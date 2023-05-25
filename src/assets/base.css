@@ -1,0 +1,27 @@
+/* Colors */
+
+:root {
+  --dark: #181818;
+  --light: #f8f8f8;
+}
+
+
+/* Base style */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--light);
+  background: var(--dark);
+  font-family: 'Montserrat', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
