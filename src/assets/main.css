@@ -1,1 +1,59 @@
 @import './base.css';
+
+/* Global variables */
+
+:root {
+    --topNav-height: 3.5rem;
+    --sideNav-width: 3.5rem;
+    --sidePanel-width: 20rem;
+}
+
+
+/* Buttons */
+
+.button,
+.icon-button {
+    --button-border-radius: 0.5rem;
+    --button-color: var(--light-gray1);
+    --button-background-color: transparent;
+    --button-border-color: var(--light-gray1);
+    --button-color-hover: var(--dark-gray1);
+    --button-background-color-hover: var(--light-gray1);
+    --button-border-color-hover: var(--light-gray1);
+    --button-color-active: var(--dark-gray1);
+    --button-background-color-active: var(--light-gray2);
+    --button-border-color-active: var(--light-gray2);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.5;
+    border-radius: var(--button-border-radius);
+    border: 2px solid var(--button-border-color);
+    color: var(--button-color);
+    background-color: var(--button-background-color);
+    transition-duration: 0.15s;
+    transition-property: color, background-color, border-color;
+    transition-timing-function: ease-in-out;
+}
+
+.button:hover,
+.icon-button:hover {
+    color: var(--button-color-hover);
+    background-color: var(--button-background-color-hover);
+    border-color: var(--button-border-color-hover);
+}
+
+.button:active,
+.icon-button:active {
+    color: var(--button-color-active);
+    background-color: var(--button-background-color-active);
+    border-color: var(--button-border-color-active);
+}
+
+.icon-button {
+    border: none;
+    padding: 0.25rem;
+    line-height: 0;
+    aspect-ratio: 1 / 1;
+}
