@@ -1,16 +1,33 @@
 <script>
 export default {
   name: "side-panel",
+  props: {
+    collapsed: { type: Boolean, default: true }
+  }
 }
 </script>
 
 <template>
-	<div id="sidePanel"></div>
+  <div id="sidePanel" :class="{ 'collapsed': collapsed }"></div>
 </template>
 
 <style scoped>
 #sidePanel {
-	width: var(--sidePanel-width);
-	background-color: var(--gray-600);
+  position: absolute;
+  width: var(--sidePanel-width);
+  height: calc(100vh - var(--topNav-height));
+  background-color: var(--gray-600);
+  transition: width 250ms ease-in-out;
+  left: var(--sideNav-width);
+}
+
+#sidePanel.collapsed {
+  width: 0rem;
+}
+
+@media (min-width: 1000px) {
+  #sidePanel {
+    position: initial;
+  }
 }
 </style>
