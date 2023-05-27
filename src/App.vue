@@ -20,6 +20,7 @@ export default {
 
 <style scoped>
 main {
+  position: relative;
   display: flex;
   height: calc(100vh - var(--topNav-height));
   min-height: var(--page-min-height);
