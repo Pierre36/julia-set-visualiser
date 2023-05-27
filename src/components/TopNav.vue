@@ -11,6 +11,6 @@ export default {
 <style scoped>
 #topNav {
 	height: var(--topNav-height);
-	background-color: var(--dark-gray4);
+	background-color: var(--gray-400);
 }
 </style>

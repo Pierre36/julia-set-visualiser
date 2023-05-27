@@ -1,15 +1,13 @@
 /* Colors */
 
 :root {
-  --dark-gray0: #000000;
-  --dark-gray1: #1e1e1e;
-  --dark-gray2: #252525;
-  --dark-gray3: #333333;
-  --dark-gray4: #3c3c3c;
-  --light-gray3: #9e9e9e;
-  --light-gray2: #a9a9a9;
-  --light-gray1: #f8f8f8;
-  --light-gray0: #ffffff;
+  --gray-700: hsl(0, 0%, 12%);
+  --gray-600: hsl(0, 0%, 15%);
+  --gray-500: hsl(0, 0%, 20%);
+  --gray-400: hsl(0, 0%, 24%);
+  --gray-300: hsl(0, 0%, 62%);
+  --gray-200: hsl(0, 0%, 66%);
+  --gray-100: hsl(0, 0%, 97%);
 }
 
 
@@ -25,8 +23,8 @@
 
 body {
   min-height: 100vh;
-  color: var(--light-gray1);
-  background-color: var(--dark-gray1);
+  color: var(--gray-100);
+  background-color: var(--gray-700);
   font-family: 'Montserrat', sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

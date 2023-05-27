@@ -11,6 +11,6 @@ export default {
 <style scoped>
 #sidePanel {
 	width: var(--sidePanel-width);
-	background-color: var(--dark-gray2);
+	background-color: var(--gray-600);
 }
 </style>

@@ -14,15 +14,15 @@
 .button,
 .icon-button {
     --button-border-radius: 0.5rem;
-    --button-color: var(--light-gray1);
+    --button-color: var(--gray-100);
     --button-background-color: transparent;
-    --button-border-color: var(--light-gray1);
+    --button-border-color: var(--gray-100);
     --button-color-hover: var(--dark-gray1);
-    --button-background-color-hover: var(--light-gray1);
-    --button-border-color-hover: var(--light-gray1);
+    --button-background-color-hover: var(--gray-100);
+    --button-border-color-hover: var(--gray-100);
     --button-color-active: var(--dark-gray1);
-    --button-background-color-active: var(--light-gray2);
-    --button-border-color-active: var(--light-gray2);
+    --button-background-color-active: var(--gray-200);
+    --button-border-color-active: var(--gray-200);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     font-size: 1rem;

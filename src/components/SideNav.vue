@@ -23,16 +23,16 @@ export default {
 
 <style scoped>
 #sideNav {
-	background-color: var(--dark-gray3);
+	background-color: var(--gray-500);
 	width: var(--sideNav-width);
 	display: flex;
 	flex-direction: column;
 }
 
 nav .icon-button {
-	--button-color: var(--light-gray3);
-	--button-color-hover: var(--light-gray1);
-	--button-color-active: var(--light-gray1);
+	--button-color: var(--gray-300);
+	--button-color-hover: var(--gray-100);
+	--button-color-active: var(--gray-100);
 	--button-background-color-hover: transparent;
 	--button-background-color-active: transparent;
 }
