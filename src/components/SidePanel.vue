@@ -15,7 +15,7 @@ export default {
 #sidePanel {
   position: absolute;
   width: var(--sidePanel-width);
-  height: calc(100vh - var(--topNav-height));
+  height: 100%;
   background-color: var(--gray-600);
   transition: width 250ms ease-in-out;
   left: var(--sideNav-width);
