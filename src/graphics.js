@@ -134,16 +134,20 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
  * @param {Object} canvas The canvas of the animation.
  * @param {Number} time The animation time in milliseconds.
  */
-function render(gl, uniformLocations, parameters, canvas, time) {
+function render(gl, uniformLocations, parameters, canvas, time, delay) {
 
   // Set uniforms
-  setUniformValues(gl, uniformLocations, parameters, canvas, time)
+  setUniformValues(gl, uniformLocations, parameters, canvas, time - delay);
 
   // Draw the scene
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
   // Render next frame
-  requestAnimationFrame(time => render(gl, uniformLocations, parameters, canvas, time));
+  if (parameters.paused) {
+    requestAnimationFrame(newTime => render(gl, uniformLocations, parameters, canvas, newTime, delay + newTime - time));
+  } else {
+    requestAnimationFrame(newTime => render(gl, uniformLocations, parameters, canvas, newTime, delay));
+  }
 }
 
 
@@ -160,7 +164,7 @@ function displayScene(canvas, shaderSources, parameters) {
   createViewport(gl, canvas, parameters);
   setPositionAttributes(gl, shaderProgram);
   gl.useProgram(shaderProgram);
-  requestAnimationFrame(time => render(gl, uniformLocations, parameters, canvas, time));
+  requestAnimationFrame(time => render(gl, uniformLocations, parameters, canvas, time, 0));
 }
 
 export { displayScene }
