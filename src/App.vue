@@ -1,10 +1,28 @@
 <script>
 import TopNav from './components/TopNav.vue'
 import SideBar from './components/SideBar.vue'
+import { displayScene } from './graphics'
+import vertexShaderSource from './assets/shaders/vertex_shader.vs?raw'
+import fragmentShaderSource from './assets/shaders/fragment_shader.fs?raw'
 
 export default {
   name: 'app',
-  components: { TopNav, SideBar }
+  components: { TopNav, SideBar },
+  data() {
+    return {
+      parameters: {
+        'resolutionScale': 1
+      }
+    }
+  },
+  mounted() {
+    const shaderSources = { 'vertex': vertexShaderSource, 'fragment': fragmentShaderSource };
+    try {
+      displayScene(this.$refs.glCanvas, shaderSources, this.parameters);
+    } catch (e) {
+      console.error(e);
+    }
+  },
 }
 </script>
 
@@ -13,7 +31,7 @@ export default {
   <main>
     <SideBar />
     <div id="content">
-      <canvas id="glcanvas"></canvas>
+      <canvas id="glCanvas" ref="glCanvas"></canvas>
     </div>
   </main>
 </template>
@@ -30,7 +48,7 @@ main {
   flex-grow: 1;
 }
 
-#glcanvas {
+#glCanvas {
   display: block;
   width: 100%;
   height: 100%;
