@@ -128,44 +128,35 @@ void main() {
 
   // Parameters
   float scale = 2.0;
-  int nbMaxIteration = 20;
+  int nbIteration = 20;
 
   // Convert coordinates to complex number
   vec2 z = vec2(length(coordinates), atan(coordinates.y, coordinates.x));
   z = vec2(z.x * scale, z.y);
 
-  // Find the smallest n so that the distance between f^k(z) and f^k(z + epsilon) 
-  // is below the given bound for all k >= n
-  float bound = 0.00001;
+  // Compute how close from an attractor the current point is 
+  // by checking if nearby pixels tend to get closer
   vec2 fkz = z;
   vec2 fkzeps = vec2(z.x * (1.0 + EPSILON), z.y);
-  int n = nbMaxIteration;
-  for (int k; k < nbMaxIteration; ++k) {
+  float divergence = 0.0;
+  for (int k; k < nbIteration; ++k) {
     fkz = applyFunction(fkz);
     fkzeps = applyFunction(fkzeps);
-    if (riemannSpheredistance(fkz, fkzeps) <= bound) {
-      n = min(n, k);
-    } else {
-      n = nbMaxIteration;
-    }
+    divergence += riemannSpheredistance(fkz, fkzeps);
   }
 
-  // Color according to n
+  // Color according to the divergence of close points
   float hue = 210.0;
   float saturation = 0.9;
   float value = 0.0;
-  value = float(n) / float(nbMaxIteration);
-  if (n == nbMaxIteration) {
+  value = divergence * 1600.0;
+  if (divergence > 0.0007) {
     value = 1.0;
-    saturation = 0.0;
   }
-  // if (n == 0) {
-  //   value = 0.5;
-  // }
-  // if (!isComplexInfinity(fkz)) {
-  //   saturation = 0.0;
-  //   value = 1.0;
-  // }
+  if (!isComplexInfinity(fkz)) {
+    saturation = 0.0;
+    value = divergence * 10000.0;
+  }
 
   // Convert HSV to RGB
   fragColor = vec4(hsvToRgb(vec3(hue, saturation, value)), 1.0);
