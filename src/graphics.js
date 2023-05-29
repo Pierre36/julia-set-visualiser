@@ -183,10 +183,10 @@ function render(gl, uniformLocations, parameters, canvas, time, delay) {
 function displayScene(canvas, shaderSources, parameters) {
   const gl = loadWebGL(canvas);
   const shaderProgram = initShaderProgram(gl, shaderSources);
-  const uniformLocations = getUniformLocations(gl, shaderProgram);
   createViewport(gl, canvas, parameters);
   setPositionAttributes(gl, shaderProgram);
   gl.useProgram(shaderProgram);
+  const uniformLocations = getUniformLocations(gl, shaderProgram);
   requestAnimationFrame(time => render(gl, uniformLocations, parameters, canvas, time, 0));
 }
 
