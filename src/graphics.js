@@ -1,4 +1,19 @@
 /**
+ * Convert an array of complex numbers in classical notation into a flattened 
+ * array of complex number in Euler's notation.
+ * @param {Array} complexArray The array of complex number in classical notation.
+ * @returns {Array} The flattened array of complex number in Euler's notation.
+ */
+function complexArrayToFloat32Array(complexArray) {
+  const flattenedArray = [];
+  complexArray.forEach(complex => {
+    flattenedArray.push(complex.mod(), complex.arg());
+  });
+  return new Float32Array(flattenedArray);
+}
+
+
+/**
  * Load WebGL2 from the provided canvas.
  * @param {Canvas} canvas The canvas.
  * @returns {WebGL2RenderingContext} The webGL2 rendering context.
@@ -79,6 +94,10 @@ function getUniformLocations(gl, shaderProgram) {
   return {
     resolution: gl.getUniformLocation(shaderProgram, "resolution"),
     time: gl.getUniformLocation(shaderProgram, "time"),
+    numeratorDegree: gl.getUniformLocation(shaderProgram, "numeratorDegree"),
+    numeratorCoefficients: gl.getUniformLocation(shaderProgram, "numeratorCoefficients"),
+    denominatorDegree: gl.getUniformLocation(shaderProgram, "denominatorDegree"),
+    denominatorCoefficients: gl.getUniformLocation(shaderProgram, "denominatorCoefficients"),
   };
 }
 
@@ -123,6 +142,10 @@ function setPositionAttributes(gl, shaderProgram) {
 function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform1f(uniformLocations.time, time / 1000);
   gl.uniform1f(uniformLocations.resolution, canvas.clientWidth / canvas.clientHeight);
+  gl.uniform1i(uniformLocations.numeratorDegree, parameters.numeratorDegree);
+  gl.uniform2fv(uniformLocations.numeratorCoefficients, complexArrayToFloat32Array(parameters.numeratorCoefficients));
+  gl.uniform1i(uniformLocations.denominatorDegree, parameters.denominatorDegree);
+  gl.uniform2fv(uniformLocations.denominatorCoefficients, complexArrayToFloat32Array(parameters.denominatorCoefficients));
 }
 
 

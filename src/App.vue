@@ -2,6 +2,7 @@
 import TopNav from './components/TopNav.vue'
 import SideBar from './components/SideBar.vue'
 import { displayScene } from './graphics'
+import { Complex } from './models/Complex'
 import vertexShaderSource from './assets/shaders/vertex_shader.vs?raw'
 import fragmentShaderSource from './assets/shaders/fragment_shader.fs?raw'
 
@@ -12,7 +13,11 @@ export default {
     return {
       parameters: {
         'paused': false,
-        'resolutionScale': 1
+        'resolutionScale': 1,
+        'numeratorDegree': 2,
+        'numeratorCoefficients': [new Complex(-1.0, 0.0), new Complex(0, 0), new Complex(1, 0)],
+        'denominatorDegree': 0,
+        'denominatorCoefficients': [new Complex(1, 0)]
       }
     }
   },

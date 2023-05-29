@@ -3,15 +3,15 @@ precision highp float;
 
 in vec4 vertexPosition;
 
-out vec2 normalizedCoord;
+out vec2 coordinates;
 
 uniform float resolution;
 
 void main() {
-    gl_Position = vertexPosition;
-    if (resolution < 1.0) {
-        normalizedCoord = vertexPosition.xy * vec2(1.0, 1.0 / resolution);
-    } else {
-        normalizedCoord = vertexPosition.xy * vec2(resolution, 1.0);
-    }
+  gl_Position = vertexPosition;
+  if (resolution < 1.0) {
+    coordinates = vertexPosition.xy * vec2(1.0, 1.0 / resolution);
+  } else {
+    coordinates = vertexPosition.xy * vec2(resolution, 1.0);
+  }
 }
