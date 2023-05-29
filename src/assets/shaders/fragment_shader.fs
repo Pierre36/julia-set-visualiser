@@ -2,6 +2,7 @@
 precision highp float;
 
 #define PI 3.1415926538
+#define ZERO 0.000000000001
 #define EPSILON 0.000001
 #define INFINITY 1000000.0
 
@@ -19,7 +20,7 @@ uniform vec2 denominatorCoefficients[16];
 // COMPLEX OPERATIONS
 
 bool isComplexZero(vec2 z) {
-  return abs(z.x) <= EPSILON;
+  return abs(z.x) <= ZERO;
 }
 
 bool isComplexInfinity(vec2 z) {
@@ -84,9 +85,9 @@ float riemannSpheredistance(vec2 z, vec2 w) {
   float zAbs = abs(z.x);
   float wAbs = abs(w.x);
   float transformationResult;
-  if (wAbs < EPSILON) {
+  if (wAbs < ZERO) {
     transformationResult = zAbs;
-  } else if (zAbs < EPSILON) {
+  } else if (zAbs < ZERO) {
     transformationResult = wAbs;
   } else if (wAbs >= INFINITY) {
     transformationResult = 1.0 / zAbs;
