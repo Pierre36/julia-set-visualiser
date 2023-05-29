@@ -1,13 +1,21 @@
+import { Complex } from './models/Complex';
+
 /**
  * Convert an array of complex numbers in classical notation into a flattened 
  * array of complex number in Euler's notation.
  * @param {Array} complexArray The array of complex number in classical notation.
+ * @param {Number} time The animation time in milliseconds. 
  * @returns {Array} The flattened array of complex number in Euler's notation.
  */
-function complexArrayToFloat32Array(complexArray) {
+function complexArrayToFloat32Array(complexArray, time) {
   const flattenedArray = [];
   complexArray.forEach(complex => {
-    flattenedArray.push(complex.mod(), complex.arg());
+    if (complex instanceof Complex) {
+      flattenedArray.push(complex.mod(), complex.arg());
+    } else if (complex instanceof Function) {
+      const complexValue = complex(time);
+      flattenedArray.push(complexValue.mod(), complexValue.arg())
+    }
   });
   return new Float32Array(flattenedArray);
 }
@@ -143,9 +151,9 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform1f(uniformLocations.time, time / 1000);
   gl.uniform1f(uniformLocations.resolution, canvas.clientWidth / canvas.clientHeight);
   gl.uniform1i(uniformLocations.numeratorDegree, parameters.numeratorDegree);
-  gl.uniform2fv(uniformLocations.numeratorCoefficients, complexArrayToFloat32Array(parameters.numeratorCoefficients));
+  gl.uniform2fv(uniformLocations.numeratorCoefficients, complexArrayToFloat32Array(parameters.numeratorCoefficients, time));
   gl.uniform1i(uniformLocations.denominatorDegree, parameters.denominatorDegree);
-  gl.uniform2fv(uniformLocations.denominatorCoefficients, complexArrayToFloat32Array(parameters.denominatorCoefficients));
+  gl.uniform2fv(uniformLocations.denominatorCoefficients, complexArrayToFloat32Array(parameters.denominatorCoefficients, time));
 }
 
 

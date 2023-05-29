@@ -1,4 +1,4 @@
-export {Complex }
+export { Complex }
 
 /**
  * Representation of a complex number.
