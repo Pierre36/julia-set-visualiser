@@ -17,12 +17,14 @@ export default {
   width: var(--sidePanel-width);
   height: 100%;
   background-color: var(--gray-600);
-  transition: width 250ms ease-in-out;
+  transition: margin-left 250ms ease-in-out;
   left: var(--sideNav-width);
+  margin-left: 0;
+  z-index: 1;
 }
 
 #sidePanel.collapsed {
-  width: 0rem;
+  margin-left: calc(-1 * var(--sidePanel-width));
 }
 
 @media (min-width: 1000px) {
