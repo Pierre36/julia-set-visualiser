@@ -155,7 +155,7 @@ ul {
 }
 
 #moreMenu li:hover {
-  background-color: var(--blue);
+  background-color: var(--blue-200);
 }
 
 #moreMenu li.active {

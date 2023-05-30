@@ -23,7 +23,10 @@
   --button-border-color-hover: var(--gray-100);
   --button-color-active: var(--gray-700);
   --button-background-color-active: var(--gray-200);
-  --button-border-color-active: var(--gray-200);
+  --button-border-color-active: var(--gray-100);
+  --button-color-focus-visible: var(--gray-100);
+  --button-background-color-focus-visible: transparent;
+  --button-border-color-focus-visible: var(--blue-100);
   cursor: pointer;
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
@@ -31,6 +34,7 @@
   line-height: 1.5;
   border-radius: var(--button-border-radius);
   border: 2px solid var(--button-border-color);
+  outline: none;
   color: var(--button-color);
   background-color: var(--button-background-color);
   transition-duration: 150ms;
@@ -45,6 +49,13 @@
   border-color: var(--button-border-color-hover);
 }
 
+.button:focus-visible,
+.icon-button:focus-visible {
+  color: var(--button-color-focus-visible);
+  background-color: var(--button-background-color-focus-visible);
+  border-color: var(--button-border-color-focus-visible);
+}
+
 .button:active,
 .icon-button:active {
   color: var(--button-color-active);
@@ -53,8 +64,14 @@
 }
 
 .icon-button {
-  border: none;
+  --button-border-color: transparent;
+  --button-border-color-hover: transparent;
+  --button-border-color-active: transparent;
   padding: 0.25rem;
   line-height: 0;
   aspect-ratio: 1 / 1;
+}
+
+.icon-button:focus-visible {
+  border: 2px solid var(--button-border-color-focus-visible);
 }
