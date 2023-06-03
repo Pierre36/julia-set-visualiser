@@ -5,6 +5,9 @@ import SidePanel from './SidePanel.vue'
 export default {
   name: 'side-bar',
   components: { SideNav, SidePanel },
+  props: {
+    parameters: { type: Object, default: null }
+  },
   data() {
     return {
       sidePanelCollapsed: true,
@@ -50,7 +53,7 @@ export default {
   <div id="sideBar">
     <SideNav :currentPanel="currentPanel" :panels="panels" :sidePanelCollapsed="sidePanelCollapsed"
       @update:sidePanelCollapsed="updateSidePanelCollapsed" @update:currentPanel="updateCurrentPanel" />
-    <SidePanel :collapsed="sidePanelCollapsed" />
+    <SidePanel :collapsed="sidePanelCollapsed" :currentPanel="currentPanel" :parameters="parameters" />
   </div>
 </template>
 

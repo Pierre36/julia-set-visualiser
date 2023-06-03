@@ -1,14 +1,25 @@
 <script>
+import FunctionPanel from './FunctionPanel.vue';
+import ColorsPanel from './ColorsPanel.vue';
+import AdvancedSettingsPanel from './AdvancedSettingsPanel.vue';
+
 export default {
   name: "side-panel",
+  components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel },
   props: {
-    collapsed: { type: Boolean, default: true }
+    collapsed: { type: Boolean, default: true },
+    currentPanel: { type: String, default: null },
+    parameters: { type: Object, default: null }
   }
 }
 </script>
 
 <template>
-  <div id="sidePanel" :class="{ 'collapsed': collapsed }"></div>
+  <div id="sidePanel" :class="{ 'collapsed': collapsed }">
+    <FunctionPanel v-if="currentPanel == 'FUNCTION'" />
+    <ColorsPanel v-if="currentPanel == 'COLORS'" />
+    <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
+  </div>
 </template>
 
 <style scoped>

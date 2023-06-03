@@ -3,6 +3,7 @@ import TopNav from './components/TopNav.vue'
 import SideBar from './components/SideBar.vue'
 import { displayScene } from './graphics'
 import { Complex } from './models/Complex'
+import { complexCircle, complexLine } from './animations'
 import vertexShaderSource from './assets/shaders/vertex_shader.vs?raw'
 import fragmentShaderSource from './assets/shaders/fragment_shader.fs?raw'
 
@@ -15,9 +16,10 @@ export default {
         'paused': false,
         'resolutionScale': 1,
         'numeratorDegree': 2,
-        'numeratorCoefficients': [new Complex(-1.0, 0.0), new Complex(0, 0), new Complex(1, 0)],
+        'numeratorCoefficients': [complexCircle(new Complex(0, 0), 1, 5000), new Complex(0, 0), new Complex(1, 0)],
         'denominatorDegree': 0,
-        'denominatorCoefficients': [new Complex(1, 0)]
+        'denominatorCoefficients': [new Complex(1, 0)],
+        'functionType': "DEFAULT"
       }
     }
   },
@@ -40,7 +42,7 @@ export default {
 <template>
   <TopNav />
   <main>
-    <SideBar />
+    <SideBar :parameters="parameters" />
     <div id="content">
       <canvas id="glCanvas" ref="glCanvas"></canvas>
       <div id="animationMenu">
