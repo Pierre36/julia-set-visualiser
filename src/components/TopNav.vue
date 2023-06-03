@@ -1,7 +1,7 @@
 <script>
 export default {
-  name: "top-nav",
-}
+  name: "TopNav",
+};
 </script>
 
 <template>

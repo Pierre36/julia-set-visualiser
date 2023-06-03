@@ -1,4 +1,4 @@
-@import './base.css';
+@import "./base.css";
 
 /* Global variables */
 
@@ -8,7 +8,6 @@
   --sidePanel-width: 20rem;
   --page-min-height: 8rem;
 }
-
 
 /* Buttons */
 
@@ -85,7 +84,6 @@
   width: 2rem;
   height: 2rem;
 }
-
 
 /* Dropdown */
 

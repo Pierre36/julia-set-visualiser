@@ -1,13 +1,9 @@
 <script>
 export default {
-  name: "colors-panel"
-}
+  name: "ColorsPanel",
+};
 </script>
 
-<template>
-  COLORS
-</template>
+<template>COLORS</template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

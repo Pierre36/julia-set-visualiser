@@ -1,29 +1,40 @@
 <script>
-import FunctionPanel from './FunctionPanel.vue';
-import ColorsPanel from './ColorsPanel.vue';
-import AdvancedSettingsPanel from './AdvancedSettingsPanel.vue';
+import FunctionPanel from "./FunctionPanel.vue";
+import ColorsPanel from "./ColorsPanel.vue";
+import AdvancedSettingsPanel from "./AdvancedSettingsPanel.vue";
 
 export default {
-  name: "side-panel",
+  name: "SidePanel",
   components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel },
   props: {
+    currentPanel: { type: String, required: true },
+    parameters: { type: Object, required: true },
     collapsed: { type: Boolean, default: true },
-    currentPanel: { type: String, default: null },
-    parameters: { type: Object, default: null }
-  }
-}
+  },
+  methods: {
+    updateFunctionType(newFunctionType) {
+      this.parameters.functionType = newFunctionType;
+    },
+  },
+};
 </script>
 
 <template>
-  <div id="sidePanel" :class="{ 'collapsed': collapsed }">
-    <FunctionPanel v-if="currentPanel == 'FUNCTION'" />
+  <div id="sidePanel" :class="{ collapsed: collapsed }">
+    <FunctionPanel
+      v-if="currentPanel == 'FUNCTION'"
+      :functionType="parameters.functionType"
+      @update:functionType="updateFunctionType"
+    />
     <ColorsPanel v-if="currentPanel == 'COLORS'" />
     <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
   </div>
 </template>
 
-<style scoped>
+<style>
 #sidePanel {
+  --divider-height: 1px;
+  --divider-color: var(--gray-350);
   position: absolute;
   width: var(--sidePanel-width);
   height: 100%;
@@ -42,5 +53,37 @@ export default {
   #sidePanel {
     position: initial;
   }
+}
+
+#sidePanel header {
+  padding-block: 0.5rem;
+  display: grid;
+  grid-template-columns: 3rem auto 3rem;
+  align-items: center;
+  text-align: center;
+  border-bottom: calc(var(--divider-height) * 2) solid var(--divider-color);
+}
+
+#sidePanel header .title {
+  grid-column: 2;
+  font-size: 1.2em;
+}
+
+#sidePanel header .info {
+  grid-column: 3;
+}
+
+#sidePanel section {
+  padding: 0.5rem;
+  border-bottom: var(--divider-height) solid var(--divider-color);
+}
+
+#sidePanel .info .icon-button {
+  padding: 0.1rem;
+}
+
+#sidePanel .info svg {
+  width: 1.7rem;
+  height: 1.7rem;
 }
 </style>

@@ -1,10 +1,9 @@
-export { Complex }
+export { Complex };
 
 /**
  * Representation of a complex number.
  */
 class Complex {
-  
   /**
    * Complex constructor
    * @param {Number} re Real part of the complex number.

@@ -14,7 +14,6 @@
   --blue-100: hsl(210, 70%, 60%);
 }
 
-
 /* Base style */
 
 *,
@@ -29,14 +28,14 @@ body {
   min-height: 100vh;
   color: var(--gray-100);
   background-color: var(--gray-700);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1em;
 }
 

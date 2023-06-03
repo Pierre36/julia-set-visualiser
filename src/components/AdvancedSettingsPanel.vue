@@ -1,13 +1,9 @@
 <script>
 export default {
-  name: "advanced-settings-panel"
-}
+  name: "AdvancedSettingsPanel",
+};
 </script>
 
-<template>
-  ADVANCED SETTINGS
-</template>
+<template>ADVANCED SETTINGS</template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
