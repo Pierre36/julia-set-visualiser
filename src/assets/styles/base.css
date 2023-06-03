@@ -1,10 +1,12 @@
 /* Colors */
 
 :root {
-  --gray-700: hsl(0, 0%, 12%);
+  --gray-700: hsl(0, 0%, 5%);
+  --gray-650: hsl(0, 0%, 10%);
   --gray-600: hsl(0, 0%, 15%);
   --gray-500: hsl(0, 0%, 20%);
   --gray-400: hsl(0, 0%, 24%);
+  --gray-350: hsl(0, 0%, 50%);
   --gray-300: hsl(0, 0%, 62%);
   --gray-200: hsl(0, 0%, 80%);
   --gray-100: hsl(0, 0%, 97%);
@@ -31,4 +33,9 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em;
 }

@@ -64,9 +64,14 @@
 }
 
 .icon-button {
+  --button-color: var(--gray-300);
   --button-border-color: transparent;
+  --button-color-hover: var(--gray-100);
   --button-border-color-hover: transparent;
+  --button-background-color-hover: transparent;
+  --button-color-active: var(--gray-100);
   --button-border-color-active: transparent;
+  --button-background-color-active: transparent;
   padding: 0.25rem;
   line-height: 0;
   aspect-ratio: 1 / 1;
@@ -74,4 +79,9 @@
 
 .icon-button:focus-visible {
   border: 2px solid var(--button-border-color-focus-visible);
+}
+
+.icon-button svg {
+  width: 2rem;
+  height: 2rem;
 }
