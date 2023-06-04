@@ -5,6 +5,7 @@ import AnimationFrame from "./components/AnimationFrame.vue";
 import { Complex } from "./models/Complex";
 import { ComplexCircle } from "./models/ComplexCircle";
 import { ComplexLine } from "./models/ComplexLine";
+import { Polynomial } from "./models/Polynomial";
 
 export default {
   name: "App",
@@ -14,10 +15,10 @@ export default {
       parameters: {
         paused: false,
         resolutionScale: 1,
-        polynomial: {
+        polynomial: new Polynomial({
           0: new ComplexCircle(new Complex(0, 0), 1, 5000),
           2: new Complex(1, 0),
-        },
+        }),
         functionType: "DEFAULT",
       },
     };

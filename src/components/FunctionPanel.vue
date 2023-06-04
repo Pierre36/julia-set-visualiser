@@ -1,4 +1,5 @@
 <script>
+import { Polynomial } from "../models/Polynomial";
 import FormSelect from "./FormSelect.vue";
 
 export default {
@@ -6,6 +7,7 @@ export default {
   components: { FormSelect },
   props: {
     functionType: { type: String, required: true },
+    polynomial: { type: Polynomial, required: true },
   },
   emits: ["update:functionType"],
   data() {
@@ -15,6 +17,33 @@ export default {
         { id: "NEWTON", text: "Newton" },
       ],
     };
+  },
+  computed: {
+    equationMathML() {
+      // Initialize equation
+      var equation = "<math display='block'>";
+
+      // Add quantifier
+      equation +=
+        "<mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow>";
+
+      // Add function
+      equation +=
+        "<mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+      if (this.functionType == "NEWTON") {
+        equation +=
+          "<mi>z</mi><mo>-</mo><mi>a</mi><mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+        equation += "</math>";
+        equation += "<math>";
+        equation +=
+          "<mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+      }
+      equation += this.polynomial.toMathML();
+
+      // End and return equation
+      equation += "</math>";
+      return equation;
+    },
   },
 };
 </script>
@@ -39,6 +68,17 @@ export default {
       </button>
     </div>
   </header>
+  <section>
+    <div class="equation" v-html="equationMathML"></div>
+  </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.equation {
+  color: var(--gray-700);
+  background-color: var(--gray-100);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  text-align: center;
+}
+</style>

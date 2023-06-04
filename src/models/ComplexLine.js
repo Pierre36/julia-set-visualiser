@@ -37,4 +37,29 @@ class ComplexLine {
       );
     }
   }
+
+  /**
+   * Computes a MathML representation of the complex circle.
+   * @param {Number} power The power associated with the coefficient.
+   * @returns {String} A MathML representation of the complex circle.
+   */
+  toMathML(power) {
+    return `<msub><mi>l</mi><mn>${power}</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>`;
+  }
+
+  /**
+   * Checks if the complex line is always 0 + 0i.
+   * @returns {Boolean} True if the complex line is always 0 + 0i.
+   */
+  isZero() {
+    return this.start.isZero() && this.end.isZero();
+  }
+
+  /**
+   * Checks if the complex line should be associated with a "-" in an equation.
+   * @returns {Boolean} True if the complex line should be associated with a "-" in an equation (always false).
+   */
+  showMinus() {
+    return false;
+  }
 }

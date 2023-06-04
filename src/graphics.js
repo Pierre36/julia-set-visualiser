@@ -1,80 +1,5 @@
 import { Complex } from "./models/Complex";
-import { ComplexCircle } from "./models/ComplexCircle";
-import { ComplexLine } from "./models/ComplexLine";
-
-const MAX_DEGREE = 15;
-
-/**
- * Converts an object representing a polynomial to an array.
- * @param {Object} polynomial The polynomial to convert.
- * @param {Number} time The animation time in milliseconds.
- * @returns {Array} The polynomial converted into an array of complex numbers.
- */
-function polynomialObjectToArray(polynomial, time) {
-  const polynomialArray = [];
-  for (let [degree, coefficient] of Object.entries(polynomial)) {
-    if (coefficient instanceof Complex) {
-      polynomialArray[degree] = coefficient.copy();
-    } else if (
-      coefficient instanceof ComplexCircle ||
-      coefficient instanceof ComplexLine
-    ) {
-      polynomialArray[degree] = coefficient.getAtTime(time);
-    }
-  }
-  return polynomialArray;
-}
-
-/**
- * Derivates a polynomial.
- * @param {Array} polynomial The polynomial to derivate.
- * @returns {Array} The derivated polynomial.
- */
-function derivate(polynomial) {
-  const derivative = [];
-  for (let p = 1; p < polynomial.length; p++) {
-    let complex = polynomial[p];
-    if (complex) {
-      derivative[p - 1] = new Complex(complex.re * p, complex.im * p);
-    }
-  }
-  return derivative;
-}
-
-/**
- * Computes the Newton numerator of a polynomial.
- * @param {Array} polynomial The polynomial for which the Newton numerator is computed.
- * @returns {Array} The Newton numerator.
- */
-function getNewtonNumerator(polynomial) {
-  const numerator = [];
-  for (let p = 0; p < polynomial.length; p++) {
-    let complex = polynomial[p];
-    if (complex) {
-      numerator[p] = new Complex((p - 1) * complex.re, (p - 1) * complex.im);
-    }
-  }
-  return numerator;
-}
-
-/**
- * Convert an array of complex numbers in classical notation into a flattened
- * array of complex number in Euler's notation.
- * @param {Array} complexArray The array of complex number in classical notation.
- * @returns {Array} The flattened array of complex number in Euler's notation.
- */
-function complexArrayToFloat32Array(complexArray) {
-  const flattenedArray = [];
-  for (let p = 0; p <= MAX_DEGREE; p++) {
-    let complex = complexArray[p];
-    if (complex) {
-      flattenedArray.push(complex.mod(), complex.arg());
-    } else {
-      flattenedArray.push(0, 0);
-    }
-  }
-  return new Float32Array(flattenedArray);
-}
+import { Polynomial } from "./models/Polynomial";
 
 /**
  * Reads the animation parameters and builds the numerator and denominator of the function.
@@ -83,30 +8,29 @@ function complexArrayToFloat32Array(complexArray) {
  * @returns The function parameters in terms of numerator and denominator.
  */
 function getFunctionParameters(parameters, time) {
-  // Converts the polynomial into an array
-  const polynomialArray = polynomialObjectToArray(parameters.polynomial, time);
-  const polynomialDegree = polynomialArray.length - 1;
+  // Gets the polynomial at the time
+  const polynomial = parameters.polynomial.getAtTime(time);
 
   // Initialize the return values
-  var numeratorDegree;
+  var numeratorDegree = polynomial.degree;
   var numeratorCoefficients;
   var denominatorDegree;
   var denominatorCoefficients;
 
   // Depending on the function type, computes the numerator and denominator
   if (parameters.functionType == "DEFAULT") {
-    numeratorDegree = polynomialDegree;
-    numeratorCoefficients = complexArrayToFloat32Array(polynomialArray);
+    numeratorCoefficients = polynomial.toFloat32EulerArray();
     denominatorDegree = 1;
-    denominatorCoefficients = complexArrayToFloat32Array([new Complex(1, 0)]);
+    denominatorCoefficients = new Polynomial({
+      0: new Complex(1, 0),
+    }).toFloat32EulerArray();
   } else if (parameters.functionType == "NEWTON") {
-    const derivative = derivate(polynomialArray);
-    numeratorDegree = polynomialDegree;
-    numeratorCoefficients = complexArrayToFloat32Array(
-      getNewtonNumerator(polynomialArray)
-    );
-    denominatorDegree = derivative.length - 1;
-    denominatorCoefficients = complexArrayToFloat32Array(derivative);
+    const derivative = polynomial.getDerivative();
+    numeratorCoefficients = polynomial
+      .getNewtonNumerator()
+      .toFloat32EulerArray();
+    denominatorDegree = derivative.degree;
+    denominatorCoefficients = derivative.toFloat32EulerArray();
   } else {
     throw new Error(
       `The function type is incorrect. It must be either "DEFAULT" or "NEWTON", but received ${parameters.functionType}`
