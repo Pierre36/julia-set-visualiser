@@ -75,11 +75,8 @@ class Polynomial {
    * @returns {String} The MathML representation of the polynomial.
    */
   toMathML() {
-    // Initialize the mathML representation of the polynomial
     var mathML = "";
-
     const descendingPowers = this.descendingPowers();
-
     var firstNonZeroCoefficient = true;
     for (let i = 0; i < descendingPowers.length; i++) {
       let power = descendingPowers[i];
@@ -110,8 +107,6 @@ class Polynomial {
         mathML += "</mrow>";
       }
     }
-
-    console.log(mathML);
     return mathML;
   }
 
