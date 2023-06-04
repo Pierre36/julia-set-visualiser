@@ -78,13 +78,4 @@ export default {
   padding: 0.5rem;
   border-bottom: var(--divider-height) solid var(--divider-color);
 }
-
-#sidePanel .info .icon-button {
-  padding: 0.1rem;
-}
-
-#sidePanel .info svg {
-  width: 1.7rem;
-  height: 1.7rem;
-}
 </style>
