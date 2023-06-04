@@ -3,7 +3,8 @@ import TopNav from "./components/TopNav.vue";
 import SideBar from "./components/SideBar.vue";
 import AnimationFrame from "./components/AnimationFrame.vue";
 import { Complex } from "./models/Complex";
-import { complexCircle } from "./animations";
+import { ComplexCircle } from "./models/ComplexCircle";
+import { ComplexLine } from "./models/ComplexLine";
 
 export default {
   name: "App",
@@ -13,14 +14,10 @@ export default {
       parameters: {
         paused: false,
         resolutionScale: 1,
-        numeratorDegree: 2,
-        numeratorCoefficients: [
-          complexCircle(new Complex(0, 0), 1, 5000),
-          new Complex(0, 0),
-          new Complex(1, 0),
-        ],
-        denominatorDegree: 0,
-        denominatorCoefficients: [new Complex(1, 0)],
+        polynomial: {
+          0: new ComplexCircle(new Complex(0, 0), 1, 5000),
+          2: new Complex(1, 0),
+        },
         functionType: "DEFAULT",
       },
     };

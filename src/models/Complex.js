@@ -29,4 +29,12 @@ class Complex {
   arg() {
     return Math.atan2(this.im, this.re);
   }
+
+  /**
+   * Returns a copy of the complex number.
+   * @returns {Complex} The copy of the complex number.
+   */
+  copy() {
+    return new Complex(this.re, this.im);
+  }
 }

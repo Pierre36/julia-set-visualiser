@@ -24,6 +24,7 @@ export default {
     <FunctionPanel
       v-if="currentPanel == 'FUNCTION'"
       :functionType="parameters.functionType"
+      :polynomial="parameters.polynomial"
       @update:functionType="updateFunctionType"
     />
     <ColorsPanel v-if="currentPanel == 'COLORS'" />
