@@ -60,13 +60,23 @@ export default {
   </section>
 
   <section>
-    <div class="functionType">
-      <h3>Type</h3>
+    <div class="title">
+      <h3>Function type</h3>
+      <InfoButton />
+    </div>
+    <div class="content">
+      <span>Type</span>
       <FormSelect
         :options="functionTypeOptions"
         :selected="functionType"
         @update:selected="(newValue) => $emit('update:functionType', newValue)"
       />
+    </div>
+  </section>
+
+  <section>
+    <div class="title">
+      <h3>Coefficients</h3>
       <InfoButton />
     </div>
   </section>
@@ -82,9 +92,18 @@ export default {
   text-align: center;
 }
 
-.functionType {
+section .title {
   display: grid;
-  grid-template-columns: auto auto max-content;
+  grid-template-columns: auto max-content;
+  align-items: center;
+  gap: 0.25rem;
+  padding-left: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+section .content {
+  display: grid;
+  grid-template-columns: auto auto;
   align-items: center;
   gap: 0.25rem;
   padding-left: 0.25rem;
