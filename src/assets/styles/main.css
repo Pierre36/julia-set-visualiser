@@ -9,6 +9,16 @@
   --page-min-height: 8rem;
 }
 
+/* Text */
+
+h2 {
+  font-size: 1.2em;
+}
+
+h3 {
+  font-size: 1em;
+}
+
 /* Buttons */
 
 .button,

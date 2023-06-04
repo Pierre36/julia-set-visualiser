@@ -51,7 +51,7 @@ export default {
 
 <template>
   <header class="panelHeader">
-    <div class="title">Function</div>
+    <h2>Function</h2>
     <InfoButton />
   </header>
 
@@ -61,7 +61,7 @@ export default {
 
   <section>
     <div class="functionType">
-      <span>Type</span>
+      <h3>Type</h3>
       <FormSelect
         :options="functionTypeOptions"
         :selected="functionType"
@@ -70,8 +70,6 @@ export default {
       <InfoButton />
     </div>
   </section>
-
-  <section>COEFFICIENTS</section>
 </template>
 
 <style scoped>

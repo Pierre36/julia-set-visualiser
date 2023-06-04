@@ -65,9 +65,8 @@ export default {
   border-bottom: calc(var(--divider-height) * 2) solid var(--divider-color);
 }
 
-#sidePanel header .title {
+#sidePanel header h2 {
   grid-column: 2;
-  font-size: 1.2em;
 }
 
 #sidePanel header .info {
