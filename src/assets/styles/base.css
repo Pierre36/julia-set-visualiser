@@ -12,6 +12,7 @@
   --gray-100: hsl(0, 0%, 97%);
   --blue-200: hsl(210, 70%, 30%);
   --blue-100: hsl(210, 70%, 60%);
+  --color-error: hsl(0, 100%, 50%);
 }
 
 /* Base style */
