@@ -16,12 +16,12 @@ body {
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: 500;
 }
 
 h3 {
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 500;
 }
 
@@ -30,14 +30,14 @@ h3 {
 .button,
 .icon-button {
   --button-border-radius: 0.5rem;
-  --button-color: var(--gray-100);
+  --button-color: var(--gray-300);
   --button-background-color: transparent;
-  --button-border-color: var(--gray-100);
-  --button-color-hover: var(--gray-700);
-  --button-background-color-hover: var(--gray-100);
+  --button-border-color: var(--gray-300);
+  --button-color-hover: var(--gray-100);
+  --button-background-color-hover: transparent;
   --button-border-color-hover: var(--gray-100);
-  --button-color-active: var(--gray-700);
-  --button-background-color-active: var(--gray-200);
+  --button-color-active: var(--gray-100);
+  --button-background-color-active: transparent;
   --button-border-color-active: var(--gray-100);
   --button-color-focus-visible: var(--gray-100);
   --button-background-color-focus-visible: transparent;
@@ -79,14 +79,9 @@ h3 {
 }
 
 .icon-button {
-  --button-color: var(--gray-300);
   --button-border-color: transparent;
-  --button-color-hover: var(--gray-100);
   --button-border-color-hover: transparent;
-  --button-background-color-hover: transparent;
-  --button-color-active: var(--gray-100);
   --button-border-color-active: transparent;
-  --button-background-color-active: transparent;
   padding: 0.25rem;
   line-height: 0;
   aspect-ratio: 1 / 1;
@@ -127,4 +122,25 @@ h3 {
 
 .dropdownMenu li.selected {
   color: var(--gray-100);
+}
+
+/* Forms */
+
+.input {
+  outline: none;
+  color: var(--gray-100);
+  background-color: var(--gray-650);
+  border: 1px solid var(--gray-500);
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  text-align: start;
+  font-family: "Montserrat", sans-serif;
+}
+
+.input:focus-visible {
+  border-color: var(--blue-100);
+}
+
+.wrongInput {
+  border-color: var(--color-error);
 }

@@ -44,7 +44,7 @@ export default {
 
 <template>
   <div class="wrapper">
-    <button id="select" ref="select" @click="isOpen = true">
+    <button class="input select" ref="select" @click="isOpen = true">
       <span class="text">{{ inputText }}</span>
       <svg
         class="icon"
@@ -92,33 +92,19 @@ export default {
   position: relative;
 }
 
-#select {
+.select {
   display: flex;
   width: 100%;
   cursor: pointer;
-  outline: none;
-  color: var(--gray-100);
-  background-color: var(--gray-650);
-  border: 1px solid var(--gray-500);
-  border-radius: 0.25rem;
   padding-left: 0.5rem;
-  padding-right: 0.25rem;
-  padding-block: 0.25rem;
-  text-align: start;
-  font-family: "Montserrat";
 }
-
-#select:focus-visible {
-  border-color: var(--blue-100);
-}
-
-#select .text {
+.select .text {
   flex-grow: 1;
   margin: auto;
   overflow-x: auto;
 }
 
-#select .icon {
+.select .icon {
   min-width: 1.5rem;
   width: 1.5rem;
   margin: auto;
