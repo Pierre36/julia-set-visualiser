@@ -75,6 +75,10 @@ export default {
   grid-column: 3;
 }
 
+#sidePanel .panelContent {
+  overflow-y: auto;
+}
+
 #sidePanel section {
   padding: 0.5rem;
   border-bottom: var(--divider-height) solid var(--divider-color);
