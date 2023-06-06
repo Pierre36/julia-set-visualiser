@@ -37,6 +37,8 @@ export default {
   --divider-height: 1px;
   --divider-color: var(--gray-350);
   position: absolute;
+  display: flex;
+  flex-direction: column;
   width: var(--sidePanel-width);
   height: 100%;
   background-color: var(--gray-600);
@@ -76,5 +78,27 @@ export default {
 #sidePanel section {
   padding: 0.5rem;
   border-bottom: var(--divider-height) solid var(--divider-color);
+}
+
+#sidePanel section:last-of-type {
+  border-bottom: none;
+  flex-grow: 1;
+}
+
+#sidePanel section .title {
+  display: grid;
+  grid-template-columns: auto max-content;
+  align-items: center;
+  gap: 0.25rem;
+  padding-left: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+#sidePanel section .content {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 0.25rem;
+  padding-left: 0.25rem;
 }
 </style>
