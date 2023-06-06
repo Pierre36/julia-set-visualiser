@@ -181,4 +181,18 @@ class Polynomial {
     }
     return newtonNumerator;
   }
+
+  /**
+   * Computes and returns the list of available powers (powers with undefined coefficients) in ascending order.
+   * @returns {Array} The list of available powers.
+   */
+  getAvailablePowers() {
+    const availablePowers = [];
+    for (let power = 0; power <= MAX_DEGREE; power++) {
+      if (!this.getCoefficient(power)) {
+        availablePowers.push(power);
+      }
+    }
+    return availablePowers;
+  }
 }
