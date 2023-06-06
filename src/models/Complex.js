@@ -1,5 +1,8 @@
 export { Complex };
 
+const COMPLEX_REGEX =
+  /^\s*(?:(-?\d+(?:\.\d+)?)|(-?\d*|\d+\.\d+)i|(-?\d+(?:\.\d+)?)\s*([+-])\s*(\d*|\d+\.\d+)i)\s*$/;
+
 /**
  * Representation of a complex number.
  */
@@ -12,6 +15,54 @@ class Complex {
   constructor(re, im) {
     this.re = re;
     this.im = im;
+  }
+
+  /**
+   * Tries to convert a string to a complex number.
+   * @param {String} complexString A string representing a complex number.
+   * @returns The complex number corresponding to the string.
+   * @throws an error if the provided string does not match the complex regex.
+   */
+  static fromString(complexString) {
+    // Prepare the error in case the conversion fails
+    const error = Error(
+      "The provided string could not be parsed into a complex number."
+    );
+
+    // Try to match the complex string with the regex of a complex number
+    const match = complexString.match(COMPLEX_REGEX);
+
+    if (match == null) {
+      throw error;
+    }
+
+    // If only the real part is provided
+    if (match[1] != undefined) {
+      return new Complex(Number(match[1]), 0);
+    }
+
+    // If only the imaginary part is provided
+    if (match[2] != undefined) {
+      if (match[2] == "") {
+        return new Complex(0, 1);
+      } else if (match[2] == "-") {
+        return new Complex(0, -1);
+      } else {
+        return new Complex(0, Number(match[2]));
+      }
+    }
+
+    // If both the real and imaginary parts are provided
+    let complex = new Complex(Number(match[3]), 0);
+    if (match[5] == "") {
+      complex.im = 1;
+    } else {
+      complex.im = Number(match[5]);
+    }
+    if (match[4] == "-") {
+      complex.im = -complex.im;
+    }
+    return complex;
   }
 
   /**
@@ -71,6 +122,31 @@ class Complex {
       } else {
         return `<mn>${displayedRe}</mn>`;
       }
+    }
+  }
+
+  /**
+   * Computes and returns a string representing the complex number.
+   * @returns {String} A string representing this complex number
+   */
+  toString() {
+    if (this.im != 0) {
+      if (this.re != 0) {
+        let string = String(this.re);
+        if (this.im >= 0) {
+          string += " + ";
+          string += String(this.im);
+        } else {
+          string += " - ";
+          string += String(-this.im);
+        }
+        string += "i";
+        return string;
+      } else {
+        return `${this.im}i`;
+      }
+    } else {
+      return String(this.re);
     }
   }
 
