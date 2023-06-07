@@ -62,4 +62,12 @@ class ComplexLine {
   showMinus() {
     return false;
   }
+
+  /**
+   * Returns a copy of the complex line.
+   * @returns {ComplexLine} The copy of the complex line.
+   */
+  copy() {
+    return new ComplexLine(this.start.copy(), this.end.copy(), this.duration);
+  }
 }

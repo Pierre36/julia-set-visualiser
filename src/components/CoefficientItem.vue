@@ -2,45 +2,29 @@
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
-import { Polynomial } from "../models/Polynomial";
 import FormSelect from "./FormSelect.vue";
-import ComplexInput from "./ComplexInput.vue";
-import FloatInput from "./FloatInput.vue";
+import CoefficientInput from "./CoefficientInput.vue";
 
 export default {
   name: "CoefficientItem",
-  components: { FormSelect, ComplexInput, FloatInput },
+  components: { FormSelect, CoefficientInput },
   props: {
     degree: { type: String, required: true },
-    polynomial: { type: Polynomial, required: true },
+    coefficient: {
+      type: [Complex, ComplexCircle, ComplexLine],
+      required: true,
+    },
+    availablePowers: { type: Array, required: true },
   },
-  emits: ["update:degree"],
-  data() {
-    return {
-      typeOptions: [
-        { id: "CONSTANT", text: "Constante" },
-        { id: "CIRCLE", text: "Circle" },
-        { id: "LINE", text: "Line" },
-      ],
-      defaultValues: {
-        CONSTANT: new Complex(0, 0),
-        CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000),
-        LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
-      },
-    };
-  },
+  emits: ["update:degree", "update:coefficient", "delete:coefficient"],
   computed: {
     degreeOptions() {
-      const availablePowers = this.polynomial.getAvailablePowers();
-      availablePowers.push(this.degree);
       const options = [];
-      availablePowers.forEach((power) => {
+      this.availablePowers.forEach((power) => {
         options.push({ id: power, text: power });
       });
+      options.push({ id: this.degree, text: this.degree });
       return options;
-    },
-    coefficient() {
-      return this.polynomial.getCoefficient(this.degree);
     },
     type() {
       if (this.coefficient instanceof ComplexCircle) {
@@ -55,98 +39,64 @@ export default {
       return this.coefficient.duration / 1000;
     },
   },
-  methods: {
-    changeType(newType) {
-      this.polynomial.setCoefficient(this.degree, this.defaultValues[newType]);
-    },
-    updateCoefficient(newCoefficient) {
-      this.polynomial.setCoefficient(this.degree, newCoefficient);
-    },
-    updateCenter(newCenter) {
-      this.coefficient.center = newCenter;
-    },
-    updateStart(newStart) {
-      this.coefficient.start = newStart;
-    },
-    updateEnd(newEnd) {
-      this.coefficient.end = newEnd;
-    },
-    updateRadius(newRadius) {
-      this.coefficient.radius = newRadius;
-    },
-    updateDuration(newDuration) {
-      this.coefficient.duration = newDuration * 1000;
-    },
-  },
 };
 </script>
 
 <template>
-  <div class="container">
-    <span>Degree</span>
-    <FormSelect
-      :options="degreeOptions"
-      :selected="degree"
-      @update:selected="(newDegree) => $emit('update:degree', newDegree)"
+  <div class="frame">
+    <div class="degreePicker">
+      <span>Degree</span>
+      <FormSelect
+        :options="degreeOptions"
+        :selected="degree"
+        @update:selected="(newDegree) => $emit('update:degree', newDegree)"
+      />
+      <button class="icon-button" @click="$emit('delete:coefficient')">
+        <svg
+          class="icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="100 -860 760 760"
+          role="img"
+        >
+          <title>Remove coefficient</title>
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="m480-438 123 123q9 9 21 9t21-9q9-9 9-21t-9-21L522-480l123-123q9-9 9-21t-9-21q-9-9-21-9t-21 9L480-522 357-645q-9-9-21-9t-21 9q-9 9-9 21t9 21l123 123-123 123q-9 9-9 21t9 21q9 9 21 9t21-9l123-123ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <CoefficientInput
+      :coefficient="coefficient"
+      @update:coefficient="
+        (newCoefficient) => $emit('update:coefficient', newCoefficient)
+      "
     />
-    <span>Type</span>
-    <FormSelect
-      :options="typeOptions"
-      :selected="type"
-      @update:selected="changeType"
-    />
-    <template v-if="type == 'CONSTANT'">
-      <span>Value</span>
-      <ComplexInput
-        :complex="coefficient"
-        @update:complex="updateCoefficient"
-      />
-    </template>
-    <template v-else-if="type == 'CIRCLE'">
-      <span>Center</span>
-      <ComplexInput
-        :complex="coefficient.center"
-        @update:complex="updateCenter"
-      />
-      <span>Radius</span>
-      <FloatInput
-        :float="coefficient.radius"
-        :min="0"
-        @update:float="updateRadius"
-      />
-      <span>Duration</span>
-      <FloatInput
-        :float="durationSecond"
-        :min="0"
-        @update:float="updateDuration"
-      />
-    </template>
-    <template v-else-if="type == 'LINE'">
-      <span>Start</span>
-      <ComplexInput
-        :complex="coefficient.start"
-        @update:complex="updateStart"
-      />
-      <span>End</span>
-      <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
-      <span>Duration</span>
-      <FloatInput
-        :float="durationSecond"
-        :min="0"
-        @update:float="updateDuration"
-      />
-    </template>
   </div>
 </template>
 
 <style scoped>
-.container {
+.frame {
   border: 1px solid var(--gray-300);
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.degreePicker {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto 9.75rem 2rem;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.icon-button {
+  padding: 0rem;
+}
+
+.icon-button svg {
+  width: 1.7rem;
+  height: 1.7rem;
 }
 </style>

@@ -15,13 +15,13 @@ class Polynomial {
    * @param {Object} coefficients The coeffficients of the polynomial.
    */
   constructor(coefficients) {
-    this.coefficients = { 0: new Complex(0, 0) };
     this.degree = 0;
-    if (coefficients) {
-      for (let [power, coefficient] of Object.entries(coefficients)) {
-        if (power <= MAX_DEGREE) {
-          this.setCoefficient(power, coefficient);
-        }
+    this.coefficients = {};
+    for (let power = 0; power <= MAX_DEGREE; power++) {
+      if (coefficients != undefined && coefficients[power] != undefined) {
+        this.setCoefficient(power, coefficients[power]);
+      } else {
+        this.coefficients[power] = null;
       }
     }
   }
@@ -51,13 +51,45 @@ class Polynomial {
    * @param {Number} power The power associated to the wanted coefficient.
    * @param {Complex | ComplexCircle | ComplexLine} coefficient The new coefficient.
    * @throws An error if the power is superior to MAX_DEGREE.
+   * @throws An error if the provided coefficient is undefined.
    */
   setCoefficient(power, coefficient) {
     if (power > MAX_DEGREE) {
       throw Error(`The power must be inferior to ${MAX_DEGREE}`);
     }
+    if (coefficient == undefined) {
+      throw Error("The provided coefficient is undefined");
+    }
     this.coefficients[power] = coefficient;
     this.degree = Math.max(this.degree, power);
+  }
+
+  /**
+   * Removes the coefficient at a given power by replacing by null.
+   * @param {Number} power The power associated to the wanted coefficient.
+   * @throws An error if the power is superior to MAX_DEGREE.
+   */
+  removeCoefficient(power) {
+    if (power > MAX_DEGREE) {
+      throw Error(`The power must be inferior to ${MAX_DEGREE}`);
+    }
+    this.coefficients[power] = null;
+    if (power == this.degree) {
+      this.recalculateDegree();
+    }
+  }
+
+  /**
+   * Recalculates the degree of the polynomial.
+   */
+  recalculateDegree() {
+    for (let power = MAX_DEGREE; power >= 1; power--) {
+      if (this.coefficients[power] != null) {
+        this.degree = power;
+        break;
+      }
+    }
+    this.degree = 0;
   }
 
   /**
@@ -65,9 +97,11 @@ class Polynomial {
    * @returns {Array} An array containing the power of the polynomial in descending orders.
    */
   descendingPowers() {
-    return Object.keys(this.coefficients).sort((a, b) => {
-      return Number(b) - Number(a);
-    });
+    return Object.keys(this.coefficients)
+      .filter((power) => this.coefficients[power] != null)
+      .sort((a, b) => {
+        return Number(b) - Number(a);
+      });
   }
 
   /**
@@ -118,7 +152,7 @@ class Polynomial {
     const flattenedArray = [];
     for (let p = 0; p <= MAX_DEGREE; p++) {
       let complex = this.coefficients[p];
-      if (complex) {
+      if (complex != null) {
         flattenedArray.push(complex.mod(), complex.arg());
       } else {
         flattenedArray.push(0, 0);
@@ -134,7 +168,8 @@ class Polynomial {
    */
   getAtTime(time) {
     const newPolynomial = new Polynomial();
-    for (let [power, coefficient] of Object.entries(this.coefficients)) {
+    this.getCoefficientPowers().forEach((power) => {
+      let coefficient = this.getCoefficient(power);
       if (coefficient instanceof Complex) {
         newPolynomial.setCoefficient(power, coefficient.copy());
       } else if (
@@ -143,22 +178,23 @@ class Polynomial {
       ) {
         newPolynomial.setCoefficient(power, coefficient.getAtTime(time));
       }
-    }
+    });
     return newPolynomial;
   }
 
   /**
-   * Computes and returs the derivative of the polynomial.
+   * Computes and returns the derivative of the polynomial.
    * @returns {Polynomial} The derivative of the polynomial.
    */
   getDerivative() {
     const derivative = new Polynomial();
-    for (let [power, coefficient] of Object.entries(this.coefficients)) {
+    this.getCoefficientPowers().forEach((power) => {
+      let coefficient = this.getCoefficient(power);
       derivative.setCoefficient(
         power - 1,
         new Complex(coefficient.re * power, coefficient.im * power)
       );
-    }
+    });
     return derivative;
   }
 
@@ -168,31 +204,35 @@ class Polynomial {
    */
   getNewtonNumerator() {
     const newtonNumerator = new Polynomial();
-    for (let [power, coefficient] of Object.entries(this.coefficients)) {
-      if (coefficient) {
-        newtonNumerator.setCoefficient(
-          power,
-          new Complex(
-            (power - 1) * coefficient.re,
-            (power - 1) * coefficient.im
-          )
-        );
-      }
-    }
+    this.getCoefficientPowers().forEach((power) => {
+      let coefficient = this.getCoefficient(power);
+      newtonNumerator.setCoefficient(
+        power,
+        new Complex((power - 1) * coefficient.re, (power - 1) * coefficient.im)
+      );
+    });
     return newtonNumerator;
   }
 
   /**
-   * Computes and returns the list of available powers (powers with undefined coefficients) in ascending order.
+   * Computes and returns the list of available powers (powers with null coefficients) in ascending order.
    * @returns {Array} The list of available powers.
    */
   getAvailablePowers() {
-    const availablePowers = [];
-    for (let power = 0; power <= MAX_DEGREE; power++) {
-      if (!this.getCoefficient(power)) {
-        availablePowers.push(power);
-      }
-    }
-    return availablePowers;
+    return Object.keys(this.coefficients)
+      .filter((power) => this.getCoefficient(power) == null)
+      .sort((a, b) => {
+        return Number(a) - Number(b);
+      });
+  }
+
+  /**
+   * Computes and returns the list of powers with not null coefficients.
+   * @returns {Object} The list of powers with not null coefficients.
+   */
+  getCoefficientPowers() {
+    return Object.keys(this.coefficients).filter(
+      (power) => this.getCoefficient(power) != null
+    );
   }
 }

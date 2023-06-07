@@ -48,8 +48,21 @@ export default {
       equation += "</math>";
       return equation;
     },
+    coefficientsList() {
+      let coefficientsList = [];
+      this.polynomial.getCoefficientPowers().forEach((degree) => {
+        coefficientsList.push({
+          degree: degree,
+          coefficient: this.polynomial.getCoefficient(degree),
+        });
+      });
+      return coefficientsList;
+    },
+    availablePowers() {
+      return this.polynomial.getAvailablePowers();
+    },
     canAddCoefficient() {
-      return this.polynomial.getAvailablePowers().length != 0;
+      return this.availablePowers.length != 0;
     },
   },
   methods: {
@@ -57,10 +70,16 @@ export default {
       if (previousDegree != newDegree) {
         this.polynomial.setCoefficient(
           newDegree,
-          this.polynomial.getCoefficient(previousDegree)
+          this.polynomial.getCoefficient(previousDegree).copy()
         );
-        delete this.polynomial.coefficients[previousDegree];
+        this.polynomial.removeCoefficient(previousDegree);
       }
+    },
+    updateCoefficient(power, newCoefficient) {
+      this.polynomial.setCoefficient(power, newCoefficient);
+    },
+    deleteCoefficient(power) {
+      this.polynomial.removeCoefficient(power);
     },
     addCoefficient() {
       this.polynomial.setCoefficient(
@@ -108,11 +127,16 @@ export default {
       <div class="list">
         <CoefficientItem
           id="coefficientItem"
-          v-for="degree in Object.keys(polynomial.coefficients)"
-          :key="degree"
-          :degree="degree"
-          :polynomial="polynomial"
-          @update:degree="(newDegree) => updateDegree(degree, newDegree)"
+          v-for="coef in coefficientsList"
+          :key="coef.degree"
+          :degree="coef.degree"
+          :coefficient="coef.coefficient"
+          :availablePowers="availablePowers"
+          @update:degree="(newDegree) => updateDegree(coef.degree, newDegree)"
+          @update:coefficient="
+            (newCoefficient) => updateCoefficient(coef.degree, newCoefficient)
+          "
+          @delete:coefficient="deleteCoefficient(coef.degree)"
         />
         <IconTextButton
           v-if="canAddCoefficient"

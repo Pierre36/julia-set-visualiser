@@ -132,7 +132,7 @@ h3 {
   background-color: var(--gray-650);
   border: 1px solid var(--gray-500);
   border-radius: 0.25rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
   text-align: start;
   font-family: "Montserrat", sans-serif;
 }

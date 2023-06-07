@@ -97,6 +97,7 @@ export default {
   width: 100%;
   cursor: pointer;
   padding-left: 0.5rem;
+  padding-block: 0.25rem;
 }
 .select .text {
   flex-grow: 1;

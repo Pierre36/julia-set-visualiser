@@ -55,4 +55,12 @@ class ComplexCircle {
   showMinus() {
     return false;
   }
+
+  /**
+   * Returns a copy of the complex circle.
+   * @returns {ComplexCircle} The copy of the complex circle.
+   */
+  copy() {
+    return new ComplexCircle(this.center.copy(), this.radius, this.duration);
+  }
 }
