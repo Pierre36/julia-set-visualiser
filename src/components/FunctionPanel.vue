@@ -1,14 +1,19 @@
 <script>
-import { Polynomial } from "../models/Polynomial";
-import InfoButton from "./InfoButton.vue";
 import FormSelect from "./FormSelect.vue";
 import IconTextButton from "./IconTextButton.vue";
 import CoefficientItem from "./CoefficientItem.vue";
+import InfoHeader from "./InfoHeader.vue";
 import { Complex } from "../models/Complex";
+import { Polynomial } from "../models/Polynomial";
 
 export default {
   name: "FunctionPanel",
-  components: { InfoButton, FormSelect, IconTextButton, CoefficientItem },
+  components: {
+    FormSelect,
+    IconTextButton,
+    CoefficientItem,
+    InfoHeader,
+  },
   props: {
     functionType: { type: String, required: true },
     polynomial: { type: Polynomial, required: true },
@@ -93,8 +98,12 @@ export default {
 
 <template>
   <header>
-    <h2>Function</h2>
-    <InfoButton />
+    <InfoHeader :centerTitle="true">
+      <template #title>
+        <h2>Function</h2>
+      </template>
+      <template #info> </template>
+    </InfoHeader>
   </header>
 
   <div class="panelContent">
@@ -103,10 +112,12 @@ export default {
     </section>
 
     <section>
-      <div class="title">
-        <h3>Function type</h3>
-        <InfoButton />
-      </div>
+      <InfoHeader class="sectionHeader">
+        <template #title>
+          <h3>Function type</h3>
+        </template>
+        <template #info> </template>
+      </InfoHeader>
       <div class="content">
         <span>Type</span>
         <FormSelect
@@ -120,13 +131,15 @@ export default {
     </section>
 
     <section>
-      <div class="title">
-        <h3>Coefficients</h3>
-        <InfoButton />
-      </div>
-      <div class="list">
+      <InfoHeader class="sectionHeader">
+        <template #title>
+          <h3>Coefficients</h3>
+        </template>
+        <template #info> </template>
+      </InfoHeader>
+      <div>
         <CoefficientItem
-          id="coefficientItem"
+          class="coefficientItem"
           v-for="coef in coefficientsList"
           :key="coef.degree"
           :degree="coef.degree"
@@ -151,6 +164,10 @@ export default {
 </template>
 
 <style scoped>
+.sectionHeader {
+  margin-bottom: 0.5rem;
+}
+
 .equation {
   color: var(--gray-700);
   background-color: var(--gray-100);
@@ -160,7 +177,7 @@ export default {
   text-align: center;
 }
 
-#coefficientItem {
+.coefficientItem {
   margin-bottom: 0.75rem;
 }
 

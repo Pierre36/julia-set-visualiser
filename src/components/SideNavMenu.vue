@@ -115,7 +115,7 @@ export default {
         <ul
           id="moreMenu"
           ref="moreMenu"
-          class="dropdownMenu"
+          class="dropdown menu"
           v-if="!moreMenuCollapsed"
         >
           <li

@@ -59,7 +59,7 @@ export default {
         />
       </svg>
     </button>
-    <ul ref="menu" class="dropdownMenu" v-show="isOpen">
+    <ul ref="menu" class="dropdown menu" v-show="isOpen">
       <li
         v-for="option in options"
         :key="option.id"
@@ -111,7 +111,7 @@ export default {
   margin: auto;
 }
 
-.dropdownMenu {
+.dropdown {
   min-width: 100%;
   top: 0;
   left: 0;
@@ -125,7 +125,7 @@ export default {
   margin-right: 0.3rem;
 }
 
-li.selected .tick {
+.menu li.selected .tick {
   visibility: visible;
 }
 </style>

@@ -59,20 +59,8 @@ export default {
 }
 
 #sidePanel header {
-  padding-block: 0.5rem;
-  display: grid;
-  grid-template-columns: 3rem auto 3rem;
-  align-items: center;
-  text-align: center;
+  padding: 0.5rem;
   border-bottom: calc(var(--divider-height) * 2) solid var(--divider-color);
-}
-
-#sidePanel header h2 {
-  grid-column: 2;
-}
-
-#sidePanel header .info {
-  grid-column: 3;
 }
 
 #sidePanel .panelContent {
@@ -87,15 +75,6 @@ export default {
 #sidePanel section:last-of-type {
   border-bottom: none;
   flex-grow: 1;
-}
-
-#sidePanel section .title {
-  display: grid;
-  grid-template-columns: auto max-content;
-  align-items: center;
-  gap: 0.25rem;
-  padding-left: 0.25rem;
-  margin-bottom: 0.5rem;
 }
 
 #sidePanel section .content {

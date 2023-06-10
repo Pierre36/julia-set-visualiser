@@ -5,7 +5,7 @@
 :root {
   --topNav-height: 3.5rem;
   --sideNav-width: 3.5rem;
-  --sidePanel-width: 20rem;
+  --sidePanel-width: 21rem;
   --page-min-height: 8rem;
 }
 
@@ -98,7 +98,7 @@ h3 {
 
 /* Dropdown */
 
-.dropdownMenu {
+.dropdown {
   position: absolute;
   z-index: 100;
   color: var(--gray-300);
@@ -109,18 +109,18 @@ h3 {
   padding: 0.25rem;
 }
 
-.dropdownMenu li {
+.menu li {
   display: flex;
   cursor: pointer;
   border-radius: 0.25rem;
   padding: 0.25rem;
 }
 
-.dropdownMenu li:hover {
+.menu li:hover {
   background-color: var(--blue-200);
 }
 
-.dropdownMenu li.selected {
+.menu li.selected {
   color: var(--gray-100);
 }
 
