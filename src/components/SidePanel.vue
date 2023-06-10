@@ -84,4 +84,22 @@ export default {
   gap: 0.25rem;
   padding-left: 0.25rem;
 }
+
+#sidePanel p {
+  margin-bottom: 0.5rem;
+}
+
+#sidePanel .infoList {
+  list-style: inside;
+  padding-inline-start: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+#sidePanel .infoListItemTitle {
+  font-weight: 500;
+}
+
+#sidePanel li {
+  margin-bottom: 0.5rem;
+}
 </style>

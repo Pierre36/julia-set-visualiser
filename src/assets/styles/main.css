@@ -25,6 +25,23 @@ h3 {
   font-weight: 500;
 }
 
+/* Links */
+
+a {
+  outline: none;
+  color: var(--blue-100);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  border: 2px solid var(--blue-100);
+  border-radius: 0.25rem;
+}
+
 /* Buttons */
 
 .button,

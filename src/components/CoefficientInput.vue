@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       typeOptions: [
-        { id: "CONSTANT", text: "Constante" },
+        { id: "CONSTANT", text: "Constant" },
         { id: "CIRCLE", text: "Circle" },
         { id: "LINE", text: "Line" },
       ],
