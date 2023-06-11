@@ -20,6 +20,7 @@ export default {
           2: new Complex(1, 0),
         }),
         functionType: "DEFAULT",
+        juliaHSV: [210, 1, 1],
       },
     };
   },

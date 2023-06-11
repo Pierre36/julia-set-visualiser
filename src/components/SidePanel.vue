@@ -27,7 +27,10 @@ export default {
       :polynomial="parameters.polynomial"
       @update:functionType="updateFunctionType"
     />
-    <ColorsPanel v-if="currentPanel == 'COLORS'" />
+    <ColorsPanel
+      v-if="currentPanel == 'COLORS'"
+      :juliaHSV="parameters.juliaHSV"
+    />
     <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
   </div>
 </template>
@@ -70,6 +73,10 @@ export default {
 #sidePanel section {
   padding: 0.5rem;
   border-bottom: var(--divider-height) solid var(--divider-color);
+}
+
+#sidePanel section .sectionHeader {
+  margin-bottom: 0.5rem;
 }
 
 #sidePanel section:last-of-type {

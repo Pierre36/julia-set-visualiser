@@ -154,7 +154,7 @@ export default {
         </template>
       </InfoHeader>
       <div class="content">
-        <span>Type</span>
+        <h4>Type</h4>
         <FormSelect
           :options="functionTypeOptions"
           :selected="functionType"
@@ -244,10 +244,6 @@ export default {
 </template>
 
 <style scoped>
-.sectionHeader {
-  margin-bottom: 0.5rem;
-}
-
 .equation {
   color: var(--gray-700);
   background-color: var(--gray-100);
