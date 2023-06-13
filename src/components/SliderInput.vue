@@ -3,7 +3,6 @@ export default {
   name: "SliderInput",
   emits: ["update:value"],
   props: {
-    name: { type: String, default: "" },
     value: { type: Number, required: true },
     min: { type: Number, required: true },
     max: { type: Number, required: true },
@@ -46,7 +45,7 @@ export default {
 
 <template>
   <div class="sliderInput">
-    <h5>{{ name }}</h5>
+    <slot name="name"></slot>
     <input
       ref="textInput"
       class="input"
@@ -77,9 +76,6 @@ export default {
   grid-template-columns: auto auto;
   align-items: center;
   gap: 0.25rem;
-  padding-inline: 0.25rem;
-  margin-bottom: 0.5rem;
-  margin-top: 0.25rem;
 }
 
 .rangeInput {
