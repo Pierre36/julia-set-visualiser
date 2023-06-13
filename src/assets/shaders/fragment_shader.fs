@@ -2,7 +2,7 @@
 precision highp float;
 
 #define PI 3.1415926538
-#define ZERO 0.000000000001
+#define ZERO 0.000001
 #define EPSILON 0.000001
 #define INFINITY 1000000.0
 
@@ -15,6 +15,15 @@ uniform int numeratorDegree;
 uniform vec2 numeratorCoefficients[16];
 uniform int denominatorDegree;
 uniform vec2 denominatorCoefficients[16];
+uniform vec3 juliaHSV;
+uniform float defaultHue;
+uniform vec4 defaultColorParameters;
+uniform float infinityHue;
+uniform vec4 infinityColorParameters;
+uniform int nbAttractors;
+uniform vec2 attractors[16];
+uniform float attractorsHue[16];
+uniform vec4 attractorsColorParameters[16];
 
 
 // COMPLEX OPERATIONS
@@ -57,6 +66,10 @@ vec2 complexInverse(vec2 z) {
   return vec2(1.0 / z.x, -z.y);
 }
 
+float complexDistance(vec2 z1, vec2 z2) {
+  return length(vec2(z1.x * cos(z1.y) - z2.x * cos(z2.y), z1.x * sin(z1.y) - z2.x * sin(z2.y)));
+}
+
 vec3 hsvToRgb(vec3 hsv) {
   float hMod360 = mod(hsv.x, 360.0);
   int hSixth = int(mod(floor(hMod360 / 60.0), 6.0));
@@ -94,12 +107,14 @@ float riemannSpheredistance(vec2 z, vec2 w) {
   } else if (zAbs >= INFINITY) {
     transformationResult = 1.0 / wAbs;
   } else {
-    vec2 zw_ = complexMultiplication(z, vec2(w.x, -w.y));
-    // transformationResult = complexSum(zw_, vec2(-wAbs * wAbs, 0.0)).x / 2.0 * wAbs * cos((z.y + w.y) / 2.0);
-    transformationResult = complexSum(zw_, vec2(-wAbs * wAbs, 0.0)).x / (complexSum(zw_, vec2(1.0, 0.0)).x * wAbs);
+    float c = z.x * cos(z.y - w.y);
+    float s = z.x * sin(z.y - w.y);
+    transformationResult = sqrt((c - w.x) * (c - w.x) + s * s) / sqrt((w.x * c + 1.0) * (w.x * c + 1.0) + w.x * w.x * s * s);
   }
   if (abs(transformationResult) >= INFINITY) {
     return PI;
+  } else if (abs(transformationResult) <= ZERO) {
+    return 2.0 * atan(ZERO);
   } else {
     return 2.0 * atan(transformationResult);
   }
@@ -124,6 +139,32 @@ vec2 applyFunction(vec2 z) {
   return complexMultiplication(numerator, complexInverse(denominator));
 }
 
+vec3 getColor(float adjustedDivergence, float hue, vec4 colorParameters) {
+  float saturation = colorParameters.x * pow(adjustedDivergence, colorParameters.y);
+  float value = colorParameters.z * pow(adjustedDivergence, colorParameters.w);
+  return vec3(hue, saturation, value);
+}
+
+vec3 colorAccordingToSet(float adjustedDivergence, vec2 fkz) {
+  // If it belongs to the Julia Set, return the Julia color
+  if (adjustedDivergence > 1.) {
+    return juliaHSV;
+  }
+
+  // If it belongs to the Fatou set, color according to attractor
+  for (int a = 0; a <= nbAttractors; ++a) {
+    if (complexDistance(attractors[a], fkz) < 0.001) {
+      return getColor(adjustedDivergence, attractorsHue[a], attractorsColorParameters[a]);
+    }
+  }
+  if (isComplexInfinity(fkz)) {
+    return getColor(adjustedDivergence, infinityHue, infinityColorParameters);
+  }
+
+  // If no attractor match the point, color using default coloring
+  return getColor(adjustedDivergence, defaultHue, defaultColorParameters);
+}
+
 void main() {
 
   // Parameters
@@ -137,7 +178,7 @@ void main() {
   // Compute how close from an attractor the current point is 
   // by checking if nearby pixels tend to get closer
   vec2 fkz = z;
-  vec2 fkzeps = vec2(z.x * (1.0 + EPSILON), z.y);
+  vec2 fkzeps = vec2(z.x + EPSILON, z.y);
   float divergence = 0.0;
   for (int k; k < nbIteration; ++k) {
     fkz = applyFunction(fkz);
@@ -145,19 +186,9 @@ void main() {
     divergence += riemannSpheredistance(fkz, fkzeps);
   }
 
-  // Color according to the divergence of close points
-  float hue = 210.0;
-  float saturation = 0.9;
-  float value = 0.0;
-  value = divergence * 1600.0;
-  if (divergence > 0.0007) {
-    value = 1.0;
-  }
-  if (!isComplexInfinity(fkz)) {
-    saturation = 0.0;
-    value = divergence * 10000.0;
-  }
+  // Color according to the divergence of close points and convert to RGB
+  float adjustedDivergence = 1400. * log(divergence + 1.0);
+  fragColor = vec4(hsvToRgb(colorAccordingToSet(adjustedDivergence, fkz)), 1.0);
 
-  // Convert HSV to RGB
-  fragColor = vec4(hsvToRgb(vec3(hue, saturation, value)), 1.0);
+  // fragColor = vec4(divergence * 10000.0, 0., 0., 1.0);
 }

@@ -45,6 +45,36 @@ function getFunctionParameters(parameters, time) {
   ];
 }
 
+function getAttractorParameters(parameters) {
+  const attractors = parameters.attractors;
+  const attractorsComplex = [];
+  const attractorsHue = [];
+  const attractorsColorParameters = [];
+  for (let a = 0; a < 16; a++) {
+    const attractor = attractors[a];
+    if (attractor != undefined) {
+      attractorsComplex.push(attractor.complex.mod(), attractor.complex.arg());
+      attractorsHue.push(attractor.hue);
+      attractorsColorParameters.push(
+        attractor.saturationStrength,
+        attractor.saturationPower,
+        attractor.valueStrength,
+        attractor.valuePower
+      );
+    } else {
+      attractorsComplex.push(0, 0);
+      attractorsHue.push(0);
+      attractorsColorParameters.push(0, 0, 0, 0);
+    }
+  }
+  return [
+    attractors.length,
+    new Float32Array(attractorsComplex),
+    new Float32Array(attractorsHue),
+    new Float32Array(attractorsColorParameters),
+  ];
+}
+
 /**
  * Load WebGL2 from the provided canvas.
  * @param {Canvas} canvas The canvas.
@@ -146,6 +176,24 @@ function getUniformLocations(gl, shaderProgram) {
       shaderProgram,
       "denominatorCoefficients"
     ),
+    juliaHSV: gl.getUniformLocation(shaderProgram, "juliaHSV"),
+    defaultHue: gl.getUniformLocation(shaderProgram, "defaultHue"),
+    defaultColorParameters: gl.getUniformLocation(
+      shaderProgram,
+      "defaultColorParameters"
+    ),
+    infinityHue: gl.getUniformLocation(shaderProgram, "infinityHue"),
+    infinityColorParameters: gl.getUniformLocation(
+      shaderProgram,
+      "infinityColorParameters"
+    ),
+    nbAttractors: gl.getUniformLocation(shaderProgram, "nbAttractors"),
+    attractors: gl.getUniformLocation(shaderProgram, "attractors"),
+    attractorsHue: gl.getUniformLocation(shaderProgram, "attractorsHue"),
+    attractorsColorParameters: gl.getUniformLocation(
+      shaderProgram,
+      "attractorsColorParameters"
+    ),
   };
 }
 
@@ -209,6 +257,40 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform2fv(
     uniformLocations.denominatorCoefficients,
     denominatorCoefficients
+  );
+  gl.uniform3fv(uniformLocations.juliaHSV, parameters.juliaHSV);
+  gl.uniform1f(uniformLocations.defaultHue, parameters.defaultAttractor.hue);
+  gl.uniform4fv(
+    uniformLocations.defaultColorParameters,
+    new Float32Array([
+      parameters.defaultAttractor.saturationStrength,
+      parameters.defaultAttractor.saturationPower,
+      parameters.defaultAttractor.valueStrength,
+      parameters.defaultAttractor.valuePower,
+    ])
+  );
+  gl.uniform1f(uniformLocations.infinityHue, parameters.infinityAttractor.hue);
+  gl.uniform4fv(
+    uniformLocations.infinityColorParameters,
+    new Float32Array([
+      parameters.infinityAttractor.saturationStrength,
+      parameters.infinityAttractor.saturationPower,
+      parameters.infinityAttractor.valueStrength,
+      parameters.infinityAttractor.valuePower,
+    ])
+  );
+  const [
+    nbAttractors,
+    attractorsComplex,
+    attractorsHue,
+    attractorsColorParameters,
+  ] = getAttractorParameters(parameters);
+  gl.uniform1i(uniformLocations.nbAttractors, nbAttractors);
+  gl.uniform2fv(uniformLocations.attractors, attractorsComplex);
+  gl.uniform1fv(uniformLocations.attractorsHue, attractorsHue);
+  gl.uniform4fv(
+    uniformLocations.attractorsColorParameters,
+    attractorsColorParameters
   );
 }
 
