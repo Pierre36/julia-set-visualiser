@@ -1,0 +1,153 @@
+<script>
+import { Complex } from "../models/Complex";
+import SliderInput from "./SliderInput.vue";
+import ComplexInput from "./ComplexInput.vue";
+import FloatInput from "./FloatInput.vue";
+import { Attractor } from "../models/Attractor";
+
+export default {
+  name: "AttractorItem",
+  components: { ComplexInput, SliderInput, FloatInput },
+  props: {
+    isDefault: { type: Boolean, default: false },
+    isInfinity: { type: Boolean, default: false },
+    attractor: {
+      type: Attractor,
+      default: new Attractor(new Complex(0, 0), 0, 1, 1, 1, 1),
+    },
+  },
+  emits: ["delete:attractor"],
+  methods: {
+    updateComplex(newComplex) {
+      this.attractor.complex = newComplex;
+    },
+    updateHue(newHue) {
+      this.attractor.hue = newHue;
+    },
+    updateSaturationStrength(newSaturationStrength) {
+      this.attractor.saturationStrength = newSaturationStrength;
+    },
+    updateSaturationPower(newSaturationPower) {
+      this.attractor.saturationPower = newSaturationPower;
+    },
+    updateValueStrength(newValueStrength) {
+      this.attractor.valueStrength = newValueStrength;
+    },
+    updateValuePower(newValuePower) {
+      this.attractor.valuePower = newValuePower;
+    },
+  },
+};
+</script>
+
+<template>
+  <div class="attractorItem">
+    <h4 v-if="isDefault" class="span-2 textAttractor">
+      Default (no attractor)
+    </h4>
+    <h4 v-else-if="isInfinity" class="span-2 textAttractor">
+      Divergence to Infinty
+    </h4>
+    <div v-else class="attractor span-2">
+      <h4>Attractor</h4>
+      <ComplexInput
+        :complex="attractor.complex"
+        @update:complex="updateComplex"
+      />
+      <button class="icon-button" @click="$emit('delete:attractor')">
+        <svg
+          class="icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="100 -860 760 760"
+          role="img"
+        >
+          <title>Remove attractor</title>
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="m480-438 123 123q9 9 21 9t21-9q9-9 9-21t-9-21L522-480l123-123q9-9 9-21t-9-21q-9-9-21-9t-21 9L480-522 357-645q-9-9-21-9t-21 9q-9 9-9 21t9 21l123 123-123 123q-9 9-9 21t9 21q9 9 21 9t21-9l123-123ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"
+          />
+        </svg>
+      </button>
+    </div>
+    <SliderInput
+      class="span-2"
+      :value="attractor.hue"
+      :min="0"
+      :max="360"
+      :step="1"
+      @update:value="updateHue"
+      ><template #name><h4>Hue</h4></template></SliderInput
+    >
+    <h4 class="span-2 subtitle">Saturation</h4>
+    <h5>Strength</h5>
+    <FloatInput
+      :float="attractor.saturationStrength"
+      :min="0"
+      @update:float="updateSaturationStrength"
+    />
+    <h5>Power</h5>
+    <FloatInput
+      :float="attractor.saturationPower"
+      :min="0"
+      @update:float="updateSaturationPower"
+    />
+    <h4 class="span-2 subtitle">Value</h4>
+    <h5>Strength</h5>
+    <FloatInput
+      :float="attractor.valueStrength"
+      :min="0"
+      @update:float="updateValueStrength"
+    />
+    <h5>Power</h5>
+    <FloatInput
+      :float="attractor.valuePower"
+      :min="0"
+      @update:float="updateValuePower"
+    />
+  </div>
+</template>
+
+<style scoped>
+.attractorItem {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.25rem;
+  align-items: center;
+  border: 1px solid var(--gray-300);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+.textAttractor {
+  margin-bottom: 0.5rem;
+}
+
+.attractor {
+  display: grid;
+  grid-template-columns: auto 9.75rem 2rem;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.icon-button {
+  padding: 0rem;
+}
+
+.icon-button svg {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+}
+
+h5 {
+  padding-left: 0.25rem;
+}
+</style>

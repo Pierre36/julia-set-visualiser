@@ -30,6 +30,9 @@ export default {
     <ColorsPanel
       v-if="currentPanel == 'COLORS'"
       :juliaHSV="parameters.juliaHSV"
+      :defaultAttractor="parameters.defaultAttractor"
+      :infinityAttractor="parameters.infinityAttractor"
+      :attractors="parameters.attractors"
     />
     <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
   </div>

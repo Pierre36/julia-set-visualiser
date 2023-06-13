@@ -6,6 +6,7 @@ import { Complex } from "./models/Complex";
 import { ComplexCircle } from "./models/ComplexCircle";
 import { ComplexLine } from "./models/ComplexLine";
 import { Polynomial } from "./models/Polynomial";
+import { Attractor } from "./models/Attractor";
 
 export default {
   name: "App",
@@ -20,7 +21,10 @@ export default {
           2: new Complex(1, 0),
         }),
         functionType: "DEFAULT",
-        juliaHSV: [210, 1, 1],
+        juliaHSV: [210, 0, 1],
+        defaultAttractor: new Attractor(null, 0, 1.6, 0.2, 10.0, 0.2),
+        infinityAttractor: new Attractor(null, 210.0, 1.0, 0.1, 1.0, 0.5),
+        attractors: [],
       },
     };
   },
