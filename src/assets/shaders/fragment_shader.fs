@@ -157,6 +157,8 @@ vec3 colorAccordingToSet(float adjustedDivergence, vec2 fkz) {
       return getColor(adjustedDivergence, attractorsHue[a], attractorsColorParameters[a]);
     }
   }
+
+  // If it converges to infinity, color using infinity coloring
   if (isComplexInfinity(fkz)) {
     return getColor(adjustedDivergence, infinityHue, infinityColorParameters);
   }
