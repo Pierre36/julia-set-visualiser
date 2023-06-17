@@ -16,6 +16,7 @@ export default {
       parameters: {
         paused: false,
         resolutionScale: 1,
+        coordinatesScale: 2,
         polynomial: new Polynomial({
           0: new ComplexCircle(new Complex(0, 0), 1, 5000),
           2: new Complex(1, 0),

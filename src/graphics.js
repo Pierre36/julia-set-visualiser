@@ -162,6 +162,7 @@ function loadShader(gl, type, source) {
 function getUniformLocations(gl, shaderProgram) {
   return {
     resolution: gl.getUniformLocation(shaderProgram, "resolution"),
+    coordinatesScale: gl.getUniformLocation(shaderProgram, "coordinatesScale"),
     time: gl.getUniformLocation(shaderProgram, "time"),
     numeratorDegree: gl.getUniformLocation(shaderProgram, "numeratorDegree"),
     numeratorCoefficients: gl.getUniformLocation(
@@ -241,6 +242,7 @@ function setPositionAttributes(gl, shaderProgram) {
  */
 function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform1f(uniformLocations.time, time / 1000);
+  gl.uniform1f(uniformLocations.coordinatesScale, parameters.coordinatesScale);
   gl.uniform1f(
     uniformLocations.resolution,
     canvas.clientWidth / canvas.clientHeight

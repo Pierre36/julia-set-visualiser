@@ -170,12 +170,10 @@ vec3 colorAccordingToSet(float adjustedDivergence, vec2 fkz) {
 void main() {
 
   // Parameters
-  float scale = 2.0;
   int nbIteration = 20;
 
   // Convert coordinates to complex number
   vec2 z = vec2(length(coordinates), atan(coordinates.y, coordinates.x));
-  z = vec2(z.x * scale, z.y);
 
   // Compute how close from an attractor the current point is 
   // by checking if nearby pixels tend to get closer

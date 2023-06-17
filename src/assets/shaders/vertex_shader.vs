@@ -6,6 +6,7 @@ in vec4 vertexPosition;
 out vec2 coordinates;
 
 uniform float resolution;
+uniform float coordinatesScale;
 
 void main() {
   gl_Position = vertexPosition;
@@ -14,4 +15,5 @@ void main() {
   } else {
     coordinates = vertexPosition.xy * vec2(resolution, 1.0);
   }
+  coordinates = coordinatesScale * coordinates;
 }
