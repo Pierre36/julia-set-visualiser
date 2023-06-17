@@ -145,15 +145,15 @@ class Polynomial {
   }
 
   /**
-   * Convert the polynomial into a flattened array of complex number in Euler's notation.
-   * @returns {Float32Array} The flattened array of complex number in Euler's notation.
+   * Convert the polynomial into a flattened array of complex number.
+   * @returns {Float32Array} The flattened array of complex numbers.
    */
-  toFloat32EulerArray() {
+  toFloat32Array() {
     const flattenedArray = [];
     for (let p = 0; p <= MAX_DEGREE; p++) {
       let complex = this.coefficients[p];
       if (complex != null) {
-        flattenedArray.push(complex.mod(), complex.arg());
+        flattenedArray.push(complex.re, complex.im);
       } else {
         flattenedArray.push(0, 0);
       }

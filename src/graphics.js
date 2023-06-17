@@ -19,18 +19,16 @@ function getFunctionParameters(parameters, time) {
 
   // Depending on the function type, computes the numerator and denominator
   if (parameters.functionType == "DEFAULT") {
-    numeratorCoefficients = polynomial.toFloat32EulerArray();
+    numeratorCoefficients = polynomial.toFloat32Array();
     denominatorDegree = 1;
     denominatorCoefficients = new Polynomial({
       0: new Complex(1, 0),
-    }).toFloat32EulerArray();
+    }).toFloat32Array();
   } else if (parameters.functionType == "NEWTON") {
     const derivative = polynomial.getDerivative();
-    numeratorCoefficients = polynomial
-      .getNewtonNumerator()
-      .toFloat32EulerArray();
+    numeratorCoefficients = polynomial.getNewtonNumerator().toFloat32Array();
     denominatorDegree = derivative.degree;
-    denominatorCoefficients = derivative.toFloat32EulerArray();
+    denominatorCoefficients = derivative.toFloat32Array();
   } else {
     throw new Error(
       `The function type is incorrect. It must be either "DEFAULT" or "NEWTON", but received ${parameters.functionType}`
