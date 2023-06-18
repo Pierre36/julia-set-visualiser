@@ -15,6 +15,11 @@ body {
   font-weight: 300;
 }
 
+h1 {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
 h2 {
   font-size: 1.3em;
   font-weight: 500;
