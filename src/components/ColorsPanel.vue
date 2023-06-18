@@ -22,9 +22,12 @@ export default {
   },
   computed: {
     visualizerColor() {
-      return `hsl(${this.juliaHSV[0]}, ${this.juliaHSV[1] * 100}%, ${
-        this.juliaHSV[2] * 100
-      }%)`;
+      const l = this.juliaHSV[2] * (1 - this.juliaHSV[1] / 2);
+      let s = 0;
+      if (l != 0 && l != 1) {
+        s = (this.juliaHSV[2] - l) / Math.min(l, 1 - l);
+      }
+      return `hsl(${this.juliaHSV[0]}, ${s * 100}%, ${l * 100}%)`;
     },
   },
   methods: {
