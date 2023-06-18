@@ -57,7 +57,7 @@ export default {
   --collapseButton-height: var(--sideNav-width);
   background-color: var(--gray-500);
   width: var(--sideNav-width);
-  z-index: 2;
+  z-index: 3;
 }
 
 #collapseButton {

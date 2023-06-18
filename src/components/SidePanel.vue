@@ -51,7 +51,7 @@ export default {
   transition: margin-left 250ms ease-in-out;
   left: var(--sideNav-width);
   margin-left: 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 #sidePanel.collapsed {
