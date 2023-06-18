@@ -141,6 +141,9 @@ class Polynomial {
         mathML += "</mrow>";
       }
     }
+    if (mathML == "") {
+      mathML = "<mrow><mn>0</mn></mrow>";
+    }
     return mathML;
   }
 
