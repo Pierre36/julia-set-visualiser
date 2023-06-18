@@ -55,9 +55,9 @@ function getAttractorParameters(parameters) {
       attractorsHue.push(attractor.hue);
       attractorsColorParameters.push(
         attractor.saturationStrength,
-        attractor.saturationPower,
+        attractor.saturationOffset,
         attractor.valueStrength,
-        attractor.valuePower
+        attractor.valueOffset
       );
     } else {
       attractorsComplex.push(0, 0);
@@ -264,9 +264,9 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
     uniformLocations.defaultColorParameters,
     new Float32Array([
       parameters.defaultAttractor.saturationStrength,
-      parameters.defaultAttractor.saturationPower,
+      parameters.defaultAttractor.saturationOffset,
       parameters.defaultAttractor.valueStrength,
-      parameters.defaultAttractor.valuePower,
+      parameters.defaultAttractor.valueOffset,
     ])
   );
   gl.uniform1f(uniformLocations.infinityHue, parameters.infinityAttractor.hue);
@@ -274,9 +274,9 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
     uniformLocations.infinityColorParameters,
     new Float32Array([
       parameters.infinityAttractor.saturationStrength,
-      parameters.infinityAttractor.saturationPower,
+      parameters.infinityAttractor.saturationOffset,
       parameters.infinityAttractor.valueStrength,
-      parameters.infinityAttractor.valuePower,
+      parameters.infinityAttractor.valueOffset,
     ])
   );
   const [

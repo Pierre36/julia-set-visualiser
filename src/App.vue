@@ -23,8 +23,8 @@ export default {
         }),
         functionType: "DEFAULT",
         juliaHSV: [210, 0, 1],
-        defaultAttractor: new Attractor(null, 0, 1.6, 0.2, 10.0, 0.2),
-        infinityAttractor: new Attractor(null, 210.0, 1.0, 0.1, 1.0, 0.5),
+        defaultAttractor: new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
+        infinityAttractor: new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
         attractors: [],
       },
     };

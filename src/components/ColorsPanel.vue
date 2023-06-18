@@ -38,7 +38,7 @@ export default {
       this.juliaHSV[2] = newValue;
     },
     addAttractor() {
-      this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 1, 1, 1));
+      this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
     },
   },
 };

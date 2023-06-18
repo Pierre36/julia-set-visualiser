@@ -27,14 +27,14 @@ export default {
     updateSaturationStrength(newSaturationStrength) {
       this.attractor.saturationStrength = newSaturationStrength;
     },
-    updateSaturationPower(newSaturationPower) {
-      this.attractor.saturationPower = newSaturationPower;
+    updateSaturationOffset(newSaturationOffset) {
+      this.attractor.saturationOffset = newSaturationOffset;
     },
     updateValueStrength(newValueStrength) {
       this.attractor.valueStrength = newValueStrength;
     },
-    updateValuePower(newValuePower) {
-      this.attractor.valuePower = newValuePower;
+    updateValueOffset(newValueOffset) {
+      this.attractor.valueOffset = newValueOffset;
     },
   },
 };
@@ -86,11 +86,11 @@ export default {
       :min="0"
       @update:float="updateSaturationStrength"
     />
-    <h5>Power</h5>
+    <h5>Offset</h5>
     <FloatInput
-      :float="attractor.saturationPower"
+      :float="attractor.saturationOffset"
       :min="0"
-      @update:float="updateSaturationPower"
+      @update:float="updateSaturationOffset"
     />
     <h4 class="span-2 subtitle">Value</h4>
     <h5>Strength</h5>
@@ -99,11 +99,11 @@ export default {
       :min="0"
       @update:float="updateValueStrength"
     />
-    <h5>Power</h5>
+    <h5>Offset</h5>
     <FloatInput
-      :float="attractor.valuePower"
+      :float="attractor.valueOffset"
       :min="0"
-      @update:float="updateValuePower"
+      @update:float="updateValueOffset"
     />
   </div>
 </template>

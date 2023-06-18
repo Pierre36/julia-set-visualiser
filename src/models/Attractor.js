@@ -11,23 +11,23 @@ class Attractor {
    * @param {Complex} complex The attractor value, a complex number.
    * @param {Number} hue The hue of the attractor.
    * @param {Number} saturationStrength The saturation strength of the attractor.
-   * @param {Number} saturationPower The saturation power of the attractor.
+   * @param {Number} saturationOffset The saturation offset of the attractor.
    * @param {Number} valueStrength The value strength of the attractor.
-   * @param {Number} valuePower The value power of the attractor.
+   * @param {Number} valueOffset The value offset of the attractor.
    */
   constructor(
     complex,
     hue,
     saturationStrength,
-    saturationPower,
+    saturationOffset,
     valueStrength,
-    valuePower
+    valueOffset
   ) {
     this.complex = complex;
     this.hue = hue;
     this.saturationStrength = saturationStrength;
-    this.saturationPower = saturationPower;
+    this.saturationOffset = saturationOffset;
     this.valueStrength = valueStrength;
-    this.valuePower = valuePower;
+    this.valueOffset = valueOffset;
   }
 }
