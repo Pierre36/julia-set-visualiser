@@ -111,10 +111,19 @@ class Complex {
         } else {
           mathML += "<mo>+</mo>";
         }
-        mathML += `<mn>${displayedIm}</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>`;
+        if (displayedIm != 1) {
+          mathML += `<mn>${displayedIm}</mn>`;
+        }
+        mathML += "<mi>i</mi><mo form='prefix' stretchy='false'>)</mo>";
         return mathML;
       } else {
-        return `<mn>${displayedIm}</mn><mi>i</mi>`;
+        if (displayedIm == 1) {
+          return "<mi>i</mi>";
+        } else if (displayedIm == -1) {
+          return "<mo>-</mo><mi>i</mi>";
+        } else {
+          return `<mn>${displayedIm}</mn><mi>i</mi>`;
+        }
       }
     } else {
       if (!showOne && (this.re == 1 || this.re == -1)) {
@@ -135,15 +144,25 @@ class Complex {
         let string = String(this.re);
         if (this.im >= 0) {
           string += " + ";
-          string += String(this.im);
+          if (this.im != 1) {
+            string += String(this.im);
+          }
         } else {
           string += " - ";
-          string += String(-this.im);
+          if (this.im != -1) {
+            string += String(-this.im);
+          }
         }
         string += "i";
         return string;
       } else {
-        return `${this.im}i`;
+        if (this.im == 1) {
+          return "i";
+        } else if (this.im == -1) {
+          return "-i";
+        } else {
+          return `${this.im}i`;
+        }
       }
     } else {
       return String(this.re);

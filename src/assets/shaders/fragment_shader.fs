@@ -197,6 +197,7 @@ void main() {
   // Parameters
   int nbIteration = 20;
   float epsilon = 0.00001;
+  float juliaBound = -4.0;
 
   // Compute how close from an attractor the current point is 
   // by checking if nearby pixels tend to get closer
@@ -210,7 +211,6 @@ void main() {
   }
 
   // Color according to the divergence of close points and convert to RGB
-  float juliaBound = -4.0;
   float adjustedDivergence = log(divergence) - juliaBound;
   fragColor = vec4(hsvToRgb(colorAccordingToSet(adjustedDivergence, fkz)), 1.0);
 }
