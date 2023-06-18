@@ -40,6 +40,9 @@ export default {
     addAttractor() {
       this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
     },
+    deleteAttractor(index) {
+      this.attractors.splice(index, 1);
+    },
   },
 };
 </script>
@@ -124,6 +127,7 @@ export default {
           :isDefault="false"
           :isInfinity="false"
           :attractor="attractor"
+          @delete:attractor="deleteAttractor(index)"
         />
         <IconTextButton
           v-if="attractors.length <= 16"
