@@ -51,7 +51,7 @@ function getAttractorParameters(parameters) {
   for (let a = 0; a < 16; a++) {
     const attractor = attractors[a];
     if (attractor != undefined) {
-      attractorsComplex.push(attractor.complex.mod(), attractor.complex.arg());
+      attractorsComplex.push(attractor.complex.re, attractor.complex.im);
       attractorsHue.push(attractor.hue);
       attractorsColorParameters.push(
         attractor.saturationStrength,
