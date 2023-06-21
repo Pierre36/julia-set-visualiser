@@ -19,6 +19,19 @@ class ComplexLine {
   }
 
   /**
+   * Creates a complex line from a JSON.
+   * @param {Object} complexLineJSON An object containing the JSON for a complex line.
+   * @returns The complex line made from the JSON.
+   */
+  static fromJSON(complexLineJSON) {
+    return new ComplexLine(
+      Complex.fromJSON(complexLineJSON["start"]),
+      Complex.fromJSON(complexLineJSON["end"]),
+      complexLineJSON["duration"]
+    );
+  }
+
+  /**
    * Get the value of the point on the line at the given time.
    * @param {Number} time The time in milliseconds.
    * @returns {Complex} The value of the point on the line at the given time.

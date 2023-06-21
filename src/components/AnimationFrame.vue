@@ -2,11 +2,53 @@
 import { displayScene } from "../graphics";
 import vertexShaderSource from "../assets/shaders/vertex_shader.vs?raw";
 import fragmentShaderSource from "../assets/shaders/fragment_shader.fs?raw";
+import { Configuration } from "../models/Configuration";
 
 export default {
   name: "AnimationFrame",
   props: {
-    parameters: { type: Object, required: true },
+    configuration: { type: Configuration, required: true },
+  },
+  data() {
+    return {
+      parameters: {
+        paused: false,
+        resolutionScale: this.configuration.resolutionScale,
+        coordinatesScale: this.configuration.coordinatesScale,
+        polynomial: this.configuration.polynomial,
+        functionType: this.configuration.functionType,
+        juliaHSV: this.configuration.juliaHSV,
+        defaultAttractor: this.configuration.defaultAttractor,
+        infinityAttractor: this.configuration.infinityAttractor,
+        attractors: this.configuration.attractors,
+      },
+    };
+  },
+  watch: {
+    "configuration.resolutionScale"(newResolutionScale) {
+      this.parameters.resolutionScale = newResolutionScale;
+    },
+    "configuration.coordinatesScale"(newCoordinatesScale) {
+      this.parameters.coordinatesScale = newCoordinatesScale;
+    },
+    "configuration.polynomial"(newPolynomial) {
+      this.parameters.polynomial = newPolynomial;
+    },
+    "configuration.functionType"(newFunctionType) {
+      this.parameters.functionType = newFunctionType;
+    },
+    "configuration.juliaHSV"(newJuliaHSV) {
+      this.parameters.juliaHSV = newJuliaHSV;
+    },
+    "configuration.defaultAttractor"(newDefaultAttractor) {
+      this.parameters.defaultAttractor = newDefaultAttractor;
+    },
+    "configuration.infinityAttractor"(newInfinityAttractor) {
+      this.parameters.infinityAttractor = newInfinityAttractor;
+    },
+    "configuration.attractors"(newAttractors) {
+      this.parameters.attractors = newAttractors;
+    },
   },
   mounted() {
     const shaderSources = {

@@ -12,7 +12,7 @@ const MAX_DEGREE = 15;
 class Polynomial {
   /**
    * Polynomial constructor
-   * @param {Object} coefficients The coeffficients of the polynomial.
+   * @param {Object} coefficients The coefficients of the polynomial.
    */
   constructor(coefficients) {
     this.degree = 0;
@@ -24,6 +24,31 @@ class Polynomial {
         this.coefficients[power] = null;
       }
     }
+  }
+
+  /**
+   * Creates a polynomial from a JSON.
+   * @param {Object} coefficientsJSON An object containing the JSON for a polynomial.
+   * @returns The polynomial made from the coefficients.
+   * @throws An error if one of the coefficients type is incorrect.
+   */
+  static fromJSON(coefficientsJSON) {
+    const coefficients = {};
+    Object.keys(coefficientsJSON).forEach((power) => {
+      const coefficientJSON = coefficientsJSON[power];
+      if (coefficientJSON["type"] == "COMPLEX_CIRCLE") {
+        coefficients[power] = ComplexCircle.fromJSON(coefficientJSON);
+      } else if (coefficientJSON["type"] == "COMPLEX_LINE") {
+        coefficients[power] = ComplexLine.fromJSON(coefficientJSON);
+      } else if (coefficientJSON["type"] == "COMPLEX") {
+        coefficients[power] = Complex.fromJSON(coefficientJSON["complex"]);
+      } else {
+        throw Error(
+          `The type of the coefficient of degree ${power} is incorrect! The type must be "COMPLEX_CIRLCE", "COMPLEX_LINE" or "COMPLEX", got ${coefficientJSON["type"]}`
+        );
+      }
+    });
+    return new Polynomial(coefficients);
   }
 
   /**
@@ -237,5 +262,20 @@ class Polynomial {
     return Object.keys(this.coefficients).filter(
       (power) => this.getCoefficient(power) != null
     );
+  }
+
+  /**
+   * Returns a copy of the polynomial.
+   * @returns {Polynomial} The copy of the polynomial.
+   */
+  copy() {
+    const newPolynomial = new Polynomial();
+    for (let p = 0; p <= MAX_DEGREE; p++) {
+      let coefficient = this.coefficients[p];
+      if (coefficient != null) {
+        newPolynomial.setCoefficient(p, coefficient.copy());
+      }
+    }
+    return newPolynomial;
   }
 }

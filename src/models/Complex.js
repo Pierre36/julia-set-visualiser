@@ -18,6 +18,19 @@ class Complex {
   }
 
   /**
+   * Creates a complex number from a JSON.
+   * @param {Object} complexJSON An object containing the JSON for a complex number.
+   * @returns The complex number made from the JSON.
+   */
+  static fromJSON(complexJSON) {
+    if (complexJSON == null) {
+      return null;
+    } else {
+      return new Complex(complexJSON["re"], complexJSON["im"]);
+    }
+  }
+
+  /**
    * Tries to convert a string to a complex number.
    * @param {String} complexString A string representing a complex number.
    * @returns The complex number corresponding to the string.

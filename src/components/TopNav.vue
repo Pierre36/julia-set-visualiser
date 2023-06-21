@@ -4,11 +4,22 @@ import FormSelect from "./FormSelect.vue";
 export default {
   name: "TopNav",
   components: { FormSelect },
-  data() {
-    return {
-      configurationOptions: [{ id: 0, text: "Default" }],
-      selectedConfiguration: 0,
-    };
+  props: {
+    configurations: { type: Object, required: true },
+    selectedConfigurationId: { type: String, required: true },
+  },
+  emits: ["update:selectedConfigurationId"],
+  computed: {
+    configurationOptions() {
+      const configurationOptions = [];
+      Object.values(this.configurations).forEach((configuration) => {
+        configurationOptions.push({
+          id: configuration.id,
+          text: configuration.name,
+        });
+      });
+      return configurationOptions;
+    },
   },
 };
 </script>
@@ -19,7 +30,10 @@ export default {
     <h1>Julia Set Visualizer</h1>
     <FormSelect
       :options="configurationOptions"
-      :selected="selectedConfiguration"
+      :selected="selectedConfigurationId"
+      @update:selected="
+        (newSelected) => $emit('update:selectedConfigurationId', newSelected)
+      "
     />
   </div>
 </template>
@@ -28,14 +42,11 @@ export default {
 #topNav {
   height: var(--topNav-height);
   background-color: var(--gray-400);
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--sideNav-width) auto 15rem;
   align-items: center;
   gap: 0.75rem;
   padding-right: 0.5rem;
-}
-
-h1 {
-  flex-grow: 1;
 }
 
 .logo {

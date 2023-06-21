@@ -19,6 +19,19 @@ class ComplexCircle {
   }
 
   /**
+   * Creates a complex circle from a JSON.
+   * @param {Object} complexCircleJSON An object containing the JSON for a complex circle.
+   * @returns The complex circle made from the JSON.
+   */
+  static fromJSON(complexCircleJSON) {
+    return new ComplexCircle(
+      Complex.fromJSON(complexCircleJSON["center"]),
+      complexCircleJSON["radius"],
+      complexCircleJSON["duration"]
+    );
+  }
+
+  /**
    * Get the value of the point on the circle at the given time.
    * @param {Number} time The time in milliseconds.
    * @returns {Complex} The value of the point on the circle at the given time.

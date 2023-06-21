@@ -30,4 +30,35 @@ class Attractor {
     this.valueStrength = valueStrength;
     this.valueOffset = valueOffset;
   }
+
+  /**
+   * Creates an attractor from a JSON.
+   * @param {Object} attractorJSON An object containing the JSON for an attractor.
+   * @returns The attractor made from the JSON.
+   */
+  static fromJSON(attractorJSON) {
+    return new Attractor(
+      Complex.fromJSON(attractorJSON["complex"]),
+      attractorJSON["hue"],
+      attractorJSON["saturationStrength"],
+      attractorJSON["saturationOffset"],
+      attractorJSON["valueStrength"],
+      attractorJSON["valueOffset"]
+    );
+  }
+
+  /**
+   * Returns a copy of the attractor.
+   * @returns {Attractor} The copy of the attractor.
+   */
+  copy() {
+    return new Attractor(
+      this.complex != null ? this.complex.copy() : null,
+      this.hue,
+      this.saturationStrength,
+      this.saturationOffset,
+      this.valueStrength,
+      this.valueOffset
+    );
+  }
 }

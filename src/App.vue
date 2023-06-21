@@ -2,41 +2,48 @@
 import TopNav from "./components/TopNav.vue";
 import SideBar from "./components/SideBar.vue";
 import AnimationFrame from "./components/AnimationFrame.vue";
-import { Complex } from "./models/Complex";
-import { ComplexCircle } from "./models/ComplexCircle";
-import { ComplexLine } from "./models/ComplexLine";
-import { Polynomial } from "./models/Polynomial";
-import { Attractor } from "./models/Attractor";
+import { Configuration } from "./models/Configuration";
 
 export default {
   name: "App",
   components: { TopNav, SideBar, AnimationFrame },
   data() {
     return {
-      parameters: {
-        paused: false,
-        resolutionScale: 1,
-        coordinatesScale: 2,
-        polynomial: new Polynomial({
-          0: new ComplexCircle(new Complex(0, 0), 1, 5000),
-          2: new Complex(1, 0),
-        }),
-        functionType: "DEFAULT",
-        juliaHSV: [210, 0, 1],
-        defaultAttractor: new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
-        infinityAttractor: new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
-        attractors: [],
-      },
+      configurations: { 0: Configuration.defaultConfiguration() },
+      selectedConfigurationId: "0",
+      configuration: Configuration.defaultConfiguration(),
     };
+  },
+  created() {
+    this.getConfigurations();
+  },
+  methods: {
+    updateConfiguration(newSelectedId) {
+      this.selectedConfigurationId = newSelectedId;
+      this.configuration.fillWith(this.configurations[newSelectedId]);
+    },
+    async getConfigurations() {
+      const { default: json } = await import("./assets/configurations.json");
+      json.forEach((jsonConfiguration) => {
+        this.configurations[jsonConfiguration.id] =
+          Configuration.fromJSON(jsonConfiguration);
+      });
+    },
   },
 };
 </script>
 
 <template>
-  <TopNav />
+  <TopNav
+    :configurations="configurations"
+    :selectedConfigurationId="selectedConfigurationId"
+    @update:selectedConfigurationId="
+      (newSelectedId) => updateConfiguration(newSelectedId)
+    "
+  />
   <main>
-    <SideBar :parameters="parameters" />
-    <AnimationFrame :parameters="parameters" />
+    <SideBar :configuration="configuration" />
+    <AnimationFrame :configuration="configuration" />
   </main>
 </template>
 

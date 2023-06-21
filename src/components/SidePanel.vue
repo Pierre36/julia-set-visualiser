@@ -8,12 +8,12 @@ export default {
   components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel },
   props: {
     currentPanel: { type: String, required: true },
-    parameters: { type: Object, required: true },
+    configuration: { type: Object, required: true },
     collapsed: { type: Boolean, default: true },
   },
   methods: {
     updateFunctionType(newFunctionType) {
-      this.parameters.functionType = newFunctionType;
+      this.configuration.functionType = newFunctionType;
     },
   },
 };
@@ -23,16 +23,16 @@ export default {
   <div id="sidePanel" :class="{ collapsed: collapsed }">
     <FunctionPanel
       v-if="currentPanel == 'FUNCTION'"
-      :functionType="parameters.functionType"
-      :polynomial="parameters.polynomial"
+      :functionType="configuration.functionType"
+      :polynomial="configuration.polynomial"
       @update:functionType="updateFunctionType"
     />
     <ColorsPanel
       v-if="currentPanel == 'COLORS'"
-      :juliaHSV="parameters.juliaHSV"
-      :defaultAttractor="parameters.defaultAttractor"
-      :infinityAttractor="parameters.infinityAttractor"
-      :attractors="parameters.attractors"
+      :juliaHSV="configuration.juliaHSV"
+      :defaultAttractor="configuration.defaultAttractor"
+      :infinityAttractor="configuration.infinityAttractor"
+      :attractors="configuration.attractors"
     />
     <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
   </div>

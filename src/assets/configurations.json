@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1",
+    "name": "z² + c",
+    "resolutionScale": 1,
+    "coordinatesScale": 2,
+    "polynomial": {
+      "0": {
+        "type": "COMPLEX_CIRCLE",
+        "center": { "re": 0, "im": 0 },
+        "radius": 1,
+        "duration": 5000
+      },
+      "2": { "type": "COMPLEX", "complex": { "re": 1, "im": 0 } }
+    },
+    "functionType": "DEFAULT",
+    "juliaHSV": [210, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 210.0,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0.0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 210.0,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0.0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
+  }
+]

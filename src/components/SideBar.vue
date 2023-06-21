@@ -6,7 +6,7 @@ export default {
   name: "SideBar",
   components: { SideNav, SidePanel },
   props: {
-    parameters: { type: Object, required: true },
+    configuration: { type: Object, required: true },
   },
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
     <SidePanel
       :collapsed="sidePanelCollapsed"
       :currentPanel="currentPanel"
-      :parameters="parameters"
+      :configuration="configuration"
     />
   </div>
 </template>
