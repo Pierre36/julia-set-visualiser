@@ -32,6 +32,18 @@ class ComplexCircle {
   }
 
   /**
+   * Converts a complex circle to a JSON object.
+   * @returns {Object} The JSON object constructed from the complex circle.
+   */
+  toJSON() {
+    return {
+      center: this.center.toJSON(),
+      radius: this.radius,
+      duration: this.duration,
+    };
+  }
+
+  /**
    * Get the value of the point on the circle at the given time.
    * @param {Number} time The time in milliseconds.
    * @returns {Complex} The value of the point on the circle at the given time.

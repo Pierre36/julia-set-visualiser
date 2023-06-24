@@ -32,6 +32,18 @@ class ComplexLine {
   }
 
   /**
+   * Converts a complex line to a JSON object.
+   * @returns {Object} The JSON object constructed from the complex line.
+   */
+  toJSON() {
+    return {
+      start: this.start.toJSON(),
+      end: this.end.toJSON(),
+      duration: this.duration,
+    };
+  }
+
+  /**
    * Get the value of the point on the line at the given time.
    * @param {Number} time The time in milliseconds.
    * @returns {Complex} The value of the point on the line at the given time.

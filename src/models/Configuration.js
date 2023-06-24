@@ -48,6 +48,7 @@ class Configuration {
   /**
    * Creates a configuration from a JSON.
    * @param {Object} configurationJSON A configuration JSON containing the configuration parameters.
+   * @returns {Configuration} the configuration created from the JSON.
    */
   static fromJSON({
     id,
@@ -76,12 +77,31 @@ class Configuration {
   }
 
   /**
+   * Converts a configuration to a JSON object.
+   * @returns {Object} The JSON object constructed from the configuration.
+   */
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      resolutionScale: this.resolutionScale,
+      coordinatesScale: this.coordinatesScale,
+      polynomial: this.polynomial.toJSON(),
+      functionType: this.functionType,
+      juliaHSV: this.juliaHSV,
+      defaultAttractor: this.defaultAttractor.toJSON(),
+      infinityAttractor: this.infinityAttractor.toJSON(),
+      attractors: this.attractors.map((attractor) => attractor.toJSON()),
+    };
+  }
+
+  /**
    * Creates the default configuration.
    * @returns The default configuration to use.
    */
   static defaultConfiguration() {
     return new Configuration(
-      "0",
+      "DEFAULT",
       "Default",
       1,
       2,

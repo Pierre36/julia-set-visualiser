@@ -31,6 +31,17 @@ class Complex {
   }
 
   /**
+   * Converts a complex to a JSON object.
+   * @returns {Object} The JSON object constructed from the complex.
+   */
+  toJSON() {
+    return {
+      re: this.re,
+      im: this.im,
+    };
+  }
+
+  /**
    * Tries to convert a string to a complex number.
    * @param {String} complexString A string representing a complex number.
    * @returns The complex number corresponding to the string.

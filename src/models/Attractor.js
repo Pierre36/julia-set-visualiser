@@ -48,6 +48,21 @@ class Attractor {
   }
 
   /**
+   * Converts an attractor to a JSON object.
+   * @returns {Object} The JSON object constructed from the attractor.
+   */
+  toJSON() {
+    return {
+      complex: this.complex == null ? null : this.complex.toJSON(),
+      hue: this.hue,
+      saturationStrength: this.saturationStrength,
+      saturationOffset: this.saturationOffset,
+      valueStrength: this.valueStrength,
+      valueOffset: this.valueOffset,
+    };
+  }
+
+  /**
    * Returns a copy of the attractor.
    * @returns {Attractor} The copy of the attractor.
    */

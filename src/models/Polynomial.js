@@ -29,7 +29,7 @@ class Polynomial {
   /**
    * Creates a polynomial from a JSON.
    * @param {Object} coefficientsJSON An object containing the JSON for a polynomial.
-   * @returns The polynomial made from the coefficients.
+   * @returns {Polynomial} The polynomial made from the coefficients.
    * @throws An error if one of the coefficients type is incorrect.
    */
   static fromJSON(coefficientsJSON) {
@@ -41,14 +41,37 @@ class Polynomial {
       } else if (coefficientJSON["type"] == "COMPLEX_LINE") {
         coefficients[power] = ComplexLine.fromJSON(coefficientJSON);
       } else if (coefficientJSON["type"] == "COMPLEX") {
-        coefficients[power] = Complex.fromJSON(coefficientJSON["complex"]);
+        coefficients[power] = Complex.fromJSON(coefficientJSON);
       } else {
         throw Error(
-          `The type of the coefficient of degree ${power} is incorrect! The type must be "COMPLEX_CIRLCE", "COMPLEX_LINE" or "COMPLEX", got ${coefficientJSON["type"]}`
+          `The type of the coefficient of degree ${power} is incorrect! The type must be "COMPLEX_CIRCLE", "COMPLEX_LINE" or "COMPLEX", got ${coefficientJSON["type"]}`
         );
       }
     });
     return new Polynomial(coefficients);
+  }
+
+  /**
+   * Converts a polynomial to a JSON object.
+   * @returns {Object} The JSON object constructed from the configuration.
+   */
+  toJSON() {
+    const coefficientsJSON = {};
+    Object.keys(this.coefficients).forEach((power) => {
+      const coefficient = this.coefficients[power];
+      if (coefficient != null) {
+        const coefficientJSON = coefficient.toJSON();
+        if (coefficient instanceof ComplexCircle) {
+          coefficientJSON["type"] = "COMPLEX_CIRCLE";
+        } else if (coefficient instanceof ComplexLine) {
+          coefficientJSON["type"] = "COMPLEX_LINE";
+        } else if (coefficient instanceof Complex) {
+          coefficientJSON["type"] = "COMPLEX";
+        }
+        coefficientsJSON[power] = coefficientJSON;
+      }
+    });
+    return coefficientsJSON;
   }
 
   /**

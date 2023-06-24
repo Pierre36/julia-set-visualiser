@@ -11,7 +11,7 @@
         "radius": 1,
         "duration": 5000
       },
-      "2": { "type": "COMPLEX", "complex": { "re": 1, "im": 0 } }
+      "2": { "type": "COMPLEX", "re": 1, "im": 0 }
     },
     "functionType": "DEFAULT",
     "juliaHSV": [210, 0, 1],
