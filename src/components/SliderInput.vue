@@ -1,13 +1,16 @@
 <script>
+import NumberInput from "./NumberInput.vue";
+
 export default {
   name: "SliderInput",
-  emits: ["update:value"],
+  components: { NumberInput },
   props: {
     value: { type: Number, required: true },
     min: { type: Number, required: true },
     max: { type: Number, required: true },
     step: { type: Number, required: true },
   },
+  emits: ["update:value"],
   data() {
     return {
       isValueWrong: false,
@@ -19,7 +22,7 @@ export default {
     },
     verifiedTextValue() {
       if (this.isValueWrong) {
-        return this.$refs.textInput.value;
+        return this.$refs.textInput.$refs.input.value;
       } else {
         return String(this.value);
       }
@@ -46,16 +49,14 @@ export default {
 <template>
   <div class="sliderInput">
     <slot name="name"></slot>
-    <input
+    <NumberInput
       ref="textInput"
-      class="input"
-      :class="{ wrongInput: isValueWrong }"
-      type="number"
       :value="verifiedTextValue"
       :min="min"
       :max="max"
       :step="step"
-      @change="($event) => checkAndUpdate($event.target.value)"
+      :wrongInput="isValueWrong"
+      @change="(newValue) => checkAndUpdate(newValue)"
     />
     <input
       ref="rangeInput"

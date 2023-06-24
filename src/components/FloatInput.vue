@@ -1,12 +1,15 @@
 <script>
+import NumberInput from "./NumberInput.vue";
+
 export default {
   name: "FloatInput",
-  emits: ["update:float"],
+  components: { NumberInput },
   props: {
     float: { type: Number, default: 0 },
     min: { type: Number, default: undefined },
     max: { type: Number, default: undefined },
   },
+  emits: ["update:float"],
   data() {
     return {
       isFLoatWrong: false,
@@ -15,7 +18,7 @@ export default {
   computed: {
     value() {
       if (this.isFLoatWrong) {
-        return this.$refs.input.value;
+        return this.$refs.input.$refs.input.value;
       } else {
         return String(this.float);
       }
@@ -37,14 +40,12 @@ export default {
 </script>
 
 <template>
-  <input
+  <NumberInput
     ref="input"
-    class="input"
-    :class="{ wrongInput: isFLoatWrong }"
-    type="number"
     :value="value"
     :min="min"
     :max="max"
-    @change="($event) => checkAndUpdate($event.target.value)"
+    :wrongInput="isFLoatWrong"
+    @change="(newValue) => checkAndUpdate(newValue)"
   />
 </template>
