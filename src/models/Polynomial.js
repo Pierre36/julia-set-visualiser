@@ -174,10 +174,7 @@ class Polynomial {
         mathML += "<mrow>";
         if (coefficient instanceof Complex) {
           mathML += coefficient.toMathML(power == 0);
-        } else if (
-          coefficient instanceof ComplexLine ||
-          coefficient instanceof ComplexCircle
-        ) {
+        } else if (coefficient instanceof ComplexLine || coefficient instanceof ComplexCircle) {
           mathML += coefficient.toMathML(power);
         }
 
@@ -223,10 +220,7 @@ class Polynomial {
       let coefficient = this.getCoefficient(power);
       if (coefficient instanceof Complex) {
         newPolynomial.setCoefficient(power, coefficient.copy());
-      } else if (
-        coefficient instanceof ComplexCircle ||
-        coefficient instanceof ComplexLine
-      ) {
+      } else if (coefficient instanceof ComplexCircle || coefficient instanceof ComplexLine) {
         newPolynomial.setCoefficient(power, coefficient.getAtTime(time));
       }
     });
@@ -282,9 +276,7 @@ class Polynomial {
    * @returns {Object} The list of powers with not null coefficients.
    */
   getCoefficientPowers() {
-    return Object.keys(this.coefficients).filter(
-      (power) => this.getCoefficient(power) != null
-    );
+    return Object.keys(this.coefficients).filter((power) => this.getCoefficient(power) != null);
   }
 
   /**

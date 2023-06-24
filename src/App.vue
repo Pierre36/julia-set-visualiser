@@ -42,9 +42,7 @@ export default {
     getStorageConfiguration() {
       const localConfiguration = localStorage.getItem("customConfiguration");
       if (localConfiguration != null) {
-        this.configurations["CUSTOM"] = Configuration.fromJSON(
-          JSON.parse(localConfiguration)
-        );
+        this.configurations["CUSTOM"] = Configuration.fromJSON(JSON.parse(localConfiguration));
         this.selectedConfigurationId = "CUSTOM";
         this.updateConfiguration(this.selectedConfigurationId);
       }
@@ -55,8 +53,7 @@ export default {
     async getJSONConfigurations() {
       const { default: json } = await import("./assets/configurations.json");
       json.forEach((jsonConfiguration) => {
-        this.configurations[jsonConfiguration.id] =
-          Configuration.fromJSON(jsonConfiguration);
+        this.configurations[jsonConfiguration.id] = Configuration.fromJSON(jsonConfiguration);
       });
     },
   },
@@ -68,15 +65,10 @@ export default {
     :configurations="configurations"
     :selectedConfigurationId="selectedConfigurationId"
     :configuration="configuration"
-    @update:selectedConfigurationId="
-      (newSelectedId) => updateConfiguration(newSelectedId)
-    "
+    @update:selectedConfigurationId="(newSelectedId) => updateConfiguration(newSelectedId)"
   />
   <main>
-    <SideBar
-      :configuration="configuration"
-      @change="switchToCustomConfiguration"
-    />
+    <SideBar :configuration="configuration" @change="switchToCustomConfiguration" />
     <AnimationFrame :configuration="configuration" />
   </main>
 </template>

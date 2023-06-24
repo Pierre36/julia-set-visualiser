@@ -26,10 +26,7 @@ export default {
   },
   methods: {
     saveConfiguration() {
-      localStorage.setItem(
-        "customConfiguration",
-        JSON.stringify(this.configuration.toJSON())
-      );
+      localStorage.setItem("customConfiguration", JSON.stringify(this.configuration.toJSON()));
       this.configurations["CUSTOM"].fillWith(this.configuration);
       this.$refs.toast.show();
     },
@@ -44,20 +41,14 @@ export default {
     <FormSelect
       :options="configurationOptions"
       :selected="selectedConfigurationId"
-      @update:selected="
-        (newSelected) => $emit('update:selectedConfigurationId', newSelected)
-      "
+      @update:selected="(newSelected) => $emit('update:selectedConfigurationId', newSelected)"
     />
     <button
       class="icon-button"
       @click="saveConfiguration"
       :disabled="selectedConfigurationId != 'CUSTOM'"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        role="img"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
         <title>Save</title>
         <path
           fill="currentColor"

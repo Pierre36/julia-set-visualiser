@@ -15,14 +15,7 @@ class Attractor {
    * @param {Number} valueStrength The value strength of the attractor.
    * @param {Number} valueOffset The value offset of the attractor.
    */
-  constructor(
-    complex,
-    hue,
-    saturationStrength,
-    saturationOffset,
-    valueStrength,
-    valueOffset
-  ) {
+  constructor(complex, hue, saturationStrength, saturationOffset, valueStrength, valueOffset) {
     this.complex = complex;
     this.hue = hue;
     this.saturationStrength = saturationStrength;

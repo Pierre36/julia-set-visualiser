@@ -17,7 +17,6 @@ out vec4 fragColor;
 
 // UNIFORMS
 
-uniform float time;
 uniform int numeratorDegree;
 uniform vec2 numeratorCoefficients[16];
 uniform int denominatorDegree;
@@ -102,18 +101,28 @@ vec2 applyFunction(vec2 z) {
   if (isComplexInfinity(z)) {
     return z;
   }
-  vec2 numerator = numeratorCoefficients[0];
-  vec2 denominator = denominatorCoefficients[0];
-  for (int p = 1; p <= numeratorDegree; ++p) {
-    if (!isComplexZero(numeratorCoefficients[p])) {
-      numerator = numerator + complexMultiplication(numeratorCoefficients[p], complexPower(z, p));
-    }
-  }
-  for (int p = 1; p <= denominatorDegree; ++p) {
-    if (!isComplexZero(denominatorCoefficients[p])) {
-      denominator = denominator + complexMultiplication(denominatorCoefficients[p], complexPower(z, p));
-    }
-  }
+  
+
+
+
+
+  vec2 numerator = numeratorCoefficients[0] + 14.0 * complexPower(z, 15);
+  // vec2 denominator = denominatorCoefficients[0];
+  vec2 denominator = 15.0 * complexPower(z, 14);
+
+
+
+
+  // for (int p = 1; p <= numeratorDegree; ++p) {
+  //   if (!isComplexZero(numeratorCoefficients[p])) {
+  //     numerator = numerator + complexMultiplication(numeratorCoefficients[p], complexPower(z, p));
+  //   }
+  // }
+  // for (int p = 1; p <= denominatorDegree; ++p) {
+  //   if (!isComplexZero(denominatorCoefficients[p])) {
+  //     denominator = denominator + complexMultiplication(denominatorCoefficients[p], complexPower(z, p));
+  //   }
+  // }
   return complexDivision(numerator, denominator);
 }
 

@@ -36,11 +36,7 @@ export default {
       @change="($event) => $emit('change', $event.target.value)"
     />
     <button class="button inputButton up" @click="stepUp">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        role="img"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
         <title>Increase value</title>
         <path
           fill="currentColor"
@@ -50,11 +46,7 @@ export default {
       </svg>
     </button>
     <button class="button inputButton down" @click="stepDown">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        role="img"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
         <title>Decrease value</title>
         <path
           fill="currentColor"

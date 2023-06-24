@@ -63,10 +63,7 @@ export default {
         <h2>Colors</h2>
       </template>
       <template #info>
-        <p>
-          This panel allows to change the colors used to draw the Julia and
-          Fatou sets.
-        </p>
+        <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
       </template>
     </InfoHeader>
   </header>
@@ -79,11 +76,9 @@ export default {
         </template>
         <template #info>
           <p>
-            In this section, you can change the color of the Julia Set. The
-            color use the HSV color system (see the
-            <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">
-              Wikipedia page
-            </a>
+            In this section, you can change the color of the Julia Set. The color use the HSV color
+            system (see the
+            <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
             for more details)
           </p>
         </template>
@@ -106,9 +101,7 @@ export default {
           :min="0"
           :max="1"
           :step="0.01"
-          @update:value="
-            (newSaturation) => updateJuliaSaturation(newSaturation)
-          "
+          @update:value="(newSaturation) => updateJuliaSaturation(newSaturation)"
           ><template #name><h5>Saturation</h5></template></SliderInput
         >
         <SliderInput
@@ -130,9 +123,8 @@ export default {
         <template #info>
           <p>In this section, you can change the color of the Fatou Sets.</p>
           <p>
-            You can choose the color parameters for the each attractor
-            (including infinity). When computing the color, if no attractor is
-            close enough, the default attractor is used.
+            You can choose the color parameters for the each attractor (including infinity). When
+            computing the color, if no attractor is close enough, the default attractor is used.
           </p>
         </template>
       </InfoHeader>

@@ -90,10 +90,7 @@ export default {
       this.$emit("change");
     },
     addCoefficient() {
-      this.polynomial.setCoefficient(
-        this.polynomial.getAvailablePowers()[0],
-        new Complex(0, 0)
-      );
+      this.polynomial.setCoefficient(this.polynomial.getAvailablePowers()[0], new Complex(0, 0));
       this.$emit("change");
     },
   },
@@ -107,18 +104,14 @@ export default {
         <h2>Function</h2>
       </template>
       <template #info>
+        <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
         <p>
-          This panel allows to choose the function used to draw the Julia and
-          Fatou sets.
+          By adding, editing and removing coefficients, you can edit a polynomial function (see
+          Coefficients section for more details).
         </p>
         <p>
-          By adding, editing and removing coefficients, you can edit a
-          polynomial function (see Coefficients section for more details).
-        </p>
-        <p>
-          By changing the function type, you can change how this polynomial is
-          used in the final function (see Function type section info for more
-          details).
+          By changing the function type, you can change how this polynomial is used in the final
+          function (see Function type section info for more details).
         </p>
       </template>
     </InfoHeader>
@@ -135,23 +128,20 @@ export default {
           <h3>Function type</h3>
         </template>
         <template #info>
-          <p>
-            In this section, you can change the function type. There is two
-            function types:
-          </p>
+          <p>In this section, you can change the function type. There is two function types:</p>
           <ul class="infoList">
             <li>
-              <span class="infoListItemTitle">Default</span>: The polynomial
-              function is directly used as the final function.
+              <span class="infoListItemTitle">Default</span>: The polynomial function is directly
+              used as the final function.
             </li>
             <li>
-              <span class="infoListItemTitle">Newton</span>: The final function
-              is the generalized Newton's iteration and the coefficient can be
-              edited (see
+              <span class="infoListItemTitle">Newton</span>: The final function is the generalized
+              Newton's iteration and the coefficient can be edited (see
               <a
                 href="https://en.wikipedia.org/wiki/Newton_fractal#Generalization_of_Newton_fractals"
-                >Wikipedia page</a
               >
+                Wikipedia page
+              </a>
               for more details).
             </li>
           </ul>
@@ -162,9 +152,7 @@ export default {
         <FormSelect
           :options="functionTypeOptions"
           :selected="functionType"
-          @update:selected="
-            (newValue) => $emit('update:functionType', newValue)
-          "
+          @update:selected="(newValue) => $emit('update:functionType', newValue)"
         />
       </div>
     </section>
@@ -178,45 +166,38 @@ export default {
           <p>In this section, you can:</p>
           <ul class="infoList">
             <li>
-              <span class="infoListItemTitle">Add</span> a coefficient by
-              clicking on the "New Coefficient" button.
+              <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
+              Coefficient" button.
             </li>
             <li>
-              <span class="infoListItemTitle">Edit</span> a coefficient by
-              picking and typing values in the fields of the coefficient frame.
+              <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
+              in the fields of the coefficient frame.
             </li>
             <li>
-              <span class="infoListItemTitle">Remove</span> a coefficient by
-              clicking on the top right button of the coefficient frame.
+              <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top
+              right button of the coefficient frame.
             </li>
           </ul>
           <p>In the coefficient frame, you can:</p>
           <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Choose</span> the degree of the
-              coefficient.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Choose</span> the type of
-              coefficient.
-            </li>
+            <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
+            <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
           </ul>
           <p>A coefficient can be of three types:</p>
           <ul class="infoList">
             <li>
-              <span class="infoListItemTitle">Constant</span>: the coefficient
-              is the constant complex number you choose.
+              <span class="infoListItemTitle">Constant</span>: the coefficient is the constant
+              complex number you choose.
             </li>
             <li>
-              <span class="infoListItemTitle">Circle</span>: the coefficient is
-              a point on a circle which you can edit by choosing its center and
-              radius as well as the duration of one turn.
+              <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
+              which you can edit by choosing its center and radius as well as the duration of one
+              turn.
             </li>
             <li>
-              <span class="infoListItemTitle">Line</span>: the coefficient goes
-              back and forth on a line. You can edit this line by choosing its
-              starting and ending points as well as the duration of the round
-              trip.
+              <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
+              line. You can edit this line by choosing its starting and ending points as well as the
+              duration of the round trip.
             </li>
           </ul>
         </template>
@@ -230,9 +211,7 @@ export default {
           :coefficient="coef.coefficient"
           :availablePowers="availablePowers"
           @update:degree="(newDegree) => updateDegree(coef.degree, newDegree)"
-          @update:coefficient="
-            (newCoefficient) => updateCoefficient(coef.degree, newCoefficient)
-          "
+          @update:coefficient="(newCoefficient) => updateCoefficient(coef.degree, newCoefficient)"
           @delete:coefficient="deleteCoefficient(coef.degree)"
         />
         <IconTextButton

@@ -48,25 +48,13 @@ export default {
 
 <template>
   <div class="attractorItem">
-    <h4 v-if="isDefault" class="span-2 textAttractor">
-      Default (no attractor)
-    </h4>
-    <h4 v-else-if="isInfinity" class="span-2 textAttractor">
-      Divergence to Infinty
-    </h4>
+    <h4 v-if="isDefault" class="span-2 textAttractor">Default (no attractor)</h4>
+    <h4 v-else-if="isInfinity" class="span-2 textAttractor">Divergence to Infinty</h4>
     <div v-else class="attractor span-2">
       <h4>Attractor</h4>
-      <ComplexInput
-        :complex="attractor.complex"
-        @update:complex="updateComplex"
-      />
+      <ComplexInput :complex="attractor.complex" @update:complex="updateComplex" />
       <button class="icon-button" @click="$emit('delete:attractor')">
-        <svg
-          class="icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="100 -860 760 760"
-          role="img"
-        >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="100 -860 760 760" role="img">
           <title>Remove attractor</title>
           <path
             fill="currentColor"
@@ -100,17 +88,9 @@ export default {
     />
     <h4 class="span-2 subtitle">Value</h4>
     <h5>Strength</h5>
-    <FloatInput
-      :float="attractor.valueStrength"
-      :min="0"
-      @update:float="updateValueStrength"
-    />
+    <FloatInput :float="attractor.valueStrength" :min="0" @update:float="updateValueStrength" />
     <h5>Offset</h5>
-    <FloatInput
-      :float="attractor.valueOffset"
-      :min="0"
-      @update:float="updateValueOffset"
-    />
+    <FloatInput :float="attractor.valueOffset" :min="0" @update:float="updateValueOffset" />
   </div>
 </template>
 

@@ -52,12 +52,7 @@ export default {
         @update:selected="(newDegree) => $emit('update:degree', newDegree)"
       />
       <button class="icon-button" @click="$emit('delete:coefficient')">
-        <svg
-          class="icon"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="100 -860 760 760"
-          role="img"
-        >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="100 -860 760 760" role="img">
           <title>Remove coefficient</title>
           <path
             fill="currentColor"
@@ -69,9 +64,7 @@ export default {
     </div>
     <CoefficientInput
       :coefficient="coefficient"
-      @update:coefficient="
-        (newCoefficient) => $emit('update:coefficient', newCoefficient)
-      "
+      @update:coefficient="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
     />
   </div>
 </template>

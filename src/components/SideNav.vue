@@ -30,16 +30,8 @@ export default {
       @update:sidePanelCollapsed="updateSidePanelCollapsed"
       @update:currentPanel="updateCurrentPanel"
     />
-    <button
-      id="collapseButton"
-      class="icon-button"
-      @click="updateSidePanelCollapsed"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        role="img"
-      >
+    <button id="collapseButton" class="icon-button" @click="updateSidePanelCollapsed">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
         <title v-if="sidePanelCollapsed">Show side panel</title>
         <title v-else>Collapse side panel</title>
         <path

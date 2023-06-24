@@ -49,9 +49,7 @@ class Complex {
    */
   static fromString(complexString) {
     // Prepare the error in case the conversion fails
-    const error = Error(
-      "The provided string could not be parsed into a complex number."
-    );
+    const error = Error("The provided string could not be parsed into a complex number.");
 
     // Try to match the complex string with the regex of a complex number
     const match = complexString.match(COMPLEX_REGEX);

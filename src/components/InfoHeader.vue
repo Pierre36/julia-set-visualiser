@@ -31,11 +31,7 @@ export default {
       <div class="infoHeaderTitle">
         <slot name="title"></slot>
       </div>
-      <InfoButton
-        class="infoButton"
-        :aria-expanded="expanded"
-        @click="toggleInfo"
-      />
+      <InfoButton class="infoButton" :aria-expanded="expanded" @click="toggleInfo" />
     </div>
     <div ref="infoHeaderInfo" class="infoHeaderInfo">
       <div class="infoContainer">
@@ -74,8 +70,7 @@ export default {
 }
 
 .infoHeaderInfo[data-state="collapsed"] .infoContainer {
-  animation: collapseInfoContainer var(--animation-duration) ease-in-out
-    forwards;
+  animation: collapseInfoContainer var(--animation-duration) ease-in-out forwards;
 }
 
 /* Expanded */

@@ -36,8 +36,7 @@ export default {
       } else {
         newValue = parseFloat(valueString);
       }
-      this.isValueWrong =
-        isNaN(newValue) || newValue < this.min || newValue > this.max;
+      this.isValueWrong = isNaN(newValue) || newValue < this.min || newValue > this.max;
       if (!this.isValueWrong) {
         this.$emit("update:value", newValue);
       }

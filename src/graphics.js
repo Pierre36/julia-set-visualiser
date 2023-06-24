@@ -35,12 +35,7 @@ function getFunctionParameters(parameters, time) {
     );
   }
 
-  return [
-    numeratorDegree,
-    numeratorCoefficients,
-    denominatorDegree,
-    denominatorCoefficients,
-  ];
+  return [numeratorDegree, numeratorCoefficients, denominatorDegree, denominatorCoefficients];
 }
 
 function getAttractorParameters(parameters) {
@@ -82,9 +77,7 @@ function getAttractorParameters(parameters) {
 function loadWebGL(canvas) {
   const gl = canvas.getContext("webgl2");
   if (gl === null) {
-    throw new Error(
-      "Unable to initialize WebGL. Your browser or machine may not support it."
-    );
+    throw new Error("Unable to initialize WebGL. Your browser or machine may not support it.");
   }
   return gl;
 }
@@ -99,11 +92,7 @@ function loadWebGL(canvas) {
 function initShaderProgram(gl, shaderSources) {
   // Load the shaders
   const vertexShader = loadShader(gl, gl.VERTEX_SHADER, shaderSources.vertex);
-  const fragmentShader = loadShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    shaderSources.fragment
-  );
+  const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, shaderSources.fragment);
 
   // Create the shader program
   const shaderProgram = gl.createProgram();
@@ -114,9 +103,7 @@ function initShaderProgram(gl, shaderSources) {
   // Check for compilation or linking errors
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
     throw new Error(
-      `Unable to initialize the shader program: ${gl.getProgramInfoLog(
-        shaderProgram
-      )}`
+      `Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`
     );
   }
 
@@ -163,36 +150,18 @@ function getUniformLocations(gl, shaderProgram) {
     coordinatesScale: gl.getUniformLocation(shaderProgram, "coordinatesScale"),
     time: gl.getUniformLocation(shaderProgram, "time"),
     numeratorDegree: gl.getUniformLocation(shaderProgram, "numeratorDegree"),
-    numeratorCoefficients: gl.getUniformLocation(
-      shaderProgram,
-      "numeratorCoefficients"
-    ),
-    denominatorDegree: gl.getUniformLocation(
-      shaderProgram,
-      "denominatorDegree"
-    ),
-    denominatorCoefficients: gl.getUniformLocation(
-      shaderProgram,
-      "denominatorCoefficients"
-    ),
+    numeratorCoefficients: gl.getUniformLocation(shaderProgram, "numeratorCoefficients"),
+    denominatorDegree: gl.getUniformLocation(shaderProgram, "denominatorDegree"),
+    denominatorCoefficients: gl.getUniformLocation(shaderProgram, "denominatorCoefficients"),
     juliaHSV: gl.getUniformLocation(shaderProgram, "juliaHSV"),
     defaultHue: gl.getUniformLocation(shaderProgram, "defaultHue"),
-    defaultColorParameters: gl.getUniformLocation(
-      shaderProgram,
-      "defaultColorParameters"
-    ),
+    defaultColorParameters: gl.getUniformLocation(shaderProgram, "defaultColorParameters"),
     infinityHue: gl.getUniformLocation(shaderProgram, "infinityHue"),
-    infinityColorParameters: gl.getUniformLocation(
-      shaderProgram,
-      "infinityColorParameters"
-    ),
+    infinityColorParameters: gl.getUniformLocation(shaderProgram, "infinityColorParameters"),
     nbAttractors: gl.getUniformLocation(shaderProgram, "nbAttractors"),
     attractors: gl.getUniformLocation(shaderProgram, "attractors"),
     attractorsHue: gl.getUniformLocation(shaderProgram, "attractorsHue"),
-    attractorsColorParameters: gl.getUniformLocation(
-      shaderProgram,
-      "attractorsColorParameters"
-    ),
+    attractorsColorParameters: gl.getUniformLocation(shaderProgram, "attractorsColorParameters"),
   };
 }
 
@@ -222,10 +191,7 @@ function setPositionAttributes(gl, shaderProgram) {
     new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]),
     gl.STATIC_DRAW
   );
-  const vertexPositionAttribute = gl.getAttribLocation(
-    shaderProgram,
-    "vertexPosition"
-  );
+  const vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "vertexPosition");
   gl.vertexAttribPointer(vertexPositionAttribute, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vertexPositionAttribute);
 }
@@ -241,23 +207,13 @@ function setPositionAttributes(gl, shaderProgram) {
 function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform1f(uniformLocations.time, time / 1000);
   gl.uniform1f(uniformLocations.coordinatesScale, parameters.coordinatesScale);
-  gl.uniform1f(
-    uniformLocations.resolution,
-    canvas.clientWidth / canvas.clientHeight
-  );
-  const [
-    numeratorDegree,
-    numeratorCoefficients,
-    denominatorDegree,
-    denominatorCoefficients,
-  ] = getFunctionParameters(parameters, time);
+  gl.uniform1f(uniformLocations.resolution, canvas.clientWidth / canvas.clientHeight);
+  const [numeratorDegree, numeratorCoefficients, denominatorDegree, denominatorCoefficients] =
+    getFunctionParameters(parameters, time);
   gl.uniform1i(uniformLocations.numeratorDegree, numeratorDegree);
   gl.uniform2fv(uniformLocations.numeratorCoefficients, numeratorCoefficients);
   gl.uniform1i(uniformLocations.denominatorDegree, denominatorDegree);
-  gl.uniform2fv(
-    uniformLocations.denominatorCoefficients,
-    denominatorCoefficients
-  );
+  gl.uniform2fv(uniformLocations.denominatorCoefficients, denominatorCoefficients);
   gl.uniform3fv(uniformLocations.juliaHSV, parameters.juliaHSV);
   gl.uniform1f(uniformLocations.defaultHue, parameters.defaultAttractor.hue);
   gl.uniform4fv(
@@ -279,19 +235,12 @@ function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
       parameters.infinityAttractor.valueOffset,
     ])
   );
-  const [
-    nbAttractors,
-    attractorsComplex,
-    attractorsHue,
-    attractorsColorParameters,
-  ] = getAttractorParameters(parameters);
+  const [nbAttractors, attractorsComplex, attractorsHue, attractorsColorParameters] =
+    getAttractorParameters(parameters);
   gl.uniform1i(uniformLocations.nbAttractors, nbAttractors);
   gl.uniform2fv(uniformLocations.attractors, attractorsComplex);
   gl.uniform1fv(uniformLocations.attractorsHue, attractorsHue);
-  gl.uniform4fv(
-    uniformLocations.attractorsColorParameters,
-    attractorsColorParameters
-  );
+  gl.uniform4fv(uniformLocations.attractorsColorParameters, attractorsColorParameters);
 }
 
 /**
@@ -312,14 +261,7 @@ function render(gl, uniformLocations, parameters, canvas, time, delay) {
   // Render next frame
   if (parameters.paused) {
     requestAnimationFrame((newTime) =>
-      render(
-        gl,
-        uniformLocations,
-        parameters,
-        canvas,
-        newTime,
-        delay + newTime - time
-      )
+      render(gl, uniformLocations, parameters, canvas, newTime, delay + newTime - time)
     );
   } else {
     requestAnimationFrame((newTime) =>
@@ -341,9 +283,7 @@ function displayScene(canvas, shaderSources, parameters) {
   setPositionAttributes(gl, shaderProgram);
   gl.useProgram(shaderProgram);
   const uniformLocations = getUniformLocations(gl, shaderProgram);
-  requestAnimationFrame((time) =>
-    render(gl, uniformLocations, parameters, canvas, time, 0)
-  );
+  requestAnimationFrame((time) => render(gl, uniformLocations, parameters, canvas, time, 0));
 }
 
 export { displayScene };

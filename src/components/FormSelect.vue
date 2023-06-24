@@ -30,8 +30,7 @@ export default {
     closeMenuIfClickIsOutsideMenu(event) {
       if (this.isOpen) {
         this.isOpen =
-          this.$refs.menu.contains(event.target) ||
-          this.$refs.select.contains(event.target);
+          this.$refs.menu.contains(event.target) || this.$refs.select.contains(event.target);
       }
     },
     onClickOption(optionId) {
@@ -46,12 +45,7 @@ export default {
   <div class="wrapper">
     <button class="input select" ref="select" @click="isOpen = true">
       <span class="text">{{ inputText }}</span>
-      <svg
-        class="icon"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 -960 960 960"
-        role="img"
-      >
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
         <path
           fill="currentColor"
           fill-rule="evenodd"

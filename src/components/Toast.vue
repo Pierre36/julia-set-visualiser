@@ -50,8 +50,7 @@ export default {
 
 .toast[aria-hidden="false"] {
   visibility: visible;
-  animation: fadein v-bind(cssDuration),
-    fadeout v-bind(cssDuration) v-bind(cssDelay);
+  animation: fadein v-bind(cssDuration), fadeout v-bind(cssDuration) v-bind(cssDelay);
 }
 
 @keyframes fadein {

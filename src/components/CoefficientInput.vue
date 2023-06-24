@@ -81,55 +81,29 @@ export default {
 <template>
   <div class="container">
     <span>Type</span>
-    <FormSelect
-      :options="typeOptions"
-      :selected="type"
-      @update:selected="changeType"
-    />
+    <FormSelect :options="typeOptions" :selected="type" @update:selected="changeType" />
     <template v-if="type == 'CONSTANT'">
       <span>Value</span>
       <ComplexInput
         :complex="coefficient"
-        @update:complex="
-          (newCoefficient) => $emit('update:coefficient', newCoefficient)
-        "
+        @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
     <template v-else-if="type == 'CIRCLE'">
       <span>Center</span>
-      <ComplexInput
-        :complex="coefficient.center"
-        @update:complex="updateCenter"
-      />
+      <ComplexInput :complex="coefficient.center" @update:complex="updateCenter" />
       <span>Radius</span>
-      <FloatInput
-        :float="coefficient.radius"
-        :min="0"
-        @update:float="updateRadius"
-      />
+      <FloatInput :float="coefficient.radius" :min="0" @update:float="updateRadius" />
       <span>Duration</span>
-      <FloatInput
-        :float="durationSecond"
-        :min="0"
-        :step="1"
-        @update:float="updateDuration"
-      />
+      <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
     <template v-else-if="type == 'LINE'">
       <span>Start</span>
-      <ComplexInput
-        :complex="coefficient.start"
-        @update:complex="updateStart"
-      />
+      <ComplexInput :complex="coefficient.start" @update:complex="updateStart" />
       <span>End</span>
       <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
       <span>Duration</span>
-      <FloatInput
-        :float="durationSecond"
-        :min="0"
-        :step="1"
-        @update:float="updateDuration"
-      />
+      <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
   </div>
 </template>

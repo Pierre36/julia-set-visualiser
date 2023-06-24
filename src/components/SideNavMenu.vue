@@ -27,9 +27,7 @@ export default {
   mounted() {
     document.addEventListener("click", this.closeMenu);
     this.nbDisplayedPanels = Math.max(
-      Math.floor(
-        this.$refs.nav.clientHeight / this.$refs.moreListItem.clientHeight
-      ) - 1,
+      Math.floor(this.$refs.nav.clientHeight / this.$refs.moreListItem.clientHeight) - 1,
       0
     );
   },
@@ -39,9 +37,7 @@ export default {
   methods: {
     updateNbDisplayedPanels() {
       this.nbDisplayedPanels = Math.max(
-        Math.floor(
-          this.$refs.nav.clientHeight / this.$refs.moreListItem.clientHeight
-        ) - 1,
+        Math.floor(this.$refs.nav.clientHeight / this.$refs.moreListItem.clientHeight) - 1,
         0
       );
     },
@@ -61,10 +57,7 @@ export default {
       this.moreMenuCollapsed = !this.moreMenuCollapsed;
     },
     closeMenu(event) {
-      if (
-        !this.moreMenuCollapsed &&
-        !this.$refs.moreButton.contains(event.target)
-      ) {
+      if (!this.moreMenuCollapsed && !this.$refs.moreButton.contains(event.target)) {
         this.moreMenuCollapsed = true;
       }
     },
@@ -82,11 +75,7 @@ export default {
         :class="{ selected: currentPanel == panel.id && !sidePanelCollapsed }"
       >
         <button class="icon-button" @click="changePanel(panel.id)">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            role="img"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
             <title>{{ panel.name }}</title>
             <path fill="currentColor" fill-rule="evenodd" :d="panel.icon" />
           </svg>
@@ -99,11 +88,7 @@ export default {
         :class="{ hidden: hiddenPanels.length == 0 }"
       >
         <button ref="moreButton" class="icon-button" @click="showMenu">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            role="img"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
             <title>More</title>
             <path
               fill="currentColor"
@@ -112,12 +97,7 @@ export default {
             />
           </svg>
         </button>
-        <ul
-          id="moreMenu"
-          ref="moreMenu"
-          class="dropdown menu"
-          v-if="!moreMenuCollapsed"
-        >
+        <ul id="moreMenu" ref="moreMenu" class="dropdown menu" v-if="!moreMenuCollapsed">
           <li
             v-for="panel in hiddenPanels"
             :class="{
