@@ -18,7 +18,7 @@ export default {
     functionType: { type: String, required: true },
     polynomial: { type: Polynomial, required: true },
   },
-  emits: ["update:functionType"],
+  emits: ["update:functionType", "change"],
   data() {
     return {
       functionTypeOptions: [
@@ -78,19 +78,23 @@ export default {
           this.polynomial.getCoefficient(previousDegree).copy()
         );
         this.polynomial.removeCoefficient(previousDegree);
+        this.$emit("change");
       }
     },
     updateCoefficient(power, newCoefficient) {
       this.polynomial.setCoefficient(power, newCoefficient);
+      this.$emit("change");
     },
     deleteCoefficient(power) {
       this.polynomial.removeCoefficient(power);
+      this.$emit("change");
     },
     addCoefficient() {
       this.polynomial.setCoefficient(
         this.polynomial.getAvailablePowers()[0],
         new Complex(0, 0)
       );
+      this.$emit("change");
     },
   },
 };

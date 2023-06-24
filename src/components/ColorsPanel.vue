@@ -20,6 +20,7 @@ export default {
     infinityAttractor: { type: Attractor, required: true },
     attractors: { type: Array, required: true },
   },
+  emits: ["change"],
   computed: {
     visualizerColor() {
       const l = this.juliaHSV[2] * (1 - this.juliaHSV[1] / 2);
@@ -33,18 +34,23 @@ export default {
   methods: {
     updateJuliaHue(newHue) {
       this.juliaHSV[0] = newHue;
+      this.$emit("change");
     },
     updateJuliaSaturation(newSaturation) {
       this.juliaHSV[1] = newSaturation;
+      this.$emit("change");
     },
     updateJuliaValue(newValue) {
       this.juliaHSV[2] = newValue;
+      this.$emit("change");
     },
     addAttractor() {
       this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
+      this.$emit("change");
     },
     deleteAttractor(index) {
       this.attractors.splice(index, 1);
+      this.$emit("change");
     },
   },
 };
@@ -116,12 +122,14 @@ export default {
           :isDefault="true"
           :isInfinity="false"
           :attractor="defaultAttractor"
+          @change="$emit('change')"
         />
         <AttractorItem
           class="attractorItem"
           :isDefault="false"
           :isInfinity="true"
           :attractor="infinityAttractor"
+          @change="$emit('change')"
         />
         <AttractorItem
           v-for="(attractor, index) in attractors"
@@ -131,6 +139,7 @@ export default {
           :isInfinity="false"
           :attractor="attractor"
           @delete:attractor="deleteAttractor(index)"
+          @change="$emit('change')"
         />
         <IconTextButton
           v-if="attractors.length <= 16"

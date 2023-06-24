@@ -30,6 +30,7 @@ export default {
         "customConfiguration",
         JSON.stringify(this.configuration.toJSON())
       );
+      this.configurations["CUSTOM"].fillWith(this.configuration);
       this.$refs.toast.show();
     },
   },

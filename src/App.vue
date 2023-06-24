@@ -27,7 +27,7 @@ export default {
         ),
       },
       selectedConfigurationId: "DEFAULT",
-      configuration: Configuration.defaultConfiguration(),
+      configuration: Configuration.defaultConfiguration("CUSTOM", "Custom"),
     };
   },
   created() {
@@ -48,6 +48,9 @@ export default {
         this.selectedConfigurationId = "CUSTOM";
         this.updateConfiguration(this.selectedConfigurationId);
       }
+    },
+    switchToCustomConfiguration() {
+      this.selectedConfigurationId = "CUSTOM";
     },
     async getJSONConfigurations() {
       const { default: json } = await import("./assets/configurations.json");
@@ -70,7 +73,10 @@ export default {
     "
   />
   <main>
-    <SideBar :configuration="configuration" />
+    <SideBar
+      :configuration="configuration"
+      @change="switchToCustomConfiguration"
+    />
     <AnimationFrame :configuration="configuration" />
   </main>
 </template>

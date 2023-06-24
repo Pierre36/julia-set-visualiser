@@ -8,6 +8,7 @@ export default {
   props: {
     configuration: { type: Object, required: true },
   },
+  emits: ["change"],
   data() {
     return {
       sidePanelCollapsed: true,
@@ -62,6 +63,7 @@ export default {
       :collapsed="sidePanelCollapsed"
       :currentPanel="currentPanel"
       :configuration="configuration"
+      @change="$emit('change')"
     />
   </div>
 </template>

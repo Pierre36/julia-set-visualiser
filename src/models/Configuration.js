@@ -99,10 +99,10 @@ class Configuration {
    * Creates the default configuration.
    * @returns The default configuration to use.
    */
-  static defaultConfiguration() {
+  static defaultConfiguration(id = "DEFAULT", name = "Default") {
     return new Configuration(
-      "DEFAULT",
-      "Default",
+      id,
+      name,
       1,
       2,
       new Polynomial({ 2: new Complex(1, 0) }),
@@ -118,9 +118,11 @@ class Configuration {
    * Fill this configuration with a copy of the information of another configuration.
    * @param {Configuration} configuration The configuration to fill with.
    */
-  fillWith(configuration) {
-    this.id = configuration.id;
-    this.name = configuration.name;
+  fillWith(configuration, exceptIdAndName = true) {
+    if (!exceptIdAndName) {
+      this.id = configuration.id;
+      this.name = configuration.name;
+    }
     this.resolutionScale = configuration.resolutionScale;
     this.coordinatesScale = configuration.coordinatesScale;
     this.polynomial = configuration.polynomial.copy();

@@ -16,25 +16,31 @@ export default {
       default: new Attractor(new Complex(0, 0), 0, 1, 1, 1, 1),
     },
   },
-  emits: ["delete:attractor"],
+  emits: ["delete:attractor", "change"],
   methods: {
     updateComplex(newComplex) {
       this.attractor.complex = newComplex;
+      this.$emit("change");
     },
     updateHue(newHue) {
       this.attractor.hue = newHue;
+      this.$emit("change");
     },
     updateSaturationStrength(newSaturationStrength) {
       this.attractor.saturationStrength = newSaturationStrength;
+      this.$emit("change");
     },
     updateSaturationOffset(newSaturationOffset) {
       this.attractor.saturationOffset = newSaturationOffset;
+      this.$emit("change");
     },
     updateValueStrength(newValueStrength) {
       this.attractor.valueStrength = newValueStrength;
+      this.$emit("change");
     },
     updateValueOffset(newValueOffset) {
       this.attractor.valueOffset = newValueOffset;
+      this.$emit("change");
     },
   },
 };

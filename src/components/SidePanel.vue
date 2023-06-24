@@ -11,9 +11,11 @@ export default {
     configuration: { type: Object, required: true },
     collapsed: { type: Boolean, default: true },
   },
+  emits: ["change"],
   methods: {
     updateFunctionType(newFunctionType) {
       this.configuration.functionType = newFunctionType;
+      this.$emit("change");
     },
   },
 };
@@ -26,6 +28,7 @@ export default {
       :functionType="configuration.functionType"
       :polynomial="configuration.polynomial"
       @update:functionType="updateFunctionType"
+      @change="$emit('change')"
     />
     <ColorsPanel
       v-if="currentPanel == 'COLORS'"
@@ -33,6 +36,7 @@ export default {
       :defaultAttractor="configuration.defaultAttractor"
       :infinityAttractor="configuration.infinityAttractor"
       :attractors="configuration.attractors"
+      @change="$emit('change')"
     />
     <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
   </div>
