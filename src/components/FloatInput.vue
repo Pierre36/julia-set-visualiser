@@ -8,6 +8,7 @@ export default {
     float: { type: Number, default: 0 },
     min: { type: Number, default: undefined },
     max: { type: Number, default: undefined },
+    step: { type: Number, default: 0.1 },
   },
   emits: ["update:float"],
   data() {
@@ -45,6 +46,7 @@ export default {
     :value="value"
     :min="min"
     :max="max"
+    :step="step"
     :wrongInput="isFLoatWrong"
     @change="(newValue) => checkAndUpdate(newValue)"
   />

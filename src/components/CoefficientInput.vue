@@ -111,6 +111,7 @@ export default {
       <FloatInput
         :float="durationSecond"
         :min="0"
+        :step="1"
         @update:float="updateDuration"
       />
     </template>
@@ -126,6 +127,7 @@ export default {
       <FloatInput
         :float="durationSecond"
         :min="0"
+        :step="1"
         @update:float="updateDuration"
       />
     </template>
