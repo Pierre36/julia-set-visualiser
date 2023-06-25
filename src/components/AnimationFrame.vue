@@ -31,6 +31,7 @@ export default {
         attractorsHue: null,
         attractorsColorParameters: null,
       },
+      error: null,
     };
   },
   computed: {
@@ -186,8 +187,9 @@ export default {
     };
     try {
       displayScene(this.$refs.animationCanvas, shaderSources, this.parameters);
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      this.error = error;
+      console.error(error);
     }
   },
   methods: {
@@ -201,7 +203,7 @@ export default {
 <template>
   <div id="animationFrame">
     <canvas id="animationCanvas" ref="animationCanvas"></canvas>
-    <div id="animationMenu">
+    <div id="animationMenu" v-if="error == null">
       <button id="pauseButton" class="icon-button" @click="updatePaused">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
           <title v-if="parameters.paused">Play</title>
@@ -220,6 +222,11 @@ export default {
           />
         </svg>
       </button>
+    </div>
+    <div id="errorMessage" v-if="error != null">
+      <h2>Error</h2>
+      <hr />
+      <p>{{ error }}</p>
     </div>
   </div>
 </template>
@@ -267,5 +274,24 @@ export default {
 #pauseButton svg {
   width: 2.5rem;
   height: 2.5rem;
+}
+
+#errorMessage {
+  position: absolute;
+  inset: 0;
+  margin: 20% auto auto auto;
+  text-align: center;
+  width: fit-content;
+  max-width: min(20rem, 100%);
+  height: fit-content;
+  max-height: 100%;
+  overflow: auto;
+}
+
+#errorMessage hr {
+  height: 1px;
+  margin-block: 0.5rem;
+  border: 0;
+  background-color: var(--gray-350);
 }
 </style>
