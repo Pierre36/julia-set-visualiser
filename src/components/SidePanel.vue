@@ -38,7 +38,11 @@ export default {
       :attractors="configuration.attractors"
       @change="$emit('change')"
     />
-    <AdvancedSettingsPanel v-if="currentPanel == 'ADVANCED'" />
+    <AdvancedSettingsPanel
+      v-if="currentPanel == 'ADVANCED'"
+      :configuration="configuration"
+      @change="$emit('change')"
+    />
   </div>
 </template>
 
@@ -95,7 +99,7 @@ export default {
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.75rem;
   padding-left: 0.25rem;
 }
 
