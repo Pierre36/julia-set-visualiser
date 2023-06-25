@@ -58,7 +58,7 @@ class ComplexLine {
     } else {
       return new Complex(
         this.end.re - (2 * animTime - 1) * (this.end.re - this.start.re),
-        this.end.im + (2 * animTime - 1) * (this.end.im - this.start.im)
+        this.end.im - (2 * animTime - 1) * (this.end.im - this.start.im)
       );
     }
   }
