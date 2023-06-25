@@ -17,6 +17,7 @@ export default {
         paused: false,
         resolutionScale: this.configuration.resolutionScale,
         coordinatesScale: this.configuration.coordinatesScale,
+        coordinatesCenter: null,
         numeratorCoefficients: null,
         numeratorNbCoefficients: null,
         denominatorCoefficients: null,
@@ -35,6 +36,12 @@ export default {
     };
   },
   computed: {
+    coordinatesCenter() {
+      return new Float32Array([
+        this.configuration.coordinatesCenter.re,
+        this.configuration.coordinatesCenter.im,
+      ]);
+    },
     numeratorCoefficients() {
       if (this.configuration.functionType == "DEFAULT") {
         return this.configuration.polynomial;
@@ -125,6 +132,9 @@ export default {
     "configuration.coordinatesScale"(newCoordinatesScale) {
       this.parameters.coordinatesScale = newCoordinatesScale;
     },
+    "configuration.coordinatesCenter"(newCoordinatesCenter) {
+      this.parameters.coordinatesCenter = this.coordinatesCenter;
+    },
     "configuration.polynomial": {
       handler(_) {
         this.parameters.numeratorCoefficients = this.numeratorCoefficients;
@@ -169,6 +179,7 @@ export default {
     },
   },
   mounted() {
+    this.parameters.coordinatesCenter = this.coordinatesCenter;
     this.parameters.numeratorCoefficients = this.numeratorCoefficients;
     this.parameters.numeratorNbCoefficients = this.numeratorNbCoefficients;
     this.parameters.denominatorCoefficients = this.denominatorCoefficients;

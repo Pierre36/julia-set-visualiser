@@ -13,7 +13,8 @@ class Configuration {
    * @param {String} id The id of the configuration.
    * @param {String} name The name of the configuration.
    * @param {Number} resolutionScale The scale of the resolution (if 1, use the resolution of the viewport).
-   * @param {Number} coordinatesScale The scale of the coordinates (if 1, the width of the viewport is 2).
+   * @param {Number} coordinatesScale The scale of the coordinates.
+   * @param {Complex} coordinatesCenter The center of the coordinates.
    * @param {Polynomial} polynomial The polynomial used for the fractal.
    * @param {String} functionType The type a function, can be DEFAULT or NEWTON.
    * @param {Array} juliaHSV The hue, saturation and value of the Julia Set.
@@ -26,6 +27,7 @@ class Configuration {
     name,
     resolutionScale,
     coordinatesScale,
+    coordinatesCenter,
     polynomial,
     functionType,
     juliaHSV,
@@ -37,6 +39,7 @@ class Configuration {
     this.name = name;
     this.resolutionScale = resolutionScale;
     this.coordinatesScale = coordinatesScale;
+    this.coordinatesCenter = coordinatesCenter;
     this.polynomial = polynomial;
     this.functionType = functionType;
     this.juliaHSV = juliaHSV;
@@ -55,6 +58,7 @@ class Configuration {
     name,
     resolutionScale,
     coordinatesScale,
+    coordinatesCenter,
     polynomial,
     functionType,
     juliaHSV,
@@ -67,6 +71,7 @@ class Configuration {
       name,
       resolutionScale,
       coordinatesScale,
+      Complex.fromJSON(coordinatesCenter),
       Polynomial.fromJSON(polynomial),
       functionType,
       juliaHSV,
@@ -86,6 +91,7 @@ class Configuration {
       name: this.name,
       resolutionScale: this.resolutionScale,
       coordinatesScale: this.coordinatesScale,
+      coordinatesCenter: this.coordinatesCenter.toJSON(),
       polynomial: this.polynomial.toJSON(),
       functionType: this.functionType,
       juliaHSV: this.juliaHSV,
@@ -105,6 +111,7 @@ class Configuration {
       name,
       1,
       2,
+      new Complex(0, 0),
       new Polynomial({ 2: new Complex(1, 0) }),
       "DEFAULT",
       [0, 0, 1],
@@ -125,6 +132,7 @@ class Configuration {
     }
     this.resolutionScale = configuration.resolutionScale;
     this.coordinatesScale = configuration.coordinatesScale;
+    this.coordinatesCenter = configuration.coordinatesCenter.copy();
     this.polynomial = configuration.polynomial.copy();
     this.functionType = configuration.functionType;
     this.juliaHSV = [

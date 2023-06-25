@@ -7,6 +7,7 @@ out vec2 coordinates;
 
 uniform float dimensionRatio;
 uniform float coordinatesScale;
+uniform vec2 coordinatesCenter;
 
 void main() {
   gl_Position = vertexPosition;
@@ -15,5 +16,5 @@ void main() {
   } else {
     coordinates = vertexPosition.xy * vec2(dimensionRatio, 1.0);
   }
-  coordinates = coordinatesScale * coordinates;
+  coordinates = coordinatesScale * coordinates + coordinatesCenter;
 }

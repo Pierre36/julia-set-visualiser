@@ -4,6 +4,7 @@
     "name": "z² + c",
     "resolutionScale": 1,
     "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
     "polynomial": {
       "0": {
         "type": "COMPLEX_CIRCLE",

@@ -5,6 +5,7 @@ import AnimationFrame from "./components/AnimationFrame.vue";
 import { Configuration } from "./models/Configuration";
 import { Polynomial } from "./models/Polynomial";
 import { Attractor } from "./models/Attractor";
+import { Complex } from "./models/Complex";
 
 export default {
   name: "App",
@@ -18,6 +19,7 @@ export default {
           "Custom",
           1,
           1,
+          new Complex(0, 0),
           new Polynomial(),
           "DEFAULT",
           [0, 0, 0],
