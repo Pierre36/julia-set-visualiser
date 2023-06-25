@@ -95,4 +95,17 @@ class ComplexLine {
   copy() {
     return new ComplexLine(this.start.copy(), this.end.copy(), this.duration);
   }
+
+  /**
+   * Computes and returns the multiplication of the complex line by a factor.
+   * @param {Number} factor The factor to multiply by.
+   * @returns {Complex} The complex line multiplied by the factor.
+   */
+  multipliedBy(factor) {
+    return new ComplexLine(
+      this.start.multipliedBy(factor),
+      this.end.multipliedBy(factor),
+      this.duration
+    );
+  }
 }

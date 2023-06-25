@@ -1,73 +1,3 @@
-import { Complex } from "./models/Complex";
-import { Polynomial } from "./models/Polynomial";
-
-/**
- * Reads the animation parameters and builds the numerator and denominator of the function.
- * @param {Object} parameters The parameters of the animation.
- * @param {Number} time The animation time in milliseconds.
- * @returns The function parameters in terms of numerator and denominator.
- */
-function getFunctionParameters(parameters, time) {
-  // Gets the polynomial at the time
-  const polynomial = parameters.polynomial.getAtTime(time);
-
-  // Initialize the return values
-  var numeratorDegree = polynomial.degree;
-  var numeratorCoefficients;
-  var denominatorDegree;
-  var denominatorCoefficients;
-
-  // Depending on the function type, computes the numerator and denominator
-  if (parameters.functionType == "DEFAULT") {
-    numeratorCoefficients = polynomial.toFloat32Array();
-    denominatorDegree = 1;
-    denominatorCoefficients = new Polynomial({
-      0: new Complex(1, 0),
-    }).toFloat32Array();
-  } else if (parameters.functionType == "NEWTON") {
-    const derivative = polynomial.getDerivative();
-    numeratorCoefficients = polynomial.getNewtonNumerator().toFloat32Array();
-    denominatorDegree = derivative.degree;
-    denominatorCoefficients = derivative.toFloat32Array();
-  } else {
-    throw new Error(
-      `The function type is incorrect. It must be either "DEFAULT" or "NEWTON", but received ${parameters.functionType}`
-    );
-  }
-
-  return [numeratorDegree, numeratorCoefficients, denominatorDegree, denominatorCoefficients];
-}
-
-function getAttractorParameters(parameters) {
-  const attractors = parameters.attractors;
-  const attractorsComplex = [];
-  const attractorsHue = [];
-  const attractorsColorParameters = [];
-  for (let a = 0; a < 16; a++) {
-    const attractor = attractors[a];
-    if (attractor != undefined) {
-      attractorsComplex.push(attractor.complex.re, attractor.complex.im);
-      attractorsHue.push(attractor.hue);
-      attractorsColorParameters.push(
-        attractor.saturationStrength,
-        attractor.saturationOffset,
-        attractor.valueStrength,
-        attractor.valueOffset
-      );
-    } else {
-      attractorsComplex.push(0, 0);
-      attractorsHue.push(0);
-      attractorsColorParameters.push(0, 0, 0, 0);
-    }
-  }
-  return [
-    attractors.length,
-    new Float32Array(attractorsComplex),
-    new Float32Array(attractorsHue),
-    new Float32Array(attractorsColorParameters),
-  ];
-}
-
 /**
  * Load WebGL2 from the provided canvas.
  * @param {Canvas} canvas The canvas.
@@ -148,10 +78,9 @@ function getUniformLocations(gl, shaderProgram) {
   return {
     resolution: gl.getUniformLocation(shaderProgram, "resolution"),
     coordinatesScale: gl.getUniformLocation(shaderProgram, "coordinatesScale"),
-    time: gl.getUniformLocation(shaderProgram, "time"),
-    numeratorDegree: gl.getUniformLocation(shaderProgram, "numeratorDegree"),
+    numeratorNbCoefficients: gl.getUniformLocation(shaderProgram, "numeratorNbCoefficients"),
     numeratorCoefficients: gl.getUniformLocation(shaderProgram, "numeratorCoefficients"),
-    denominatorDegree: gl.getUniformLocation(shaderProgram, "denominatorDegree"),
+    denominatorNbCoefficients: gl.getUniformLocation(shaderProgram, "denominatorNbCoefficients"),
     denominatorCoefficients: gl.getUniformLocation(shaderProgram, "denominatorCoefficients"),
     juliaHSV: gl.getUniformLocation(shaderProgram, "juliaHSV"),
     defaultHue: gl.getUniformLocation(shaderProgram, "defaultHue"),
@@ -205,42 +134,27 @@ function setPositionAttributes(gl, shaderProgram) {
  * @param {Number} time The animation time in milliseconds.
  */
 function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
-  gl.uniform1f(uniformLocations.time, time / 1000);
   gl.uniform1f(uniformLocations.coordinatesScale, parameters.coordinatesScale);
   gl.uniform1f(uniformLocations.resolution, canvas.clientWidth / canvas.clientHeight);
-  const [numeratorDegree, numeratorCoefficients, denominatorDegree, denominatorCoefficients] =
-    getFunctionParameters(parameters, time);
-  gl.uniform1i(uniformLocations.numeratorDegree, numeratorDegree);
-  gl.uniform2fv(uniformLocations.numeratorCoefficients, numeratorCoefficients);
-  gl.uniform1i(uniformLocations.denominatorDegree, denominatorDegree);
-  gl.uniform2fv(uniformLocations.denominatorCoefficients, denominatorCoefficients);
+  gl.uniform1i(uniformLocations.numeratorNbCoefficients, parameters.numeratorNbCoefficients);
+  gl.uniform3fv(
+    uniformLocations.numeratorCoefficients,
+    parameters.numeratorCoefficients.toFloat32ArrayAtTime(time)
+  );
+  gl.uniform1i(uniformLocations.denominatorNbCoefficients, parameters.denominatorNbCoefficients);
+  gl.uniform3fv(
+    uniformLocations.denominatorCoefficients,
+    parameters.denominatorCoefficients.toFloat32ArrayAtTime(time)
+  );
   gl.uniform3fv(uniformLocations.juliaHSV, parameters.juliaHSV);
-  gl.uniform1f(uniformLocations.defaultHue, parameters.defaultAttractor.hue);
-  gl.uniform4fv(
-    uniformLocations.defaultColorParameters,
-    new Float32Array([
-      parameters.defaultAttractor.saturationStrength,
-      parameters.defaultAttractor.saturationOffset,
-      parameters.defaultAttractor.valueStrength,
-      parameters.defaultAttractor.valueOffset,
-    ])
-  );
-  gl.uniform1f(uniformLocations.infinityHue, parameters.infinityAttractor.hue);
-  gl.uniform4fv(
-    uniformLocations.infinityColorParameters,
-    new Float32Array([
-      parameters.infinityAttractor.saturationStrength,
-      parameters.infinityAttractor.saturationOffset,
-      parameters.infinityAttractor.valueStrength,
-      parameters.infinityAttractor.valueOffset,
-    ])
-  );
-  const [nbAttractors, attractorsComplex, attractorsHue, attractorsColorParameters] =
-    getAttractorParameters(parameters);
-  gl.uniform1i(uniformLocations.nbAttractors, nbAttractors);
-  gl.uniform2fv(uniformLocations.attractors, attractorsComplex);
-  gl.uniform1fv(uniformLocations.attractorsHue, attractorsHue);
-  gl.uniform4fv(uniformLocations.attractorsColorParameters, attractorsColorParameters);
+  gl.uniform1f(uniformLocations.defaultHue, parameters.defaultHue);
+  gl.uniform4fv(uniformLocations.defaultColorParameters, parameters.defaultColorParameters);
+  gl.uniform1f(uniformLocations.infinityHue, parameters.infinityHue);
+  gl.uniform4fv(uniformLocations.infinityColorParameters, parameters.infinityColorParameters);
+  gl.uniform1i(uniformLocations.nbAttractors, parameters.nbAttractors);
+  gl.uniform2fv(uniformLocations.attractors, parameters.attractorsComplex);
+  gl.uniform1fv(uniformLocations.attractorsHue, parameters.attractorsHue);
+  gl.uniform4fv(uniformLocations.attractorsColorParameters, parameters.attractorsColorParameters);
 }
 
 /**

@@ -88,4 +88,13 @@ class ComplexCircle {
   copy() {
     return new ComplexCircle(this.center.copy(), this.radius, this.duration);
   }
+
+  /**
+   * Computes and returns the multiplication of the complex circle by a factor.
+   * @param {Number} factor The factor to multiply by.
+   * @returns {Complex} The complex circle multiplied by the factor.
+   */
+  multipliedBy(factor) {
+    return new ComplexCircle(this.center.multipliedBy(factor), this.radius * factor, this.duration);
+  }
 }

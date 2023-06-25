@@ -206,4 +206,13 @@ class Complex {
   showMinus() {
     return (this.re == 0 || this.im == 0) && this.re <= 0 && this.im <= 0;
   }
+
+  /**
+   * Computes and returns the multiplication of the complex number by a factor.
+   * @param {Number} factor The factor to multiply by.
+   * @returns {Complex} The complex number multiplied by the factor.
+   */
+  multipliedBy(factor) {
+    return new Complex(factor * this.re, factor * this.im);
+  }
 }

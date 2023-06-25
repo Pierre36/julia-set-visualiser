@@ -17,10 +17,10 @@ out vec4 fragColor;
 
 // UNIFORMS
 
-uniform int numeratorDegree;
-uniform vec2 numeratorCoefficients[16];
-uniform int denominatorDegree;
-uniform vec2 denominatorCoefficients[16];
+uniform int numeratorNbCoefficients;
+uniform vec3 numeratorCoefficients[16];
+uniform int denominatorNbCoefficients;
+uniform vec3 denominatorCoefficients[16];
 uniform vec3 juliaHSV;
 uniform float defaultHue;
 uniform vec4 defaultColorParameters;
@@ -76,19 +76,18 @@ vec2 complexDivision(vec2 z1, vec2 z2) {
   return complexMultiplication(z1, complexInverse(z2));
 }
 
-vec2 complexPower(vec2 z, int p) {
-  if (p == 0) {
+vec2 complexPower(vec2 z, float p) {
+  if (p < ZERO) {
     return vec2(1.0, 0.0);
-  } else if (p == 1) {
+  } else if (p - 1.0 < ZERO) {
     return z;
   } else {
-    float floatp = float(p);
-    float modpz = pow(complexMod(z), floatp);
+    float modpz = pow(complexMod(z), p);
     if (modpz > INFINITY) {
       return vec2(INFINITY, INFINITY);
     } else {
       float argz = complexArg(z);
-      return modpz * vec2(cos(floatp * argz), sin(floatp * argz));
+      return modpz * vec2(cos(p * argz), sin(p * argz));
     }
   }
 }
@@ -104,17 +103,13 @@ vec2 applyFunction(vec2 z) {
   if (isComplexInfinity(z)) {
     return z;
   }
-  vec2 numerator = numeratorCoefficients[0];
-  vec2 denominator = denominatorCoefficients[0];
-  for (int p = 1; p <= numeratorDegree; ++p) {
-    if (!isComplexZero(numeratorCoefficients[p])) {
-      numerator = numerator + complexMultiplication(numeratorCoefficients[p], complexPower(z, p));
-    }
+  vec2 numerator = vec2(0.0, 0.0);
+  vec2 denominator = vec2(0.0, 0.0);
+  for (int c = 0; c <= numeratorNbCoefficients; ++c) {
+    numerator += complexMultiplication(numeratorCoefficients[c].xy, complexPower(z, numeratorCoefficients[c].z));
   }
-  for (int p = 1; p <= denominatorDegree; ++p) {
-    if (!isComplexZero(denominatorCoefficients[p])) {
-      denominator = denominator + complexMultiplication(denominatorCoefficients[p], complexPower(z, p));
-    }
+  for (int c = 0; c <= denominatorNbCoefficients; ++c) {
+    denominator += complexMultiplication(denominatorCoefficients[c].xy, complexPower(z, denominatorCoefficients[c].z));
   }
   return complexDivision(numerator, denominator);
 }

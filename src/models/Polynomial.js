@@ -193,38 +193,23 @@ class Polynomial {
   }
 
   /**
-   * Convert the polynomial into a flattened array of complex number.
-   * @returns {Float32Array} The flattened array of complex numbers.
+   * Convert the polynomial into a flattened array of complex number at the given time.
+   * @param {Number} time The time in milliseconds.
+   * @returns {Float32Array} The flattened array of complex numbers at the given time.
    */
-  toFloat32Array() {
+  toFloat32ArrayAtTime(time) {
     const flattenedArray = [];
-    for (let p = 0; p <= MAX_DEGREE; p++) {
-      let complex = this.coefficients[p];
-      if (complex != null) {
-        flattenedArray.push(complex.re, complex.im);
-      } else {
-        flattenedArray.push(0, 0);
+    this.getCoefficientPowers().forEach((power) => {
+      let complex = this.getCoefficient(power);
+      if (complex instanceof ComplexCircle || complex instanceof ComplexLine) {
+        complex = complex.getAtTime(time);
       }
+      flattenedArray.push(complex.re, complex.im, power);
+    });
+    for (let i = flattenedArray.length; i < 3 * (MAX_DEGREE + 1); i++) {
+      flattenedArray.push(0);
     }
     return new Float32Array(flattenedArray);
-  }
-
-  /**
-   * Get the value of the polynomial at the given time.
-   * @param {Number} time The time in milliseconds.
-   * @returns {Complex} The value of the polynomial at the given time.
-   */
-  getAtTime(time) {
-    const newPolynomial = new Polynomial();
-    this.getCoefficientPowers().forEach((power) => {
-      let coefficient = this.getCoefficient(power);
-      if (coefficient instanceof Complex) {
-        newPolynomial.setCoefficient(power, coefficient.copy());
-      } else if (coefficient instanceof ComplexCircle || coefficient instanceof ComplexLine) {
-        newPolynomial.setCoefficient(power, coefficient.getAtTime(time));
-      }
-    });
-    return newPolynomial;
   }
 
   /**
@@ -235,10 +220,7 @@ class Polynomial {
     const derivative = new Polynomial();
     this.getCoefficientPowers().forEach((power) => {
       let coefficient = this.getCoefficient(power);
-      derivative.setCoefficient(
-        power - 1,
-        new Complex(coefficient.re * power, coefficient.im * power)
-      );
+      derivative.setCoefficient(power - 1, coefficient.multipliedBy(power));
     });
     return derivative;
   }
@@ -251,10 +233,7 @@ class Polynomial {
     const newtonNumerator = new Polynomial();
     this.getCoefficientPowers().forEach((power) => {
       let coefficient = this.getCoefficient(power);
-      newtonNumerator.setCoefficient(
-        power,
-        new Complex((power - 1) * coefficient.re, (power - 1) * coefficient.im)
-      );
+      newtonNumerator.setCoefficient(power, coefficient.multipliedBy(power - 1));
     });
     return newtonNumerator;
   }
