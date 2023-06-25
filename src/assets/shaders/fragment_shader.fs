@@ -49,6 +49,10 @@ float complexMod(vec2 z) {
   return length(z);
 }
 
+float complexArg(vec2 z) {
+  return atan(z.y, z.x);
+}
+
 bool isComplexZero(vec2 z) {
   return complexMod(z) <= ZERO;
 }
@@ -78,15 +82,14 @@ vec2 complexPower(vec2 z, int p) {
   } else if (p == 1) {
     return z;
   } else {
-    vec2 result = z;
-    for (int n = 1; n < p; n++) {
-      if (length(result) >= INFINITY) {
-        return result;
-      } else {
-        result = complexMultiplication(result, z);
-      }
+    float floatp = float(p);
+    float modpz = pow(complexMod(z), floatp);
+    if (modpz > INFINITY) {
+      return vec2(INFINITY, INFINITY);
+    } else {
+      float argz = complexArg(z);
+      return modpz * vec2(cos(floatp * argz), sin(floatp * argz));
     }
-    return result;
   }
 }
 
@@ -101,28 +104,18 @@ vec2 applyFunction(vec2 z) {
   if (isComplexInfinity(z)) {
     return z;
   }
-  
-
-
-
-
-  vec2 numerator = numeratorCoefficients[0] + 14.0 * complexPower(z, 15);
-  // vec2 denominator = denominatorCoefficients[0];
-  vec2 denominator = 15.0 * complexPower(z, 14);
-
-
-
-
-  // for (int p = 1; p <= numeratorDegree; ++p) {
-  //   if (!isComplexZero(numeratorCoefficients[p])) {
-  //     numerator = numerator + complexMultiplication(numeratorCoefficients[p], complexPower(z, p));
-  //   }
-  // }
-  // for (int p = 1; p <= denominatorDegree; ++p) {
-  //   if (!isComplexZero(denominatorCoefficients[p])) {
-  //     denominator = denominator + complexMultiplication(denominatorCoefficients[p], complexPower(z, p));
-  //   }
-  // }
+  vec2 numerator = numeratorCoefficients[0];
+  vec2 denominator = denominatorCoefficients[0];
+  for (int p = 1; p <= numeratorDegree; ++p) {
+    if (!isComplexZero(numeratorCoefficients[p])) {
+      numerator = numerator + complexMultiplication(numeratorCoefficients[p], complexPower(z, p));
+    }
+  }
+  for (int p = 1; p <= denominatorDegree; ++p) {
+    if (!isComplexZero(denominatorCoefficients[p])) {
+      denominator = denominator + complexMultiplication(denominatorCoefficients[p], complexPower(z, p));
+    }
+  }
   return complexDivision(numerator, denominator);
 }
 
