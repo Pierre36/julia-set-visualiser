@@ -15,6 +15,9 @@ class Configuration {
    * @param {Number} resolutionScale The scale of the resolution (if 1, use the resolution of the viewport).
    * @param {Number} coordinatesScale The scale of the coordinates.
    * @param {Complex} coordinatesCenter The center of the coordinates.
+   * @param {Number} nbIterations The number of iterations.
+   * @param {Number} epsilon The epsilon added to the complex number before to compute the divergence.
+   * @param {Number} juliaBound The highest value of log-divergence in the Julia Set.
    * @param {Polynomial} polynomial The polynomial used for the fractal.
    * @param {String} functionType The type a function, can be DEFAULT or NEWTON.
    * @param {Array} juliaHSV The hue, saturation and value of the Julia Set.
@@ -28,6 +31,9 @@ class Configuration {
     resolutionScale,
     coordinatesScale,
     coordinatesCenter,
+    nbIterations,
+    epsilon,
+    juliaBound,
     polynomial,
     functionType,
     juliaHSV,
@@ -40,6 +46,9 @@ class Configuration {
     this.resolutionScale = resolutionScale;
     this.coordinatesScale = coordinatesScale;
     this.coordinatesCenter = coordinatesCenter;
+    this.nbIterations = nbIterations;
+    this.epsilon = epsilon;
+    this.juliaBound = juliaBound;
     this.polynomial = polynomial;
     this.functionType = functionType;
     this.juliaHSV = juliaHSV;
@@ -59,6 +68,9 @@ class Configuration {
     resolutionScale,
     coordinatesScale,
     coordinatesCenter,
+    nbIterations,
+    epsilon,
+    juliaBound,
     polynomial,
     functionType,
     juliaHSV,
@@ -72,6 +84,9 @@ class Configuration {
       resolutionScale,
       coordinatesScale,
       Complex.fromJSON(coordinatesCenter),
+      nbIterations,
+      epsilon,
+      juliaBound,
       Polynomial.fromJSON(polynomial),
       functionType,
       juliaHSV,
@@ -92,6 +107,9 @@ class Configuration {
       resolutionScale: this.resolutionScale,
       coordinatesScale: this.coordinatesScale,
       coordinatesCenter: this.coordinatesCenter.toJSON(),
+      nbIterations: this.nbIterations,
+      epsilon: this.epsilon,
+      juliaBound: this.juliaBound,
       polynomial: this.polynomial.toJSON(),
       functionType: this.functionType,
       juliaHSV: this.juliaHSV,
@@ -112,6 +130,9 @@ class Configuration {
       1,
       2,
       new Complex(0, 0),
+      20,
+      0.00001,
+      -4,
       new Polynomial({ 2: new Complex(1, 0) }),
       "DEFAULT",
       [0, 0, 1],
@@ -133,6 +154,9 @@ class Configuration {
     this.resolutionScale = configuration.resolutionScale;
     this.coordinatesScale = configuration.coordinatesScale;
     this.coordinatesCenter = configuration.coordinatesCenter.copy();
+    this.nbIterations = configuration.nbIterations;
+    this.epsilon = configuration.epsilon;
+    this.juliaBound = configuration.juliaBound;
     this.polynomial = configuration.polynomial.copy();
     this.functionType = configuration.functionType;
     this.juliaHSV = [

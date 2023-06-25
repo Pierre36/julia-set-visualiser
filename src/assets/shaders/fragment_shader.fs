@@ -17,6 +17,9 @@ out vec4 fragColor;
 
 // UNIFORMS
 
+uniform int nbIterations;
+uniform float epsilon;
+uniform float juliaBound;
 uniform int numeratorNbCoefficients;
 uniform vec3 numeratorCoefficients[16];
 uniform int denominatorNbCoefficients;
@@ -190,18 +193,12 @@ vec3 hsvToRgb(vec3 hsv) {
 // MAIN
 
 void main() {
-
-  // Parameters
-  int nbIteration = 20;
-  float epsilon = 0.00001;
-  float juliaBound = -4.0;
-
   // Compute how close from an attractor the current point is 
   // by checking if nearby pixels tend to get closer
   vec2 fkz = coordinates;
   vec2 fkzeps = coordinates + vec2(epsilon, epsilon);
   float divergence = 0.0;
-  for (int k; k < nbIteration; ++k) {
+  for (int k; k < nbIterations; ++k) {
     fkz = applyFunction(fkz);
     fkzeps = applyFunction(fkzeps);
     divergence += riemannSpheredistance(fkz, fkzeps);

@@ -79,6 +79,9 @@ function getUniformLocations(gl, shaderProgram) {
     dimensionRatio: gl.getUniformLocation(shaderProgram, "dimensionRatio"),
     coordinatesScale: gl.getUniformLocation(shaderProgram, "coordinatesScale"),
     coordinatesCenter: gl.getUniformLocation(shaderProgram, "coordinatesCenter"),
+    nbIterations: gl.getUniformLocation(shaderProgram, "nbIterations"),
+    epsilon: gl.getUniformLocation(shaderProgram, "epsilon"),
+    juliaBound: gl.getUniformLocation(shaderProgram, "juliaBound"),
     numeratorNbCoefficients: gl.getUniformLocation(shaderProgram, "numeratorNbCoefficients"),
     numeratorCoefficients: gl.getUniformLocation(shaderProgram, "numeratorCoefficients"),
     denominatorNbCoefficients: gl.getUniformLocation(shaderProgram, "denominatorNbCoefficients"),
@@ -137,6 +140,9 @@ function setPositionAttributes(gl, shaderProgram) {
 function setUniformValues(gl, uniformLocations, parameters, canvas, time) {
   gl.uniform1f(uniformLocations.coordinatesScale, parameters.coordinatesScale);
   gl.uniform2fv(uniformLocations.coordinatesCenter, parameters.coordinatesCenter);
+  gl.uniform1i(uniformLocations.nbIterations, parameters.nbIterations);
+  gl.uniform1f(uniformLocations.epsilon, parameters.epsilon);
+  gl.uniform1f(uniformLocations.juliaBound, parameters.juliaBound);
   gl.uniform1f(uniformLocations.dimensionRatio, canvas.clientWidth / canvas.clientHeight);
   gl.uniform1i(uniformLocations.numeratorNbCoefficients, parameters.numeratorNbCoefficients);
   gl.uniform3fv(

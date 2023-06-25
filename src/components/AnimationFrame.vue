@@ -18,6 +18,9 @@ export default {
         resolutionScale: this.configuration.resolutionScale,
         coordinatesScale: this.configuration.coordinatesScale,
         coordinatesCenter: null,
+        nbIterations: this.configuration.nbIterations,
+        epsilon: this.configuration.epsilon,
+        juliaBound: this.configuration.juliaBound,
         numeratorCoefficients: null,
         numeratorNbCoefficients: null,
         denominatorCoefficients: null,
@@ -132,8 +135,17 @@ export default {
     "configuration.coordinatesScale"(newCoordinatesScale) {
       this.parameters.coordinatesScale = newCoordinatesScale;
     },
-    "configuration.coordinatesCenter"(newCoordinatesCenter) {
+    "configuration.coordinatesCenter"(_) {
       this.parameters.coordinatesCenter = this.coordinatesCenter;
+    },
+    "configuration.nbIterations"(newNbIterations) {
+      this.parameters.nbIterations = newNbIterations;
+    },
+    "configuration.epsilon"(newEpsilon) {
+      this.parameters.epsilon = newEpsilon;
+    },
+    "configuration.juliaBound"(newJuliaBound) {
+      this.parameters.juliaBound = newJuliaBound;
     },
     "configuration.polynomial": {
       handler(_) {
@@ -164,7 +176,7 @@ export default {
     "configuration.infinityAttractor": {
       handler(_) {
         this.parameters.infinityHue = this.infinityHue;
-        this.parameters.infinityColorParameterss = this.infinityColorParameterss;
+        this.parameters.infinityColorParameters = this.infinityColorParameters;
       },
       deep: true,
     },

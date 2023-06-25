@@ -5,6 +5,9 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
     "polynomial": {
       "0": {
         "type": "COMPLEX_CIRCLE",
