@@ -36,7 +36,7 @@ export default {
 
 <template>
   <div id="topNav">
-    <img class="logo" src="../../public/logo.svg" />
+    <img class="logo" src="/logo.svg" />
     <h1>Julia Set Visualizer</h1>
     <FormSelect
       :options="configurationOptions"
