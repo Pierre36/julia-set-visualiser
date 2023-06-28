@@ -36,5 +36,43 @@
       "valueOffset": 1.4
     },
     "attractors": []
+  },
+  {
+    "id": "2",
+    "name": "z⁴ + cz",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.8,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
+    "polynomial": {
+      "1": {
+        "center": { "re": 0.2, "im": 0 },
+        "radius": 1.1,
+        "duration": 10000,
+        "type": "COMPLEX_CIRCLE"
+      },
+      "4": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+    },
+    "functionType": "DEFAULT",
+    "juliaHSV": [50, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 223,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 193,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.5,
+      "valueOffset": 1.4
+    },
+    "attractors": []
   }
 ]
