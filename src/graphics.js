@@ -105,8 +105,8 @@ function getUniformLocations(gl, shaderProgram) {
  * @param {Object} parameters The parameters of the animation.
  */
 function createViewport(gl, canvas, parameters) {
-  canvas.width = canvas.clientWidth * parameters.resolutionScale;
-  canvas.height = canvas.clientHeight * parameters.resolutionScale;
+  canvas.width = canvas.clientWidth * window.devicePixelRatio * parameters.resolutionScale;
+  canvas.height = canvas.clientHeight * window.devicePixelRatio * parameters.resolutionScale;
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);

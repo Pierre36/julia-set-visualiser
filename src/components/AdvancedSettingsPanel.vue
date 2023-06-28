@@ -12,6 +12,10 @@ export default {
   },
   emits: ["change"],
   methods: {
+    updateResolutionScale(newResolutionScale) {
+      this.configuration.resolutionScale = newResolutionScale;
+      this.$emit("change");
+    },
     updateCoordinatesScale(newCoordinatesScale) {
       this.configuration.coordinatesScale = newCoordinatesScale;
       this.$emit("change");
@@ -62,6 +66,12 @@ export default {
           <p>In this section, you can change the viewport parameters:</p>
           <ul class="infoList">
             <li>
+              <span class="infoListItemTitle">Resolution</span>: This is the resolution of the
+              viewport. A value of 1 means that the resolution of the window is used. In order for
+              any change to the resolution to be applied, the configuration has to be saved and the
+              page reloaded.
+            </li>
+            <li>
               <span class="infoListItemTitle">Scale</span>: This is the scale of the viewport. A
               scale of 1 corresponds means the smallest axis of the viewport has a length of 2 (from
               -1 to 1 if the center of the viewport is 0).
@@ -74,6 +84,13 @@ export default {
         </template>
       </InfoHeader>
       <div class="content">
+        <h4>Resolution</h4>
+        <FloatInput
+          :float="configuration.resolutionScale"
+          :min="0"
+          :step="0.1"
+          @update:float="updateResolutionScale"
+        />
         <h4>Scale</h4>
         <FloatInput
           :float="configuration.coordinatesScale"
