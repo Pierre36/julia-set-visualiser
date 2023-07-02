@@ -18,6 +18,7 @@
       "2": { "type": "COMPLEX", "re": 1, "im": 0 }
     },
     "functionType": "DEFAULT",
+    "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 },
     "juliaHSV": [210, 0, 1],
     "defaultAttractor": {
       "complex": null,
@@ -56,6 +57,7 @@
       "4": { "re": 1.1, "im": 0, "type": "COMPLEX" }
     },
     "functionType": "DEFAULT",
+    "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
       "complex": null,

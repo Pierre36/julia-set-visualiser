@@ -108,4 +108,13 @@ class ComplexLine {
       this.duration
     );
   }
+
+  /**
+   * Computes and returns the addition of the complex line and a number.
+   * @param {Number} term The number to add.
+   * @returns {Complex} The result of the addition.
+   */
+  plus(term) {
+    return new ComplexLine(this.start.plus(term), this.end.plus(term), this.duration);
+  }
 }

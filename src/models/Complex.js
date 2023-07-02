@@ -215,4 +215,25 @@ class Complex {
   multipliedBy(factor) {
     return new Complex(factor * this.re, factor * this.im);
   }
+
+  /**
+   * Computes and returns the multiplication of the complex number by a complex factor.
+   * @param {Complex} factor The factor to multiply by.
+   * @returns {Complex} The complex number multiplied by the complex factor.
+   */
+  multipliedByComplex(factor) {
+    return new Complex(
+      this.re * factor.re - this.im * factor.im,
+      this.im * factor.re + this.re * factor.im
+    );
+  }
+
+  /**
+   * Computes and returns the addition of the complex number and a number.
+   * @param {Number} term The number to add.
+   * @returns {Complex} The result of the addition.
+   */
+  plus(term) {
+    return new Complex(this.re + term, this.im);
+  }
 }

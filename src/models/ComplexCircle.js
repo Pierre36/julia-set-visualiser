@@ -97,4 +97,13 @@ class ComplexCircle {
   multipliedBy(factor) {
     return new ComplexCircle(this.center.multipliedBy(factor), this.radius * factor, this.duration);
   }
+
+  /**
+   * Computes and returns the addition of the complex circle and a number.
+   * @param {Number} term The number to add.
+   * @returns {Complex} The result of the addition.
+   */
+  plus(term) {
+    return new ComplexCircle(this.center.plus(term), this.radius, this.duration);
+  }
 }

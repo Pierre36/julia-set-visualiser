@@ -50,7 +50,9 @@ export default {
       if (this.configuration.functionType == "DEFAULT") {
         return this.configuration.polynomial;
       } else if (this.configuration.functionType == "NEWTON") {
-        return this.configuration.polynomial.getNewtonNumerator();
+        return this.configuration.polynomial.getNewtonNumerator(
+          this.configuration.newtonCoefficient
+        );
       }
     },
     numeratorNbCoefficients() {
@@ -157,12 +159,14 @@ export default {
       },
       deep: true,
     },
-
     "configuration.functionType"(_) {
       this.parameters.numeratorCoefficients = this.numeratorCoefficients;
       this.parameters.numeratorNbCoefficients = this.numeratorNbCoefficients;
       this.parameters.denominatorCoefficients = this.denominatorCoefficients;
       this.parameters.denominatorNbCoefficients = this.denominatorNbCoefficients;
+    },
+    "configuration.newtonCoefficient"(_) {
+      this.parameters.numeratorCoefficients = this.numeratorCoefficients;
     },
     "configuration.juliaHSV"(newJuliaHSV) {
       this.parameters.juliaHSV = newJuliaHSV;

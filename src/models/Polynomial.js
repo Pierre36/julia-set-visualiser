@@ -1,6 +1,8 @@
 import { ComplexCircle } from "./ComplexCircle";
 import { ComplexLine } from "./ComplexLine";
 import { Complex } from "./Complex";
+import { Coefficient } from "./Coefficient";
+import { ComplexMultiplication } from "./ComplexMultiplication";
 
 export { Polynomial };
 
@@ -35,40 +37,21 @@ class Polynomial {
   static fromJSON(coefficientsJSON) {
     const coefficients = {};
     Object.keys(coefficientsJSON).forEach((power) => {
-      const coefficientJSON = coefficientsJSON[power];
-      if (coefficientJSON["type"] == "COMPLEX_CIRCLE") {
-        coefficients[power] = ComplexCircle.fromJSON(coefficientJSON);
-      } else if (coefficientJSON["type"] == "COMPLEX_LINE") {
-        coefficients[power] = ComplexLine.fromJSON(coefficientJSON);
-      } else if (coefficientJSON["type"] == "COMPLEX") {
-        coefficients[power] = Complex.fromJSON(coefficientJSON);
-      } else {
-        throw Error(
-          `The type of the coefficient of degree ${power} is incorrect! The type must be "COMPLEX_CIRCLE", "COMPLEX_LINE" or "COMPLEX", got ${coefficientJSON["type"]}`
-        );
-      }
+      coefficients[power] = Coefficient.fromJSON(coefficientsJSON[power]);
     });
     return new Polynomial(coefficients);
   }
 
   /**
    * Converts a polynomial to a JSON object.
-   * @returns {Object} The JSON object constructed from the configuration.
+   * @returns {Object} The JSON object constructed from the polynomial.
    */
   toJSON() {
     const coefficientsJSON = {};
     Object.keys(this.coefficients).forEach((power) => {
       const coefficient = this.coefficients[power];
       if (coefficient != null) {
-        const coefficientJSON = coefficient.toJSON();
-        if (coefficient instanceof ComplexCircle) {
-          coefficientJSON["type"] = "COMPLEX_CIRCLE";
-        } else if (coefficient instanceof ComplexLine) {
-          coefficientJSON["type"] = "COMPLEX_LINE";
-        } else if (coefficient instanceof Complex) {
-          coefficientJSON["type"] = "COMPLEX";
-        }
-        coefficientsJSON[power] = coefficientJSON;
+        coefficientsJSON[power] = Coefficient.toJSON(coefficient);
       }
     });
     return coefficientsJSON;
@@ -201,7 +184,11 @@ class Polynomial {
     const flattenedArray = [];
     this.getCoefficientPowers().forEach((power) => {
       let complex = this.getCoefficient(power);
-      if (complex instanceof ComplexCircle || complex instanceof ComplexLine) {
+      if (
+        complex instanceof ComplexCircle ||
+        complex instanceof ComplexLine ||
+        complex instanceof ComplexMultiplication
+      ) {
         complex = complex.getAtTime(time);
       }
       flattenedArray.push(complex.re, complex.im, power);
@@ -229,11 +216,23 @@ class Polynomial {
    * Computes and returns the Newton numerator of the polynomial.
    * @returns {Polynomial} The Newton numerator of the polynomial.
    */
-  getNewtonNumerator() {
+  getNewtonNumerator(newtonCoefficient) {
     const newtonNumerator = new Polynomial();
+    const minusNewtonCoefficient = newtonCoefficient.multipliedBy(-1);
+    const newtonCoefficientIsComplex = newtonCoefficient instanceof Complex;
     this.getCoefficientPowers().forEach((power) => {
       let coefficient = this.getCoefficient(power);
-      newtonNumerator.setCoefficient(power, coefficient.multipliedBy(power - 1));
+      if (coefficient instanceof Complex && newtonCoefficientIsComplex) {
+        newtonNumerator.setCoefficient(
+          power,
+          coefficient.multipliedByComplex(minusNewtonCoefficient.plus(Number(power)))
+        );
+      } else {
+        newtonNumerator.setCoefficient(
+          power,
+          new ComplexMultiplication(coefficient, minusNewtonCoefficient.plus(Number(power)))
+        );
+      }
     });
     return newtonNumerator;
   }

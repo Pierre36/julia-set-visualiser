@@ -1,6 +1,9 @@
 import { Polynomial } from "./Polynomial";
 import { Attractor } from "./Attractor";
 import { Complex } from "./Complex";
+import { ComplexCircle } from "./ComplexCircle";
+import { ComplexLine } from "./ComplexLine";
+import { Coefficient } from "./Coefficient";
 
 export { Configuration };
 
@@ -20,6 +23,7 @@ class Configuration {
    * @param {Number} juliaBound The highest value of log-divergence in the Julia Set.
    * @param {Polynomial} polynomial The polynomial used for the fractal.
    * @param {String} functionType The type a function, can be DEFAULT or NEWTON.
+   * @param {Complex | ComplexCircle | ComplexLine} newtonCoefficient The newton coefficient (a).
    * @param {Array} juliaHSV The hue, saturation and value of the Julia Set.
    * @param {Attractor} defaultAttractor The default attractor to use if no attractor is closer.
    * @param {Attractor} infinityAttractor The attractor for the infinity.
@@ -36,6 +40,7 @@ class Configuration {
     juliaBound,
     polynomial,
     functionType,
+    newtonCoefficient,
     juliaHSV,
     defaultAttractor,
     infinityAttractor,
@@ -51,6 +56,7 @@ class Configuration {
     this.juliaBound = juliaBound;
     this.polynomial = polynomial;
     this.functionType = functionType;
+    this.newtonCoefficient = newtonCoefficient;
     this.juliaHSV = juliaHSV;
     this.defaultAttractor = defaultAttractor;
     this.infinityAttractor = infinityAttractor;
@@ -73,6 +79,7 @@ class Configuration {
     juliaBound,
     polynomial,
     functionType,
+    newtonCoefficient,
     juliaHSV,
     defaultAttractor,
     infinityAttractor,
@@ -89,6 +96,7 @@ class Configuration {
       juliaBound,
       Polynomial.fromJSON(polynomial),
       functionType,
+      Coefficient.fromJSON(newtonCoefficient),
       juliaHSV,
       Attractor.fromJSON(defaultAttractor),
       Attractor.fromJSON(infinityAttractor),
@@ -112,6 +120,7 @@ class Configuration {
       juliaBound: this.juliaBound,
       polynomial: this.polynomial.toJSON(),
       functionType: this.functionType,
+      newtonCoefficient: Coefficient.toJSON(this.newtonCoefficient),
       juliaHSV: this.juliaHSV,
       defaultAttractor: this.defaultAttractor.toJSON(),
       infinityAttractor: this.infinityAttractor.toJSON(),
@@ -135,6 +144,7 @@ class Configuration {
       -4,
       new Polynomial({ 2: new Complex(1, 0) }),
       "DEFAULT",
+      new Complex(1, 0),
       [0, 0, 1],
       new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
       new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
@@ -159,6 +169,7 @@ class Configuration {
     this.juliaBound = configuration.juliaBound;
     this.polynomial = configuration.polynomial.copy();
     this.functionType = configuration.functionType;
+    this.newtonCoefficient = configuration.newtonCoefficient.copy();
     this.juliaHSV = [
       configuration.juliaHSV[0],
       configuration.juliaHSV[1],

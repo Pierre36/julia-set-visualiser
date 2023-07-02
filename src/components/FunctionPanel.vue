@@ -1,10 +1,13 @@
 <script>
 import FormSelect from "./FormSelect.vue";
+import CoefficientInput from "./CoefficientInput.vue";
 import IconTextButton from "./IconTextButton.vue";
 import CoefficientItem from "./CoefficientItem.vue";
 import InfoHeader from "./InfoHeader.vue";
 import { Complex } from "../models/Complex";
 import { Polynomial } from "../models/Polynomial";
+import { ComplexCircle } from "../models/ComplexCircle";
+import { ComplexLine } from "../models/ComplexLine";
 
 export default {
   name: "FunctionPanel",
@@ -12,13 +15,15 @@ export default {
     FormSelect,
     IconTextButton,
     CoefficientItem,
+    CoefficientInput,
     InfoHeader,
   },
   props: {
     functionType: { type: String, required: true },
+    newtonCoefficient: { type: [Complex, ComplexCircle, ComplexLine], required: true },
     polynomial: { type: Polynomial, required: true },
   },
-  emits: ["update:functionType", "change"],
+  emits: ["update:functionType", "update:newtonCoefficient", "change"],
   data() {
     return {
       functionTypeOptions: [
@@ -154,6 +159,17 @@ export default {
           :selected="functionType"
           @update:selected="(newValue) => $emit('update:functionType', newValue)"
         />
+        <template v-if="functionType == 'NEWTON'">
+          <h4 class="column-span-2">Newton coefficient</h4>
+          <CoefficientInput
+            class="column-span-2"
+            :coefficient="newtonCoefficient"
+            :level="5"
+            @update:coefficient="
+              (newCoefficient) => $emit('update:newtonCoefficient', newCoefficient)
+            "
+          />
+        </template>
       </div>
     </section>
 
@@ -234,6 +250,10 @@ export default {
   margin-block: 0.25rem;
   border-radius: 0.25rem;
   text-align: center;
+}
+
+.column-span-2 {
+  grid-column: span 2;
 }
 
 .coefficientItem {

@@ -17,6 +17,10 @@ export default {
       this.configuration.functionType = newFunctionType;
       this.$emit("change");
     },
+    updateNewtonCoefficient(newNewtonCoefficient) {
+      this.configuration.newtonCoefficient = newNewtonCoefficient;
+      this.$emit("change");
+    },
   },
 };
 </script>
@@ -26,8 +30,10 @@ export default {
     <FunctionPanel
       v-if="currentPanel == 'FUNCTION'"
       :functionType="configuration.functionType"
+      :newtonCoefficient="configuration.newtonCoefficient"
       :polynomial="configuration.polynomial"
       @update:functionType="updateFunctionType"
+      @update:newtonCoefficient="updateNewtonCoefficient"
       @change="$emit('change')"
     />
     <ColorsPanel
@@ -97,7 +103,7 @@ export default {
 
 #sidePanel section .content {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto 12rem;
   align-items: center;
   gap: 0.75rem;
   padding-left: 0.25rem;

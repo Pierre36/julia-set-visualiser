@@ -25,6 +25,7 @@ export default {
           -4,
           new Polynomial(),
           "DEFAULT",
+          new Complex(1, 0),
           [0, 0, 0],
           new Attractor(null, 0, 0, 0, 0, 0),
           new Attractor(null, 0, 0, 0, 0, 0),
