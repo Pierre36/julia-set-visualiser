@@ -198,7 +198,7 @@ a:focus-visible {
 @supports (scrollbar-width: thin) {
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--gray-350) var(--gray-500);
+    scrollbar-color: var(--gray-400) var(--gray-500);
   }
 }
 
