@@ -15,6 +15,7 @@ export default {
       type: [Complex, ComplexCircle, ComplexLine],
       default: new Complex(0, 0),
     },
+    level: { type: Number, default: 4 },
   },
   emits: ["update:coefficient"],
   data() {
@@ -80,29 +81,37 @@ export default {
 
 <template>
   <div class="container">
-    <span>Type</span>
+    <h4 v-if="level == 4">Type</h4>
+    <h5 v-if="level == 5">Type</h5>
     <FormSelect :options="typeOptions" :selected="type" @update:selected="changeType" />
     <template v-if="type == 'CONSTANT'">
-      <span>Value</span>
+      <h4 v-if="level == 4">Value</h4>
+      <h5 v-if="level == 5">Value</h5>
       <ComplexInput
         :complex="coefficient"
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
     <template v-else-if="type == 'CIRCLE'">
-      <span>Center</span>
+      <h4 v-if="level == 4">Center</h4>
+      <h5 v-if="level == 5">Center</h5>
       <ComplexInput :complex="coefficient.center" @update:complex="updateCenter" />
-      <span>Radius</span>
+      <h4 v-if="level == 4">Radius</h4>
+      <h5 v-if="level == 5">Radius</h5>
       <FloatInput :float="coefficient.radius" :min="0" @update:float="updateRadius" />
-      <span>Duration</span>
+      <h4 v-if="level == 4">Duration</h4>
+      <h5 v-if="level == 5">Duration</h5>
       <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
     <template v-else-if="type == 'LINE'">
-      <span>Start</span>
+      <h4 v-if="level == 4">Start</h4>
+      <h5 v-if="level == 5">Start</h5>
       <ComplexInput :complex="coefficient.start" @update:complex="updateStart" />
-      <span>End</span>
+      <h4 v-if="level == 4">End</h4>
+      <h5 v-if="level == 5">End</h5>
       <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
-      <span>Duration</span>
+      <h4 v-if="level == 4">Duration</h4>
+      <h5 v-if="level == 5">Duration</h5>
       <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
   </div>
@@ -114,5 +123,9 @@ export default {
   grid-template-columns: auto 12rem;
   align-items: center;
   gap: 0.25rem;
+}
+
+h5 {
+  padding-left: 0.25rem;
 }
 </style>
