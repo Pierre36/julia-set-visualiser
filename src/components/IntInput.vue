@@ -49,6 +49,7 @@ export default {
     :max="max"
     :step="step"
     :wrongInput="isIntWrong"
+    wrongInputMessage="Please enter a valid integer"
     @change="(newValue) => checkAndUpdate(newValue)"
   />
 </template>

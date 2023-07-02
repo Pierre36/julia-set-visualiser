@@ -48,6 +48,7 @@ export default {
     :max="max"
     :step="step"
     :wrongInput="isFLoatWrong"
+    wrongInputMessage="Please enter a valid float number"
     @change="(newValue) => checkAndUpdate(newValue)"
   />
 </template>
