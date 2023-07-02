@@ -85,6 +85,7 @@ export default {
 
 #sidePanel .panelContent {
   overflow-y: auto;
+  flex-grow: 1;
 }
 
 #sidePanel section {
