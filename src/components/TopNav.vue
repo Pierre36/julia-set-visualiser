@@ -64,6 +64,7 @@ export default {
 <style scoped>
 #topNav {
   height: var(--topNav-height);
+  min-width: var(--page-min-width);
   background-color: var(--gray-400);
   display: grid;
   grid-template-columns:

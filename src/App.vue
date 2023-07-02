@@ -85,5 +85,6 @@ main {
   display: flex;
   height: calc(100vh - var(--topNav-height));
   min-height: var(--page-min-height);
+  min-width: var(--page-min-width);
 }
 </style>
