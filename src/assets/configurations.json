@@ -76,5 +76,44 @@
       "valueOffset": 1.4
     },
     "attractors": []
+  },
+  {
+    "id": "3",
+    "name": "Psychadelic",
+    "resolutionScale": 0.7,
+    "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 30,
+    "epsilon": 0.00001,
+    "juliaBound": -3.6,
+    "polynomial": {
+      "0": { "re": 1, "im": 0, "type": "COMPLEX" },
+      "5": { "re": 1, "im": 0, "type": "COMPLEX" }
+    },
+    "functionType": "NEWTON",
+    "newtonCoefficient": {
+      "center": { "re": 0, "im": 0 },
+      "radius": 5,
+      "duration": 30000,
+      "type": "COMPLEX_CIRCLE"
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.4,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
   }
 ]
