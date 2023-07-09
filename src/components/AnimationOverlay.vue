@@ -16,6 +16,11 @@ export default {
     document.addEventListener("fullscreenchange", () => {
       this.isFullscreen = !this.isFullscreen;
     });
+    document.addEventListener("keypress", (event) => {
+      if (event.target.tagName.toLowerCase() !== "input" && event.key == "f") {
+        this.updateFullscreen();
+      }
+    });
   },
   methods: {
     updatePaused() {
