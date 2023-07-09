@@ -10,16 +10,31 @@ export default {
       metricsDisplayed: false,
       paused: false,
       isFullscreen: false,
+      mouseMoveTimer: null,
+      menuDisplayed: false,
     };
   },
   mounted() {
+    // Add an event listener for the fullscreen event
     document.addEventListener("fullscreenchange", () => {
       this.isFullscreen = !this.isFullscreen;
     });
+
+    // Add a shortcut to switch fullscreen
     document.addEventListener("keypress", (event) => {
       if (event.target.tagName.toLowerCase() !== "input" && event.key == "f") {
         this.updateFullscreen();
       }
+    });
+
+    // Control whether the animation menu should be displayed or not
+    this.$refs.animationOverlay.addEventListener("mousemove", () => {
+      this.menuDisplayed = true;
+      this.timer = setTimeout(() => (this.menuDisplayed = false), 3000);
+    });
+    this.$refs.animationOverlay.addEventListener("mouseleave", () => {
+      this.menuDisplayed = false;
+      clearTimeout(this.timer);
     });
   },
   methods: {
@@ -43,9 +58,9 @@ export default {
 </script>
 
 <template>
-  <div id="animationOverlay">
+  <div ref="animationOverlay" id="animationOverlay">
     <div id="animationMetrics" v-show="metricsDisplayed">{{ fps }}</div>
-    <div id="animationMenu">
+    <div id="animationMenu" :class="{ show: menuDisplayed }">
       <button id="metricsButton" class="icon-button" @click="metricsDisplayed = !metricsDisplayed">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
           <title v-if="metricsDisplayed">Hide metrics</title>
@@ -111,6 +126,8 @@ export default {
 }
 
 #animationMenu {
+  opacity: 0;
+  pointer-events: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -119,11 +136,14 @@ export default {
   padding-inline: 0.5rem;
   margin-top: auto;
   background: linear-gradient(hsla(0, 0%, 0%, 0) 0%, hsla(0, 0%, 0%, 0.3) 100%);
-  visibility: hidden;
+  transition: opacity 250ms ease-in-out;
 }
 
-#animationOverlay:hover #animationMenu {
-  visibility: visible;
+#animationMenu.show,
+#animationMenu:hover,
+#animationMenu:focus-within {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .icon-button {
