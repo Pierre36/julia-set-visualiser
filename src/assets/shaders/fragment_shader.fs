@@ -108,30 +108,28 @@ vec2 applyFunction(vec2 z) {
   }
   vec2 numerator = vec2(0.0, 0.0);
   vec2 denominator = vec2(0.0, 0.0);
-  for (int c = 0; c <= numeratorNbCoefficients; ++c) {
+  for (int c = 0; c < numeratorNbCoefficients; ++c) {
     numerator += complexMultiplication(numeratorCoefficients[c].xy, complexPower(z, numeratorCoefficients[c].z));
   }
-  for (int c = 0; c <= denominatorNbCoefficients; ++c) {
+  for (int c = 0; c < denominatorNbCoefficients; ++c) {
     denominator += complexMultiplication(denominatorCoefficients[c].xy, complexPower(z, denominatorCoefficients[c].z));
   }
   return complexDivision(numerator, denominator);
 }
 
 float riemannSpheredistance(vec2 z, vec2 w) {
-  float t;
   float zMod = complexMod(z);
   float wMod = complexMod(w);
   if (wMod < ZERO) {
-    t = zMod;
+    return 2.0 * atan(zMod);
   } else if (wMod > INFINITY) {
-    t = 1.0 / zMod;
+    return 2.0 * atan(1.0 / zMod);
   } else if (zMod > INFINITY) {
-    t = 0.0;
+    return 0.0;
   } else {
     vec2 zw_ = vec2(z.x * w.x + z.y * w.y, z.y * w.x - w.y * z.x);
-    t = complexMod(zw_ - vec2(wMod * wMod, 0)) / (complexMod(zw_ + vec2(1.0, 0)) * wMod);
+    return 2.0 * atan(complexMod(zw_ - vec2(wMod * wMod, 0)) / (complexMod(zw_ + vec2(1.0, 0)) * wMod));
   }
-  return 2.0 * atan(t);
 }
 
 
@@ -167,26 +165,7 @@ vec3 colorAccordingToSet(float adjustedDivergence, vec2 fkz) {
 }
 
 vec3 hsvToRgb(vec3 hsv) {
-  float hMod360 = mod(hsv.x, 360.0);
-  int hSixth = int(mod(floor(hMod360 / 60.0), 6.0));
-  float f = hMod360 / 60.0 - float(hSixth);
-  float l = hsv.z * (1.0 - hsv.y);
-  float m = hsv.z * (1.0 - f * hsv.y);
-  float n = hsv.z * (1.0 - (1.0 - f) * hsv.y);
-  if (hSixth == 0) {
-    return vec3(hsv.z, n, l);
-  } else if (hSixth == 1) {
-    return vec3(m, hsv.z, l);
-  } else if (hSixth == 2) {
-    return vec3(l, hsv.z, n);
-  } else if (hSixth == 3) {
-    return vec3(l, m, hsv.z);
-  } else if (hSixth == 4) {
-    return vec3(n, l, hsv.z);
-  } else if (hSixth == 5) {
-    return vec3(hsv.z, l, m);
-  }
-  return vec3(0.0, 0.0, 0.0);
+  return hsv.z * mix(vec3(1.0), clamp(abs(mod(hsv.x / 60.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0), hsv.y);
 }
 
 
@@ -198,13 +177,12 @@ void main() {
   vec2 fkz = coordinates;
   vec2 fkzeps = coordinates + vec2(epsilon, epsilon);
   float divergence = 0.0;
-  for (int k; k < nbIterations; ++k) {
+  for (int k = 0; k < nbIterations; ++k) {
     fkz = applyFunction(fkz);
     fkzeps = applyFunction(fkzeps);
     divergence += riemannSpheredistance(fkz, fkzeps);
   }
 
   // Color according to the divergence of close points and convert to RGB
-  float adjustedDivergence = log(divergence) - juliaBound;
-  fragColor = vec4(hsvToRgb(colorAccordingToSet(adjustedDivergence, fkz)), 1.0);
+  fragColor = vec4(hsvToRgb(colorAccordingToSet(log(divergence) - juliaBound, fkz)), 1.0);
 }
