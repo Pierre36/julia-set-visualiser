@@ -80,10 +80,10 @@
   {
     "id": "3",
     "name": "Psychadelic",
-    "resolutionScale": 0.7,
+    "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCenter": { "re": 0, "im": 0 },
-    "nbIterations": 30,
+    "nbIterations": 12,
     "epsilon": 0.00001,
     "juliaBound": -3.6,
     "polynomial": {
@@ -94,7 +94,7 @@
     "newtonCoefficient": {
       "center": { "re": 0, "im": 0 },
       "radius": 5,
-      "duration": 30000,
+      "duration": 40000,
       "type": "COMPLEX_CIRCLE"
     },
     "juliaHSV": [0, 0, 1],
@@ -112,6 +112,45 @@
       "saturationStrength": 0.11,
       "saturationOffset": 0,
       "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
+  },
+  {
+    "id": "4",
+    "name": "z⁹ + cz",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.8,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
+    "polynomial": {
+      "1": {
+        "center": { "re": 0.2, "im": 0 },
+        "radius": 1.1,
+        "duration": 40000,
+        "type": "COMPLEX_CIRCLE"
+      },
+      "9": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+    },
+    "functionType": "DEFAULT",
+    "newtonCoefficient": { "re": 1, "im": 0, "type": "COMPLEX" },
+    "juliaHSV": [50, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 223,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 193,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.5,
       "valueOffset": 1.4
     },
     "attractors": []
