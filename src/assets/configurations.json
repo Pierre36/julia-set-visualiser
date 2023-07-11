@@ -154,5 +154,50 @@
       "valueOffset": 1.4
     },
     "attractors": []
+  },
+  {
+    "id": "5",
+    "name": "Crazy fern",
+    "resolutionScale": 0.75,
+    "coordinatesScale": 10,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -2.6,
+    "polynomial": {
+      "0": { "re": 1, "im": 0, "type": "COMPLEX" },
+      "1": {
+        "center": { "re": 1, "im": 0 },
+        "radius": 10,
+        "duration": 10000,
+        "type": "COMPLEX_CIRCLE"
+      },
+      "3": { "re": 1, "im": 0, "type": "COMPLEX" }
+    },
+    "functionType": "NEWTON",
+    "newtonCoefficient": {
+      "center": { "re": 1, "im": 0 },
+      "radius": 1.1,
+      "duration": 20000,
+      "type": "COMPLEX_CIRCLE"
+    },
+    "juliaHSV": [253, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 115,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.45,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 203,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
   }
 ]
