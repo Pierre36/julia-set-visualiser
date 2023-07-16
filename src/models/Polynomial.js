@@ -18,6 +18,11 @@ class Polynomial {
    */
   constructor(coefficients) {
     this.degree = 0;
+    this.arrayRepresentation = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    ];
+    this.nbCoefficients = 0;
     this.coefficients = {};
     for (let power = 0; power <= MAX_DEGREE; power++) {
       if (coefficients != undefined && coefficients[power] != undefined) {
@@ -49,7 +54,7 @@ class Polynomial {
   toJSON() {
     const coefficientsJSON = {};
     Object.keys(this.coefficients).forEach((power) => {
-      const coefficient = this.coefficients[power];
+      const coefficient = this.getCoefficient(power);
       if (coefficient != null) {
         coefficientsJSON[power] = Coefficient.toJSON(coefficient);
       }
@@ -91,6 +96,10 @@ class Polynomial {
     if (coefficient == undefined) {
       throw Error("The provided coefficient is undefined");
     }
+    if (this.coefficients[power] == null || this.coefficients[power] == undefined) {
+      this.arrayRepresentation[3 * this.nbCoefficients + 2] = Number(power);
+      this.nbCoefficients += 1;
+    }
     this.coefficients[power] = coefficient;
     this.degree = Math.max(this.degree, power);
   }
@@ -104,10 +113,34 @@ class Polynomial {
     if (power > MAX_DEGREE) {
       throw Error(`The power must be inferior to ${MAX_DEGREE}`);
     }
+    // Remove the coefficient
     this.coefficients[power] = null;
+
+    // Update the degree
     if (power == this.degree) {
       this.recalculateDegree();
     }
+
+    // Update the array representation
+    let rank;
+    for (let n = 0; n < this.nbCoefficients; n++) {
+      if (this.arrayRepresentation[3 * n + 2] == power) {
+        rank = n;
+        break;
+      }
+    }
+    for (let n = rank; n < this.nbCoefficients; n++) {
+      if (n == MAX_DEGREE) {
+        this.arrayRepresentation[3 * n] = 0;
+        this.arrayRepresentation[3 * n + 1] = 0;
+        this.arrayRepresentation[3 * n + 2] = 0;
+      } else {
+        this.arrayRepresentation[3 * n] = this.arrayRepresentation[3 * (n + 1)];
+        this.arrayRepresentation[3 * n + 1] = this.arrayRepresentation[3 * (n + 1) + 1];
+        this.arrayRepresentation[3 * n + 2] = this.arrayRepresentation[3 * (n + 1) + 2];
+      }
+    }
+    this.nbCoefficients -= 1;
   }
 
   /**
@@ -117,7 +150,7 @@ class Polynomial {
     for (let power = MAX_DEGREE; power >= 1; power--) {
       if (this.coefficients[power] != null) {
         this.degree = power;
-        break;
+        return;
       }
     }
     this.degree = 0;
@@ -157,7 +190,7 @@ class Polynomial {
         mathML += "<mrow>";
         if (coefficient instanceof Complex) {
           mathML += coefficient.toMathML(power == 0);
-        } else if (coefficient instanceof ComplexLine || coefficient instanceof ComplexCircle) {
+        } else {
           mathML += coefficient.toMathML(power);
         }
 
@@ -176,27 +209,18 @@ class Polynomial {
   }
 
   /**
-   * Convert the polynomial into a flattened array of complex number at the given time.
-   * @param {Number} time The time in milliseconds.
-   * @returns {Float32Array} The flattened array of complex numbers at the given time.
+   * Evaluates the polynomial at the given time.
+   * @param {Number} time The time at which the polynomial is evaluated.
    */
-  toFloat32ArrayAtTime(time) {
-    const flattenedArray = [];
-    this.getCoefficientPowers().forEach((power) => {
-      let complex = this.getCoefficient(power);
-      if (
-        complex instanceof ComplexCircle ||
-        complex instanceof ComplexLine ||
-        complex instanceof ComplexMultiplication
-      ) {
-        complex = complex.getAtTime(time);
-      }
-      flattenedArray.push(complex.re, complex.im, power);
-    });
-    for (let i = flattenedArray.length; i < 3 * (MAX_DEGREE + 1); i++) {
-      flattenedArray.push(0);
+  updateWithTime(time) {
+    let power;
+    let coefficient;
+    for (let n = 0; n < this.nbCoefficients; n++) {
+      power = this.arrayRepresentation[3 * n + 2];
+      coefficient = this.getCoefficient(power).getAtTime(time);
+      this.arrayRepresentation[3 * n] = coefficient.re;
+      this.arrayRepresentation[3 * n + 1] = coefficient.im;
     }
-    return new Float32Array(flattenedArray);
   }
 
   /**
@@ -206,8 +230,10 @@ class Polynomial {
   getDerivative() {
     const derivative = new Polynomial();
     this.getCoefficientPowers().forEach((power) => {
-      let coefficient = this.getCoefficient(power);
-      derivative.setCoefficient(power - 1, coefficient.multipliedBy(power));
+      if (power > 0) {
+        let coefficient = this.getCoefficient(power);
+        derivative.setCoefficient(power - 1, coefficient.multipliedBy(power));
+      }
     });
     return derivative;
   }
@@ -219,20 +245,14 @@ class Polynomial {
   getNewtonNumerator(newtonCoefficient) {
     const newtonNumerator = new Polynomial();
     const minusNewtonCoefficient = newtonCoefficient.multipliedBy(-1);
-    const newtonCoefficientIsComplex = newtonCoefficient instanceof Complex;
     this.getCoefficientPowers().forEach((power) => {
-      let coefficient = this.getCoefficient(power);
-      if (coefficient instanceof Complex && newtonCoefficientIsComplex) {
-        newtonNumerator.setCoefficient(
-          power,
-          coefficient.multipliedByComplex(minusNewtonCoefficient.plus(Number(power)))
-        );
-      } else {
-        newtonNumerator.setCoefficient(
-          power,
-          new ComplexMultiplication(coefficient, minusNewtonCoefficient.plus(Number(power)))
-        );
-      }
+      newtonNumerator.setCoefficient(
+        power,
+        new ComplexMultiplication(
+          this.getCoefficient(power),
+          minusNewtonCoefficient.plus(Number(power))
+        )
+      );
     });
     return newtonNumerator;
   }
@@ -270,5 +290,21 @@ class Polynomial {
       }
     }
     return newPolynomial;
+  }
+
+  /**
+   * Returns the array representation of the polynomial.
+   * @returns {Array} The array representation of the polynomial.
+   */
+  getArrayRepresentation() {
+    return this.arrayRepresentation;
+  }
+
+  /**
+   * Returns the number of coefficients of the polynomial.
+   * @returns {Number} The number of coefficients of the polynomial.
+   */
+  getNbCoefficients() {
+    return this.nbCoefficients;
   }
 }

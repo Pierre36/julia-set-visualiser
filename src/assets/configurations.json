@@ -8,17 +8,22 @@
     "nbIterations": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
-    "polynomial": {
-      "0": {
-        "type": "COMPLEX_CIRCLE",
-        "center": { "re": 0, "im": 0 },
-        "radius": 1,
-        "duration": 5000
+    "fractalFunction": {
+      "numerator": {
+        "0": {
+          "type": "COMPLEX_CIRCLE",
+          "center": { "re": 0, "im": 0 },
+          "radius": 1,
+          "duration": 5000
+        },
+        "2": { "type": "COMPLEX", "re": 1, "im": 0 }
       },
-      "2": { "type": "COMPLEX", "re": 1, "im": 0 }
+      "denominator": {
+        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+      },
+      "functionType": "DEFAULT",
+      "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 }
     },
-    "functionType": "DEFAULT",
-    "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 },
     "juliaHSV": [210, 0, 1],
     "defaultAttractor": {
       "complex": null,
@@ -47,17 +52,22 @@
     "nbIterations": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
-    "polynomial": {
-      "1": {
-        "center": { "re": 0.2, "im": 0 },
-        "radius": 1.1,
-        "duration": 10000,
-        "type": "COMPLEX_CIRCLE"
+    "fractalFunction": {
+      "numerator": {
+        "1": {
+          "center": { "re": 0.2, "im": 0 },
+          "radius": 1.1,
+          "duration": 10000,
+          "type": "COMPLEX_CIRCLE"
+        },
+        "4": { "re": 1.1, "im": 0, "type": "COMPLEX" }
       },
-      "4": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+      "denominator": {
+        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+      },
+      "functionType": "DEFAULT",
+      "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 }
     },
-    "functionType": "DEFAULT",
-    "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
       "complex": null,
@@ -86,16 +96,21 @@
     "nbIterations": 12,
     "epsilon": 0.00001,
     "juliaBound": -3.6,
-    "polynomial": {
-      "0": { "re": 1, "im": 0, "type": "COMPLEX" },
-      "5": { "re": 1, "im": 0, "type": "COMPLEX" }
-    },
-    "functionType": "NEWTON",
-    "newtonCoefficient": {
-      "center": { "re": 0, "im": 0 },
-      "radius": 5,
-      "duration": 40000,
-      "type": "COMPLEX_CIRCLE"
+    "fractalFunction": {
+      "numerator": {
+        "0": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "5": { "re": 1, "im": 0, "type": "COMPLEX" }
+      },
+      "denominator": {
+        "4": { "re": 5, "im": 0, "type": "COMPLEX" }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "center": { "re": 0, "im": 0 },
+        "radius": 5,
+        "duration": 40000,
+        "type": "COMPLEX_CIRCLE"
+      }
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
@@ -125,17 +140,22 @@
     "nbIterations": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
-    "polynomial": {
-      "1": {
-        "center": { "re": 0.2, "im": 0 },
-        "radius": 1.1,
-        "duration": 40000,
-        "type": "COMPLEX_CIRCLE"
+    "fractalFunction": {
+      "numerator": {
+        "1": {
+          "center": { "re": 0.2, "im": 0 },
+          "radius": 1.1,
+          "duration": 40000,
+          "type": "COMPLEX_CIRCLE"
+        },
+        "9": { "re": 1.1, "im": 0, "type": "COMPLEX" }
       },
-      "9": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+      "denominator": {
+        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+      },
+      "functionType": "DEFAULT",
+      "newtonCoefficient": { "re": 1, "im": 0, "type": "COMPLEX" }
     },
-    "functionType": "DEFAULT",
-    "newtonCoefficient": { "re": 1, "im": 0, "type": "COMPLEX" },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
       "complex": null,
@@ -164,22 +184,33 @@
     "nbIterations": 20,
     "epsilon": 0.00001,
     "juliaBound": -2.6,
-    "polynomial": {
-      "0": { "re": 1, "im": 0, "type": "COMPLEX" },
-      "1": {
-        "center": { "re": 1, "im": 0 },
-        "radius": 10,
-        "duration": 10000,
-        "type": "COMPLEX_CIRCLE"
+    "fractalFunction": {
+      "numerator": {
+        "0": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "1": {
+          "center": { "re": 1, "im": 0 },
+          "radius": 10,
+          "duration": 10000,
+          "type": "COMPLEX_CIRCLE"
+        },
+        "3": { "re": 1, "im": 0, "type": "COMPLEX" }
       },
-      "3": { "re": 1, "im": 0, "type": "COMPLEX" }
-    },
-    "functionType": "NEWTON",
-    "newtonCoefficient": {
-      "center": { "re": 1, "im": 0 },
-      "radius": 1.1,
-      "duration": 20000,
-      "type": "COMPLEX_CIRCLE"
+      "denominator": {
+        "0": {
+          "center": { "re": 1, "im": 0 },
+          "radius": 10,
+          "duration": 10000,
+          "type": "COMPLEX_CIRCLE"
+        },
+        "2": { "re": 3, "im": 0, "type": "COMPLEX" }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "center": { "re": 1, "im": 0 },
+        "radius": 1.1,
+        "duration": 20000,
+        "type": "COMPLEX_CIRCLE"
+      }
     },
     "juliaHSV": [253, 0, 1],
     "defaultAttractor": {

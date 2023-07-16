@@ -12,16 +12,6 @@ export default {
     collapsed: { type: Boolean, default: true },
   },
   emits: ["change"],
-  methods: {
-    updateFunctionType(newFunctionType) {
-      this.configuration.functionType = newFunctionType;
-      this.$emit("change");
-    },
-    updateNewtonCoefficient(newNewtonCoefficient) {
-      this.configuration.newtonCoefficient = newNewtonCoefficient;
-      this.$emit("change");
-    },
-  },
 };
 </script>
 
@@ -29,11 +19,7 @@ export default {
   <div id="sidePanel" :class="{ collapsed: collapsed }">
     <FunctionPanel
       v-if="currentPanel == 'FUNCTION'"
-      :functionType="configuration.functionType"
-      :newtonCoefficient="configuration.newtonCoefficient"
-      :polynomial="configuration.polynomial"
-      @update:functionType="updateFunctionType"
-      @update:newtonCoefficient="updateNewtonCoefficient"
+      :fractalFunction="configuration.fractalFunction"
       @change="$emit('change')"
     />
     <ColorsPanel

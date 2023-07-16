@@ -24,14 +24,6 @@ class ComplexMultiplication {
    * @returns {Complex} The value of the multiplication at the given time.
    */
   getAtTime(time) {
-    let complex1 = this.coefficient1;
-    if (!(complex1 instanceof Complex)) {
-      complex1 = complex1.getAtTime(time);
-    }
-    let complex2 = this.coefficient2;
-    if (!(complex2 instanceof Complex)) {
-      complex2 = complex2.getAtTime(time);
-    }
-    return complex1.multipliedByComplex(complex2);
+    return this.coefficient1.getAtTime(time).multipliedByComplex(this.coefficient2.getAtTime(time));
   }
 }

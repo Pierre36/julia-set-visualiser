@@ -1,9 +1,7 @@
 import { Polynomial } from "./Polynomial";
 import { Attractor } from "./Attractor";
 import { Complex } from "./Complex";
-import { ComplexCircle } from "./ComplexCircle";
-import { ComplexLine } from "./ComplexLine";
-import { Coefficient } from "./Coefficient";
+import { FractalFunction } from "./FractalFunction";
 
 export { Configuration };
 
@@ -21,9 +19,7 @@ class Configuration {
    * @param {Number} nbIterations The number of iterations.
    * @param {Number} epsilon The epsilon added to the complex number before to compute the divergence.
    * @param {Number} juliaBound The highest value of log-divergence in the Julia Set.
-   * @param {Polynomial} polynomial The polynomial used for the fractal.
-   * @param {String} functionType The type a function, can be DEFAULT or NEWTON.
-   * @param {Complex | ComplexCircle | ComplexLine} newtonCoefficient The newton coefficient (a).
+   * @param {FractalFunction} fractalFunction The function used for the fractal.
    * @param {Array} juliaHSV The hue, saturation and value of the Julia Set.
    * @param {Attractor} defaultAttractor The default attractor to use if no attractor is closer.
    * @param {Attractor} infinityAttractor The attractor for the infinity.
@@ -38,9 +34,7 @@ class Configuration {
     nbIterations,
     epsilon,
     juliaBound,
-    polynomial,
-    functionType,
-    newtonCoefficient,
+    fractalFunction,
     juliaHSV,
     defaultAttractor,
     infinityAttractor,
@@ -54,9 +48,7 @@ class Configuration {
     this.nbIterations = nbIterations;
     this.epsilon = epsilon;
     this.juliaBound = juliaBound;
-    this.polynomial = polynomial;
-    this.functionType = functionType;
-    this.newtonCoefficient = newtonCoefficient;
+    this.fractalFunction = fractalFunction;
     this.juliaHSV = juliaHSV;
     this.defaultAttractor = defaultAttractor;
     this.infinityAttractor = infinityAttractor;
@@ -66,7 +58,7 @@ class Configuration {
   /**
    * Creates a configuration from a JSON.
    * @param {Object} configurationJSON A configuration JSON containing the configuration parameters.
-   * @returns {Configuration} the configuration created from the JSON.
+   * @returns {Configuration} The configuration created from the JSON.
    */
   static fromJSON({
     id,
@@ -77,9 +69,7 @@ class Configuration {
     nbIterations,
     epsilon,
     juliaBound,
-    polynomial,
-    functionType,
-    newtonCoefficient,
+    fractalFunction,
     juliaHSV,
     defaultAttractor,
     infinityAttractor,
@@ -94,9 +84,7 @@ class Configuration {
       nbIterations,
       epsilon,
       juliaBound,
-      Polynomial.fromJSON(polynomial),
-      functionType,
-      Coefficient.fromJSON(newtonCoefficient),
+      FractalFunction.fromJSON(fractalFunction),
       juliaHSV,
       Attractor.fromJSON(defaultAttractor),
       Attractor.fromJSON(infinityAttractor),
@@ -118,9 +106,7 @@ class Configuration {
       nbIterations: this.nbIterations,
       epsilon: this.epsilon,
       juliaBound: this.juliaBound,
-      polynomial: this.polynomial.toJSON(),
-      functionType: this.functionType,
-      newtonCoefficient: Coefficient.toJSON(this.newtonCoefficient),
+      fractalFunction: this.fractalFunction.toJSON(),
       juliaHSV: this.juliaHSV,
       defaultAttractor: this.defaultAttractor.toJSON(),
       infinityAttractor: this.infinityAttractor.toJSON(),
@@ -142,12 +128,42 @@ class Configuration {
       20,
       0.00001,
       -4,
-      new Polynomial({ 2: new Complex(1, 0) }),
-      "DEFAULT",
-      new Complex(1, 0),
+      new FractalFunction(
+        new Polynomial({ 2: new Complex(1, 0) }),
+        new Polynomial({ 0: new Complex(1, 0) }),
+        "DEFAULT",
+        new Complex(1, 0)
+      ),
       [0, 0, 1],
-      new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
-      new Attractor(null, 210.0, 0.11, 0.0, 0.26, 1.4),
+      new Attractor(null, 210.0, 0.11, 0, 0.26, 1.4),
+      new Attractor(null, 210.0, 0.11, 0, 0.26, 1.4),
+      []
+    );
+  }
+
+  /**
+   * Creates an empty configuration.
+   * @returns An empty configuration.
+   */
+  static emptyConfiguration(id, name) {
+    return new Configuration(
+      id,
+      name,
+      1,
+      1,
+      new Complex(0, 0),
+      20,
+      0.00001,
+      -4,
+      new FractalFunction(
+        new Polynomial(),
+        new Polynomial({ 0: new Complex(1, 0) }),
+        "DEFAULT",
+        new Complex(1, 0)
+      ),
+      [0, 0, 0],
+      new Attractor(null, 0, 0, 0, 0, 0),
+      new Attractor(null, 0, 0, 0, 0, 0),
       []
     );
   }
@@ -167,9 +183,7 @@ class Configuration {
     this.nbIterations = configuration.nbIterations;
     this.epsilon = configuration.epsilon;
     this.juliaBound = configuration.juliaBound;
-    this.polynomial = configuration.polynomial.copy();
-    this.functionType = configuration.functionType;
-    this.newtonCoefficient = configuration.newtonCoefficient.copy();
+    this.fractalFunction = configuration.fractalFunction.copy();
     this.juliaHSV = [
       configuration.juliaHSV[0],
       configuration.juliaHSV[1],

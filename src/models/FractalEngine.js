@@ -1,5 +1,7 @@
 import vertexShaderSource from "../assets/shaders/vertex_shader.vs?raw";
 import fragmentShaderSource from "../assets/shaders/fragment_shader.fs?raw";
+import { Polynomial } from "./Polynomial";
+import { FractalFunction } from "./FractalFunction";
 
 export { FractalEngine };
 
@@ -12,16 +14,30 @@ class FractalEngine {
   /**
    * Fractal Engine constructor
    * @param {Object} canvas The canvas of the animation.
-   * @param {Object} parameters The parameters of the animation.
    */
-  constructor(canvas, parameters) {
+  constructor(canvas) {
     this.canvas = canvas;
-    this.parameters = parameters;
     this.fps = 0;
+    this.paused = false;
+    this.animationTime = 0;
   }
 
   /**
-   * Load WebGL2 from the canvas.
+   * Pauses the animation.
+   */
+  pause() {
+    this.paused = true;
+  }
+
+  /**
+   * Unpauses the animation.
+   */
+  unpause() {
+    this.paused = false;
+  }
+
+  /**
+   * Loads WebGL2 from the canvas.
    * @throws An exception if it is unable to load WebGL2.
    */
   loadWebGL() {
@@ -37,7 +53,7 @@ class FractalEngine {
   }
 
   /**
-   * Load a shader from its source.
+   * Loads a shader from its source.
    * @param {Number} type The type of shader.
    * @param {String} source The shader program.
    * @returns {WebGLShader} The shader.
@@ -88,7 +104,7 @@ class FractalEngine {
   }
 
   /**
-   * Initialize the viewport for the animation.
+   * Initializes the viewport for the animation.
    * @param {Number} resolutionScale the scale of the resolution.
    */
   createViewport(resolutionScale) {
@@ -100,7 +116,7 @@ class FractalEngine {
   }
 
   /**
-   * Set the position attributes in the shader program.
+   * Sets the position attributes in the shader program.
    */
   setPositionAttributes() {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.gl.createBuffer());
@@ -115,7 +131,7 @@ class FractalEngine {
   }
 
   /**
-   * Load the uniform locations in the shader program.
+   * Loads the uniform locations in the shader program.
    */
   loadUniformLocations() {
     this.uniformLocations = {
@@ -148,92 +164,233 @@ class FractalEngine {
   }
 
   /**
-   * Sets the values of the uniforms.
-   * @param {Number} time The animation time in milliseconds.
+   * Sets the coordinates scale.
+   * @param {Number} newCoordinatesScale The new scale of the coordinates.
    */
-  setUniformValues(time) {
-    this.gl.uniform1f(this.uniformLocations.coordinatesScale, this.parameters.coordinatesScale);
-    this.gl.uniform2fv(this.uniformLocations.coordinatesCenter, this.parameters.coordinatesCenter);
-    this.gl.uniform1i(this.uniformLocations.nbIterations, this.parameters.nbIterations);
-    this.gl.uniform1f(this.uniformLocations.epsilon, this.parameters.epsilon);
-    this.gl.uniform1f(this.uniformLocations.juliaBound, this.parameters.juliaBound);
-    this.gl.uniform1f(
-      this.uniformLocations.dimensionRatio,
-      this.canvas.clientWidth / this.canvas.clientHeight
-    );
-    this.gl.uniform1i(
-      this.uniformLocations.numeratorNbCoefficients,
-      this.parameters.numeratorNbCoefficients
-    );
-    this.gl.uniform3fv(
-      this.uniformLocations.numeratorCoefficients,
-      this.parameters.numeratorCoefficients.toFloat32ArrayAtTime(time)
-    );
-    this.gl.uniform1i(
-      this.uniformLocations.denominatorNbCoefficients,
-      this.parameters.denominatorNbCoefficients
-    );
-    this.gl.uniform3fv(
-      this.uniformLocations.denominatorCoefficients,
-      this.parameters.denominatorCoefficients.toFloat32ArrayAtTime(time)
-    );
-    this.gl.uniform3fv(this.uniformLocations.juliaHSV, this.parameters.juliaHSV);
-    this.gl.uniform1f(this.uniformLocations.defaultHue, this.parameters.defaultHue);
-    this.gl.uniform4fv(
-      this.uniformLocations.defaultColorParameters,
-      this.parameters.defaultColorParameters
-    );
-    this.gl.uniform1f(this.uniformLocations.infinityHue, this.parameters.infinityHue);
-    this.gl.uniform4fv(
-      this.uniformLocations.infinityColorParameters,
-      this.parameters.infinityColorParameters
-    );
-    this.gl.uniform1i(this.uniformLocations.nbAttractors, this.parameters.nbAttractors);
-    this.gl.uniform2fv(this.uniformLocations.attractors, this.parameters.attractorsComplex);
-    this.gl.uniform1fv(this.uniformLocations.attractorsHue, this.parameters.attractorsHue);
-    this.gl.uniform4fv(
-      this.uniformLocations.attractorsColorParameters,
-      this.parameters.attractorsColorParameters
+  setCoordinatesScale(newCoordinatesScale) {
+    this.gl.uniform1f(this.uniformLocations.coordinatesScale, newCoordinatesScale);
+  }
+
+  /**
+   * Sets the coordinates center.
+   * @param {Number} newCoordinatesCenter The new center of the coordinates.
+   */
+  setCoordinatesCenter(newCoordinatesCenter) {
+    this.gl.uniform2fv(
+      this.uniformLocations.coordinatesCenter,
+      new Float32Array([newCoordinatesCenter.re, newCoordinatesCenter.im])
     );
   }
 
   /**
-   * Render the current frame.
+   * Sets the number of iterations.
+   * @param {Number} newNbIterations The new number of iterations.
+   */
+  setNbIterations(newNbIterations) {
+    this.gl.uniform1i(this.uniformLocations.nbIterations, newNbIterations);
+  }
+
+  /**
+   * Sets the epsilon value.
+   * @param {Number} newEpsilon The new epsilon value.
+   */
+  setEpsilon(newEpsilon) {
+    this.gl.uniform1f(this.uniformLocations.epsilon, newEpsilon);
+  }
+
+  /**
+   * Sets the Julia bound.
+   * @param {Number} newJuliaBound The new Julia bound.
+   */
+  setJuliaBound(newJuliaBound) {
+    this.gl.uniform1f(this.uniformLocations.juliaBound, newJuliaBound);
+  }
+
+  /**
+   * Sets the Julia HSV.
+   * @param {Number} newJuliaHSV The new Julia HSV.
+   */
+  setJuliaHSV(newJuliaHSV) {
+    this.gl.uniform3fv(this.uniformLocations.juliaHSV, newJuliaHSV);
+  }
+
+  /**
+   * Sets the default attractor parameters.
+   * @param {Attractor} newDefaultAttractor The new default attractor.
+   */
+  setDefaultAttractor(newDefaultAttractor) {
+    this.gl.uniform1f(this.uniformLocations.defaultHue, newDefaultAttractor.hue);
+    this.gl.uniform4fv(
+      this.uniformLocations.defaultColorParameters,
+      new Float32Array([
+        newDefaultAttractor.saturationStrength,
+        newDefaultAttractor.saturationOffset,
+        newDefaultAttractor.valueStrength,
+        newDefaultAttractor.valueOffset,
+      ])
+    );
+  }
+
+  /**
+   * Sets the infinity attractor parameters.
+   * @param {Attractor} newInfinityAttractor The new infinity attractor.
+   */
+  setInfinityAttractor(newInfinityAttractor) {
+    this.gl.uniform1f(this.uniformLocations.infinityHue, newInfinityAttractor.hue);
+    this.gl.uniform4fv(
+      this.uniformLocations.infinityColorParameters,
+      new Float32Array([
+        newInfinityAttractor.saturationStrength,
+        newInfinityAttractor.saturationOffset,
+        newInfinityAttractor.valueStrength,
+        newInfinityAttractor.valueOffset,
+      ])
+    );
+  }
+
+  /**
+   * Sets the fractal function.
+   * @param {FractalFunction} newFractalFunction The new fractal function.
+   */
+  setFunction(fractalFunction) {
+    fractalFunction.updateWithTime(this.animationTime);
+    this.gl.uniform1i(
+      this.uniformLocations.numeratorNbCoefficients,
+      fractalFunction.getNumeratorNbCoefficients()
+    );
+    this.gl.uniform3fv(
+      this.uniformLocations.numeratorCoefficients,
+      fractalFunction.getNumeratorArray()
+    );
+    this.gl.uniform1i(
+      this.uniformLocations.denominatorNbCoefficients,
+      fractalFunction.getDenominatorNbCoefficients()
+    );
+    this.gl.uniform3fv(
+      this.uniformLocations.denominatorCoefficients,
+      fractalFunction.getDenominatorArray()
+    );
+  }
+
+  /**
+   * Sets the attractors.
+   * @param {Array<Attractor>} newAttractors The new attractors.
+   */
+  setAttractors(newAttractors) {
+    this.gl.uniform1i(this.uniformLocations.nbAttractors, newAttractors.length);
+    const complex = [];
+    const hue = [];
+    const colorParameters = [];
+    newAttractors.forEach((attractor) => {
+      complex.push(attractor.complex.re, attractor.complex.im);
+      hue.push(attractor.hue);
+      colorParameters.push(
+        attractor.saturationStrength,
+        attractor.saturationOffset,
+        attractor.valueStrength,
+        attractor.valueOffset
+      );
+    });
+    for (let i = newAttractors.length; i <= Polynomial.MAX_DEGREE; i++) {
+      complex.push(0, 0);
+      hue.push(0);
+      colorParameters.push(0, 0, 0, 0);
+    }
+    this.gl.uniform2fv(this.uniformLocations.attractors, new Float32Array(complex));
+    this.gl.uniform1fv(this.uniformLocations.attractorsHue, new Float32Array(hue));
+    this.gl.uniform4fv(
+      this.uniformLocations.attractorsColorParameters,
+      new Float32Array(colorParameters)
+    );
+  }
+
+  /**
+   * Initializes the values of the uniforms.
+   * @param {Configuration} configuration The configuration of the animation.
+   */
+  initUniformValues(configuration) {
+    this.setCoordinatesScale(configuration.coordinatesScale);
+    this.setCoordinatesCenter(configuration.coordinatesCenter);
+    this.setNbIterations(configuration.nbIterations);
+    this.setEpsilon(configuration.epsilon);
+    this.setJuliaBound(configuration.juliaBound);
+    this.setJuliaHSV(configuration.juliaHSV);
+    this.setDefaultAttractor(configuration.defaultAttractor);
+    this.setInfinityAttractor(configuration.infinityAttractor);
+    this.setFunction(configuration.fractalFunction);
+    // TODO Fix dimension ratio
+    this.gl.uniform1f(
+      this.uniformLocations.dimensionRatio,
+      this.canvas.clientWidth / this.canvas.clientHeight
+    );
+  }
+
+  /**
+   * Sets the values of the uniforms.
+   * @param {Number} time The animation time in milliseconds.
+   */
+  setUniformValues(time) {
+    this.gl.uniform1f(
+      this.uniformLocations.dimensionRatio,
+      this.canvas.clientWidth / this.canvas.clientHeight
+    );
+  }
+
+  /**
+   * Updates the fps.
+   * @param {Number} frameDuration The duration of the frame in milliseconds.
+   * @param {Number} nbFrames The number of frames since the beginning of the animation.
+   */
+  updateFPS(frameDuration, nbFrames) {
+    let frameFPS = 1000 / (10 * frameDuration);
+    if (frameFPS == Infinity) {
+      frameFPS = 0;
+    }
+    this.fps = this.fps - last10FPS[nbFrames % 10] + frameFPS;
+    last10FPS[nbFrames % 10] = frameFPS;
+  }
+
+  /**
+   * Renders the current frame.
+   * @param {FractalFunction} fractalFunction The fractal function for the animation.
    * @param {Number} time The animation time in milliseconds.
    * @param {Number} delay The delay time in milliseconds.
    * @param {Number} nbFrames The number of frames since the beginning of the animation.
    */
-  render(time, delay, nbFrames) {
-    // Set uniforms
-    this.setUniformValues(time - delay);
+  render(configuration, time, delay, nbFrames) {
+    if (!this.paused) {
+      // Update animation time
+      this.animationTime = time - delay;
 
-    // Draw the scene
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+      // Update the function
+      this.setFunction(configuration.fractalFunction);
 
+      // Draw the scene
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
     // Render next frame
     requestAnimationFrame((newTime) => {
-      this.fps -= last10FPS[nbFrames % 10] / 10;
-      last10FPS[nbFrames % 10] = 1000 / (newTime - time);
-      this.fps += last10FPS[nbFrames % 10] / 10;
-      if (this.parameters.paused) {
-        this.render(newTime, delay + newTime - time, nbFrames + 1);
+      this.updateFPS(newTime - time, nbFrames);
+      if (this.paused) {
+        this.render(configuration, newTime, delay + newTime - time, nbFrames + 1);
       } else {
-        this.render(newTime, delay, nbFrames + 1);
+        this.render(configuration, newTime, delay, nbFrames + 1);
       }
     });
   }
 
   /**
-   * Display a scene in the canvas using WebGL2, the shader sources and parameters.
+   * Displays a scene in the canvas using WebGL2, the shader sources and parameters.
+   * @param {Configuration} configuration The configuration of the animation.
    */
-  displayScene(resolutionScale) {
+  displayScene(configuration) {
     this.loadWebGL();
     this.initShaderProgram();
-    this.createViewport(resolutionScale);
+    this.createViewport(configuration.resolutionScale);
     this.setPositionAttributes();
     this.gl.useProgram(this.program);
     this.loadUniformLocations();
-    this.setUniformValues(0);
-    requestAnimationFrame((time) => this.render(time, 0, 0, 0));
+    this.initUniformValues(configuration);
+    requestAnimationFrame((time) => this.render(configuration, time, 0, 0, 0));
   }
 }

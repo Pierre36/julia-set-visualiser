@@ -3,9 +3,6 @@ import TopNav from "./components/TopNav.vue";
 import SideBar from "./components/SideBar.vue";
 import AnimationFrame from "./components/AnimationFrame.vue";
 import { Configuration } from "./models/Configuration";
-import { Polynomial } from "./models/Polynomial";
-import { Attractor } from "./models/Attractor";
-import { Complex } from "./models/Complex";
 
 export default {
   name: "App",
@@ -14,26 +11,10 @@ export default {
     return {
       configurations: {
         DEFAULT: Configuration.defaultConfiguration(),
-        CUSTOM: new Configuration(
-          "CUSTOM",
-          "Custom",
-          1,
-          1,
-          new Complex(0, 0),
-          20,
-          0.00001,
-          -4,
-          new Polynomial(),
-          "DEFAULT",
-          new Complex(1, 0),
-          [0, 0, 0],
-          new Attractor(null, 0, 0, 0, 0, 0),
-          new Attractor(null, 0, 0, 0, 0, 0),
-          []
-        ),
+        CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
       },
       selectedConfigurationId: "DEFAULT",
-      configuration: Configuration.defaultConfiguration("CUSTOM", "Custom"),
+      configuration: Configuration.emptyConfiguration("", ""),
     };
   },
   created() {
@@ -48,9 +29,15 @@ export default {
     getStorageConfiguration() {
       const localConfiguration = localStorage.getItem("customConfiguration");
       if (localConfiguration != null) {
-        this.configurations["CUSTOM"] = Configuration.fromJSON(JSON.parse(localConfiguration));
-        this.selectedConfigurationId = "CUSTOM";
-        this.updateConfiguration(this.selectedConfigurationId);
+        try {
+          let customConfiguration = Configuration.fromJSON(JSON.parse(localConfiguration));
+          customConfiguration.id = "CUSTOM";
+          customConfiguration.name = "Custom";
+          this.configurations["CUSTOM"] = customConfiguration;
+          this.selectedConfigurationId = "CUSTOM";
+        } finally {
+          this.updateConfiguration(this.selectedConfigurationId);
+        }
       }
     },
     switchToCustomConfiguration() {

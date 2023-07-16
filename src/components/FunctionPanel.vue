@@ -5,9 +5,7 @@ import IconTextButton from "./IconTextButton.vue";
 import CoefficientItem from "./CoefficientItem.vue";
 import InfoHeader from "./InfoHeader.vue";
 import { Complex } from "../models/Complex";
-import { Polynomial } from "../models/Polynomial";
-import { ComplexCircle } from "../models/ComplexCircle";
-import { ComplexLine } from "../models/ComplexLine";
+import { FractalFunction } from "../models/FractalFunction";
 
 export default {
   name: "FunctionPanel",
@@ -19,11 +17,9 @@ export default {
     InfoHeader,
   },
   props: {
-    functionType: { type: String, required: true },
-    newtonCoefficient: { type: [Complex, ComplexCircle, ComplexLine], required: true },
-    polynomial: { type: Polynomial, required: true },
+    fractalFunction: { type: FractalFunction, required: true },
   },
-  emits: ["update:functionType", "update:newtonCoefficient", "change"],
+  emits: ["change"],
   data() {
     return {
       functionTypeOptions: [
@@ -44,7 +40,7 @@ export default {
       // Add function
       equation +=
         "<mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
-      if (this.functionType == "NEWTON") {
+      if (this.fractalFunction.functionType == "NEWTON") {
         equation +=
           "<mi>z</mi><mo>-</mo><mi>a</mi><mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
         equation += "</math>";
@@ -52,7 +48,7 @@ export default {
         equation +=
           "<mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
       }
-      equation += this.polynomial.toMathML();
+      equation += this.fractalFunction.numerator.toMathML();
 
       // End and return equation
       equation += "</math>";
@@ -60,42 +56,51 @@ export default {
     },
     coefficientsList() {
       let coefficientsList = [];
-      this.polynomial.getCoefficientPowers().forEach((degree) => {
+      this.fractalFunction.numerator.getCoefficientPowers().forEach((degree) => {
         coefficientsList.push({
           degree: degree,
-          coefficient: this.polynomial.getCoefficient(degree),
+          coefficient: this.fractalFunction.numerator.getCoefficient(degree),
         });
       });
       return coefficientsList;
     },
     availablePowers() {
-      return this.polynomial.getAvailablePowers();
+      return this.fractalFunction.numerator.getAvailablePowers();
     },
     canAddCoefficient() {
       return this.availablePowers.length != 0;
     },
   },
   methods: {
+    updateFunctionType(newFunctionType) {
+      this.fractalFunction.setFunctionType(newFunctionType);
+      this.$emit("change");
+    },
+    updateNewtonCoefficient(newNewtonCoefficient) {
+      this.fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
+      this.$emit("change");
+    },
     updateDegree(previousDegree, newDegree) {
       if (previousDegree != newDegree) {
-        this.polynomial.setCoefficient(
+        this.fractalFunction.setCoefficient(
           newDegree,
-          this.polynomial.getCoefficient(previousDegree).copy()
+          true,
+          this.fractalFunction.getCoefficient(previousDegree, true).copy()
         );
-        this.polynomial.removeCoefficient(previousDegree);
+        this.fractalFunction.removeCoefficient(previousDegree, true);
         this.$emit("change");
       }
     },
     updateCoefficient(power, newCoefficient) {
-      this.polynomial.setCoefficient(power, newCoefficient);
+      this.fractalFunction.setCoefficient(power, true, newCoefficient);
       this.$emit("change");
     },
     deleteCoefficient(power) {
-      this.polynomial.removeCoefficient(power);
+      this.fractalFunction.removeCoefficient(power, true);
       this.$emit("change");
     },
     addCoefficient() {
-      this.polynomial.setCoefficient(this.polynomial.getAvailablePowers()[0], new Complex(0, 0));
+      this.fractalFunction.setCoefficient(this.availablePowers[0], true, new Complex(0, 0));
       this.$emit("change");
     },
   },
@@ -156,18 +161,16 @@ export default {
         <h4>Type</h4>
         <FormSelect
           :options="functionTypeOptions"
-          :selected="functionType"
-          @update:selected="(newValue) => $emit('update:functionType', newValue)"
+          :selected="fractalFunction.functionType"
+          @update:selected="updateFunctionType"
         />
-        <template v-if="functionType == 'NEWTON'">
+        <template v-if="fractalFunction.functionType == 'NEWTON'">
           <h4 class="column-span-2">Newton coefficient</h4>
           <CoefficientInput
             class="column-span-2"
-            :coefficient="newtonCoefficient"
+            :coefficient="fractalFunction.newtonCoefficient"
             :level="5"
-            @update:coefficient="
-              (newCoefficient) => $emit('update:newtonCoefficient', newCoefficient)
-            "
+            @update:coefficient="updateNewtonCoefficient"
           />
         </template>
       </div>

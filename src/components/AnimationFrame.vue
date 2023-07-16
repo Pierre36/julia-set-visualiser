@@ -1,134 +1,21 @@
 <script>
 import { FractalEngine } from "../models/FractalEngine";
 import { Configuration } from "../models/Configuration";
-import { Polynomial } from "../models/Polynomial";
-import { Complex } from "../models/Complex";
 
 import AnimationOverlay from "./AnimationOverlay.vue";
 export default {
   name: "AnimationFrame",
+  components: { AnimationOverlay },
   props: {
     configuration: { type: Configuration, required: true },
   },
   data() {
     return {
       fractalEngine: null,
-      parameters: {
-        paused: false,
-        resolutionScale: this.configuration.resolutionScale,
-        coordinatesScale: this.configuration.coordinatesScale,
-        coordinatesCenter: null,
-        nbIterations: this.configuration.nbIterations,
-        epsilon: this.configuration.epsilon,
-        juliaBound: this.configuration.juliaBound,
-        numeratorCoefficients: null,
-        numeratorNbCoefficients: null,
-        denominatorCoefficients: null,
-        denominatorNbCoefficients: null,
-        juliaHSV: this.configuration.juliaHSV,
-        defaultHue: null,
-        defaultColorParameters: null,
-        infinityHue: null,
-        infinityColorParameters: null,
-        nbAttractors: null,
-        attractorsComplex: null,
-        attractorsHue: null,
-        attractorsColorParameters: null,
-      },
       error: null,
     };
   },
   computed: {
-    coordinatesCenter() {
-      return new Float32Array([
-        this.configuration.coordinatesCenter.re,
-        this.configuration.coordinatesCenter.im,
-      ]);
-    },
-    numeratorCoefficients() {
-      if (this.configuration.functionType == "DEFAULT") {
-        return this.configuration.polynomial;
-      } else if (this.configuration.functionType == "NEWTON") {
-        return this.configuration.polynomial.getNewtonNumerator(
-          this.configuration.newtonCoefficient
-        );
-      }
-    },
-    numeratorNbCoefficients() {
-      return this.numeratorCoefficients.getCoefficientPowers().length;
-    },
-    denominatorCoefficients() {
-      if (this.configuration.functionType == "DEFAULT") {
-        return new Polynomial({
-          0: new Complex(1, 0),
-        });
-      } else if (this.configuration.functionType == "NEWTON") {
-        return this.configuration.polynomial.getDerivative();
-      }
-    },
-    denominatorNbCoefficients() {
-      return this.denominatorCoefficients.getCoefficientPowers().length;
-    },
-    defaultHue() {
-      return this.configuration.defaultAttractor.hue;
-    },
-    defaultColorParameters() {
-      return new Float32Array([
-        this.configuration.defaultAttractor.saturationStrength,
-        this.configuration.defaultAttractor.saturationOffset,
-        this.configuration.defaultAttractor.valueStrength,
-        this.configuration.defaultAttractor.valueOffset,
-      ]);
-    },
-    infinityHue() {
-      return this.configuration.infinityAttractor.hue;
-    },
-    infinityColorParameters() {
-      return new Float32Array([
-        this.configuration.infinityAttractor.saturationStrength,
-        this.configuration.infinityAttractor.saturationOffset,
-        this.configuration.infinityAttractor.valueStrength,
-        this.configuration.infinityAttractor.valueOffset,
-      ]);
-    },
-    nbAttractors() {
-      return this.configuration.attractors.length;
-    },
-    attractorsComplex() {
-      const flattenedArray = [];
-      this.configuration.attractors.forEach((attractor) => {
-        flattenedArray.push(attractor.complex.re, attractor.complex.im);
-      });
-      for (let i = flattenedArray.length; i < 2 * (Polynomial.MAX_DEGREE + 1); i++) {
-        flattenedArray.push(0);
-      }
-      return new Float32Array(flattenedArray);
-    },
-    attractorsHue() {
-      const flattenedArray = [];
-      this.configuration.attractors.forEach((attractor) => {
-        flattenedArray.push(attractor.hue);
-      });
-      for (let i = flattenedArray.length; i <= Polynomial.MAX_DEGREE; i++) {
-        flattenedArray.push(0);
-      }
-      return new Float32Array(flattenedArray);
-    },
-    attractorsColorParameters() {
-      const flattenedArray = [];
-      this.configuration.attractors.forEach((attractor) => {
-        flattenedArray.push(
-          attractor.saturationStrength,
-          attractor.saturationOffset,
-          attractor.valueStrength,
-          attractor.valueOffset
-        );
-      });
-      for (let i = flattenedArray.length; i < 4 * (Polynomial.MAX_DEGREE + 1); i++) {
-        flattenedArray.push(0);
-      }
-      return new Float32Array(flattenedArray);
-    },
     fps() {
       if (this.fractalEngine == null) {
         return 0;
@@ -138,101 +25,68 @@ export default {
   },
   watch: {
     "configuration.resolutionScale"(newResolutionScale) {
-      this.parameters.resolutionScale = newResolutionScale;
+      this.fractalEngine.createViewport(newResolutionScale);
     },
     "configuration.coordinatesScale"(newCoordinatesScale) {
-      this.parameters.coordinatesScale = newCoordinatesScale;
+      this.fractalEngine.setCoordinatesScale(newCoordinatesScale);
     },
-    "configuration.coordinatesCenter"(_) {
-      this.parameters.coordinatesCenter = this.coordinatesCenter;
+    "configuration.coordinatesCenter"(newCoordinatesCenter) {
+      this.fractalEngine.setCoordinatesCenter(newCoordinatesCenter);
     },
     "configuration.nbIterations"(newNbIterations) {
-      this.parameters.nbIterations = newNbIterations;
+      this.fractalEngine.setNbIterations(newNbIterations);
     },
     "configuration.epsilon"(newEpsilon) {
-      this.parameters.epsilon = newEpsilon;
+      this.fractalEngine.setEpsilon(newEpsilon);
     },
     "configuration.juliaBound"(newJuliaBound) {
-      this.parameters.juliaBound = newJuliaBound;
+      this.fractalEngine.setJuliaBound(newJuliaBound);
     },
-    "configuration.polynomial": {
+    "configuration.fractalFunction": {
       handler(_) {
-        this.parameters.numeratorCoefficients = this.numeratorCoefficients;
-        this.parameters.numeratorNbCoefficients = this.numeratorNbCoefficients;
-        this.parameters.denominatorCoefficients = this.denominatorCoefficients;
-        this.parameters.denominatorNbCoefficients = this.denominatorNbCoefficients;
+        if (this.fractalEngine.paused) {
+          this.fractalEngine.setFractalFunction(this.configuration.fractalFunction);
+        }
       },
       deep: true,
     },
-    "configuration.functionType"(_) {
-      this.parameters.numeratorCoefficients = this.numeratorCoefficients;
-      this.parameters.numeratorNbCoefficients = this.numeratorNbCoefficients;
-      this.parameters.denominatorCoefficients = this.denominatorCoefficients;
-      this.parameters.denominatorNbCoefficients = this.denominatorNbCoefficients;
-    },
-    "configuration.newtonCoefficient"(_) {
-      this.parameters.numeratorCoefficients = this.numeratorCoefficients;
-    },
-    "configuration.juliaHSV"(newJuliaHSV) {
-      this.parameters.juliaHSV = newJuliaHSV;
+    "configuration.juliaHSV": {
+      handler(newJuliaHSV) {
+        this.fractalEngine.setJuliaHSV(newJuliaHSV);
+      },
+      deep: true,
     },
     "configuration.defaultAttractor": {
-      handler(_) {
-        this.parameters.defaultHue = this.defaultHue;
-        this.parameters.defaultColorParameters = this.defaultColorParameters;
+      handler(newDefaultAttractor) {
+        this.fractalEngine.setDefaultAttractor(newDefaultAttractor);
       },
       deep: true,
     },
     "configuration.infinityAttractor": {
-      handler(_) {
-        this.parameters.infinityHue = this.infinityHue;
-        this.parameters.infinityColorParameters = this.infinityColorParameters;
+      handler(newInfinityAttractor) {
+        this.fractalEngine.setInfinityAttractor(newInfinityAttractor);
       },
       deep: true,
     },
     "configuration.attractors": {
-      handler(_) {
-        this.parameters.nbAttractors = this.nbAttractors;
-        this.parameters.attractorsComplex = this.attractorsComplex;
-        this.parameters.attractorsHue = this.attractorsHue;
-        this.parameters.attractorsColorParameters = this.attractorsColorParameters;
+      handler(newAttractors) {
+        this.fractalEngine.setAttractors(newAttractors);
       },
       deep: true,
     },
   },
   mounted() {
-    // Initialize parameters
-    this.parameters.coordinatesCenter = this.coordinatesCenter;
-    this.parameters.numeratorCoefficients = this.numeratorCoefficients;
-    this.parameters.numeratorNbCoefficients = this.numeratorNbCoefficients;
-    this.parameters.denominatorCoefficients = this.denominatorCoefficients;
-    this.parameters.denominatorNbCoefficients = this.denominatorNbCoefficients;
-    this.parameters.defaultHue = this.defaultHue;
-    this.parameters.defaultColorParameters = this.defaultColorParameters;
-    this.parameters.infinityHue = this.infinityHue;
-    this.parameters.infinityColorParameters = this.infinityColorParameters;
-    this.parameters.nbAttractors = this.nbAttractors;
-    this.parameters.attractorsComplex = this.attractorsComplex;
-    this.parameters.attractorsHue = this.attractorsHue;
-    this.parameters.attractorsColorParameters = this.attractorsColorParameters;
-
     // Initialize fractal engine
-    this.fractalEngine = new FractalEngine(this.$refs.animationCanvas, this.parameters);
+    this.fractalEngine = new FractalEngine(this.$refs.animationCanvas);
 
     // Try to display the scene
     try {
-      this.fractalEngine.displayScene(this.parameters.resolutionScale);
+      this.fractalEngine.displayScene(this.configuration);
     } catch (error) {
       this.error = error;
       console.error(error);
     }
   },
-  methods: {
-    updatePaused() {
-      this.parameters.paused = !this.parameters.paused;
-    },
-  },
-  components: { AnimationOverlay },
 };
 </script>
 
@@ -243,8 +97,8 @@ export default {
       v-if="error == null"
       :fps="fps"
       @fullscreen="$refs.animationFrame.requestFullscreen()"
-      @pause="updatePaused"
-      @unpause="updatePaused"
+      @pause="fractalEngine.pause()"
+      @unpause="fractalEngine.unpause()"
     />
     <div id="errorMessage" v-if="error != null">
       <h2>Error</h2>
