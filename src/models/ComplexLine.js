@@ -21,7 +21,7 @@ class ComplexLine {
   /**
    * Creates a complex line from a JSON.
    * @param {Object} complexLineJSON An object containing the JSON for a complex line.
-   * @returns The complex line made from the JSON.
+   * @returns {ComplexLine} The complex line made from the JSON.
    */
   static fromJSON(complexLineJSON) {
     return new ComplexLine(
