@@ -141,8 +141,6 @@ class Complex {
       } else {
         if (displayedIm == 1) {
           return "<mi>i</mi>";
-        } else if (displayedIm == -1) {
-          return "<mo>-</mo><mi>i</mi>";
         } else {
           return `<mn>${displayedIm}</mn><mi>i</mi>`;
         }
@@ -235,5 +233,13 @@ class Complex {
    */
   plus(term) {
     return new Complex(this.re + term, this.im);
+  }
+
+  /**
+   * Get the value of the complex number.
+   * @returns {Complex} The value of the complex number.
+   */
+  getAtTime() {
+    return this;
   }
 }
