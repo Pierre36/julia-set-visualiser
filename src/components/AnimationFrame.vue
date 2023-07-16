@@ -86,6 +86,16 @@ export default {
       this.error = error;
       console.error(error);
     }
+
+    // Update dimension ratio when canvas changes size
+    new ResizeObserver(() => {
+      this.fractalEngine.updateDimensionRatio();
+    }).observe(this.$refs.animationCanvas);
+
+    // Update resolution on window resize
+    window.addEventListener("resize", () => {
+      this.fractalEngine.createViewport(this.configuration.resolutionScale);
+    });
   },
 };
 </script>

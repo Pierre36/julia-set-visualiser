@@ -164,6 +164,16 @@ class FractalEngine {
   }
 
   /**
+   * Updates the dimension ratio.
+   */
+  updateDimensionRatio() {
+    this.gl.uniform1f(
+      this.uniformLocations.dimensionRatio,
+      this.canvas.clientWidth / this.canvas.clientHeight
+    );
+  }
+
+  /**
    * Sets the coordinates scale.
    * @param {Number} newCoordinatesScale The new scale of the coordinates.
    */
@@ -309,6 +319,7 @@ class FractalEngine {
    * @param {Configuration} configuration The configuration of the animation.
    */
   initUniformValues(configuration) {
+    this.updateDimensionRatio();
     this.setCoordinatesScale(configuration.coordinatesScale);
     this.setCoordinatesCenter(configuration.coordinatesCenter);
     this.setNbIterations(configuration.nbIterations);
@@ -318,22 +329,6 @@ class FractalEngine {
     this.setDefaultAttractor(configuration.defaultAttractor);
     this.setInfinityAttractor(configuration.infinityAttractor);
     this.setFunction(configuration.fractalFunction);
-    // TODO Fix dimension ratio
-    this.gl.uniform1f(
-      this.uniformLocations.dimensionRatio,
-      this.canvas.clientWidth / this.canvas.clientHeight
-    );
-  }
-
-  /**
-   * Sets the values of the uniforms.
-   * @param {Number} time The animation time in milliseconds.
-   */
-  setUniformValues(time) {
-    this.gl.uniform1f(
-      this.uniformLocations.dimensionRatio,
-      this.canvas.clientWidth / this.canvas.clientHeight
-    );
   }
 
   /**
