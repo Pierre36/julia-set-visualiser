@@ -22,6 +22,19 @@ export default {
         return "";
       }
     },
+    sortedOptions() {
+      const sortedOptions = this.options.slice();
+      sortedOptions.sort((optionA, optionB) => {
+        if (optionA.id == this.selected) {
+          return -1;
+        } else if (optionB.id == this.selected) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+      return sortedOptions;
+    },
   },
   mounted() {
     document.addEventListener("click", this.closeMenuIfClickIsOutsideMenu);
@@ -55,7 +68,7 @@ export default {
     </button>
     <ul ref="menu" class="dropdown menu" v-show="isOpen">
       <li
-        v-for="option in options"
+        v-for="option in sortedOptions"
         :key="option.id"
         :class="{ selected: option.id == selected }"
         @click="onClickOption(option.id)"
