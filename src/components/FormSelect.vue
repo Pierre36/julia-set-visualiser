@@ -120,6 +120,8 @@ export default {
 
 .dropdown {
   min-width: 100%;
+  max-height: 20rem;
+  overflow-y: auto;
   top: 0;
   left: 0;
   margin: 0;
