@@ -218,8 +218,8 @@ class Polynomial {
     for (let n = 0; n < this.nbCoefficients; n++) {
       power = this.arrayRepresentation[3 * n + 2];
       coefficient = this.getCoefficient(power).getAtTime(time);
-      this.arrayRepresentation[3 * n] = coefficient.re;
-      this.arrayRepresentation[3 * n + 1] = coefficient.im;
+      this.arrayRepresentation[3 * n] = coefficient.mod();
+      this.arrayRepresentation[3 * n + 1] = coefficient.arg();
     }
   }
 

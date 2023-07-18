@@ -325,14 +325,14 @@ describe("updateWithTime", () => {
     const coefficient2AtTime = coefficient2.getAtTime(time);
 
     expect(polynomial.arrayRepresentation).toEqual([
-      coefficient0AtTime.re,
-      coefficient0AtTime.im,
+      coefficient0AtTime.mod(),
+      coefficient0AtTime.arg(),
       0,
-      coefficient1AtTime.re,
-      coefficient1AtTime.im,
+      coefficient1AtTime.mod(),
+      coefficient1AtTime.arg(),
       1,
-      coefficient2AtTime.re,
-      coefficient2AtTime.im,
+      coefficient2AtTime.mod(),
+      coefficient2AtTime.arg(),
       2,
       0,
       0,

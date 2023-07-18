@@ -3,9 +3,9 @@ precision highp float;
 
 // CONSTANTS
 
-#define PI 3.1415926538
-#define ZERO 0.00000000001
-#define INFINITY 10000000000.0
+const float PI = 3.1415926538;
+const float ZERO = 0.00000000001;
+const float INFINITY = 10000000000.0;
 
 
 // INPUT AND OUTPUT
@@ -69,30 +69,16 @@ vec2 complexMultiplication(vec2 z1, vec2 z2) {
 }
 
 vec2 complexInverse(vec2 z) {
-  if (isComplexZero(z)) {
-    return vec2(INFINITY, INFINITY);
-  }
-  return vec2(z.x, -z.y) / (z.x * z.x + z.y * z.y);
+  return vec2(z.x, -z.y) / dot(z, z);
 }
 
-vec2 complexDivision(vec2 z1, vec2 z2) {
-  return complexMultiplication(z1, complexInverse(z2));
-}
-
-vec2 complexPower(vec2 z, float p) {
-  if (p < ZERO) {
-    return vec2(1.0, 0.0);
-  } else if (p - 1.0 < ZERO) {
-    return z;
-  } else {
-    float modpz = pow(complexMod(z), p);
-    if (modpz > INFINITY) {
-      return vec2(INFINITY, INFINITY);
-    } else {
-      float argz = complexArg(z);
-      return modpz * vec2(cos(p * argz), sin(p * argz));
-    }
+vec2 complexPowerAndMultiplication(vec2 z, float power, vec2 factor) {
+  float modpz = pow(complexMod(z), power) * factor.x;
+  if (modpz > INFINITY) {
+    return vec2(INFINITY);
   }
+  float argpz = power * complexArg(z) + factor.y;
+  return vec2(min(modpz * cos(argpz), INFINITY), min(modpz * sin(argpz), INFINITY));
 }
 
 float complexDistance(vec2 z1, vec2 z2) {
@@ -106,30 +92,23 @@ vec2 applyFunction(vec2 z) {
   if (isComplexInfinity(z)) {
     return z;
   }
-  vec2 numerator = vec2(0.0, 0.0);
-  vec2 denominator = vec2(0.0, 0.0);
+  vec2 numerator = vec2(0.0);
+  vec2 denominator = vec2(0.0);
   for (int c = 0; c < numeratorNbCoefficients; ++c) {
-    numerator += complexMultiplication(numeratorCoefficients[c].xy, complexPower(z, numeratorCoefficients[c].z));
+    numerator += complexPowerAndMultiplication(z, numeratorCoefficients[c].z, numeratorCoefficients[c].xy);
   }
   for (int c = 0; c < denominatorNbCoefficients; ++c) {
-    denominator += complexMultiplication(denominatorCoefficients[c].xy, complexPower(z, denominatorCoefficients[c].z));
+    denominator += complexPowerAndMultiplication(z, denominatorCoefficients[c].z, denominatorCoefficients[c].xy);
   }
-  return complexDivision(numerator, denominator);
+  return complexMultiplication(numerator, complexInverse(denominator));
 }
 
 float riemannSpheredistance(vec2 z, vec2 w) {
   float zMod = complexMod(z);
   float wMod = complexMod(w);
-  if (wMod < ZERO) {
-    return 2.0 * atan(zMod);
-  } else if (wMod > INFINITY) {
-    return 2.0 * atan(1.0 / zMod);
-  } else if (zMod > INFINITY) {
-    return 0.0;
-  } else {
-    vec2 zw_ = vec2(z.x * w.x + z.y * w.y, z.y * w.x - w.y * z.x);
-    return 2.0 * atan(complexMod(zw_ - vec2(wMod * wMod, 0)) / (complexMod(zw_ + vec2(1.0, 0)) * wMod));
-  }
+  vec2 zw_ = vec2(z.x * w.x + z.y * w.y, z.y * w.x - w.y * z.x);
+  float d = complexMod(zw_ - vec2(wMod * wMod, 0.0)) / (complexMod(zw_ + vec2(1.0, 0.0)) * wMod);
+  return 2.0 * atan(mix(mix(mix(d, 0.0, zMod > INFINITY), 1.0 / zMod, wMod > INFINITY), zMod, wMod < ZERO));
 }
 
 
@@ -160,7 +139,7 @@ vec3 colorAccordingToSet(float adjustedDivergence, vec2 fkz) {
     return getColor(adjustedDivergence, infinityHue, infinityColorParameters);
   }
 
-  // If no attractor match the point, color using default coloring
+  // If no attractor matches the point, color using default coloring
   return getColor(adjustedDivergence, defaultHue, defaultColorParameters);
 }
 
@@ -175,7 +154,7 @@ void main() {
   // Compute how close from an attractor the current point is 
   // by checking if nearby pixels tend to get closer
   vec2 fkz = coordinates;
-  vec2 fkzeps = coordinates + vec2(epsilon, epsilon);
+  vec2 fkzeps = coordinates + epsilon;
   float divergence = 0.0;
   for (int k = 0; k < nbIterations; ++k) {
     fkz = applyFunction(fkz);
