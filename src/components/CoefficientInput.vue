@@ -3,13 +3,13 @@ import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
 import { Polynomial } from "../models/Polynomial";
-import FormSelect from "./FormSelect.vue";
+import ComboBox from "./ComboBox.vue";
 import ComplexInput from "./ComplexInput.vue";
 import FloatInput from "./FloatInput.vue";
 
 export default {
   name: "CoefficientInput",
-  components: { FormSelect, ComplexInput, FloatInput },
+  components: { ComboBox, ComplexInput, FloatInput },
   props: {
     coefficient: {
       type: [Complex, ComplexCircle, ComplexLine],
@@ -83,7 +83,7 @@ export default {
   <div class="container">
     <h4 v-if="level == 4">Type</h4>
     <h5 v-if="level == 5">Type</h5>
-    <FormSelect :options="typeOptions" :selected="type" @update:selected="changeType" />
+    <ComboBox :options="typeOptions" :selected="type" @update:selected="changeType" />
     <template v-if="type == 'CONSTANT'">
       <h4 v-if="level == 4">Value</h4>
       <h5 v-if="level == 5">Value</h5>

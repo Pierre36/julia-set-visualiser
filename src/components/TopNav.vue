@@ -1,11 +1,11 @@
 <script>
 import { Configuration } from "../models/Configuration";
-import FormSelect from "./FormSelect.vue";
+import ComboBox from "./ComboBox.vue";
 import Toast from "./Toast.vue";
 
 export default {
   name: "TopNav",
-  components: { FormSelect, Toast },
+  components: { ComboBox, Toast },
   props: {
     configurations: { type: Object, required: true },
     selectedConfigurationId: { type: String, required: true },
@@ -38,7 +38,7 @@ export default {
   <div id="topNav">
     <img class="logo" src="/logo.svg" />
     <h1>Julia Set Visualizer</h1>
-    <FormSelect
+    <ComboBox
       :options="configurationOptions"
       :selected="selectedConfigurationId"
       @update:selected="(newSelected) => $emit('update:selectedConfigurationId', newSelected)"

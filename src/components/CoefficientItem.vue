@@ -2,12 +2,12 @@
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
-import FormSelect from "./FormSelect.vue";
+import ComboBox from "./ComboBox.vue";
 import CoefficientInput from "./CoefficientInput.vue";
 
 export default {
   name: "CoefficientItem",
-  components: { FormSelect, CoefficientInput },
+  components: { ComboBox, CoefficientInput },
   props: {
     degree: { type: String, required: true },
     coefficient: {
@@ -46,7 +46,7 @@ export default {
   <div class="frame">
     <div class="degreePicker">
       <span>Degree</span>
-      <FormSelect
+      <ForComboBoxmSelect
         :options="degreeOptions"
         :selected="degree"
         @update:selected="(newDegree) => $emit('update:degree', newDegree)"

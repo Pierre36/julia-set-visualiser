@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "FormSelect",
+  name: "ComboBox",
   props: {
     options: { type: Array, default: [] },
     selected: { type: String, default: null },
@@ -46,7 +46,7 @@ export default {
           this.$refs.menu.contains(event.target) || this.$refs.select.contains(event.target);
       }
     },
-    onClickOption(optionId) {
+    selectOption(optionId) {
       this.$emit("update:selected", optionId);
       this.isOpen = false;
     },
@@ -66,12 +66,15 @@ export default {
         />
       </svg>
     </button>
-    <ul ref="menu" class="dropdown menu" v-show="isOpen">
+    <ul ref="menu" class="dropdown menu" v-show="isOpen" role="listbox">
       <li
         v-for="option in sortedOptions"
         :key="option.id"
         :class="{ selected: option.id == selected }"
-        @click="onClickOption(option.id)"
+        :aria-selected="option.id == this.selected"
+        @click="selectOption(option.id)"
+        tabindex="0"
+        role="option"
       >
         <span class="tick">
           <svg
@@ -136,5 +139,15 @@ export default {
 
 .menu li.selected .tick {
   visibility: visible;
+}
+
+.menu li {
+  --option-border-color: transparent;
+  border: 2px solid var(--option-border-color);
+  outline: none;
+}
+
+.menu li:focus-visible {
+  --option-border-color: var(--gray-100);
 }
 </style>

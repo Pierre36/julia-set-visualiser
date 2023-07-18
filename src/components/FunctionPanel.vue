@@ -1,5 +1,5 @@
 <script>
-import FormSelect from "./FormSelect.vue";
+import ComboBox from "./ComboBox.vue";
 import CoefficientInput from "./CoefficientInput.vue";
 import IconTextButton from "./IconTextButton.vue";
 import CoefficientItem from "./CoefficientItem.vue";
@@ -10,7 +10,7 @@ import { FractalFunction } from "../models/FractalFunction";
 export default {
   name: "FunctionPanel",
   components: {
-    FormSelect,
+    ComboBox,
     IconTextButton,
     CoefficientItem,
     CoefficientInput,
@@ -159,7 +159,7 @@ export default {
       </InfoHeader>
       <div class="content">
         <h4>Type</h4>
-        <FormSelect
+        <ComboBox
           :options="functionTypeOptions"
           :selected="fractalFunction.functionType"
           @update:selected="updateFunctionType"
