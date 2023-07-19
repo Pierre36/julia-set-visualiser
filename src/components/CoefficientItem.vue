@@ -46,7 +46,7 @@ export default {
   <div class="frame">
     <div class="degreePicker">
       <span>Degree</span>
-      <ForComboBoxmSelect
+      <ComboBox
         :options="degreeOptions"
         :selected="degree"
         @update:selected="(newDegree) => $emit('update:degree', newDegree)"
