@@ -44,9 +44,7 @@ export default {
     },
     "configuration.fractalFunction": {
       handler(_) {
-        if (this.fractalEngine.paused) {
-          this.fractalEngine.setFractalFunction(this.configuration.fractalFunction);
-        }
+        this.fractalEngine.setFractalFunction(this.configuration.fractalFunction.copy());
       },
       deep: true,
     },
@@ -81,7 +79,9 @@ export default {
 
     // Try to display the scene
     try {
-      this.fractalEngine.displayScene(this.configuration);
+      const configuration = new Configuration();
+      configuration.fillWith(this.configuration);
+      this.fractalEngine.displayScene(configuration);
     } catch (error) {
       this.error = error;
       console.error(error);

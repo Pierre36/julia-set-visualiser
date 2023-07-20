@@ -17,6 +17,7 @@ class FractalEngine {
    */
   constructor(canvas) {
     this.canvas = canvas;
+    this.fractalFunction = null;
     this.fps = 0;
     this.paused = false;
     this.animationTime = 0;
@@ -262,23 +263,33 @@ class FractalEngine {
    * Sets the fractal function.
    * @param {FractalFunction} newFractalFunction The new fractal function.
    */
-  setFunction(fractalFunction) {
-    fractalFunction.updateWithTime(this.animationTime);
+  setFractalFunction(newFractalFunction) {
+    this.fractalFunction = newFractalFunction;
+    if (this.paused) {
+      this.updateFractalFunction();
+    }
+  }
+
+  /**
+   * Updates the fractal function.
+   */
+  updateFractalFunction() {
+    this.fractalFunction.updateWithTime(this.animationTime);
     this.gl.uniform1i(
       this.uniformLocations.numeratorNbCoefficients,
-      fractalFunction.getNumeratorNbCoefficients()
+      this.fractalFunction.getNumeratorNbCoefficients()
     );
     this.gl.uniform3fv(
       this.uniformLocations.numeratorCoefficients,
-      fractalFunction.getNumeratorArray()
+      this.fractalFunction.getNumeratorArray()
     );
     this.gl.uniform1i(
       this.uniformLocations.denominatorNbCoefficients,
-      fractalFunction.getDenominatorNbCoefficients()
+      this.fractalFunction.getDenominatorNbCoefficients()
     );
     this.gl.uniform3fv(
       this.uniformLocations.denominatorCoefficients,
-      fractalFunction.getDenominatorArray()
+      this.fractalFunction.getDenominatorArray()
     );
   }
 
@@ -328,7 +339,6 @@ class FractalEngine {
     this.setJuliaHSV(configuration.juliaHSV);
     this.setDefaultAttractor(configuration.defaultAttractor);
     this.setInfinityAttractor(configuration.infinityAttractor);
-    this.setFunction(configuration.fractalFunction);
   }
 
   /**
@@ -347,18 +357,17 @@ class FractalEngine {
 
   /**
    * Renders the current frame.
-   * @param {FractalFunction} fractalFunction The fractal function for the animation.
    * @param {Number} time The animation time in milliseconds.
    * @param {Number} delay The delay time in milliseconds.
    * @param {Number} nbFrames The number of frames since the beginning of the animation.
    */
-  render(configuration, time, delay, nbFrames) {
+  render(time, delay, nbFrames) {
     if (!this.paused) {
       // Update animation time
       this.animationTime = time - delay;
 
-      // Update the function
-      this.setFunction(configuration.fractalFunction);
+      // Update the fractal function
+      this.updateFractalFunction();
 
       // Draw the scene
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
@@ -367,9 +376,9 @@ class FractalEngine {
     requestAnimationFrame((newTime) => {
       this.updateFPS(newTime - time, nbFrames);
       if (this.paused) {
-        this.render(configuration, newTime, delay + newTime - time, nbFrames + 1);
+        this.render(newTime, delay + newTime - time, nbFrames + 1);
       } else {
-        this.render(configuration, newTime, delay, nbFrames + 1);
+        this.render(newTime, delay, nbFrames + 1);
       }
     });
   }
@@ -385,7 +394,8 @@ class FractalEngine {
     this.setPositionAttributes();
     this.gl.useProgram(this.program);
     this.loadUniformLocations();
+    this.setFractalFunction(configuration.fractalFunction);
     this.initUniformValues(configuration);
-    requestAnimationFrame((time) => this.render(configuration, time, 0, 0, 0));
+    requestAnimationFrame((time) => this.render(time, 0, 0, 0));
   }
 }
