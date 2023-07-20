@@ -44,7 +44,7 @@ class FractalEngine {
   loadWebGL() {
     this.gl = this.canvas.getContext("webgl2", {
       alpha: false,
-      antialias: true,
+      antialias: false,
       premultipliedAlpha: false,
       preserveDrawingBuffer: false,
     });
