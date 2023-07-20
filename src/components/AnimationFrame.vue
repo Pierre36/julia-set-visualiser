@@ -3,6 +3,7 @@ import { FractalEngine } from "../models/FractalEngine";
 import { Configuration } from "../models/Configuration";
 
 import AnimationOverlay from "./AnimationOverlay.vue";
+import { shallowRef } from "vue";
 export default {
   name: "AnimationFrame",
   components: { AnimationOverlay },
@@ -13,15 +14,8 @@ export default {
     return {
       fractalEngine: null,
       error: null,
+      fps: 0,
     };
-  },
-  computed: {
-    fps() {
-      if (this.fractalEngine == null) {
-        return 0;
-      }
-      return Math.round(this.fractalEngine.fps);
-    },
   },
   watch: {
     "configuration.resolutionScale"(newResolutionScale) {
@@ -75,7 +69,7 @@ export default {
   },
   mounted() {
     // Initialize fractal engine
-    this.fractalEngine = new FractalEngine(this.$refs.animationCanvas);
+    this.fractalEngine = shallowRef(new FractalEngine(this.$refs.animationCanvas));
 
     // Try to display the scene
     try {
@@ -96,6 +90,9 @@ export default {
     window.addEventListener("resize", () => {
       this.fractalEngine.createViewport(this.configuration.resolutionScale);
     });
+
+    // Update fps every 0.3 seconds
+    setInterval(() => (this.fps = Math.round(this.fractalEngine.fps)), 300);
   },
 };
 </script>
