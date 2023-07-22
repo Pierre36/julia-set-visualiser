@@ -2,7 +2,6 @@
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
-import { Polynomial } from "../models/Polynomial";
 import ComboBox from "./ComboBox.vue";
 import ComplexInput from "./ComplexInput.vue";
 import FloatInput from "./FloatInput.vue";
@@ -45,6 +44,9 @@ export default {
     durationSecond() {
       return this.coefficient.duration / 1000;
     },
+    heading() {
+      return `h${this.level}`;
+    },
   },
   methods: {
     changeType(newType) {
@@ -81,37 +83,29 @@ export default {
 
 <template>
   <div class="container">
-    <h4 v-if="level == 4">Type</h4>
-    <h5 v-if="level == 5">Type</h5>
+    <component :is="heading">Type</component>
     <ComboBox :options="typeOptions" :selected="type" @update:selected="changeType" />
     <template v-if="type == 'CONSTANT'">
-      <h4 v-if="level == 4">Value</h4>
-      <h5 v-if="level == 5">Value</h5>
+      <component :is="heading">Value</component>
       <ComplexInput
         :complex="coefficient"
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
     <template v-else-if="type == 'CIRCLE'">
-      <h4 v-if="level == 4">Center</h4>
-      <h5 v-if="level == 5">Center</h5>
+      <component :is="heading">Center</component>
       <ComplexInput :complex="coefficient.center" @update:complex="updateCenter" />
-      <h4 v-if="level == 4">Radius</h4>
-      <h5 v-if="level == 5">Radius</h5>
+      <component :is="heading">Radius</component>
       <FloatInput :float="coefficient.radius" :min="0" @update:float="updateRadius" />
-      <h4 v-if="level == 4">Duration</h4>
-      <h5 v-if="level == 5">Duration</h5>
+      <component :is="heading">Duration</component>
       <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
     <template v-else-if="type == 'LINE'">
-      <h4 v-if="level == 4">Start</h4>
-      <h5 v-if="level == 5">Start</h5>
+      <component :is="heading">Start</component>
       <ComplexInput :complex="coefficient.start" @update:complex="updateStart" />
-      <h4 v-if="level == 4">End</h4>
-      <h5 v-if="level == 5">End</h5>
+      <component :is="heading">End</component>
       <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
-      <h4 v-if="level == 4">Duration</h4>
-      <h5 v-if="level == 5">Duration</h5>
+      <component :is="heading">Duration</component>
       <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
     </template>
   </div>
