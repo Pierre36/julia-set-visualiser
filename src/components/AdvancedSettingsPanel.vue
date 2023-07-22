@@ -138,7 +138,7 @@ export default {
           :step="1"
           @update:int="updateNbIterations"
         />
-        <h4>Espilon</h4>
+        <h4>Epsilon</h4>
         <FloatInput
           :float="configuration.epsilon"
           :min="0"
