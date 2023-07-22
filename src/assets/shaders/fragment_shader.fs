@@ -78,7 +78,7 @@ vec2 complexPowerAndMultiplication(vec2 z, float power, vec2 factor) {
     return vec2(INFINITY);
   }
   float argpz = power * complexArg(z) + factor.y;
-  return vec2(min(modpz * cos(argpz), INFINITY), min(modpz * sin(argpz), INFINITY));
+  return vec2(modpz * cos(argpz), modpz * sin(argpz));
 }
 
 float complexDistance(vec2 z1, vec2 z2) {
@@ -107,8 +107,8 @@ float riemannSpheredistance(vec2 z, vec2 w) {
   float zMod = complexMod(z);
   float wMod = complexMod(w);
   vec2 zw_ = vec2(z.x * w.x + z.y * w.y, z.y * w.x - w.y * z.x);
-  float d = complexMod(zw_ - vec2(wMod * wMod, 0.0)) / (complexMod(zw_ + vec2(1.0, 0.0)) * wMod);
-  return 2.0 * atan(mix(mix(mix(d, 0.0, zMod > INFINITY), 1.0 / zMod, wMod > INFINITY), zMod, wMod < ZERO));
+  float d = 2.0 * atan(complexMod(zw_ - vec2(wMod * wMod, 0.0)) / (complexMod(zw_ + vec2(1.0, 0.0)) * wMod));
+  return mix(mix(mix(d, 0.0, zMod > INFINITY), 0., wMod > INFINITY), 0., wMod < ZERO);
 }
 
 
