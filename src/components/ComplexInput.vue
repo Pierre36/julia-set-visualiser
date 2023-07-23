@@ -44,13 +44,7 @@ export default {
       type="text"
       @change="($event) => checkAndUpdate($event.target.value)"
     />
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 -960 960 960"
-      role="img"
-      class="wrongInputSVG"
-      v-if="isComplexWrong"
-    >
+    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="isComplexWrong">
       <title>Please enter a valid complex number</title>
       <path
         fill="currentColor"

@@ -62,7 +62,7 @@ export default {
     <div id="animationMetrics" v-show="metricsDisplayed">{{ fps }}</div>
     <div id="animationMenu" :class="{ show: menuDisplayed }">
       <button id="metricsButton" class="icon-button" @click="metricsDisplayed = !metricsDisplayed">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <svg viewBox="0 -960 960 960">
           <title v-if="metricsDisplayed">Hide metrics</title>
           <title v-else>Show metrics</title>
           <path
@@ -73,7 +73,7 @@ export default {
         </svg>
       </button>
       <button id="pauseButton" class="icon-button" @click="updatePaused">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <svg viewBox="0 -960 960 960">
           <title v-if="paused">Play</title>
           <title v-else>Pause</title>
           <path
@@ -91,7 +91,7 @@ export default {
         </svg>
       </button>
       <button id="fullscreenButton" class="icon-button" @click="updateFullscreen">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+        <svg viewBox="0 -960 960 960">
           <title v-if="isFullscreen">Leave fullscreen</title>
           <title v-else>Fullscreen</title>
           <path

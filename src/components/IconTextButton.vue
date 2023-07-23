@@ -10,7 +10,7 @@ export default {
 
 <template>
   <button class="button" :title="text">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
+    <svg viewBox="0 -960 960 960" role="img">
       <title>{{ text }}</title>
       <path fill="currentColor" fill-rule="evenodd" :d="svgPath" />
     </svg>

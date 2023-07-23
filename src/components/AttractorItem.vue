@@ -54,7 +54,7 @@ export default {
       <h4>Attractor</h4>
       <ComplexInput :complex="attractor.complex" @update:complex="updateComplex" />
       <button class="icon-button" @click="$emit('delete:attractor')">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="100 -860 760 760" role="img">
+        <svg class="icon" viewBox="100 -860 760 760" role="img">
           <title>Remove attractor</title>
           <path
             fill="currentColor"
