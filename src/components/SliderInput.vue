@@ -56,6 +56,7 @@ export default {
       :step="step"
       :wrongInput="isValueWrong"
       wrongInputMessage="Please enter a valid integer"
+      label="Value"
       @change="(newValue) => checkAndUpdate(newValue)"
     />
     <input

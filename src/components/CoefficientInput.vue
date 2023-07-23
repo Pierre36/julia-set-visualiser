@@ -4,11 +4,11 @@ import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
 import ComboBox from "./ComboBox.vue";
 import ComplexInput from "./ComplexInput.vue";
-import FloatInput from "./FloatInput.vue";
+import NumberInput from "./NumberInput.vue";
 
 export default {
   name: "CoefficientInput",
-  components: { ComboBox, ComplexInput, FloatInput },
+  components: { ComboBox, ComplexInput, NumberInput },
   props: {
     coefficient: {
       type: [Complex, ComplexCircle, ComplexLine],
@@ -101,9 +101,21 @@ export default {
       <component :is="heading">Center</component>
       <ComplexInput :complex="coefficient.center" @update:complex="updateCenter" />
       <component :is="heading">Radius</component>
-      <FloatInput :float="coefficient.radius" :min="0" @update:float="updateRadius" />
+      <NumberInput
+        :value="coefficient.radius"
+        :min="0"
+        :step="0.1"
+        label="Circle radius"
+        @update:value="updateRadius"
+      />
       <component :is="heading">Duration</component>
-      <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
+      <NumberInput
+        :value="durationSecond"
+        :min="0"
+        :step="1"
+        @update:value="updateDuration"
+        label="Duration"
+      />
     </template>
     <template v-else-if="type == 'LINE'">
       <component :is="heading">Start</component>
@@ -111,7 +123,13 @@ export default {
       <component :is="heading">End</component>
       <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
       <component :is="heading">Duration</component>
-      <FloatInput :float="durationSecond" :min="0" :step="1" @update:float="updateDuration" />
+      <NumberInput
+        :value="durationSecond"
+        :min="0"
+        :step="1"
+        @update:value="updateDuration"
+        label="Duration"
+      />
     </template>
   </div>
 </template>

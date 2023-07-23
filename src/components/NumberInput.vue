@@ -1,42 +1,88 @@
 <script>
 export default {
   name: "NumberInput",
-  emits: ["change"],
+  emits: ["update:value"],
   props: {
-    value: { type: String, default: "0" },
+    value: { type: Number, default: 0 },
     min: { type: Number, default: undefined },
     max: { type: Number, default: undefined },
     step: { type: Number, default: 1 },
-    wrongInput: { type: Boolean, default: false },
-    wrongInputMessage: { type: String, default: "" },
+    integerOnly: { type: Boolean, default: false },
+    wrongInputMessage: { type: String, default: "Please enter a valid number" },
+    label: { type: String, default: "" },
+  },
+  data() {
+    return {
+      wrong: false,
+    };
+  },
+  computed: {
+    inputValue() {
+      if (this.wrong) {
+        return this.$refs.input.value;
+      } else {
+        return String(this.value);
+      }
+    },
   },
   methods: {
+    stepDown() {
+      this.$refs.input.stepDown();
+      this.$refs.input.dispatchEvent(new Event("change"));
+    },
+    goToMin() {
+      if (this.min != undefined) {
+        this.$emit("update:value", this.min);
+      }
+    },
+    goToMax() {
+      if (this.max != undefined) {
+        this.$emit("update:value", this.max);
+      }
+    },
     stepUp() {
       this.$refs.input.stepUp();
       this.$refs.input.dispatchEvent(new Event("change"));
     },
-    stepDown() {
-      this.$refs.input.stepDown();
-      this.$refs.input.dispatchEvent(new Event("change"));
+    checkAndUpdate(stringValue) {
+      let newValue = parseFloat(stringValue);
+      this.wrong =
+        isNaN(newValue) ||
+        (this.integerOnly && newValue % 1 != 0) ||
+        (this.min != undefined && newValue < this.min) ||
+        (this.max != undefined && newValue > this.max);
+      if (!this.wrong) {
+        this.$emit("update:value", newValue);
+      }
     },
   },
 };
 </script>
 
 <template>
-  <div class="inputContainer">
+  <div class="input-container">
     <input
       ref="input"
       class="input"
-      :class="{ wrongInput: wrongInput }"
+      :class="{ wrong: wrong }"
       type="number"
-      :value="value"
+      :value="inputValue"
+      :aria-valuenow="inputValue"
       :min="min"
+      :aria-valuemin="min"
       :max="max"
+      :aria-valuemax="max"
       :step="step"
-      @change="($event) => $emit('change', $event.target.value)"
+      :aria-label="label"
+      :aria-invalid="wrong"
+      role="spinbutton"
+      @keydown.down.prevent="stepDown"
+      @keydown.up.prevent="stepUp"
+      @keydown.home.prevent="goToMin"
+      @keydown.end.prevent="goToMax"
+      @change="($event) => checkAndUpdate($event.target.value)"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="wrongInput">
+    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="wrong">
       <title>{{ wrongInputMessage }}</title>
       <path
         fill="currentColor"
@@ -44,7 +90,7 @@ export default {
         d="M92-120q-9 0-15.652-4.125Q69.696-128.25 66-135q-4.167-6.6-4.583-14.3Q61-157 66-165l388-670q5-8 11.5-11.5T480-850q8 0 14.5 3.5T506-835l388 670q5 8 4.583 15.7-.416 7.7-4.583 14.3-3.696 6.75-10.348 10.875Q877-120 868-120H92Zm52-60h672L480-760 144-180Zm340.175-57q12.825 0 21.325-8.675 8.5-8.676 8.5-21.5 0-12.825-8.675-21.325-8.676-8.5-21.5-8.5-12.825 0-21.325 8.675-8.5 8.676-8.5 21.5 0 12.825 8.675 21.325 8.676 8.5 21.5 8.5Zm0-111q12.825 0 21.325-8.625T514-378v-164q0-12.75-8.675-21.375-8.676-8.625-21.5-8.625-12.825 0-21.325 8.625T454-542v164q0 12.75 8.675 21.375 8.676 8.625 21.5 8.625ZM480-470Z"
       />
     </svg>
-    <button class="button inputButton up" @click="stepUp">
+    <button class="button inputButton up" @click="stepUp" tabindex="-1">
       <svg viewBox="0 -960 960 960" role="img">
         <title>Increase value</title>
         <path
@@ -54,7 +100,7 @@ export default {
         />
       </svg>
     </button>
-    <button class="button inputButton down" @click="stepDown">
+    <button class="button inputButton down" @click="stepDown" tabindex="-1">
       <svg viewBox="0 -960 960 960" role="img">
         <title>Decrease value</title>
         <path
@@ -68,7 +114,7 @@ export default {
 </template>
 
 <style scoped>
-.inputContainer {
+.input-container {
   --buttons-width: 1.5rem;
   --buttons-margin: 0.2rem;
   --warning-width: 1.2rem;
@@ -78,10 +124,25 @@ export default {
 .input {
   width: 100%;
   appearance: textfield;
+  padding: var(--input-padding, 0.5rem);
   padding-right: calc(var(--buttons-width) + 2 * var(--buttons-margin) + 2px);
+  outline: var(--input-outline, none);
+  color: var(--input-color, #000000);
+  background-color: var(--input-background-color, #ffffff);
+  border-width: var(--input-border-width, 1px);
+  border-style: var(--input-border-style, solid);
+  border-color: var(--input-border-color, #000000);
+  border-radius: var(--input-border-radius, 0.25rem);
+  text-align: var(--input-text-align, start);
+  font-family: var(--input-font-family, sans-serif);
 }
 
-.wrongInput {
+.input:focus-visible {
+  border-color: var(--input-border-color-focus, hsl(210, 70%, 30%));
+}
+
+.input.wrong {
+  border-color: var(--input-border-color-wrong, #ff0000);
   padding-right: calc(
     var(--buttons-width) + 2 * var(--buttons-margin) + var(--warning-width) + 4px
   );
@@ -90,13 +151,13 @@ export default {
 .inputButton {
   --button-border-radius: 0.15rem;
   --button-border-width: 1px;
-  --button-color: var(--gray-100);
-  --button-background-color: var(--gray-500);
-  --button-border-color: var(--gray-500);
-  --button-background-color-hover: var(--gray-500);
-  --button-color-active: var(--gray-100);
-  --button-background-color-active: var(--gray-500);
-  --button-background-color-focus-visible: var(--gray-500);
+  --button-color: var(--input-color, #000000);
+  --button-background-color: var(--input-border-color, #000000);
+  --button-border-color: var(--input-border-color, #000000);
+  --button-background-color-hover: var(--input-border-color, #000000);
+  --button-border-color-hover: var(--input-color, #ffffff);
+  --button-color-active: var(--input-color, #000000);
+  --button-background-color-active: var(--input-border-color, #000000);
   position: absolute;
   width: var(--buttons-width);
   right: 0;
@@ -130,7 +191,7 @@ export default {
   position: absolute;
   height: 100%;
   width: var(--warning-width);
-  color: var(--color-error);
+  color: var(--input-border-color-wrong, #ff0000);
   top: 0;
   bottom: 0;
   left: auto;

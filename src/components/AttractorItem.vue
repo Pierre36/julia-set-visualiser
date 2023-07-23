@@ -1,13 +1,13 @@
 <script>
 import { Complex } from "../models/Complex";
+import { Attractor } from "../models/Attractor";
 import SliderInput from "./SliderInput.vue";
 import ComplexInput from "./ComplexInput.vue";
-import FloatInput from "./FloatInput.vue";
-import { Attractor } from "../models/Attractor";
+import NumberInput from "./NumberInput.vue";
 
 export default {
   name: "AttractorItem",
-  components: { ComplexInput, SliderInput, FloatInput },
+  components: { ComplexInput, SliderInput, NumberInput },
   props: {
     isDefault: { type: Boolean, default: false },
     isInfinity: { type: Boolean, default: false },
@@ -75,22 +75,38 @@ export default {
     >
     <h4 class="span-2 subtitle">Saturation</h4>
     <h5>Strength</h5>
-    <FloatInput
-      :float="attractor.saturationStrength"
+    <NumberInput
+      :value="attractor.saturationStrength"
       :min="0"
-      @update:float="updateSaturationStrength"
+      :step="0.1"
+      label="Saturation strength"
+      @update:value="updateSaturationStrength"
     />
     <h5>Offset</h5>
-    <FloatInput
-      :float="attractor.saturationOffset"
+    <NumberInput
+      :value="attractor.saturationOffset"
       :min="0"
-      @update:float="updateSaturationOffset"
+      :step="0.1"
+      label="Saturation offset"
+      @update:value="updateSaturationOffset"
     />
     <h4 class="span-2 subtitle">Value</h4>
     <h5>Strength</h5>
-    <FloatInput :float="attractor.valueStrength" :min="0" @update:float="updateValueStrength" />
+    <NumberInput
+      :value="attractor.valueStrength"
+      :min="0"
+      :step="0.1"
+      label="Value strength"
+      @update:value="updateValueStrength"
+    />
     <h5>Offset</h5>
-    <FloatInput :float="attractor.valueOffset" :min="0" @update:float="updateValueOffset" />
+    <NumberInput
+      :value="attractor.valueOffset"
+      :min="0"
+      :step="0.1"
+      label="Value offset"
+      @update:value="updateValueOffset"
+    />
   </div>
 </template>
 

@@ -1,12 +1,11 @@
 <script>
 import InfoHeader from "./InfoHeader.vue";
 import ComplexInput from "./ComplexInput.vue";
-import FloatInput from "./FloatInput.vue";
-import IntInput from "./IntInput.vue";
+import NumberInput from "./NumberInput.vue";
 
 export default {
   name: "AdvancedSettingsPanel",
-  components: { InfoHeader, ComplexInput, FloatInput, IntInput },
+  components: { InfoHeader, ComplexInput, NumberInput },
   props: {
     configuration: { type: Object, required: true },
   },
@@ -75,18 +74,20 @@ export default {
       </InfoHeader>
       <div class="content">
         <h4>Resolution</h4>
-        <FloatInput
-          :float="configuration.resolutionScale"
+        <NumberInput
+          :value="configuration.resolutionScale"
           :min="0"
           :step="0.1"
-          @update:float="updateResolutionScale"
+          label="Resolution"
+          @update:value="updateResolutionScale"
         />
         <h4>Scale</h4>
-        <FloatInput
-          :float="configuration.coordinatesScale"
+        <NumberInput
+          :value="configuration.coordinatesScale"
           :min="0"
           :step="0.1"
-          @update:float="updateCoordinatesScale"
+          label="Scale"
+          @update:value="updateCoordinatesScale"
         />
         <h4>Center</h4>
         <ComplexInput
@@ -117,24 +118,29 @@ export default {
       </InfoHeader>
       <div class="content">
         <h4>Iterations</h4>
-        <IntInput
-          :int="configuration.nbIterations"
+        <NumberInput
+          :value="configuration.nbIterations"
           :min="1"
           :step="1"
-          @update:int="updateNbIterations"
+          :integerOnly="true"
+          wrongInputMessage="Please enter a valid number of iterations"
+          label="Number of iterations"
+          @update:value="updateNbIterations"
         />
         <h4>Epsilon</h4>
-        <FloatInput
-          :float="configuration.epsilon"
+        <NumberInput
+          :value="configuration.epsilon"
           :min="0"
           :step="0.000001"
-          @update:float="updateEpsilon"
+          label="Epsilon"
+          @update:value="updateEpsilon"
         />
         <h4>Julia bound</h4>
-        <FloatInput
-          :float="configuration.juliaBound"
+        <NumberInput
+          :value="configuration.juliaBound"
           :step="0.1"
-          @update:float="updateJuliaBound"
+          label="Julia bound"
+          @update:value="updateJuliaBound"
         />
       </div>
     </section>
