@@ -109,21 +109,16 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :centerTitle="true">
-      <template #title>
-        <h2>Function</h2>
-      </template>
-      <template #info>
-        <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
-        <p>
-          By adding, editing and removing coefficients, you can edit a polynomial function (see
-          Coefficients section for more details).
-        </p>
-        <p>
-          By changing the function type, you can change how this polynomial is used in the final
-          function (see Function type section info for more details).
-        </p>
-      </template>
+    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Function">
+      <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
+      <p>
+        By adding, editing and removing coefficients, you can edit a polynomial function (see
+        Coefficients section for more details).
+      </p>
+      <p>
+        By changing the function type, you can change how this polynomial is used in the final
+        function (see Function type section info for more details).
+      </p>
     </InfoHeader>
   </header>
 
@@ -133,29 +128,24 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Function type</h3>
-        </template>
-        <template #info>
-          <p>In this section, you can change the function type. There is two function types:</p>
-          <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Default</span>: The polynomial function is directly
-              used as the final function.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Newton</span>: The final function is the generalized
-              Newton's iteration and the coefficient can be edited (see
-              <a
-                href="https://en.wikipedia.org/wiki/Newton_fractal#Generalization_of_Newton_fractals"
-              >
-                Wikipedia page
-              </a>
-              for more details).
-            </li>
-          </ul>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Function type">
+        <p>In this section, you can change the function type. There is two function types:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Default</span>: The polynomial function is directly used
+            as the final function.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Newton</span>: The final function is the generalized
+            Newton's iteration and the coefficient can be edited (see
+            <a
+              href="https://en.wikipedia.org/wiki/Newton_fractal#Generalization_of_Newton_fractals"
+            >
+              Wikipedia page
+            </a>
+            for more details).
+          </li>
+        </ul>
       </InfoHeader>
       <div class="content">
         <h4>Type</h4>
@@ -178,49 +168,44 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Coefficients</h3>
-        </template>
-        <template #info>
-          <p>In this section, you can:</p>
-          <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
-              Coefficient" button.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
-              in the fields of the coefficient frame.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top
-              right button of the coefficient frame.
-            </li>
-          </ul>
-          <p>In the coefficient frame, you can:</p>
-          <ul class="infoList">
-            <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
-            <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
-          </ul>
-          <p>A coefficient can be of three types:</p>
-          <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Constant</span>: the coefficient is the constant
-              complex number you choose.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
-              which you can edit by choosing its center and radius as well as the duration of one
-              turn.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
-              line. You can edit this line by choosing its starting and ending points as well as the
-              duration of the round trip.
-            </li>
-          </ul>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Coefficients">
+        <p>In this section, you can:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
+            Coefficient" button.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
+            in the fields of the coefficient frame.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top right
+            button of the coefficient frame.
+          </li>
+        </ul>
+        <p>In the coefficient frame, you can:</p>
+        <ul class="infoList">
+          <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
+          <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
+        </ul>
+        <p>A coefficient can be of three types:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Constant</span>: the coefficient is the constant complex
+            number you choose.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
+            which you can edit by choosing its center and radius as well as the duration of one
+            turn.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
+            line. You can edit this line by choosing its starting and ending points as well as the
+            duration of the round trip.
+          </li>
+        </ul>
       </InfoHeader>
       <div>
         <CoefficientItem

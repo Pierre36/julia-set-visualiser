@@ -58,30 +58,20 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :centerTitle="true">
-      <template #title>
-        <h2>Colors</h2>
-      </template>
-      <template #info>
-        <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
-      </template>
+    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Colors">
+      <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
     </InfoHeader>
   </header>
 
   <div class="panelContent">
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Julia</h3>
-        </template>
-        <template #info>
-          <p>
-            In this section, you can change the color of the Julia Set. The color use the HSV color
-            system (see the
-            <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
-            for more details)
-          </p>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Julia">
+        <p>
+          In this section, you can change the color of the Julia Set. The color use the HSV color
+          system (see the
+          <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
+          for more details)
+        </p>
       </InfoHeader>
       <div class="content">
         <h4>Color</h4>
@@ -116,17 +106,12 @@ export default {
       </div>
     </section>
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Fatou</h3>
-        </template>
-        <template #info>
-          <p>In this section, you can change the color of the Fatou Sets.</p>
-          <p>
-            You can choose the color parameters for the each attractor (including infinity). When
-            computing the color, if no attractor is close enough, the default attractor is used.
-          </p>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Fatou">
+        <p>In this section, you can change the color of the Fatou Sets.</p>
+        <p>
+          You can choose the color parameters for the each attractor (including infinity). When
+          computing the color, if no attractor is close enough, the default attractor is used.
+        </p>
       </InfoHeader>
       <div>
         <AttractorItem

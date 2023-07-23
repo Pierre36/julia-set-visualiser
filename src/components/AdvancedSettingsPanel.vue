@@ -42,46 +42,36 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :centerTitle="true">
-      <template #title>
-        <h2>Advanced settings</h2>
-      </template>
-      <template #info>
-        <p>This panel allows to change advanced settings.</p>
-        <p>
-          Be careful when editing those, small changes can greatly affect the results and the
-          performances.
-        </p>
-      </template>
+    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Advanced settings">
+      <p>This panel allows to change advanced settings.</p>
+      <p>
+        Be careful when editing those, small changes can greatly affect the results and the
+        performances.
+      </p>
     </InfoHeader>
   </header>
 
   <div class="panelContent">
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Viewport</h3>
-        </template>
-        <template #info>
-          <p>In this section, you can change the viewport parameters:</p>
-          <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Resolution</span>: This is the resolution of the
-              viewport. A value of 1 means that the resolution of the window is used. In order for
-              any change to the resolution to be applied, the configuration has to be saved and the
-              page reloaded.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Scale</span>: This is the scale of the viewport. A
-              scale of 1 corresponds means the smallest axis of the viewport has a length of 2 (from
-              -1 to 1 if the center of the viewport is 0).
-            </li>
-            <li>
-              <span class="infoListItemTitle">Center</span>: This is the complex number at the
-              center of the viewport. By default, it is 0.
-            </li>
-          </ul>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Viewport">
+        <p>In this section, you can change the viewport parameters:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Resolution</span>: This is the resolution of the
+            viewport. A value of 1 means that the resolution of the window is used. In order for any
+            change to the resolution to be applied, the configuration has to be saved and the page
+            reloaded.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Scale</span>: This is the scale of the viewport. A scale
+            of 1 corresponds means the smallest axis of the viewport has a length of 2 (from -1 to 1
+            if the center of the viewport is 0).
+          </li>
+          <li>
+            <span class="infoListItemTitle">Center</span>: This is the complex number at the center
+            of the viewport. By default, it is 0.
+          </li>
+        </ul>
       </InfoHeader>
       <div class="content">
         <h4>Resolution</h4>
@@ -107,28 +97,23 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader">
-        <template #title>
-          <h3>Computation</h3>
-        </template>
-        <template #info>
-          <p>In this section, you can change the computation parameters:</p>
-          <ul class="infoList">
-            <li>
-              <span class="infoListItemTitle">Iterations</span>: This is the number of iterations of
-              the function for each point.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Epsilon</span>: This is the small number added to the
-              initial complex number to compute the divergence.
-            </li>
-            <li>
-              <span class="infoListItemTitle">Julia bound</span>: This is the bound for the Julia
-              set. All points with a log-divergance lesser than the julia Bound will be considered
-              in the Julia Set.
-            </li>
-          </ul>
-        </template>
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Computation">
+        <p>In this section, you can change the computation parameters:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Iterations</span>: This is the number of iterations of
+            the function for each point.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Epsilon</span>: This is the small number added to the
+            initial complex number to compute the divergence.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Julia bound</span>: This is the bound for the Julia set.
+            All points with a log-divergance lesser than the julia Bound will be considered in the
+            Julia Set.
+          </li>
+        </ul>
       </InfoHeader>
       <div class="content">
         <h4>Iterations</h4>
