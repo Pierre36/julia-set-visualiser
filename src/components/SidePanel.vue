@@ -109,8 +109,4 @@ export default {
 #sidePanel .infoListItemTitle {
   font-weight: 500;
 }
-
-#sidePanel li {
-  margin-bottom: 0.5rem;
-}
 </style>

@@ -4,61 +4,121 @@ export default {
   props: {
     options: { type: Array, default: [] },
     selected: { type: String, default: null },
+    label: { type: String, default: "" },
   },
   emits: ["update:selected"],
   data() {
     return {
-      isOpen: false,
+      popupOpen: false,
+      focusedIndex: 0,
     };
   },
   computed: {
+    selectedOption() {
+      return this.options.find((option) => option.id == this.selected);
+    },
     inputText() {
-      if (this.selected == null) {
+      if (this.selected == null || this.selectedOption == undefined) {
         return "";
-      }
-      try {
-        return this.options.find((option) => option.id == this.selected).text;
-      } catch (_) {
-        return "";
+      } else {
+        return this.selectedOption.text;
       }
     },
     sortedOptions() {
       const sortedOptions = this.options.slice();
-      sortedOptions.sort((optionA, optionB) => {
-        if (optionA.id == this.selected) {
-          return -1;
-        } else if (optionB.id == this.selected) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-      return sortedOptions;
+      return sortedOptions.sort((a, b) => -(a.id == this.selected) + (b.id == this.selected));
+    },
+    focusedOption() {
+      return this.sortedOptions[this.focusedIndex];
     },
   },
   mounted() {
-    document.addEventListener("click", this.closeMenuIfClickIsOutsideMenu);
+    document.addEventListener("click", this.closePopupIfClickIsOutside);
   },
   methods: {
-    closeMenuIfClickIsOutsideMenu(event) {
-      if (this.isOpen) {
-        this.isOpen =
-          this.$refs.menu.contains(event.target) || this.$refs.select.contains(event.target);
+    makeFocusedVisible() {
+      const optionItem = this.$refs.optionItems.find((o) => o.id == this.focusedOption.id);
+      const popup = this.$refs.popup;
+
+      const top = optionItem.offsetTop - popup.scrollTop;
+      const bottom = top + optionItem.clientHeight;
+
+      if (top < 0) {
+        popup.scrollTo(0, optionItem.offsetTop);
+      } else if (bottom > popup.clientHeight) {
+        popup.scrollTo(0, optionItem.offsetTop - popup.clientHeight + optionItem.clientHeight);
       }
+    },
+    closePopupIfClickIsOutside(e) {
+      this.popupOpen &&= this.$refs.popup.contains(e.target) || this.$refs.input.contains(e.target);
+    },
+    openPopup() {
+      this.moveFocusToFirst();
+      this.popupOpen = true;
+    },
+    closePopup() {
+      this.popupOpen = false;
+      this.$refs.input.focus();
+    },
+    moveFocusDown() {
+      this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
+      this.makeFocusedVisible();
+    },
+    moveFocusUp() {
+      this.focusedIndex = (this.focusedIndex + this.options.length - 1) % this.options.length;
+      this.makeFocusedVisible();
+    },
+    moveFocusToFirst() {
+      this.focusedIndex = 0;
+      this.makeFocusedVisible();
+    },
+    moveFocusToLast() {
+      this.focusedIndex = this.options.length - 1;
+      this.makeFocusedVisible();
     },
     selectOption(optionId) {
       this.$emit("update:selected", optionId);
-      this.isOpen = false;
+      this.closePopup();
+    },
+    onDownKeyPressed() {
+      if (!this.popupOpen) {
+        this.openPopup();
+      } else {
+        this.moveFocusDown();
+      }
+    },
+    onClick() {
+      if (!this.popupOpen) {
+        this.openPopup();
+      } else {
+        this.selectOption(this.focusedOption.id);
+      }
     },
   },
 };
 </script>
 
 <template>
-  <div class="wrapper">
-    <button class="input select" ref="select" @click="isOpen = true">
-      <span class="text">{{ inputText }}</span>
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" role="img">
+  <div class="combobox">
+    <button
+      ref="input"
+      class="input"
+      @click="onClick"
+      @keydown.down="onDownKeyPressed"
+      @keydown.enter="onClick"
+      @keydown.up="moveFocusUp"
+      @keydown.escape="closePopup"
+      @keydown.home="moveFocusToFirst"
+      @keydown.end="moveFocusToLast"
+      aria-controls="popup"
+      :aria-expanded="popupOpen"
+      :aria-activedescendant="sortedOptions[focusedIndex].id"
+      :aria-label="label"
+      aria-autocomplete="none"
+      role="combobox"
+    >
+      <span class="input-text">{{ inputText }}</span>
+      <svg class="input-icon" viewBox="0 -960 960 960" role="img">
         <path
           fill="currentColor"
           fill-rule="evenodd"
@@ -66,31 +126,24 @@ export default {
         />
       </svg>
     </button>
-    <ul ref="menu" class="dropdown menu" v-show="isOpen" role="listbox">
+    <ul ref="popup" id="popup" class="popup" v-show="popupOpen" role="listbox">
       <li
-        v-for="option in sortedOptions"
+        ref="optionItems"
+        v-for="(option, index) in sortedOptions"
         :key="option.id"
-        :class="{ selected: option.id == selected }"
+        :id="option.id"
+        :class="{ focused: index == focusedIndex }"
         :aria-selected="option.id == this.selected"
         @click="selectOption(option.id)"
-        tabindex="0"
         role="option"
       >
-        <span class="tick">
-          <svg
-            class="icon"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 -960 960 960"
-            role="img"
-            v-if="option.id == selected"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M378-258q-6 0-11-2t-10-7L176-448q-9-9-9-22t9-22q9-9 21-9t21 9l160 160 363-363q9-9 21.5-9t21.5 9q9 9 9 21.5t-9 21.5L399-267q-5 5-10 7t-11 2Z"
-            />
-          </svg>
-        </span>
+        <svg class="tick" viewBox="0 -960 960 960" role="img">
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M378-258q-6 0-11-2t-10-7L176-448q-9-9-9-22t9-22q9-9 21-9t21 9l160 160 363-363q9-9 21.5-9t21.5 9q9 9 9 21.5t-9 21.5L399-267q-5 5-10 7t-11 2Z"
+          />
+        </svg>
         <span>{{ option.text }}</span>
       </li>
     </ul>
@@ -98,56 +151,90 @@ export default {
 </template>
 
 <style scoped>
-.wrapper {
+.combobox {
   position: relative;
 }
 
-.select {
+.input {
   display: flex;
   width: 100%;
   cursor: pointer;
-  padding-left: 0.5rem;
-  padding-block: 0.25rem;
+  padding: calc(var(--input-padding, 0.5rem) / 2);
+  padding-left: var(--input-padding, 0.5rem);
+  outline: var(--input-outline, none);
+  color: var(--input-color, #000000);
+  background-color: var(--input-background-color, #ffffff);
+  border-width: var(--input-border-width, 1px);
+  border-style: var(--input-border-style, solid);
+  border-color: var(--input-border-color, #000000);
+  border-radius: var(--input-border-radius, 0.25rem);
+  text-align: var(--input-text-align, start);
+  font-family: var(--input-font-family, sans-serif);
 }
-.select .text {
+
+.input:focus-visible {
+  border-color: var(--input-border-color-focus, hsl(210, 70%, 30%));
+}
+
+.input-text {
   flex-grow: 1;
   margin: auto;
   overflow-x: auto;
 }
 
-.select .icon {
+.input-icon {
   min-width: 1.5rem;
   width: 1.5rem;
   margin: auto;
 }
 
-.dropdown {
+.popup {
+  position: absolute;
+  z-index: var(--popup-z-index, 100);
   min-width: 100%;
   max-height: 20rem;
   overflow-y: auto;
   top: 0;
   left: 0;
   margin: 0;
+  background-color: var(--popup-background-color, #ffffff);
+  border-width: var(--popup-border-width, 2px);
+  border-style: var(--popup-border-style, solid);
+  border-color: var(--popup-border-color, #000000);
+  border-radius: var(--popup-border-radius, 0.25rem);
+  padding: var(--popup-padding, 0.25rem);
+}
+
+[role="listbox"] {
+  white-space: nowrap;
+}
+
+[role="option"] {
+  display: flex;
+  gap: 0.4rem;
+  cursor: pointer;
+  color: var(--option-color, #333333);
+  border-radius: var(--option-border-radius, 0.25rem);
+  padding: var(--option-padding, 0.25rem);
+  margin-block: var(--option-margin-block, 0.1rem);
+}
+
+[role="option"].focused,
+[role="option"]:hover {
+  background-color: var(--option-background-color-highlighted, hsl(210, 70%, 60%));
+}
+
+[role="option"][aria-selected="true"] {
+  color: var(--option-color-selected, #000000);
 }
 
 .tick {
   visibility: hidden;
   width: 1.2rem;
   height: 1.2rem;
-  margin-right: 0.3rem;
 }
 
-.menu li.selected .tick {
+[aria-selected="true"] .tick {
   visibility: visible;
-}
-
-.menu li {
-  --option-border-color: transparent;
-  border: 2px solid var(--option-border-color);
-  outline: none;
-}
-
-.menu li:focus-visible {
-  --option-border-color: var(--gray-100);
 }
 </style>

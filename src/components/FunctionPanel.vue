@@ -160,6 +160,7 @@ export default {
       <div class="content">
         <h4>Type</h4>
         <ComboBox
+          label="Function type"
           :options="functionTypeOptions"
           :selected="fractalFunction.functionType"
           @update:selected="updateFunctionType"

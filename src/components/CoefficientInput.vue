@@ -84,7 +84,12 @@ export default {
 <template>
   <div class="container">
     <component :is="heading">Type</component>
-    <ComboBox :options="typeOptions" :selected="type" @update:selected="changeType" />
+    <ComboBox
+      :options="typeOptions"
+      label="Coefficient type"
+      :selected="type"
+      @update:selected="changeType"
+    />
     <template v-if="type == 'CONSTANT'">
       <component :is="heading">Value</component>
       <ComplexInput

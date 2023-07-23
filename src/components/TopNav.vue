@@ -39,6 +39,7 @@ export default {
     <img class="logo" src="/logo.svg" />
     <h1>Julia Set Visualizer</h1>
     <ComboBox
+      label="Configuration"
       :options="configurationOptions"
       :selected="selectedConfigurationId"
       @update:selected="(newSelected) => $emit('update:selectedConfigurationId', newSelected)"

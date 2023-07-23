@@ -145,56 +145,33 @@ a:focus-visible {
   height: 2rem;
 }
 
-/* Dropdown */
+/* Popups */
 
-.dropdown {
-  position: absolute;
-  z-index: 100;
-  color: var(--gray-300);
-  background-color: var(--gray-500);
-  border: 0.15rem solid var(--gray-400);
-  border-radius: 0.25rem;
-  white-space: nowrap;
-  padding: 0.25rem;
+:root {
+  --popup-background-color: var(--gray-500);
+  --popup-border-color: var(--gray-400);
 }
 
-.menu li {
-  display: flex;
-  cursor: pointer;
-  border-radius: 0.25rem;
-  padding: 0.25rem;
+/* Listboxes */
+
+:root {
+  --option-color: var(--gray-300);
+  --option-color-selected: var(--gray-100);
+  --option-background-color-highlighted: var(--blue-200);
 }
 
-.menu li:hover {
-  background-color: var(--blue-200);
+/* Inputs */
+
+:root {
+  --input-color: var(--gray-100);
+  --input-background-color: var(--gray-650);
+  --input-border-color: var(--gray-500);
+  --input-font-family: "Montserrat", sans-serif;
+  --input-border-color-focus: var(--blue-100);
+  --input-border-color-wrong: var(--color-error);
 }
 
-.menu li.selected {
-  color: var(--gray-100);
-}
-
-/* Forms */
-
-.input {
-  outline: none;
-  color: var(--gray-100);
-  background-color: var(--gray-650);
-  border: 1px solid var(--gray-500);
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-  text-align: start;
-  font-family: "Montserrat", sans-serif;
-}
-
-.input:focus-visible {
-  border-color: var(--blue-100);
-}
-
-.wrongInput {
-  border-color: var(--color-error);
-}
-
-/* Scroll bars */
+/* Scrollbars */
 
 @supports (scrollbar-width: thin) {
   * {

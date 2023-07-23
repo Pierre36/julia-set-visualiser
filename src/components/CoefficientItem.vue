@@ -49,6 +49,7 @@ export default {
       <ComboBox
         :options="degreeOptions"
         :selected="degree"
+        label="Coefficient degree"
         @update:selected="(newDegree) => $emit('update:degree', newDegree)"
       />
       <button class="icon-button" @click="$emit('delete:coefficient')">
