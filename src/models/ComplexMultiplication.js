@@ -16,6 +16,9 @@ class ComplexMultiplication {
   constructor(coefficient1, coefficient2) {
     this.coefficient1 = coefficient1;
     this.coefficient2 = coefficient2;
+    if (coefficient1 instanceof Complex && coefficient2 instanceof Complex) {
+      return coefficient1.multipliedByComplex(coefficient2);
+    }
   }
 
   /**
