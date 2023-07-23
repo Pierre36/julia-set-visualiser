@@ -64,7 +64,6 @@ export default {
     <input
       ref="input"
       class="input"
-      :class="{ wrong: wrong }"
       type="number"
       :value="inputValue"
       :aria-valuenow="inputValue"
@@ -141,7 +140,7 @@ export default {
   border-color: var(--input-border-color-focus, hsl(210, 70%, 30%));
 }
 
-.input.wrong {
+.input[aria-invalid="true"] {
   border-color: var(--input-border-color-wrong, #ff0000);
   padding-right: calc(
     var(--buttons-width) + 2 * var(--buttons-margin) + var(--warning-width) + 4px
