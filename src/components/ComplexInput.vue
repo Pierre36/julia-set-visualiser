@@ -5,16 +5,17 @@ export default {
   name: "ComplexInput",
   props: {
     complex: { type: Complex, default: new Complex(0, 0) },
+    label: { type: String, default: "" },
   },
   emits: ["update:complex"],
   data() {
     return {
-      isComplexWrong: false,
+      wrong: false,
     };
   },
   computed: {
     value() {
-      if (this.isComplexWrong) {
+      if (this.wrong) {
         return this.$refs.input.value;
       } else {
         return this.complex.toString();
@@ -25,9 +26,9 @@ export default {
     checkAndUpdate(complexString) {
       try {
         this.$emit("update:complex", Complex.fromString(complexString));
-        this.isComplexWrong = false;
-      } catch (e) {
-        this.isComplexWrong = true;
+        this.wrong = false;
+      } catch (_) {
+        this.wrong = true;
       }
     },
   },
@@ -35,16 +36,19 @@ export default {
 </script>
 
 <template>
-  <div class="inputContainer">
+  <div class="input-container">
     <input
       ref="input"
       class="input"
-      :class="{ wrongInput: isComplexWrong }"
-      :value="value"
       type="text"
+      :value="value"
+      :aria-valuenow="value.toString()"
+      :aria-label="label"
+      :aria-invalid="wrong"
+      role="textbox"
       @change="($event) => checkAndUpdate($event.target.value)"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="isComplexWrong">
+    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="wrong">
       <title>Please enter a valid complex number</title>
       <path
         fill="currentColor"
@@ -56,7 +60,7 @@ export default {
 </template>
 
 <style scoped>
-.inputContainer {
+.input-container {
   --warning-width: 1.2rem;
   --warning-margin: 0.5rem;
   position: relative;
@@ -65,9 +69,25 @@ export default {
 .input {
   width: 100%;
   appearance: textfield;
+  padding: var(--input-padding, 0.5rem);
+  padding-right: calc(var(--buttons-width) + 2 * var(--buttons-margin) + 2px);
+  outline: var(--input-outline, none);
+  color: var(--input-color, #000000);
+  background-color: var(--input-background-color, #ffffff);
+  border-width: var(--input-border-width, 1px);
+  border-style: var(--input-border-style, solid);
+  border-color: var(--input-border-color, #000000);
+  border-radius: var(--input-border-radius, 0.25rem);
+  text-align: var(--input-text-align, start);
+  font-family: var(--input-font-family, sans-serif);
 }
 
-.wrongInput {
+.input:focus-visible {
+  border-color: var(--input-border-color-focus, hsl(210, 70%, 30%));
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--input-border-color-wrong, #ff0000);
   padding-right: calc(var(--warning-width) + var(--warning-margin) + 4px);
 }
 
@@ -75,7 +95,7 @@ export default {
   position: absolute;
   height: 100%;
   width: var(--warning-width);
-  color: var(--color-error);
+  color: var(--input-border-color-wrong, #ff0000);
   margin-right: var(--warning-margin);
   top: 0;
   bottom: 0;
