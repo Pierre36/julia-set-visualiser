@@ -105,7 +105,7 @@ export default {
       class="input"
       @click="onClick"
       @keydown.down="onDownKeyPressed"
-      @keydown.enter="onClick"
+      @keydown.enter.prevent="onClick"
       @keydown.up="moveFocusUp"
       @keydown.escape="closePopup"
       @keydown.home="moveFocusToFirst"
