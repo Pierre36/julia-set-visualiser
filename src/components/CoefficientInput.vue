@@ -94,7 +94,7 @@ export default {
       <component :is="heading">Value</component>
       <ComplexInput
         :complex="coefficient"
-        label="coefficient value"
+        label="Coefficient value"
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
