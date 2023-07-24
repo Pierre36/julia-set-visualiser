@@ -94,12 +94,17 @@ export default {
       <component :is="heading">Value</component>
       <ComplexInput
         :complex="coefficient"
+        label="coefficient value"
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
     <template v-else-if="type == 'CIRCLE'">
       <component :is="heading">Center</component>
-      <ComplexInput :complex="coefficient.center" @update:complex="updateCenter" />
+      <ComplexInput
+        :complex="coefficient.center"
+        label="Circle center"
+        @update:complex="updateCenter"
+      />
       <component :is="heading">Radius</component>
       <NumberInput
         :value="coefficient.radius"
@@ -119,9 +124,9 @@ export default {
     </template>
     <template v-else-if="type == 'LINE'">
       <component :is="heading">Start</component>
-      <ComplexInput :complex="coefficient.start" @update:complex="updateStart" />
+      <ComplexInput :complex="coefficient.start" label="Line start" @update:complex="updateStart" />
       <component :is="heading">End</component>
-      <ComplexInput :complex="coefficient.end" @update:complex="updateEnd" />
+      <ComplexInput :complex="coefficient.end" label="Line end" @update:complex="updateEnd" />
       <component :is="heading">Duration</component>
       <NumberInput
         :value="durationSecond"

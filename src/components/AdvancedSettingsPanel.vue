@@ -92,6 +92,7 @@ export default {
         <h4>Center</h4>
         <ComplexInput
           :complex="configuration.coordinatesCenter"
+          label="Coordinates center"
           @update:complex="updateCoordinatesCenter"
         />
       </div>

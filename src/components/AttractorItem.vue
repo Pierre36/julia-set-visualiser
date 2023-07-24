@@ -52,7 +52,11 @@ export default {
     <h4 v-else-if="isInfinity" class="span-2 textAttractor">Divergence to Infinty</h4>
     <div v-else class="attractor span-2">
       <h4>Attractor</h4>
-      <ComplexInput :complex="attractor.complex" @update:complex="updateComplex" />
+      <ComplexInput
+        :complex="attractor.complex"
+        label="Attractor"
+        @update:complex="updateComplex"
+      />
       <button class="icon-button" @click="$emit('delete:attractor')">
         <svg class="icon" viewBox="100 -860 760 760" role="img">
           <title>Remove attractor</title>
