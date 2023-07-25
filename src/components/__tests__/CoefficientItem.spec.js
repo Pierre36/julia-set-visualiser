@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import { Complex } from "../../models/Complex";
-import { ComplexCircle } from "../../models/ComplexCircle";
-import { ComplexLine } from "../../models/ComplexLine";
 
 import CoefficientInput from "../CoefficientInput.vue";
 import CoefficientItem from "../CoefficientItem.vue";
