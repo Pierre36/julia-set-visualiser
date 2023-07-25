@@ -9,7 +9,7 @@ export default {
   name: "CoefficientItem",
   components: { ComboBox, CoefficientInput },
   props: {
-    degree: { type: String, required: true },
+    degree: { type: Number, required: true },
     coefficient: {
       type: [Complex, ComplexCircle, ComplexLine],
       required: true,
@@ -19,24 +19,9 @@ export default {
   emits: ["update:degree", "update:coefficient", "delete:coefficient"],
   computed: {
     degreeOptions() {
-      const options = [];
-      this.availablePowers.forEach((power) => {
-        options.push({ id: power, text: power });
-      });
-      options.push({ id: this.degree, text: this.degree });
-      return options;
-    },
-    type() {
-      if (this.coefficient instanceof ComplexCircle) {
-        return "CIRCLE";
-      } else if (this.coefficient instanceof ComplexLine) {
-        return "LINE";
-      } else {
-        return "CONSTANT";
-      }
-    },
-    durationSecond() {
-      return this.coefficient.duration / 1000;
+      return this.availablePowers
+        .map((power) => ({ id: power, text: power }))
+        .concat({ id: this.degree.toString(), text: this.degree.toString() });
     },
   },
 };
@@ -48,11 +33,11 @@ export default {
       <span>Degree</span>
       <ComboBox
         :options="degreeOptions"
-        :selected="degree"
+        :selected="degree.toString()"
         label="Coefficient degree"
         @update:selected="(newDegree) => $emit('update:degree', newDegree)"
       />
-      <button class="icon-button" @click="$emit('delete:coefficient')">
+      <button ref="removeButton" class="icon-button" @click="$emit('delete:coefficient')">
         <svg class="icon" viewBox="100 -860 760 760" role="img">
           <title>Remove coefficient</title>
           <path
