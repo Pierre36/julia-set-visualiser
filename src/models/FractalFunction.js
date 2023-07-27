@@ -82,22 +82,27 @@ class FractalFunction {
    * @throws An error if the coefficient should be inserted in the numerator when the function type is NEWTON or DEFAULT.
    */
   setCoefficient(power, inNumerator, coefficient) {
-    if (!inNumerator) {
-      throw Error(
-        "Coefficient should not be inserted in the denominator of NEWTON and DEAULT functions."
-      );
-    }
-    this.numerator.setCoefficient(power, coefficient);
-    if (this.functionType == "NEWTON") {
-      this.newtonNumerator.setCoefficient(
-        power,
-        new ComplexMultiplication(
-          coefficient,
-          this.newtonCoefficient.multipliedBy(-1).plus(Number(power))
-        )
-      );
-      if (power >= 1) {
-        this.denominator.setCoefficient(power - 1, coefficient.multipliedBy(power));
+    if (inNumerator) {
+      this.numerator.setCoefficient(power, coefficient);
+      if (this.functionType == "NEWTON") {
+        this.newtonNumerator.setCoefficient(
+          power,
+          new ComplexMultiplication(
+            coefficient,
+            this.newtonCoefficient.multipliedBy(-1).plus(Number(power))
+          )
+        );
+        if (power >= 1) {
+          this.denominator.setCoefficient(power - 1, coefficient.multipliedBy(power));
+        }
+      }
+    } else {
+      if (this.functionType == "FRACTION") {
+        this.denominator.setCoefficient(power, coefficient);
+      } else {
+        throw Error(
+          "Coefficient should not be inserted in the denominator of NEWTON and DEAULT functions."
+        );
       }
     }
   }
@@ -110,17 +115,22 @@ class FractalFunction {
    * @throws An error if the coefficient should be removed from the numerator when the function type is NEWTON or DEFAULT.
    */
   removeCoefficient(power, inNumerator) {
-    if (!inNumerator) {
-      throw Error(
-        "Coefficient should not be removed from the denominator of NEWTON and DEAULT functions."
-      );
-    }
-    this.numerator.removeCoefficient(power);
-    if (this.functionType == "NEWTON") {
-      if (power >= 1) {
-        this.denominator.removeCoefficient(power - 1);
+    if (inNumerator) {
+      this.numerator.removeCoefficient(power);
+      if (this.functionType == "NEWTON") {
+        if (power >= 1) {
+          this.denominator.removeCoefficient(power - 1);
+        }
+        this.newtonNumerator.removeCoefficient(power);
       }
-      this.newtonNumerator.removeCoefficient(power);
+    } else {
+      if (this.functionType == "FRACTION") {
+        this.denominator.removeCoefficient(power);
+      } else {
+        throw Error(
+          "Coefficient should not be removed from the denominator of NEWTON and DEAULT functions."
+        );
+      }
     }
   }
 
@@ -178,18 +188,19 @@ class FractalFunction {
    * @throws An error if the new function type is incorrect.
    */
   setFunctionType(newFunctionType) {
-    // TODO
     this.functionType = newFunctionType;
     if (newFunctionType == "NEWTON") {
       this.newtonCoefficient = new Complex(1, 0);
       this.denominator = this.numerator.getDerivative();
       this.newtonNumerator = this.numerator.getNewtonNumerator(this.newtonCoefficient);
-    } else if (newFunctionType == "DEFAULT") {
+    } else if (newFunctionType == "DEFAULT" || newFunctionType == "FRACTION") {
       this.denominator = new Polynomial({ 0: new Complex(1, 0) });
       this.newtonCoefficient = new Complex(0, 0);
       this.newtonNumerator = new Polynomial();
     } else {
-      throw Error(`The function type must be "DEFAULT" or "NEWTON", got ${newFunctionType}`);
+      throw Error(
+        `The function type must be "DEFAULT", "NEWTON" or "FRACTION", got ${newFunctionType}`
+      );
     }
   }
 
@@ -215,5 +226,58 @@ class FractalFunction {
       this.functionType,
       this.newtonCoefficient.copy()
     );
+  }
+
+  /**
+   * Computes a MathML representation of the fractal function.
+   *
+   * @returns {String} A MathML representation of the fractal function.
+   */
+  toMathML() {
+    // Initialize equation
+    let mathML = "<math display='block'>";
+
+    // Prepare useful bit of equations
+    let ofz = "<mo form='prefix' stretchy='false'>(</mo>";
+    ofz += "<mi>z</mi>";
+    ofz += "<mo form='postfix' stretchy='false'>)</mo>";
+    const p = "<mi>P</mi>";
+    const dp = "<msup>" + p + "<mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup>";
+    const q = "<mi>Q</mi>";
+
+    // Add quantifier
+    mathML += "<mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo>";
+    mathML += "<mspace width='1em'/></mrow>";
+
+    // Add function
+    mathML += "<mrow><mi>f</mi>" + ofz + "<mo>=</mo></mrow>";
+    if (this.functionType != "DEFAULT") {
+      if (this.functionType == "NEWTON") {
+        mathML += "<mi>z</mi><mo>-</mo><mi>a</mi>";
+      }
+      mathML += "<mfrac>";
+      mathML += "<mrow>" + p + ofz + "</mrow>";
+      if (this.functionType == "NEWTON") {
+        mathML += "<mrow>" + dp + ofz + "</mrow>";
+      } else {
+        mathML += "<mrow>" + q + ofz + "</mrow>";
+      }
+      mathML += "</mfrac>";
+      mathML += "</math>";
+      mathML += "<math display='block'>";
+      mathML += "<mrow><mtext>with</mtext><mspace width='0.5em'/>" + p + ofz + "<mo>=</mo></mrow>";
+      mathML += this.numerator.toMathML();
+      if (this.functionType == "FRACTION") {
+        mathML += "</math><math display='block'>";
+        mathML += "<mrow><mtext>and</mtext><mspace width='0.5em'/>" + q + ofz + "<mo>=</mo></mrow>";
+        mathML += this.denominator.toMathML();
+      }
+    } else {
+      mathML += this.numerator.toMathML();
+    }
+
+    // End and return equation
+    mathML += "</math>";
+    return mathML;
   }
 }

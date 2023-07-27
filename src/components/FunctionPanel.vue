@@ -25,50 +25,41 @@ export default {
       functionTypeOptions: [
         { id: "DEFAULT", text: "Default" },
         { id: "NEWTON", text: "Newton" },
+        { id: "FRACTION", text: "Fraction" },
       ],
     };
   },
   computed: {
-    equationMathML() {
-      // Initialize equation
-      var equation = "<math display='block'>";
-
-      // Add quantifier
-      equation +=
-        "<mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow>";
-
-      // Add function
-      equation +=
-        "<mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
-      if (this.fractalFunction.functionType == "NEWTON") {
-        equation +=
-          "<mi>z</mi><mo>-</mo><mi>a</mi><mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
-        equation += "</math>";
-        equation += "<math>";
-        equation +=
-          "<mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
-      }
-      equation += this.fractalFunction.numerator.toMathML();
-
-      // End and return equation
-      equation += "</math>";
-      return equation;
+    numeratorCoefficientsList() {
+      return this.fractalFunction.numerator.getCoefficientPowers().map((degree) => ({
+        degree: degree,
+        coefficient: this.fractalFunction.getCoefficient(degree, true),
+      }));
     },
-    coefficientsList() {
-      let coefficientsList = [];
-      this.fractalFunction.numerator.getCoefficientPowers().forEach((degree) => {
-        coefficientsList.push({
-          degree: degree,
-          coefficient: this.fractalFunction.numerator.getCoefficient(degree),
-        });
-      });
-      return coefficientsList;
+    denominatorCoefficientsList() {
+      return this.fractalFunction.denominator.getCoefficientPowers().map((degree) => ({
+        degree: degree,
+        coefficient: this.fractalFunction.getCoefficient(degree, false),
+      }));
     },
-    availablePowers() {
+    numeratorAvailablePowers() {
       return this.fractalFunction.numerator.getAvailablePowers();
     },
-    canAddCoefficient() {
-      return this.availablePowers.length != 0;
+    denominatorAvailablePowers() {
+      return this.fractalFunction.denominator.getAvailablePowers();
+    },
+    canAddCoefficientToNumerator() {
+      return this.numeratorAvailablePowers.length != 0;
+    },
+    canAddCoefficientToDenominator() {
+      return this.denominatorAvailablePowers.length != 0;
+    },
+    numeratorHeading() {
+      if (this.fractalFunction.functionType == "FRACTION") {
+        return "Numerator coefficients";
+      } else {
+        return "Coefficients";
+      }
     },
   },
   methods: {
@@ -80,27 +71,27 @@ export default {
       this.fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
       this.$emit("change");
     },
-    updateDegree(previousDegree, newDegree) {
+    updateDegree(previousDegree, newDegree, inNumerator) {
       if (previousDegree != newDegree) {
         this.fractalFunction.setCoefficient(
           newDegree,
-          true,
-          this.fractalFunction.getCoefficient(previousDegree, true).copy()
+          inNumerator,
+          this.fractalFunction.getCoefficient(previousDegree, inNumerator).copy()
         );
-        this.fractalFunction.removeCoefficient(previousDegree, true);
+        this.fractalFunction.removeCoefficient(previousDegree, inNumerator);
         this.$emit("change");
       }
     },
-    updateCoefficient(power, newCoefficient) {
-      this.fractalFunction.setCoefficient(power, true, newCoefficient);
+    updateCoefficient(power, newCoefficient, inNumerator) {
+      this.fractalFunction.setCoefficient(power, inNumerator, newCoefficient);
       this.$emit("change");
     },
-    deleteCoefficient(power) {
-      this.fractalFunction.removeCoefficient(power, true);
+    deleteCoefficient(power, inNumerator) {
+      this.fractalFunction.removeCoefficient(power, inNumerator);
       this.$emit("change");
     },
-    addCoefficient() {
-      this.fractalFunction.setCoefficient(this.availablePowers[0], true, new Complex(0, 0));
+    addCoefficient(power, inNumerator) {
+      this.fractalFunction.setCoefficient(power, inNumerator, new Complex(0, 0));
       this.$emit("change");
     },
   },
@@ -112,24 +103,24 @@ export default {
     <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Function">
       <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
       <p>
-        By adding, editing and removing coefficients, you can edit a polynomial function (see
-        Coefficients section for more details).
+        By adding, editing and removing coefficients, you can edit a polynomial or fractional
+        function (see Coefficients section for more details).
       </p>
       <p>
-        By changing the function type, you can change how this polynomial is used in the final
-        function (see Function type section info for more details).
+        By changing the function type, you can change the type of the final function (see Function
+        type section info for more details).
       </p>
     </InfoHeader>
   </header>
 
   <div class="panelContent">
     <section>
-      <div class="equation" v-html="equationMathML"></div>
+      <div class="equation" v-html="fractalFunction.toMathML()"></div>
     </section>
 
     <section>
       <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Function type">
-        <p>In this section, you can change the function type. There is two function types:</p>
+        <p>In this section, you can change the function type. There is 3 function types:</p>
         <ul class="infoList">
           <li>
             <span class="infoListItemTitle">Default</span>: The polynomial function is directly used
@@ -144,6 +135,10 @@ export default {
               Wikipedia page
             </a>
             for more details).
+          </li>
+          <li>
+            <span class="infoListItemTitle">Fraction</span>: The function is a fraction of two
+            polynomials.
           </li>
         </ul>
       </InfoHeader>
@@ -168,7 +163,7 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Coefficients">
+      <InfoHeader class="sectionHeader" :headingLevel="3" :headingText="numeratorHeading">
         <p>In this section, you can:</p>
         <ul class="infoList">
           <li>
@@ -210,21 +205,83 @@ export default {
       <div>
         <CoefficientItem
           class="coefficientItem"
-          v-for="coef in coefficientsList"
+          v-for="coef in numeratorCoefficientsList"
           :key="coef.degree"
-          :degree="coef.degree"
+          :degree="Number(coef.degree)"
           :coefficient="coef.coefficient"
-          :availablePowers="availablePowers"
-          @update:degree="(newDegree) => updateDegree(coef.degree, newDegree)"
-          @update:coefficient="(newCoefficient) => updateCoefficient(coef.degree, newCoefficient)"
-          @delete:coefficient="deleteCoefficient(coef.degree)"
+          :availablePowers="numeratorAvailablePowers"
+          @update:degree="(newDegree) => updateDegree(coef.degree, newDegree, true)"
+          @update:coefficient="(newCoef) => updateCoefficient(coef.degree, newCoef, true)"
+          @delete:coefficient="deleteCoefficient(coef.degree, true)"
         />
         <IconTextButton
-          v-if="canAddCoefficient"
-          id="addCoefficientButton"
+          v-if="canAddCoefficientToNumerator"
+          id="addCoefficientToNumeratorButton"
           svgPath="M453-446v136q0 12.75 8.675 21.375 8.676 8.625 21.5 8.625 12.825 0 21.325-8.625T513-310v-136h137q12.75 0 21.375-8.675 8.625-8.676 8.625-21.5 0-12.825-8.625-21.325T650-506H513v-144q0-12.75-8.675-21.375-8.676-8.625-21.5-8.625-12.825 0-21.325 8.625T453-650v144H310q-12.75 0-21.375 8.675-8.625 8.676-8.625 21.5 0 12.825 8.625 21.325T310-446h143Zm27.266 366q-82.734 0-155.5-31.5t-127.266-86q-54.5-54.5-86-127.341Q80-397.681 80-480.5q0-82.819 31.5-155.659Q143-709 197.5-763t127.341-85.5Q397.681-880 480.5-880q82.819 0 155.659 31.5Q709-817 763-763t85.5 127Q880-563 880-480.266q0 82.734-31.5 155.5T763-197.684q-54 54.316-127 86Q563-80 480.266-80Zm.234-60Q622-140 721-239.5t99-241Q820-622 721.188-721 622.375-820 480-820q-141 0-240.5 98.812Q140-622.375 140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"
           text="New Coefficient"
-          @click="addCoefficient"
+          @click="addCoefficient(numeratorAvailablePowers[0], true)"
+        />
+      </div>
+    </section>
+
+    <section v-if="fractalFunction.functionType == 'FRACTION'">
+      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Denominator coefficients">
+        <p>In this section, you can:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
+            Coefficient" button.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
+            in the fields of the coefficient frame.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top right
+            button of the coefficient frame.
+          </li>
+        </ul>
+        <p>In the coefficient frame, you can:</p>
+        <ul class="infoList">
+          <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
+          <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
+        </ul>
+        <p>A coefficient can be of three types:</p>
+        <ul class="infoList">
+          <li>
+            <span class="infoListItemTitle">Constant</span>: the coefficient is the constant complex
+            number you choose.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
+            which you can edit by choosing its center and radius as well as the duration of one
+            turn.
+          </li>
+          <li>
+            <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
+            line. You can edit this line by choosing its starting and ending points as well as the
+            duration of the round trip.
+          </li>
+        </ul>
+      </InfoHeader>
+      <div>
+        <CoefficientItem
+          class="coefficientItem"
+          v-for="coef in denominatorCoefficientsList"
+          :key="coef.degree"
+          :degree="Number(coef.degree)"
+          :coefficient="coef.coefficient"
+          :availablePowers="denominatorAvailablePowers"
+          @update:degree="(newDegree) => updateDegree(coef.degree, newDegree, false)"
+          @update:coefficient="(newCoef) => updateCoefficient(coef.degree, newCoef, false)"
+          @delete:coefficient="deleteCoefficient(coef.degree, false)"
+        />
+        <IconTextButton
+          v-if="canAddCoefficientToDenominator"
+          id="addCoefficientToDenominatorButton"
+          svgPath="M453-446v136q0 12.75 8.675 21.375 8.676 8.625 21.5 8.625 12.825 0 21.325-8.625T513-310v-136h137q12.75 0 21.375-8.675 8.625-8.676 8.625-21.5 0-12.825-8.625-21.325T650-506H513v-144q0-12.75-8.675-21.375-8.676-8.625-21.5-8.625-12.825 0-21.325 8.625T453-650v144H310q-12.75 0-21.375 8.675-8.625 8.676-8.625 21.5 0 12.825 8.625 21.325T310-446h143Zm27.266 366q-82.734 0-155.5-31.5t-127.266-86q-54.5-54.5-86-127.341Q80-397.681 80-480.5q0-82.819 31.5-155.659Q143-709 197.5-763t127.341-85.5Q397.681-880 480.5-880q82.819 0 155.659 31.5Q709-817 763-763t85.5 127Q880-563 880-480.266q0 82.734-31.5 155.5T763-197.684q-54 54.316-127 86Q563-80 480.266-80Zm.234-60Q622-140 721-239.5t99-241Q820-622 721.188-721 622.375-820 480-820q-141 0-240.5 98.812Q140-622.375 140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"
+          text="New Coefficient"
+          @click="addCoefficient(denominatorAvailablePowers[0], false)"
         />
       </div>
     </section>
@@ -249,7 +306,8 @@ export default {
   margin-bottom: 0.75rem;
 }
 
-#addCoefficientButton {
+#addCoefficientToNumeratorButton,
+#addCoefficientToDenominatorButton {
   width: 100%;
 }
 </style>

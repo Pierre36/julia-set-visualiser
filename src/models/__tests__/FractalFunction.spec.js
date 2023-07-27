@@ -161,7 +161,7 @@ describe("setCoefficient", () => {
     );
   });
 
-  it("properly throws errors when setting coefficients in the denominator", () => {
+  it("properly throws errors when setting coefficients in the denominator for DEFAULT and NEWTON", () => {
     const fractalFunction = new FractalFunction();
 
     expect(() => fractalFunction.setCoefficient(2, false, new Complex(3, 6))).toThrowError();
@@ -218,6 +218,32 @@ describe("setCoefficient", () => {
       )
     );
   });
+
+  it("properly sets coefficients in denominator in fraction function", () => {
+    const numerator = new Polynomial();
+    const denominator = new Polynomial();
+    const functionType = "FRACTION";
+    const newtonCoefficient = new Complex(0, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    const coefficient = new Complex(3, 6);
+    fractalFunction.setCoefficient(2, false, coefficient);
+
+    expect(fractalFunction).toEqual(
+      new FractalFunction(
+        numerator,
+        new Polynomial({ 2: coefficient }),
+        functionType,
+        newtonCoefficient
+      )
+    );
+  });
 });
 
 describe("removeCoefficient", () => {
@@ -241,7 +267,7 @@ describe("removeCoefficient", () => {
     );
   });
 
-  it("properly throws errors when removing coefficients from the denominator", () => {
+  it("properly throws errors when removing coefficients from the denominator for DEFAULT and NEWTON", () => {
     const fractalFunction = new FractalFunction();
 
     expect(() => fractalFunction.removeCoefficient(2, false)).toThrowError();
@@ -284,6 +310,26 @@ describe("removeCoefficient", () => {
 
     expect(fractalFunction).toEqual(
       new FractalFunction(new Polynomial(), new Polynomial(), functionType, newtonCoefficient)
+    );
+  });
+
+  it("properly removes coefficients in denominator of fraction function", () => {
+    const numerator = new Polynomial();
+    const denominator = new Polynomial({ 2: new Complex(3, 6) });
+    const functionType = "FRACTION";
+    const newtonCoefficient = new Complex(0, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    fractalFunction.removeCoefficient(2, false);
+
+    expect(fractalFunction).toEqual(
+      new FractalFunction(numerator, new Polynomial(), functionType, newtonCoefficient)
     );
   });
 });
@@ -558,5 +604,81 @@ describe("copy", () => {
 
     expect(fractalFunction.copy()).toEqual(fractalFunction);
     expect(fractalFunction.copy()).not.toBe(fractalFunction);
+  });
+});
+
+describe("toMathML", () => {
+  it("properly returns the mathML string for default function", () => {
+    const numerator = new Polynomial({ 2: new Complex(3, 6) });
+    const denominator = new Polynomial();
+    const functionType = "DEFAULT";
+    const newtonCoefficient = new Complex(1, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    let expectedMathML =
+      "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += numerator.toMathML();
+    expectedMathML += "</math>";
+    expect(fractalFunction.toMathML()).toBe(expectedMathML);
+  });
+
+  it("properly returns the mathML string for Newton function", () => {
+    const numerator = new Polynomial({ 2: new Complex(3, 6) });
+    const denominator = new Polynomial({ 1: new Complex(6, 12) });
+    const functionType = "NEWTON";
+    const newtonCoefficient = new Complex(1, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    let expectedMathML =
+      "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML +=
+      "<mi>z</mi><mo>-</mo><mi>a</mi><mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+    expectedMathML += "</math>";
+    expectedMathML +=
+      "<math display='block'><mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += numerator.toMathML();
+    expectedMathML += "</math>";
+    expect(fractalFunction.toMathML()).toBe(expectedMathML);
+  });
+
+  it("properly returns the mathML string for fraction function", () => {
+    const numerator = new Polynomial({ 2: new Complex(3, 6) });
+    const denominator = new Polynomial({ 1: new Complex(6, 12) });
+    const functionType = "FRACTION";
+    const newtonCoefficient = new Complex(1, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    let expectedMathML =
+      "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML +=
+      "<mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><mi>Q</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+    expectedMathML += "</math>";
+    expectedMathML +=
+      "<math display='block'><mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += numerator.toMathML();
+    expectedMathML += "</math>";
+    expectedMathML +=
+      "<math display='block'><mrow><mtext>and</mtext><mspace width='0.5em'/><mi>Q</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += denominator.toMathML();
+    expectedMathML += "</math>";
+    expect(fractalFunction.toMathML()).toBe(expectedMathML);
   });
 });
