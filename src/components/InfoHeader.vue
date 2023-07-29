@@ -19,11 +19,6 @@ export default {
   methods: {
     toggleInfo() {
       this.expanded = !this.expanded;
-      if (this.expanded) {
-        this.$refs.infoPanel.setAttribute("data-state", "expanded");
-      } else {
-        this.$refs.infoPanel.setAttribute("data-state", "collapsed");
-      }
     },
   },
 };
@@ -36,7 +31,7 @@ export default {
         {{ headingText }}
       </component>
       <div class="button-container">
-        <button class="icon-button" @click="toggleInfo" :aria-expanded="expanded">
+        <button class="icon-button" @click="toggleInfo" :aria-expanded="expanded" role="button">
           <svg viewBox="0 -960 960 960" role="img">
             <title>Info</title>
             <path
@@ -48,15 +43,19 @@ export default {
         </button>
       </div>
     </div>
-    <div ref="infoPanel" class="info-panel">
-      <div class="info-container">
-        <slot></slot>
-      </div>
+    <div class="info-panel" :data-expanded="expanded">
+      <Transition>
+        <div class="info-container" v-if="expanded">
+          <slot></slot>
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* HEADER */
+
 .info-header {
   --animation-duration: 300ms;
   --button-container-width: 2rem;
@@ -77,6 +76,8 @@ export default {
   margin-left: var(--button-container-width);
 }
 
+/* BUTTON */
+
 .button-container {
   text-align: center;
   width: var(--button-container-width);
@@ -91,74 +92,41 @@ export default {
   height: 1.7rem;
 }
 
-.info-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows var(--animation-duration) ease-in-out;
-}
-
-.info-container {
-  overflow: hidden;
-  padding-inline: 0.5rem;
-  border-radius: 0.25rem;
-  border-color: var(--gray-100);
-  border-style: solid;
-  border-width: 0px;
-}
-
-.info-panel[data-state="collapsed"] .info-container {
-  animation: collapseInfoContainer var(--animation-duration) ease-in-out forwards;
-}
-
-.info-button[aria-expanded="true"] {
+.icon-button[aria-expanded="true"] {
   color: var(--gray-100);
 }
 
-.info-panel[data-state="expanded"] {
+/* INFO PANEL */
+
+.info-panel {
+  display: grid;
+  transition: grid-template-rows var(--animation-duration) ease-in-out;
+}
+
+.info-panel[data-expanded="false"] {
+  grid-template-rows: 0fr;
+}
+
+.info-panel[data-expanded="true"] {
   grid-template-rows: 1fr;
 }
 
-.info-panel[data-state="expanded"] .info-container {
-  animation: expandInfoContainer var(--animation-duration) ease-in-out forwards;
+/* INFO CONTAINER */
+
+.info-container {
+  overflow: hidden;
+  padding: 0.5rem;
 }
 
-@keyframes expandInfoContainer {
-  0% {
-    opacity: 0;
-    margin-top: 0rem;
-    padding-block: 0rem;
-    border-width: 0px;
-  }
-  10% {
-    opacity: 0;
-    border-right-width: 2px;
-    border-left-width: 2px;
-  }
-  100% {
-    opacity: 1;
-    margin-top: 0.5rem;
-    padding-block: 0.5rem;
-    border-width: 2px;
-  }
+.v-enter-active,
+.v-leave-active {
+  transition: opacity var(--animation-duration) ease-in-out,
+    padding-block var(--animation-duration) ease-in-out;
 }
 
-@keyframes collapseInfoContainer {
-  0% {
-    opacity: 1;
-    margin-top: 0.5rem;
-    padding-block: 0.5rem;
-    border-width: 2px;
-  }
-  90% {
-    opacity: 0;
-    border-right-width: 2px;
-    border-left-width: 2px;
-  }
-  100% {
-    opacity: 0;
-    margin-top: 0rem;
-    padding-block: 0rem;
-    border-width: 0px;
-  }
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+  padding-block: 0rem;
 }
 </style>
