@@ -3,7 +3,6 @@ precision highp float;
 
 // CONSTANTS
 
-const float PI = 3.1415926538;
 const float ZERO = 0.00000000001;
 const float INFINITY = 10000000000.0;
 
@@ -35,17 +34,6 @@ uniform float attractorsHue[16];
 uniform vec4 attractorsColorParameters[16];
 
 
-// UTILS
-
-bool isZero(float x) {
-  return abs(x) <= ZERO;
-}
-
-bool isInfinity(float x) {
-  return abs(x) >= INFINITY;
-}
-
-
 // COMPLEX OPERATIONS
 
 float complexMod(vec2 z) {
@@ -56,20 +44,12 @@ float complexArg(vec2 z) {
   return atan(z.y, z.x);
 }
 
-bool isComplexZero(vec2 z) {
-  return complexMod(z) <= ZERO;
-}
-
 bool isComplexInfinity(vec2 z) {
   return complexMod(z) >= INFINITY;
 }
 
-vec2 complexMultiplication(vec2 z1, vec2 z2) {
-  return vec2(z1.x * z2.x - z1.y * z2.y, z1.x * z2.y + z1.y * z2.x);
-}
-
-vec2 complexInverse(vec2 z) {
-  return vec2(z.x, -z.y) / dot(z, z);
+vec2 complexDivision(vec2 z1, vec2 z2) {
+  return  vec2(z1.x * z2.x + z1.y * z2.y, z1.y * z2.x - z1.x * z2.y) / dot(z2, z2);
 }
 
 vec2 complexPowerAndMultiplication(vec2 z, float power, vec2 factor) {
@@ -100,7 +80,7 @@ vec2 applyFunction(vec2 z) {
   for (int c = 0; c < denominatorNbCoefficients; ++c) {
     denominator += complexPowerAndMultiplication(z, denominatorCoefficients[c].z, denominatorCoefficients[c].xy);
   }
-  return complexMultiplication(numerator, complexInverse(denominator));
+  return complexDivision(numerator, denominator);
 }
 
 float riemannSpheredistance(vec2 z, vec2 w) {
