@@ -29,7 +29,7 @@ describe("Render", () => {
     // Check the title is correct
     expect(degreeTitle.text()).toBe("Degree");
 
-    // Check the ComboBox is rendered correcly
+    // Check the ComboBox is rendered correctly
     expect(degreeCombobBox.vm.$props.options).toEqual([
       { id: "1", text: "1" },
       { id: "2", text: "2" },
@@ -48,7 +48,7 @@ describe("Render", () => {
     const degreeDiv = coefficientItem.find(".degreePicker");
     const removeButton = degreeDiv.find({ ref: "removeButton" });
 
-    // Check the button is rendered correcly
+    // Check the button is rendered correctly
     expect(removeButton.find("svg").find("title").text()).toBe("Remove coefficient");
   });
 
@@ -59,7 +59,7 @@ describe("Render", () => {
     // Get the CoefficientInput
     const coefficientInput = coefficientItem.findComponent(CoefficientInput);
 
-    // Check the CoefficientInput is rendered correcly
+    // Check the CoefficientInput is rendered correctly
     expect(coefficientInput.vm.$props.coefficient).toEqual(props.coefficient);
     expect(coefficientInput.vm.$props.level).toEqual(4);
   });
