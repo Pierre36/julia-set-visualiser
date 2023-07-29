@@ -108,7 +108,7 @@ float riemannSpheredistance(vec2 z, vec2 w) {
   float wMod = complexMod(w);
   vec2 zw_ = vec2(z.x * w.x + z.y * w.y, z.y * w.x - w.y * z.x);
   float d = 2.0 * atan(complexMod(zw_ - vec2(wMod * wMod, 0.0)) / (complexMod(zw_ + vec2(1.0, 0.0)) * wMod));
-  return mix(mix(mix(d, 0.0, zMod > INFINITY), 0., wMod > INFINITY), 0., wMod < ZERO);
+  return mix(d, 0.0, wMod < ZERO || wMod > INFINITY || zMod > INFINITY);
 }
 
 
