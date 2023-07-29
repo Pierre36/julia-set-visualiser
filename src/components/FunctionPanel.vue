@@ -113,7 +113,7 @@ export default {
     </InfoHeader>
   </header>
 
-  <div class="panelContent">
+  <div class="panel-content">
     <section>
       <div class="equation" v-html="fractalFunction.toMathML()"></div>
     </section>
@@ -204,7 +204,7 @@ export default {
       </InfoHeader>
       <div>
         <CoefficientItem
-          class="coefficientItem"
+          class="coefficient-item"
           v-for="coef in numeratorCoefficientsList"
           :key="coef.degree"
           :degree="Number(coef.degree)"
@@ -266,7 +266,7 @@ export default {
       </InfoHeader>
       <div>
         <CoefficientItem
-          class="coefficientItem"
+          class="coefficient-item"
           v-for="coef in denominatorCoefficientsList"
           :key="coef.degree"
           :degree="Number(coef.degree)"
@@ -302,7 +302,7 @@ export default {
   grid-column: span 2;
 }
 
-.coefficientItem {
+.coefficient-item {
   margin-bottom: 0.75rem;
 }
 
