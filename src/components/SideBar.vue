@@ -62,10 +62,10 @@ export default {
         @update:currentPanel="updateCurrentPanel"
       />
       <button
-        id="expand-button"
-        class="icon-button"
+        class="icon-button expand-button"
         @click="updateSidePanelCollapsed"
         :aria-expanded="!sidePanelCollapsed"
+        aria-controls="#sidePanel"
         role="button"
       >
         <svg viewBox="0 -960 960 960" role="img">
@@ -100,19 +100,19 @@ export default {
   z-index: 3;
 }
 
-#expand-button {
+.expand-button {
   width: var(--expand-button-height);
   height: var(--expand-button-height);
   rotate: 0deg;
   transition: rotate 1000ms;
 }
 
-#expand-button svg {
+.expand-button svg {
   rotate: 0deg;
   transition: rotate 250ms;
 }
 
-#expand-button[aria-expanded="false"] svg {
+.expand-button[aria-expanded="false"] svg {
   rotate: 180deg;
 }
 </style>
