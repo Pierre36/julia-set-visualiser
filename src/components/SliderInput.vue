@@ -9,65 +9,50 @@ export default {
     min: { type: Number, required: true },
     max: { type: Number, required: true },
     step: { type: Number, required: true },
+    integerOnly: { type: Boolean, default: false },
+    label: { type: String, default: "" },
+    level: { type: Number, default: 4 },
   },
   emits: ["update:value"],
-  data() {
-    return {
-      isValueWrong: false,
-    };
-  },
   computed: {
-    isInt() {
-      return this.step >= 1;
-    },
-    verifiedTextValue() {
-      if (this.isValueWrong) {
-        return this.$refs.textInput.$refs.input.value;
-      } else {
-        return String(this.value);
-      }
+    heading() {
+      return `h${this.level}`;
     },
   },
-  methods: {
-    checkAndUpdate(valueString) {
-      let newValue;
-      if (this.isInt) {
-        newValue = parseInt(valueString);
-      } else {
-        newValue = parseFloat(valueString);
-      }
-      this.isValueWrong = isNaN(newValue) || newValue < this.min || newValue > this.max;
-      if (!this.isValueWrong) {
-        this.$emit("update:value", newValue);
-      }
-    },
-  },
+  methods: {},
 };
 </script>
 
 <template>
   <div class="sliderInput">
-    <slot name="name"></slot>
+    <component :is="heading">{{ label }}</component>
     <NumberInput
-      ref="textInput"
-      :value="verifiedTextValue"
-      :min="min"
-      :max="max"
-      :step="step"
-      :wrongInput="isValueWrong"
-      wrongInputMessage="Please enter a valid integer"
-      label="Value"
-      @change="(newValue) => checkAndUpdate(newValue)"
-    />
-    <input
-      ref="rangeInput"
-      class="rangeInput"
-      type="range"
       :value="value"
       :min="min"
       :max="max"
       :step="step"
-      @input="($event) => checkAndUpdate($event.target.value)"
+      :integerOnly="integerOnly"
+      :label="label"
+      @update:value="(newValue) => $emit('update:value', newValue)"
+    />
+    <input
+      type="range"
+      role="slider"
+      :value="value"
+      :aria-valuenow="value"
+      :min="min"
+      :aria-valuemin="min"
+      :max="max"
+      :aria-valuemax="max"
+      :step="step"
+      :aria-label="label"
+      @keydown.down.prevent="$emit('update:value', value - step)"
+      @keydown.left.prevent="$emit('update:value', value - step)"
+      @keydown.up.prevent="$emit('update:value', value + step)"
+      @keydown.right.prevent="$emit('update:value', value + step)"
+      @keydown.home.prevent="$emit('update:value', min)"
+      @keydown.end.prevent="$emit('update:value', max)"
+      @input="($event) => $emit('update:value', Number($event.target.value))"
     />
   </div>
 </template>
@@ -80,7 +65,7 @@ export default {
   gap: 0.25rem;
 }
 
-.rangeInput {
+input[type="range"] {
   grid-column: span 2;
 }
 </style>

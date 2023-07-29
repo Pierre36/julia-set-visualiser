@@ -74,9 +74,11 @@ export default {
       :min="0"
       :max="360"
       :step="1"
+      :level="4"
+      :integerOnly="true"
+      label="Hue"
       @update:value="updateHue"
-      ><template #name><h4>Hue</h4></template></SliderInput
-    >
+    />
     <h4 class="span-2 subtitle">Saturation</h4>
     <h5>Strength</h5>
     <NumberInput

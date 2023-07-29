@@ -82,27 +82,31 @@ export default {
           :min="0"
           :max="360"
           :step="1"
+          :integerOnly="true"
+          :level="5"
+          label="Hue"
           @update:value="(newHue) => updateJuliaHue(newHue)"
-          ><template #name><h5>Hue</h5></template></SliderInput
-        >
+        />
         <SliderInput
           class="span-2 juliaSliderInput"
           :value="juliaHSV[1]"
           :min="0"
           :max="1"
           :step="0.01"
+          :level="5"
+          label="Sturation"
           @update:value="(newSaturation) => updateJuliaSaturation(newSaturation)"
-          ><template #name><h5>Saturation</h5></template></SliderInput
-        >
+        />
         <SliderInput
           class="span-2 juliaSliderInput"
           :value="juliaHSV[2]"
           :min="0"
           :max="1"
           :step="0.01"
+          :level="5"
+          label="Value"
           @update:value="(newValue) => updateJuliaValue(newValue)"
-          ><template #name><h5>Value</h5></template></SliderInput
-        >
+        />
       </div>
     </section>
     <section>
