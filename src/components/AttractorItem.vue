@@ -49,7 +49,7 @@ export default {
 <template>
   <div class="attractorItem">
     <h4 v-if="isDefault" class="span-2 textAttractor">Default (no attractor)</h4>
-    <h4 v-else-if="isInfinity" class="span-2 textAttractor">Divergence to Infinty</h4>
+    <h4 v-else-if="isInfinity" class="span-2 textAttractor">Divergence to Infinity</h4>
     <div v-else class="attractor span-2">
       <h4>Attractor</h4>
       <ComplexInput
