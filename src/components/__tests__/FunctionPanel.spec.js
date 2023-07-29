@@ -326,6 +326,7 @@ describe("Interactions", () => {
 
     // Check the function type has changed accordingly
     expect(props.fractalFunction.functionType).toBe(newFunctionType);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("changes the newton coefficient with the newton coefficient input", () => {
@@ -345,6 +346,7 @@ describe("Interactions", () => {
 
     // Check the newton coefficient has changed accordingly
     expect(props.fractalFunction.newtonCoefficient).toEqual(newNewtonCoefficient);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("changes the numerator coefficient degree with the coefficient item", () => {
@@ -365,6 +367,7 @@ describe("Interactions", () => {
     // Check the numerator has changed accordingly
     expect(props.fractalFunction.getCoefficient(oldDegree, true)).toBeNull();
     expect(props.fractalFunction.getCoefficient(newDegree, true)).toEqual(oldCoefficient);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("changes the numerator coefficient value with the coefficient item", () => {
@@ -382,6 +385,7 @@ describe("Interactions", () => {
 
     // Check the numerator has changed accordingly
     expect(props.fractalFunction.getCoefficient(0, true)).toEqual(newCoefficient);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("deletes the numerator coefficient with the coefficient item", () => {
@@ -398,6 +402,7 @@ describe("Interactions", () => {
 
     // Check the numerator has changed accordingly
     expect(props.fractalFunction.getCoefficient(0, true)).toBeNull();
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("adds a numerator coefficient with the add button", () => {
@@ -414,6 +419,7 @@ describe("Interactions", () => {
 
     // Check the numerator has changed accordingly
     expect(props.fractalFunction.getCoefficient(1, true)).toEqual(new Complex(0, 0));
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("changes the denominator coefficient degree with the coefficient item", () => {
@@ -435,6 +441,7 @@ describe("Interactions", () => {
     // Check the denominator has changed accordingly
     expect(props.fractalFunction.getCoefficient(oldDegree, false)).toBeNull();
     expect(props.fractalFunction.getCoefficient(newDegree, false)).toEqual(oldCoefficient);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("changes the denominator coefficient value with the coefficient item", () => {
@@ -453,6 +460,7 @@ describe("Interactions", () => {
 
     // Check the denominator has changed accordingly
     expect(props.fractalFunction.getCoefficient(0, false)).toEqual(newCoefficient);
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("deletes the denominator coefficient with the coefficient item", () => {
@@ -470,6 +478,7 @@ describe("Interactions", () => {
 
     // Check the denominator has changed accordingly
     expect(props.fractalFunction.getCoefficient(0, false)).toBeNull();
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("adds a denominator coefficient with the add button", () => {
@@ -487,6 +496,7 @@ describe("Interactions", () => {
 
     // Check the denominator has changed accordingly
     expect(props.fractalFunction.getCoefficient(1, false)).toEqual(new Complex(0, 0));
+    expect(functionPanel.emitted().change).toBeDefined();
   });
 
   it("does not change the coefficient degree with the coefficient item if the degree is the same as before", () => {
