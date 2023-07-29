@@ -39,9 +39,9 @@ export default {
     }
   },
   methods: {
-    updateSidePanelCollapsed(collapsed) {
-      this.sidePanelCollapsed = collapsed;
-      localStorage.setItem("sidePanelCollapsed", JSON.stringify(collapsed));
+    updateSidePanelCollapsed() {
+      this.sidePanelCollapsed = !this.sidePanelCollapsed;
+      localStorage.setItem("sidePanelCollapsed", JSON.stringify(this.sidePanelCollapsed));
     },
     updateCurrentPanel(newPanel) {
       this.currentPanel = newPanel;
@@ -51,14 +51,34 @@ export default {
 </script>
 
 <template>
-  <div id="sideBar">
-    <SideNav
-      :currentPanel="currentPanel"
-      :panels="panels"
-      :sidePanelCollapsed="sidePanelCollapsed"
-      @update:sidePanelCollapsed="updateSidePanelCollapsed"
-      @update:currentPanel="updateCurrentPanel"
-    />
+  <div id="sidebar">
+    <div id="sidenav">
+      <SideNav
+        :currentPanel="currentPanel"
+        :panels="panels"
+        :sidePanelCollapsed="sidePanelCollapsed"
+        label="Settings panels"
+        @update:sidePanelCollapsed="updateSidePanelCollapsed"
+        @update:currentPanel="updateCurrentPanel"
+      />
+      <button
+        id="expand-button"
+        class="icon-button"
+        @click="updateSidePanelCollapsed"
+        :aria-expanded="!sidePanelCollapsed"
+        role="button"
+      >
+        <svg viewBox="0 -960 960 960" role="img">
+          <title v-if="sidePanelCollapsed">Expand side panel</title>
+          <title v-else>Collapse side panel</title>
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M685-262 487-459q-5-5-7-10t-2-11q0-6 2-11.5t7-10.5l198-198q9-9 21-8.5t21 9.5q9 9 9 21t-9 21L550-480l177 177q9 9 9 20.5t-9 20.5q-9 9-21 9t-21-9Zm-253 0L234-459q-5-5-7-10t-2-11q0-6 2-11.5t7-10.5l198-198q9-9 21-8.5t21 9.5q9 9 9 21t-9 21L297-480l177 177q9 9 9 20.5t-9 20.5q-9 9-21 9t-21-9Z"
+          />
+        </svg>
+      </button>
+    </div>
     <SidePanel
       :collapsed="sidePanelCollapsed"
       :currentPanel="currentPanel"
@@ -69,7 +89,30 @@ export default {
 </template>
 
 <style scoped>
-#sideBar {
+#sidebar {
   display: flex;
+}
+
+#sidenav {
+  --expand-button-height: var(--sideNav-width);
+  background-color: var(--gray-500);
+  width: var(--sideNav-width);
+  z-index: 3;
+}
+
+#expand-button {
+  width: var(--expand-button-height);
+  height: var(--expand-button-height);
+  rotate: 0deg;
+  transition: rotate 1000ms;
+}
+
+#expand-button svg {
+  rotate: 0deg;
+  transition: rotate 250ms;
+}
+
+#expand-button[aria-expanded="false"] svg {
+  rotate: 180deg;
 }
 </style>
