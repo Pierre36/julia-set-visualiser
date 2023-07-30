@@ -21,20 +21,10 @@ export default {
     });
 
     // Add a shortcut to switch fullscreen
-    document.addEventListener("keypress", (event) => {
+    document.addEventListener("keyup", (event) => {
       if (event.target.tagName.toLowerCase() !== "input" && event.key == "f") {
         this.updateFullscreen();
       }
-    });
-
-    // Control whether the animation menu should be displayed or not
-    this.$refs.animationOverlay.addEventListener("mousemove", () => {
-      this.menuDisplayed = true;
-      this.timer = setTimeout(() => (this.menuDisplayed = false), 3000);
-    });
-    this.$refs.animationOverlay.addEventListener("mouseleave", () => {
-      this.menuDisplayed = false;
-      clearTimeout(this.timer);
     });
   },
   methods: {
@@ -53,15 +43,23 @@ export default {
         this.$emit("fullscreen");
       }
     },
+    onMouseMove() {
+      this.menuDisplayed = true;
+      this.timer = setTimeout(() => (this.menuDisplayed = false), 3000);
+    },
+    onMouseLeave() {
+      this.menuDisplayed = false;
+      clearTimeout(this.timer);
+    },
   },
 };
 </script>
 
 <template>
-  <div ref="animationOverlay" id="animationOverlay">
-    <div id="animationMetrics" v-show="metricsDisplayed">{{ fps }}</div>
-    <div id="animationMenu" :class="{ show: menuDisplayed }">
-      <button id="metricsButton" class="icon-button" @click="metricsDisplayed = !metricsDisplayed">
+  <div class="animation-overlay" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
+    <div class="metrics" v-if="metricsDisplayed">{{ fps }}</div>
+    <div class="animation-menu" :class="{ show: menuDisplayed }">
+      <button ref="metricsButton" class="icon-button" @click="metricsDisplayed = !metricsDisplayed">
         <svg viewBox="0 -960 960 960">
           <title v-if="metricsDisplayed">Hide metrics</title>
           <title v-else>Show metrics</title>
@@ -72,7 +70,7 @@ export default {
           />
         </svg>
       </button>
-      <button id="pauseButton" class="icon-button" @click="updatePaused">
+      <button ref="pauseButton" class="icon-button" @click="updatePaused">
         <svg viewBox="0 -960 960 960">
           <title v-if="paused">Play</title>
           <title v-else>Pause</title>
@@ -90,7 +88,7 @@ export default {
           />
         </svg>
       </button>
-      <button id="fullscreenButton" class="icon-button" @click="updateFullscreen">
+      <button ref="fullscreenButton" class="icon-button" @click="updateFullscreen">
         <svg viewBox="0 -960 960 960">
           <title v-if="isFullscreen">Leave fullscreen</title>
           <title v-else>Fullscreen</title>
@@ -113,7 +111,7 @@ export default {
 </template>
 
 <style scoped>
-#animationOverlay {
+.animation-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -121,11 +119,11 @@ export default {
   flex-direction: column;
 }
 
-#animationMetrics {
+.metrics {
   padding: 0.5rem;
 }
 
-#animationMenu {
+.animation-menu {
   opacity: 0;
   pointer-events: none;
   display: flex;
@@ -139,9 +137,9 @@ export default {
   transition: opacity 250ms ease-in-out;
 }
 
-#animationMenu.show,
-#animationMenu:hover,
-#animationMenu:focus-within {
+.animation-menu.show,
+.animation-menu:hover,
+.animation-menu:focus-within {
   opacity: 1;
   pointer-events: auto;
 }
