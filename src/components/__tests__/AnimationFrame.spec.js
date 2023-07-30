@@ -350,14 +350,17 @@ describe("Interactions", () => {
   });
 
   it("updates the fps when the fractal engine fps changes", async () => {
+    // Use fake timers to avoid waiting
+    vi.useFakeTimers();
+
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
 
     // Change the fps
     const newFPS = 36;
     animationFrame.vm.$data.fractalEngine.fps = newFPS;
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-    await delay(300);
+    vi.advanceTimersByTime(300);
+    await animationFrame.vm.$nextTick();
 
     // Check the fps is updated
     const animationOverlay = animationFrame.findComponent(AnimationOverlay);
