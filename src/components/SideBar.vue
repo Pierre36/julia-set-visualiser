@@ -65,7 +65,7 @@ export default {
         class="icon-button expand-button"
         @click="updateSidePanelCollapsed"
         :aria-expanded="!sidePanelCollapsed"
-        aria-controls="#sidePanel"
+        aria-controls=".side-panel"
         role="button"
       >
         <svg viewBox="0 -960 960 960" role="img">

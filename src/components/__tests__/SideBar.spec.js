@@ -62,7 +62,7 @@ describe("Render", () => {
     // Check expand button renders correctly
     expect(expandButton.attributes().role).toBe("button");
     expect(expandButton.attributes()["aria-expanded"]).toBe("false");
-    expect(expandButton.attributes()["aria-controls"]).toBe("#sidePanel");
+    expect(expandButton.attributes()["aria-controls"]).toBe(".side-panel");
     expect(expandButton.find("svg").find("title").text()).toBe("Expand side panel");
   });
 
