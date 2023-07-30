@@ -50,7 +50,7 @@ export default {
     </InfoHeader>
   </header>
 
-  <div class="panelContent">
+  <div class="panel-content">
     <section>
       <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Viewport">
         <p>In this section, you can change the viewport parameters:</p>
@@ -86,7 +86,7 @@ export default {
           :value="configuration.coordinatesScale"
           :min="0"
           :step="0.1"
-          label="Scale"
+          label="Coordinates scale"
           @update:value="updateCoordinatesScale"
         />
         <h4>Center</h4>
@@ -112,7 +112,7 @@ export default {
           </li>
           <li>
             <span class="infoListItemTitle">Julia bound</span>: This is the bound for the Julia set.
-            All points with a log-divergance lesser than the julia Bound will be considered in the
+            All points with a log-divergence lesser than the julia Bound will be considered in the
             Julia Set.
           </li>
         </ul>
