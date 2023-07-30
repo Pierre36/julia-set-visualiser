@@ -14,7 +14,7 @@ export default {
         CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
       },
       selectedConfigurationId: "DEFAULT",
-      configuration: Configuration.emptyConfiguration("", ""),
+      configuration: Configuration.defaultConfiguration("", ""),
     };
   },
   created() {

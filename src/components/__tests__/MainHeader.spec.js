@@ -128,5 +128,3 @@ describe("Interactions", () => {
     expect(mainHeader.emitted()["update:selectedConfigurationId"]).toEqual([[newConfigId]]);
   });
 });
-
-// Change selected configuration
