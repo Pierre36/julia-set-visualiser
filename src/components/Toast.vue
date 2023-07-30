@@ -7,33 +7,30 @@ export default {
     displayDuration: { type: Number, default: 1500 },
   },
   expose: ["show"],
-  computed: {
-    cssDuration() {
-      return this.animationDuration + "ms";
-    },
-    cssDelay() {
-      return this.displayDuration + "ms";
-    },
+  data() {
+    return {
+      shown: false,
+    };
   },
   methods: {
     show() {
-      this.$refs.toast.setAttribute("aria-hidden", false);
-      setTimeout(
-        () => this.$refs.toast.setAttribute("aria-hidden", true),
-        this.displayDuration + this.animationDuration
-      );
+      this.shown = true;
+      setTimeout(() => (this.shown = false), this.displayDuration + this.animationDuration);
     },
   },
 };
 </script>
 
 <template>
-  <div ref="toast" class="toast" aria-hidden="true">{{ text }}</div>
+  <Transition>
+    <div role="alert" :style="`--duration: ${this.animationDuration}ms`" v-if="shown">
+      {{ text }}
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
-.toast {
-  visibility: hidden;
+[role="alert"] {
   position: fixed;
   z-index: 10;
   bottom: 7%;
@@ -41,6 +38,7 @@ export default {
   right: 0;
   max-width: 20rem;
   width: fit-content;
+  opacity: 1;
   background-color: var(--gray-400);
   text-align: center;
   border-radius: 0.5rem;
@@ -48,30 +46,14 @@ export default {
   margin-inline: auto;
 }
 
-.toast[aria-hidden="false"] {
-  visibility: visible;
-  animation: fadein v-bind(cssDuration), fadeout v-bind(cssDuration) v-bind(cssDelay);
+.v-enter-active,
+.v-leave-active {
+  transition: bottom var(--duration) ease-in-out, opacity var(--duration) ease-in-out;
 }
 
-@keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 7%;
-    opacity: 1;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    bottom: 7%;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
-  }
+.v-enter-from,
+.v-leave-to {
+  bottom: 0;
+  opacity: 0;
 }
 </style>
