@@ -4,7 +4,7 @@ import ComboBox from "./ComboBox.vue";
 import Toast from "./Toast.vue";
 
 export default {
-  name: "TopNav",
+  name: "MainHeader",
   components: { ComboBox, Toast },
   props: {
     configurations: { type: Object, required: true },
@@ -14,14 +14,10 @@ export default {
   emits: ["update:selectedConfigurationId"],
   computed: {
     configurationOptions() {
-      const configurationOptions = [];
-      Object.values(this.configurations).forEach((configuration) => {
-        configurationOptions.push({
-          id: configuration.id,
-          text: configuration.name,
-        });
-      });
-      return configurationOptions;
+      return Object.values(this.configurations).map((configuration) => ({
+        id: configuration.id,
+        text: configuration.name,
+      }));
     },
   },
   methods: {
@@ -35,7 +31,7 @@ export default {
 </script>
 
 <template>
-  <div id="topNav">
+  <header>
     <img class="logo" src="/logo.svg" />
     <h1>Julia Set Visualizer</h1>
     <ComboBox
@@ -47,7 +43,7 @@ export default {
     <button
       class="icon-button"
       @click="saveConfiguration"
-      :disabled="selectedConfigurationId != 'CUSTOM'"
+      :disabled="selectedConfigurationId !== 'CUSTOM'"
     >
       <svg viewBox="0 -960 960 960" role="img">
         <title>Save</title>
@@ -59,12 +55,12 @@ export default {
       </svg>
     </button>
     <Toast ref="toast" text="Custom configuration saved" />
-  </div>
+  </header>
 </template>
 
 <style scoped>
-#topNav {
-  height: var(--topNav-height);
+header {
+  height: var(--header-height);
   min-width: var(--page-min-width);
   background-color: var(--gray-400);
   display: grid;
@@ -77,7 +73,7 @@ export default {
 }
 
 .logo {
-  max-height: var(--topNav-height);
+  max-height: var(--header-height);
   padding: 0.5rem;
 }
 </style>

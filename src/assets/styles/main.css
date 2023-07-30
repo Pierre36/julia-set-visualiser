@@ -3,7 +3,7 @@
 /* Global variables */
 
 :root {
-  --topNav-height: 3.5rem;
+  --header-height: 3.5rem;
   --sideNav-width: 3.5rem;
   --sidePanel-width: 21rem;
   --page-min-height: 8rem;

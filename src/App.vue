@@ -1,12 +1,12 @@
 <script>
-import TopNav from "./components/TopNav.vue";
+import MainHeader from "./components/MainHeader.vue";
 import SideBar from "./components/SideBar.vue";
 import AnimationFrame from "./components/AnimationFrame.vue";
 import { Configuration } from "./models/Configuration";
 
 export default {
   name: "App",
-  components: { TopNav, SideBar, AnimationFrame },
+  components: { MainHeader, SideBar, AnimationFrame },
   data() {
     return {
       configurations: {
@@ -54,7 +54,7 @@ export default {
 </script>
 
 <template>
-  <TopNav
+  <MainHeader
     :configurations="configurations"
     :selectedConfigurationId="selectedConfigurationId"
     :configuration="configuration"
@@ -70,7 +70,7 @@ export default {
 main {
   position: relative;
   display: flex;
-  height: calc(100vh - var(--topNav-height));
+  height: calc(100vh - var(--header-height));
   min-height: var(--page-min-height);
   min-width: var(--page-min-width);
 }
