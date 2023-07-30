@@ -99,7 +99,7 @@ export default {
 
 <template>
   <div id="animationFrame" ref="animationFrame">
-    <canvas id="animationCanvas" ref="animationCanvas"></canvas>
+    <canvas ref="animationCanvas"></canvas>
     <AnimationOverlay
       v-if="error == null"
       :fps="fps"
@@ -121,7 +121,7 @@ export default {
   flex-grow: 1;
 }
 
-#animationCanvas {
+canvas {
   display: block;
   width: 100%;
   height: 100%;
