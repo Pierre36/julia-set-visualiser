@@ -88,8 +88,8 @@
     "attractors": []
   },
   {
-    "id": "PSYCHADELIC",
-    "name": "Psychadelic",
+    "id": "PSYCHEDELIC",
+    "name": "Psychedelic",
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCenter": { "re": 0, "im": 0 },
@@ -325,6 +325,61 @@
       "saturationOffset": 0,
       "valueStrength": 0,
       "valueOffset": 0
+    },
+    "attractors": []
+  },
+  {
+    "id": "PSYCHEDELIC_FLOWER_FIELD",
+    "name": "Psychedelic Flower Field",
+    "resolutionScale": 0.7,
+    "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 15,
+    "epsilon": 0.000005,
+    "juliaBound": -4,
+    "fractalFunction": {
+      "numerator": {
+        "2": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "12": {
+          "center": { "re": 0.3, "im": 0 },
+          "radius": 10,
+          "duration": 10000,
+          "type": "COMPLEX_CIRCLE"
+        }
+      },
+      "denominator": {
+        "1": { "re": 2, "im": 0, "type": "COMPLEX" },
+        "11": {
+          "center": { "re": 3.5999999999999996, "im": 0 },
+          "radius": 120,
+          "duration": 10000,
+          "type": "COMPLEX_CIRCLE"
+        }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "start": { "re": 0, "im": 1 },
+        "end": { "re": 30, "im": 0 },
+        "duration": 60000,
+        "type": "COMPLEX_LINE"
+      }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 175,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.36,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
     },
     "attractors": []
   }
