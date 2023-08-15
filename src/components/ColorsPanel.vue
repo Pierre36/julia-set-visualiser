@@ -1,7 +1,7 @@
 <script>
 import { Attractor } from "../models/Attractor";
 import AttractorItem from "./AttractorItem.vue";
-import InfoHeader from "./InfoHeader.vue";
+import Disclosure from "./Disclosure.vue";
 import SliderInput from "./SliderInput.vue";
 import IconTextButton from "./IconTextButton.vue";
 import { Complex } from "../models/Complex";
@@ -9,7 +9,7 @@ import { Complex } from "../models/Complex";
 export default {
   name: "ColorsPanel",
   components: {
-    InfoHeader,
+    Disclosure,
     SliderInput,
     AttractorItem,
     IconTextButton,
@@ -58,21 +58,21 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Colors">
+    <Disclosure :headingCentered="true" :headingLevel="2" headingText="Colors">
       <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
-    </InfoHeader>
+    </Disclosure>
   </header>
 
   <div class="panel-content">
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Julia">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Julia">
         <p>
           In this section, you can change the color of the Julia Set. The color use the HSV color
           system (see the
           <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
           for more details)
         </p>
-      </InfoHeader>
+      </Disclosure>
       <div class="content">
         <h4>Color</h4>
         <div class="colorVisualizer" :style="'background-color:' + visualizerColor"></div>
@@ -110,13 +110,13 @@ export default {
       </div>
     </section>
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Fatou">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Fatou">
         <p>In this section, you can change the color of the Fatou Sets.</p>
         <p>
           You can choose the color parameters for the each attractor (including infinity). When
           computing the color, if no attractor is close enough, the default attractor is used.
         </p>
-      </InfoHeader>
+      </Disclosure>
       <div>
         <AttractorItem
           class="attractorItem"

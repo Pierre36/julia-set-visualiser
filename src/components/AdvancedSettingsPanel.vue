@@ -1,11 +1,11 @@
 <script>
-import InfoHeader from "./InfoHeader.vue";
+import Disclosure from "./Disclosure.vue";
 import ComplexInput from "./ComplexInput.vue";
 import NumberInput from "./NumberInput.vue";
 
 export default {
   name: "AdvancedSettingsPanel",
-  components: { InfoHeader, ComplexInput, NumberInput },
+  components: { Disclosure, ComplexInput, NumberInput },
   props: {
     configuration: { type: Object, required: true },
   },
@@ -41,18 +41,18 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Advanced settings">
+    <Disclosure :headingCentered="true" :headingLevel="2" headingText="Advanced settings">
       <p>This panel allows to change advanced settings.</p>
       <p>
         Be careful when editing those, small changes can greatly affect the results and the
         performances.
       </p>
-    </InfoHeader>
+    </Disclosure>
   </header>
 
   <div class="panel-content">
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Viewport">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Viewport">
         <p>In this section, you can change the viewport parameters:</p>
         <ul class="infoList">
           <li>
@@ -71,7 +71,7 @@ export default {
             of the viewport. By default, it is 0.
           </li>
         </ul>
-      </InfoHeader>
+      </Disclosure>
       <div class="content">
         <h4>Resolution</h4>
         <NumberInput
@@ -99,7 +99,7 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Computation">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Computation">
         <p>In this section, you can change the computation parameters:</p>
         <ul class="infoList">
           <li>
@@ -116,7 +116,7 @@ export default {
             Julia Set.
           </li>
         </ul>
-      </InfoHeader>
+      </Disclosure>
       <div class="content">
         <h4>Iterations</h4>
         <NumberInput

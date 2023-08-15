@@ -3,7 +3,7 @@ import ComboBox from "./ComboBox.vue";
 import CoefficientInput from "./CoefficientInput.vue";
 import IconTextButton from "./IconTextButton.vue";
 import CoefficientItem from "./CoefficientItem.vue";
-import InfoHeader from "./InfoHeader.vue";
+import Disclosure from "./Disclosure.vue";
 import { Complex } from "../models/Complex";
 import { FractalFunction } from "../models/FractalFunction";
 
@@ -14,7 +14,7 @@ export default {
     IconTextButton,
     CoefficientItem,
     CoefficientInput,
-    InfoHeader,
+    Disclosure,
   },
   props: {
     fractalFunction: { type: FractalFunction, required: true },
@@ -100,7 +100,7 @@ export default {
 
 <template>
   <header>
-    <InfoHeader :headingCentered="true" :headingLevel="2" headingText="Function">
+    <Disclosure :headingCentered="true" :headingLevel="2" headingText="Function">
       <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
       <p>
         By adding, editing and removing coefficients, you can edit a polynomial or fractional
@@ -110,7 +110,7 @@ export default {
         By changing the function type, you can change the type of the final function (see Function
         type section info for more details).
       </p>
-    </InfoHeader>
+    </Disclosure>
   </header>
 
   <div class="panel-content">
@@ -119,7 +119,7 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Function type">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Function type">
         <p>In this section, you can change the function type. There is 3 function types:</p>
         <ul class="infoList">
           <li>
@@ -141,7 +141,7 @@ export default {
             polynomials.
           </li>
         </ul>
-      </InfoHeader>
+      </Disclosure>
       <div class="content">
         <h4>Type</h4>
         <ComboBox
@@ -163,7 +163,7 @@ export default {
     </section>
 
     <section>
-      <InfoHeader class="sectionHeader" :headingLevel="3" :headingText="numeratorHeading">
+      <Disclosure class="sectionHeader" :headingLevel="3" :headingText="numeratorHeading">
         <p>In this section, you can:</p>
         <ul class="infoList">
           <li>
@@ -201,7 +201,7 @@ export default {
             duration of the round trip.
           </li>
         </ul>
-      </InfoHeader>
+      </Disclosure>
       <div>
         <CoefficientItem
           class="coefficient-item"
@@ -225,7 +225,7 @@ export default {
     </section>
 
     <section v-if="fractalFunction.functionType == 'FRACTION'">
-      <InfoHeader class="sectionHeader" :headingLevel="3" headingText="Denominator coefficients">
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Denominator coefficients">
         <p>In this section, you can:</p>
         <ul class="infoList">
           <li>
@@ -263,7 +263,7 @@ export default {
             duration of the round trip.
           </li>
         </ul>
-      </InfoHeader>
+      </Disclosure>
       <div>
         <CoefficientItem
           class="coefficient-item"

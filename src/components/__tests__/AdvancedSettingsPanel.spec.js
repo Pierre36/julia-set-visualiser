@@ -4,7 +4,7 @@ import { Configuration } from "../../models/Configuration";
 import { Complex } from "../../models/Complex";
 
 import AdvancedSettingsPanel from "../AdvancedSettingsPanel.vue";
-import InfoHeader from "../InfoHeader.vue";
+import Disclosure from "../Disclosure.vue";
 import NumberInput from "../NumberInput.vue";
 import ComplexInput from "../ComplexInput.vue";
 
@@ -23,12 +23,12 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = advancedPanel.find("header");
-    const infoHeader = header.findComponent(InfoHeader);
+    const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(true);
-    expect(infoHeader.vm.$props.headingLevel).toBe(2);
-    expect(infoHeader.vm.$props.headingText).toBe("Advanced settings");
+    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingLevel).toBe(2);
+    expect(disclosure.vm.$props.headingText).toBe("Advanced settings");
   });
 
   it("renders the viewport section correctly", () => {
@@ -38,16 +38,16 @@ describe("Render", () => {
     // Get the DOM elements
     let content = advancedPanel.find(".panel-content");
     let viewportSection = content.find("section:nth-of-type(1)");
-    let infoHeader = viewportSection.findComponent(InfoHeader);
+    let disclosure = viewportSection.findComponent(Disclosure);
     let sectionContent = viewportSection.find(".content");
     let subHeadings = sectionContent.findAll("h4");
     let numberInputs = sectionContent.findAllComponents(NumberInput);
     let complexInput = sectionContent.findComponent(ComplexInput);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Viewport");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Viewport");
 
     // Check the resolution part renders correctly
     expect(subHeadings[0].text()).toBe("Resolution");
@@ -80,15 +80,15 @@ describe("Render", () => {
     // Get the DOM elements
     let content = advancedPanel.find(".panel-content");
     let computationSection = content.find("section:nth-of-type(2)");
-    let infoHeader = computationSection.findComponent(InfoHeader);
+    let disclosure = computationSection.findComponent(Disclosure);
     let sectionContent = computationSection.find(".content");
     let subHeadings = sectionContent.findAll("h4");
     let numberInputs = sectionContent.findAllComponents(NumberInput);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Computation");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Computation");
 
     // Check the iteration part renders correctly
     expect(subHeadings[0].text()).toBe("Iterations");

@@ -4,7 +4,7 @@ import { Attractor } from "../../models/Attractor";
 import { Complex } from "../../models/Complex";
 
 import ColorsPanel from "../ColorsPanel.vue";
-import InfoHeader from "../InfoHeader.vue";
+import Disclosure from "../Disclosure.vue";
 import SliderInput from "../SliderInput.vue";
 import AttractorItem from "../AttractorItem.vue";
 import IconTextButton from "../IconTextButton.vue";
@@ -27,12 +27,12 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = colorsPanel.find("header");
-    const infoHeader = header.findComponent(InfoHeader);
+    const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(true);
-    expect(infoHeader.vm.$props.headingLevel).toBe(2);
-    expect(infoHeader.vm.$props.headingText).toBe("Colors");
+    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingLevel).toBe(2);
+    expect(disclosure.vm.$props.headingText).toBe("Colors");
   });
 
   it("renders the Julia section correctly", () => {
@@ -42,16 +42,16 @@ describe("Render", () => {
     // Get the DOM elements
     const content = colorsPanel.find(".panel-content");
     const juliaSection = content.find("section:nth-of-type(1)");
-    const infoHeader = juliaSection.findComponent(InfoHeader);
+    const disclosure = juliaSection.findComponent(Disclosure);
     const sectionContent = juliaSection.find(".content");
     const subHeading = sectionContent.find("h4");
     const colorVisualizer = sectionContent.find(".colorVisualizer");
     const sliderInputs = sectionContent.findAllComponents(SliderInput);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Julia");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Julia");
 
     // Check the sub heading is rendered correctly
     expect(subHeading.text()).toBe("Color");
@@ -90,14 +90,14 @@ describe("Render", () => {
     // Get the DOM elements
     let content = colorsPanel.find(".panel-content");
     let fatouSection = content.find("section:nth-of-type(2)");
-    const infoHeader = fatouSection.findComponent(InfoHeader);
+    const disclosure = fatouSection.findComponent(Disclosure);
     const attractorItems = fatouSection.findAllComponents(AttractorItem);
     let addButton = fatouSection.findComponent(IconTextButton);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Fatou");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Fatou");
 
     // Check the attractorItems are rendered correctly
     expect(attractorItems[0].vm.$props.isDefault).toBe(true);

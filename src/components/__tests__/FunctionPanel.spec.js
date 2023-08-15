@@ -6,7 +6,7 @@ import { ComplexCircle } from "../../models/ComplexCircle";
 import { Complex } from "../../models/Complex";
 
 import FunctionPanel from "../FunctionPanel.vue";
-import InfoHeader from "../InfoHeader.vue";
+import Disclosure from "../Disclosure.vue";
 import ComboBox from "../ComboBox.vue";
 import CoefficientInput from "../CoefficientInput.vue";
 import CoefficientItem from "../CoefficientItem.vue";
@@ -35,12 +35,12 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = functionPanel.find("header");
-    const infoHeader = header.findComponent(InfoHeader);
+    const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(true);
-    expect(infoHeader.vm.$props.headingLevel).toBe(2);
-    expect(infoHeader.vm.$props.headingText).toBe("Function");
+    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingLevel).toBe(2);
+    expect(disclosure.vm.$props.headingText).toBe("Function");
   });
 
   it("renders the equation section correctly", () => {
@@ -67,16 +67,16 @@ describe("Render", () => {
     // Get the DOM elements
     let content = functionPanel.find(".panel-content");
     let typeSection = content.find("section:nth-of-type(2)");
-    let infoHeader = typeSection.findComponent(InfoHeader);
+    let disclosure = typeSection.findComponent(Disclosure);
     let sectionContent = typeSection.find(".content");
     let subHeadings = sectionContent.findAll("h4");
     let comboBox = sectionContent.findComponent(ComboBox);
     let coefficientInput = sectionContent.findComponent(CoefficientInput);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Function type");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Function type");
 
     // Check the section content renders correctly
     expect(subHeadings.length).toBe(1);
@@ -97,7 +97,7 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     typeSection = content.find("section:nth-of-type(2)");
-    infoHeader = typeSection.findComponent(InfoHeader);
+    disclosure = typeSection.findComponent(Disclosure);
     sectionContent = typeSection.find(".content");
     subHeadings = sectionContent.findAll("h4");
     comboBox = sectionContent.findComponent(ComboBox);
@@ -119,14 +119,14 @@ describe("Render", () => {
     // Get the DOM elements
     let content = functionPanel.find(".panel-content");
     let numeratorSection = content.find("section:nth-of-type(3)");
-    let infoHeader = numeratorSection.findComponent(InfoHeader);
+    let disclosure = numeratorSection.findComponent(Disclosure);
     let coefficientItems = numeratorSection.findAllComponents(CoefficientItem);
     let addButton = numeratorSection.findComponent(IconTextButton);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Coefficients");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Coefficients");
 
     // Check the coefficient items render correctly
     coefficientItems.forEach((item) => {
@@ -159,10 +159,10 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     numeratorSection = content.find("section:nth-of-type(3)");
-    infoHeader = numeratorSection.findComponent(InfoHeader);
+    disclosure = numeratorSection.findComponent(Disclosure);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingText).toBe("Numerator coefficients");
+    expect(disclosure.vm.$props.headingText).toBe("Numerator coefficients");
 
     // Mount the FunctionPanel with a full numerator
     props.fractalFunction = new FractalFunction(
@@ -228,7 +228,7 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     denominatorSection = content.find("section:nth-of-type(4)");
-    let infoHeader = denominatorSection.findComponent(InfoHeader);
+    let disclosure = denominatorSection.findComponent(Disclosure);
     let coefficientItems = denominatorSection.findAllComponents(CoefficientItem);
     let addButton = denominatorSection.findComponent(IconTextButton);
 
@@ -236,9 +236,9 @@ describe("Render", () => {
     expect(denominatorSection.exists()).toBe(true);
 
     // Check the info header renders correctly
-    expect(infoHeader.vm.$props.headingCentered).toBe(false);
-    expect(infoHeader.vm.$props.headingLevel).toBe(3);
-    expect(infoHeader.vm.$props.headingText).toBe("Denominator coefficients");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(3);
+    expect(disclosure.vm.$props.headingText).toBe("Denominator coefficients");
 
     // Check the coefficient items render correctly
     coefficientItems.forEach((item) => {
