@@ -1,4 +1,5 @@
 import { RandomUtils } from "../Utils/RandomUtils";
+import { NumberUtils } from "../Utils/NumberUtils";
 
 export { Complex };
 
