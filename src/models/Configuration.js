@@ -2,6 +2,7 @@ import { Polynomial } from "./Polynomial";
 import { Attractor } from "./Attractor";
 import { Complex } from "./Complex";
 import { FractalFunction } from "./FractalFunction";
+import { RandomUtils } from "../Utils/RandomUtils";
 
 export { Configuration };
 
@@ -195,5 +196,89 @@ class Configuration {
     configuration.attractors.forEach((attractor) => {
       this.attractors.push(attractor.copy());
     });
+  }
+
+  /**
+   * Randomize the configuration with the provided settings.
+   * @param {Set} functionTypes A set of the function types.
+   * @param {Set} coefficientTypes A set the available coefficient types.
+   * @param {Object} nbCoefficients An object containing the min and max value of the number of coefficients.
+   * @param {Object} complexModulus An object containing the min and max value of the modulus for constant coefficients.
+   * @param {Object} centerModulus An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} radius An object containing the min and max value of the radius for circle coefficients.
+   * @param {Object} circleDuration An object containing the min and max value of the duration for circle coefficients.
+   * @param {Object} startEndModulus An object containing the min and max value of the start and end modulus for line coefficients.
+   * @param {Object} lineDuration An object containing the min and max value of the duration for line coefficients.
+   * @param {Object} juliaHue An object containing the min and max value of the Julia hue.
+   * @param {Object} juliaSaturation An object containing the min and max value of the Julia saturation.
+   * @param {Object} juliaValue An object containing the min and max value of the Julia value.
+   * @param {Object} attractorsHue An object containing the min and max value of the attractors hue.
+   * @param {Object} attractorsSaturationStrength An object containing the min and max value of the attractors saturation strength.
+   * @param {Object} attractorsSaturationOffset An object containing the min and max value of the attractors saturation offset.
+   * @param {Object} attractorsValueStrength An object containing the min and max value of the attractors value strength.
+   * @param {Object} attractorsValueOffset An object containing the min and max value of the attractors value offset.
+   * @param {Object} viewportScale An object containing the min and max value of the viewport scale.
+   * @param {Object} viewportCenterModulus An object containing the min and max value of viewport center modulus.
+   * @param {Object} nbIterations An object containing the min and max value of the number of iterations.
+   * @param {Object} epsilon An object containing the min and max value of epsilon.
+   * @param {Object} juliaBound An object containing the min and max value of the Julia bound.
+   */
+  randomize(
+    functionTypes,
+    coefficientTypes,
+    nbCoefficients,
+    complexModulus,
+    centerModulus,
+    radius,
+    circleDuration,
+    startEndModulus,
+    lineDuration,
+    juliaHue,
+    juliaSaturation,
+    juliaValue,
+    attractorsHue,
+    attractorsSaturationStrength,
+    attractorsSaturationOffset,
+    attractorsValueStrength,
+    attractorsValueOffset,
+    viewportScale,
+    viewportCenterModulus,
+    nbIterations,
+    epsilon,
+    juliaBound
+  ) {
+    this.coordinatesScale = RandomUtils.floatBetween(viewportScale.min, viewportScale.max);
+    this.coordinatesCenter = Complex.getRandomComplex(viewportCenterModulus);
+    this.nbIterations = RandomUtils.integerBetween(nbIterations.min, nbIterations.max);
+    this.epsilon = RandomUtils.floatBetween(epsilon.min, epsilon.max);
+    this.juliaBound = RandomUtils.floatBetween(juliaBound.min, juliaBound.max);
+    this.fractalFunction = FractalFunction.getRandomFractalFunction(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficients,
+      complexModulus,
+      centerModulus,
+      radius,
+      circleDuration,
+      startEndModulus,
+      lineDuration
+    );
+    this.juliaHSV[0] = RandomUtils.integerBetween(juliaHue.min, juliaHue.max);
+    this.juliaHSV[2] = RandomUtils.floatBetween(juliaSaturation.min, juliaSaturation.max);
+    this.juliaHSV[1] = RandomUtils.floatBetween(juliaValue.min, juliaValue.max);
+    this.defaultAttractor = Attractor.getRandomAttractor(
+      attractorsHue,
+      attractorsSaturationStrength,
+      attractorsSaturationOffset,
+      attractorsValueStrength,
+      attractorsValueOffset
+    );
+    this.infinityAttractor = Attractor.getRandomAttractor(
+      attractorsHue,
+      attractorsSaturationStrength,
+      attractorsSaturationOffset,
+      attractorsValueStrength,
+      attractorsValueOffset
+    );
   }
 }

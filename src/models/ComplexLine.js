@@ -1,3 +1,4 @@
+import { RandomUtils } from "../Utils/RandomUtils";
 import { Complex } from "./Complex";
 
 export { ComplexLine };
@@ -116,5 +117,19 @@ class ComplexLine {
    */
   plus(term) {
     return new ComplexLine(this.start.plus(term), this.end.plus(term), this.duration);
+  }
+
+  /**
+   * Returns a random complex line with the provided settings.
+   * @param {Object} startEndModulusMinMax An object containing the min and max value of the radius.
+   * @param {Object} durationMinMax An object containing the min and max value of the duration.
+   * @returns {ComplexLine} The new complex line.
+   */
+  static getRandomComplexLine(startEndModulusMinMax, durationMinMax) {
+    return new ComplexLine(
+      Complex.getRandomComplex(startEndModulusMinMax),
+      Complex.getRandomComplex(startEndModulusMinMax),
+      RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
+    );
   }
 }

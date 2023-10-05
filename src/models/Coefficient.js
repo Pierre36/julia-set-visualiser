@@ -1,6 +1,7 @@
 import { ComplexCircle } from "./ComplexCircle";
 import { ComplexLine } from "./ComplexLine";
 import { Complex } from "./Complex";
+import { RandomUtils } from "../Utils/RandomUtils";
 
 export { Coefficient };
 
@@ -45,5 +46,39 @@ class Coefficient {
       coefficientJSON["type"] = "COMPLEX";
     }
     return coefficientJSON;
+  }
+
+  /**
+   * Returns a random coefficient with the provided settings.
+   * @param {Set} coefficientTypes A set the available coefficient types.
+   * @param {Object} complexModulusMinMax An object containing the min and max value of the modulus for constant coefficients.
+   * @param {Object} centerModulusMinMax An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} radiusMinMax An object containing the min and max value of the radius for circle coefficients.
+   * @param {Object} circleDurationMinMax An object containing the min and max value of the duration for circle coefficients.
+   * @param {Object} startEndModulusMinMax An object containing the min and max value of the start and end modulus for line coefficients.
+   * @param {Object} lineDurationMinMax An object containing the min and max value of the duration for line coefficients.
+   * @returns {Complex | ComplexCircle | ComplexLine} The new random coefficient.
+   */
+  static getRandomCoefficient(
+    coefficientTypes,
+    complexModulusMinMax,
+    centerModulusMinMax,
+    radiusMinMax,
+    circleDurationMinMax,
+    startEndModulusMinMax,
+    lineDurationMinMax
+  ) {
+    const coefficientType = RandomUtils.pickAmong(Array.from(coefficientTypes));
+    if (coefficientType == "CIRCLE") {
+      return ComplexCircle.getRandomComplexCircle(
+        centerModulusMinMax,
+        radiusMinMax,
+        circleDurationMinMax
+      );
+    } else if (coefficientType == "LINE") {
+      return ComplexLine.getRandomComplexLine(startEndModulusMinMax, lineDurationMinMax);
+    } else if (coefficientType == "CONSTANT") {
+      return Complex.getRandomComplex(complexModulusMinMax);
+    }
   }
 }

@@ -4,6 +4,7 @@ import { ComplexLine } from "./ComplexLine";
 import { Complex } from "./Complex";
 import { Coefficient } from "./Coefficient";
 import { ComplexMultiplication } from "./ComplexMultiplication";
+import { RandomUtils } from "../Utils/RandomUtils";
 
 export { FractalFunction };
 
@@ -279,5 +280,80 @@ class FractalFunction {
     // End and return equation
     mathML += "</math>";
     return mathML;
+  }
+
+  /**
+   * Returns a random fractal function with the provided settings.
+   * @param {Set} functionTypes A set of the function types.
+   * @param {Set} coefficientTypes A set the available coefficient types.
+   * @param {Object} nbCoefficientsMinMax An object containing the min and max value of the number of coefficients.
+   * @param {Object} complexModulusMinMax An object containing the min and max value of the modulus for constant coefficients.
+   * @param {Object} centerModulusMinMax An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} radiusMinMax An object containing the min and max value of the radius for circle coefficients.
+   * @param {Object} circleDurationMinMax An object containing the min and max value of the duration for circle coefficients.
+   * @param {Object} startEndModulusMinMax An object containing the min and max value of the start and end modulus for line coefficients.
+   * @param {Object} lineDurationMinMax An object containing the min and max value of the duration for line coefficients.
+   * @returns {FractalFunction} The new random fractal function.
+   */
+  static getRandomFractalFunction(
+    functionTypes,
+    coefficientTypes,
+    nbCoefficientsMinMax,
+    complexModulusMinMax,
+    centerModulusMinMax,
+    radiusMinMax,
+    circleDurationMinMax,
+    startEndModulusMinMax,
+    lineDurationMinMax
+  ) {
+    const newFunctionType = RandomUtils.pickAmong(Array.from(functionTypes));
+    const newNewtonCoefficient = Coefficient.getRandomCoefficient(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    const nbCoefficients = RandomUtils.integerBetween(
+      nbCoefficientsMinMax.min,
+      nbCoefficientsMinMax.max
+    );
+    let nbNumeratorCoefficients;
+    if (newFunctionType == "FRACTION") {
+      nbNumeratorCoefficients = RandomUtils.integerBetween(1, nbCoefficients);
+    } else {
+      nbNumeratorCoefficients = nbCoefficients;
+    }
+    const newNumerator = Polynomial.getRandomPolynomial(
+      nbCoefficients,
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    let newDenominator;
+    if (newFunctionType == "DEFAULT") {
+      newDenominator = new Polynomial({ 0: new Complex(1, 0) });
+    } else if (newFunctionType == "NEWTON") {
+      newDenominator = newNumerator.getDerivative();
+    } else {
+      newDenominator = Polynomial.getRandomPolynomial(
+        Math.max(1, nbCoefficients - nbNumeratorCoefficients),
+        coefficientTypes,
+        complexModulusMinMax,
+        centerModulusMinMax,
+        radiusMinMax,
+        circleDurationMinMax,
+        startEndModulusMinMax,
+        lineDurationMinMax
+      );
+    }
+
+    return new FractalFunction(newNumerator, newDenominator, newFunctionType, newNewtonCoefficient);
   }
 }

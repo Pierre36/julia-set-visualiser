@@ -1,3 +1,5 @@
+import { RandomUtils } from "../Utils/RandomUtils";
+
 export { Complex };
 
 const COMPLEX_REGEX =
@@ -241,5 +243,19 @@ class Complex {
    */
   getAtTime() {
     return this;
+  }
+
+  /**
+   * Returns a random complex number with a modulus in the given range.
+   * @param {Object} modulusMinMax An object containing the min and max value of the modulus.
+   * @returns {Complex} The new complex number.
+   */
+  static getRandomComplex(modulusMinMax) {
+    const modulus = RandomUtils.floatBetween(modulusMinMax.min, modulusMinMax.max);
+    const angle = RandomUtils.floatBetween(0, 2 * Math.PI);
+    return new Complex(
+      NumberUtils.toPrecision(modulus * Math.cos(angle), 2),
+      NumberUtils.toPrecision(modulus * Math.sin(angle), 2)
+    );
   }
 }

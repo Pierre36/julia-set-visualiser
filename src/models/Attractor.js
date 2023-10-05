@@ -1,3 +1,4 @@
+import { RandomUtils } from "../Utils/RandomUtils";
 import { Complex } from "./Complex";
 
 export { Attractor };
@@ -67,6 +68,46 @@ class Attractor {
       this.saturationOffset,
       this.valueStrength,
       this.valueOffset
+    );
+  }
+
+  /**
+   * Returns a random attractor with the given settings.
+   * @param {Object} hueMinMax An object containing the min and max value of the hue.
+   * @param {Object} saturationStrengthMinMax An object containing the min and max value of the saturation strength.
+   * @param {Object} saturationOffsetMinMax An object containing the min and max value of the saturation offset.
+   * @param {Object} valueStrengthMinMax An object containing the min and max value of the value strength.
+   * @param {Object} valueOffsetMinMax An object containing the min and max value of the value offset.
+   * @returns {Attractor} The new random attractor.
+   */
+  static getRandomAttractor(
+    hueMinMax,
+    saturationStrengthMinMax,
+    saturationOffsetMinMax,
+    valueStrengthMinMax,
+    valueOffsetMinMax
+  ) {
+    const newHue = RandomUtils.integerBetween(hueMinMax.min, hueMinMax.max);
+    const newSaturationStrength = RandomUtils.floatBetween(
+      saturationStrengthMinMax.min,
+      saturationStrengthMinMax.max
+    );
+    const newSaturationOffset = RandomUtils.floatBetween(
+      saturationOffsetMinMax.min,
+      saturationOffsetMinMax.max
+    );
+    const newValueStrength = RandomUtils.floatBetween(
+      valueStrengthMinMax.min,
+      valueStrengthMinMax.max
+    );
+    const newValueOffset = RandomUtils.floatBetween(valueOffsetMinMax.min, valueOffsetMinMax.max);
+    return new Attractor(
+      null,
+      newHue,
+      newSaturationStrength,
+      newSaturationOffset,
+      newValueStrength,
+      newValueOffset
     );
   }
 }

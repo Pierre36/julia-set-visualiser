@@ -3,6 +3,7 @@ import { ComplexLine } from "./ComplexLine";
 import { Complex } from "./Complex";
 import { Coefficient } from "./Coefficient";
 import { ComplexMultiplication } from "./ComplexMultiplication";
+import { RandomUtils } from "../Utils/RandomUtils";
 
 export { Polynomial };
 
@@ -306,5 +307,43 @@ class Polynomial {
    */
   getNbCoefficients() {
     return this.nbCoefficients;
+  }
+
+  /**
+   * Returns a random polynomial with the provided settings.
+   * @param {Number} nbCoefficients The number of coefficients of the new polynomial.
+   * @param {Set} coefficientTypes A set the available coefficient types.
+   * @param {Object} complexModulusMinMax An object containing the min and max value of the modulus for constant coefficients.
+   * @param {Object} centerModulusMinMax An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} radiusMinMax An object containing the min and max value of the radius for circle coefficients.
+   * @param {Object} circleDurationMinMax An object containing the min and max value of the duration for circle coefficients.
+   * @param {Object} startEndModulusMinMax An object containing the min and max value of the start and end modulus for line coefficients.
+   * @param {Object} lineDurationMinMax An object containing the min and max value of the duration for line coefficients.
+   * @returns {Polynomial} The new random polynomial.
+   */
+  static getRandomPolynomial(
+    nbCoefficients,
+    coefficientTypes,
+    complexModulusMinMax,
+    centerModulusMinMax,
+    radiusMinMax,
+    circleDurationMinMax,
+    startEndModulusMinMax,
+    lineDurationMinMax
+  ) {
+    const powers = RandomUtils.distinctIntegersBetween(0, MAX_DEGREE, nbCoefficients);
+    const newCoefficients = {};
+    for (let power of powers) {
+      newCoefficients[power] = Coefficient.getRandomCoefficient(
+        coefficientTypes,
+        complexModulusMinMax,
+        centerModulusMinMax,
+        radiusMinMax,
+        circleDurationMinMax,
+        startEndModulusMinMax,
+        lineDurationMinMax
+      );
+    }
+    return new Polynomial(newCoefficients);
   }
 }

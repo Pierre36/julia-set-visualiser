@@ -1,3 +1,4 @@
+import { RandomUtils } from "../Utils/RandomUtils";
 import { Complex } from "./Complex";
 
 export { ComplexCircle };
@@ -105,5 +106,20 @@ class ComplexCircle {
    */
   plus(term) {
     return new ComplexCircle(this.center.plus(term), this.radius, this.duration);
+  }
+
+  /**
+   * Returns a random complex circle with the provided settings.
+   * @param {Object} centerModulusMinMax An object containing the min and max value of the center modulus.
+   * @param {Object} radiusMinMax An object containing the min and max value of the radius.
+   * @param {Object} durationMinMax An object containing the min and max value of the duration.
+   * @returns {ComplexCircle} The new complex circle.
+   */
+  static getRandomComplexCircle(centerModulusMinMax, radiusMinMax, durationMinMax) {
+    return new ComplexCircle(
+      Complex.getRandomComplex(centerModulusMinMax),
+      RandomUtils.floatBetween(radiusMinMax.min, radiusMinMax.max),
+      RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
+    );
   }
 }
