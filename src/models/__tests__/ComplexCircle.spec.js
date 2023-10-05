@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Complex } from "../Complex";
 import { ComplexCircle } from "../ComplexCircle";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -173,5 +174,28 @@ describe("plus", () => {
     const circle = new ComplexCircle(new Complex(3, 6), 3, 2000);
 
     expect(circle.plus(-42)).toEqual(new ComplexCircle(new Complex(-39, 6), 3, 2000));
+  });
+});
+
+describe("getRandomComplexCircle", () => {
+  it("properly returns a random complex circle", () => {
+    RandomUtils.floatBetween = vi.fn(() => 1);
+    RandomUtils.integerBetween = vi.fn(() => 1);
+    Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
+
+    const centerModulusMinMax = { min: 0, max: 2 };
+    const radiusMinMax = { min: 1, max: 4 };
+    const durationMinMax = { min: 0, max: 2 };
+    const randomCircle = ComplexCircle.getRandomComplexCircle(
+      centerModulusMinMax,
+      radiusMinMax,
+      durationMinMax
+    );
+
+    expect(RandomUtils.floatBetween).toBeCalledWith(radiusMinMax.min, radiusMinMax.max);
+    expect(RandomUtils.integerBetween).toBeCalledWith(durationMinMax.min, durationMinMax.max);
+    expect(Complex.getRandomComplex).toBeCalledWith(centerModulusMinMax);
+
+    expect(randomCircle).toEqual(new ComplexCircle(new Complex(1, 0), 1, 1000));
   });
 });
