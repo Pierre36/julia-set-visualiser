@@ -2,10 +2,11 @@
 import FunctionPanel from "./FunctionPanel.vue";
 import ColorsPanel from "./ColorsPanel.vue";
 import AdvancedSettingsPanel from "./AdvancedSettingsPanel.vue";
+import RandomPanel from "./RandomPanel.vue";
 
 export default {
   name: "SidePanel",
-  components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel },
+  components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel, RandomPanel },
   props: {
     currentPanel: { type: String, required: true },
     configuration: { type: Object, required: true },
@@ -16,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <Transition>
+  <Transition name="panel-slide">
     <div :id="currentPanel" class="side-panel" v-if="!collapsed" role="tabpanel">
       <FunctionPanel
         v-if="currentPanel == 'FUNCTION'"
@@ -33,6 +34,11 @@ export default {
       />
       <AdvancedSettingsPanel
         v-else-if="currentPanel == 'ADVANCED'"
+        :configuration="configuration"
+        @change="$emit('change')"
+      />
+      <RandomPanel
+        v-else-if="currentPanel == 'RANDOM'"
         :configuration="configuration"
         @change="$emit('change')"
       />
@@ -54,13 +60,13 @@ export default {
   z-index: 2;
 }
 
-.v-enter-active,
-.v-leave-active {
+.panel-slide-enter-active,
+.panel-slide-leave-active {
   transition: margin-left 250ms ease-in-out;
 }
 
-.v-enter-from,
-.v-leave-to {
+.panel-slide-enter-from,
+.panel-slide-leave-to {
   margin-left: calc(-1 * var(--sidePanel-width));
 }
 
@@ -107,6 +113,10 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding-left: 0.25rem;
+}
+
+.side-panel section .content.one-column {
+  grid-template-columns: auto;
 }
 
 .side-panel p {

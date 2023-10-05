@@ -6,6 +6,7 @@ import SidePanel from "../SidePanel.vue";
 import FunctionPanel from "../FunctionPanel.vue";
 import ColorsPanel from "../ColorsPanel.vue";
 import AdvancedSettingsPanel from "../AdvancedSettingsPanel.vue";
+import RandomPanel from "../RandomPanel.vue";
 
 describe("Render", () => {
   let props;
@@ -51,11 +52,13 @@ describe("Render", () => {
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
+    const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the FUNCTION panel is displayed
     expect(functionPanel.exists()).toBe(true);
     expect(colorsPanel.exists()).toBe(false);
     expect(advancedPanel.exists()).toBe(false);
+    expect(randomPanel.exists()).toBe(false);
 
     // Check the FUNCTION panel is rendered properly
     expect(functionPanel.vm.$props.fractalFunction).toEqual(props.configuration.fractalFunction);
@@ -71,11 +74,13 @@ describe("Render", () => {
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
+    const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the COLORS panel is displayed
     expect(functionPanel.exists()).toBe(false);
     expect(colorsPanel.exists()).toBe(true);
     expect(advancedPanel.exists()).toBe(false);
+    expect(randomPanel.exists()).toBe(false);
 
     // Check the COLORS panel is rendered properly
     expect(colorsPanel.vm.$props.juliaHSV).toEqual(props.configuration.juliaHSV);
@@ -94,14 +99,38 @@ describe("Render", () => {
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
+    const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the ADVANCED panel is displayed
     expect(functionPanel.exists()).toBe(false);
     expect(colorsPanel.exists()).toBe(false);
     expect(advancedPanel.exists()).toBe(true);
+    expect(randomPanel.exists()).toBe(false);
 
     // Check the ADVANCED panel is rendered properly
     expect(advancedPanel.vm.$props.configuration).toEqual(props.configuration);
+  });
+
+  it("renders properly the RANDOM panel", () => {
+    // Mount the SidePanel
+    props.currentPanel = "RANDOM";
+    const sidePanel = mount(SidePanel, { props: props, shallow: true });
+
+    // Get the panels
+    const panelContainer = sidePanel.find(".side-panel");
+    const functionPanel = panelContainer.findComponent(FunctionPanel);
+    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
+    const randomPanel = panelContainer.findComponent(RandomPanel);
+
+    // Check only the ADVANCED panel is displayed
+    expect(functionPanel.exists()).toBe(false);
+    expect(colorsPanel.exists()).toBe(false);
+    expect(advancedPanel.exists()).toBe(false);
+    expect(randomPanel.exists()).toBe(true);
+
+    // Check the ADVANCED panel is rendered properly
+    expect(randomPanel.vm.$props.configuration).toEqual(props.configuration);
   });
 });
 
@@ -157,6 +186,18 @@ describe("Interactions", () => {
     advancedPanel.vm.$emit("change");
     expect(sidePanel.emitted().change).toBeDefined();
   });
-});
 
-// Change
+  it("emits change the RANDOM panel emits change", () => {
+    // Mount the SidePanel
+    props.currentPanel = "RANDOM";
+    const sidePanel = mount(SidePanel, { props: props, shallow: true });
+
+    // Get the ADVANCED panel
+    const panelContainer = sidePanel.find(".side-panel");
+    const randomPanel = panelContainer.findComponent(RandomPanel);
+
+    // Make ADVANCED panel emit change and check the SidePanel emits change
+    randomPanel.vm.$emit("change");
+    expect(sidePanel.emitted().change).toBeDefined();
+  });
+});
