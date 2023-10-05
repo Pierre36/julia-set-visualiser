@@ -1,6 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Complex } from "../Complex";
+import { RandomUtils } from "../../Utils/RandomUtils";
+import { NumberUtils } from "../../Utils/NumberUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -492,5 +494,21 @@ describe("getAtTime", () => {
     const complex = new Complex(3, 6);
 
     expect(complex.getAtTime(5)).toEqual(new Complex(3, 6));
+  });
+});
+
+describe("getRandomComplex", () => {
+  it("properly returns a random complex number", () => {
+    RandomUtils.floatBetween = vi.fn(() => 1);
+
+    const modulusMinMax = { min: 0, max: 2 };
+    const randomComplex = Complex.getRandomComplex(modulusMinMax);
+
+    expect(RandomUtils.floatBetween).toBeCalledWith(modulusMinMax.min, modulusMinMax.max);
+    expect(RandomUtils.floatBetween).toBeCalledWith(0, 2 * Math.PI);
+
+    expect(randomComplex).toEqual(
+      new Complex(NumberUtils.toPrecision(Math.cos(1), 2), NumberUtils.toPrecision(Math.sin(1), 2))
+    );
   });
 });
