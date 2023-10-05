@@ -325,6 +325,22 @@ describe("Combobox interactions with popup open", () => {
     expect(popup.isVisible()).toBe(false);
   });
 
+  it("closes the popup when pressing tab", async () => {
+    // Mount the ComboBox
+    const comboBox = mount(ComboBox, { props: props });
+    const button = comboBox.find("button");
+    const popup = comboBox.find("#popup");
+
+    // Open the popup
+    await button.trigger("click");
+
+    // Press key "tab"
+    await button.trigger("keydown.tab");
+
+    // Check it is closed
+    expect(popup.isVisible()).toBe(false);
+  });
+
   it("keeps the popup open when clicking inside it (not on an option)", async () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
