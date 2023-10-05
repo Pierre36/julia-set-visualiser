@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Complex } from "../Complex";
 import { ComplexLine } from "../ComplexLine";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -191,5 +192,22 @@ describe("plus", () => {
     const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
 
     expect(line.plus(-42)).toEqual(new ComplexLine(new Complex(-39, 6), new Complex(-38, 2), 2000));
+  });
+});
+
+describe("getRandomComplexLine", () => {
+  it("properly returns a random complex line", () => {
+    RandomUtils.integerBetween = vi.fn(() => 1);
+    Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
+
+    const startEndModulusMinMax = { min: 0, max: 2 };
+    const durationMinMax = { min: 0, max: 2 };
+    const randomLine = ComplexLine.getRandomComplexLine(startEndModulusMinMax, durationMinMax);
+
+    expect(RandomUtils.integerBetween).toBeCalledWith(durationMinMax.min, durationMinMax.max);
+    expect(Complex.getRandomComplex).toBeCalledWith(startEndModulusMinMax);
+    expect(Complex.getRandomComplex).toBeCalledTimes(2);
+
+    expect(randomLine).toEqual(new ComplexLine(new Complex(1, 0), new Complex(1, 0), 1000));
   });
 });
