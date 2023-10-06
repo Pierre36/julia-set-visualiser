@@ -264,8 +264,8 @@ class Configuration {
       lineDuration
     );
     this.juliaHSV[0] = RandomUtils.integerBetween(juliaHue.min, juliaHue.max);
-    this.juliaHSV[2] = RandomUtils.floatBetween(juliaSaturation.min, juliaSaturation.max);
-    this.juliaHSV[1] = RandomUtils.floatBetween(juliaValue.min, juliaValue.max);
+    this.juliaHSV[1] = RandomUtils.floatBetween(juliaSaturation.min, juliaSaturation.max);
+    this.juliaHSV[2] = RandomUtils.floatBetween(juliaValue.min, juliaValue.max);
     this.defaultAttractor = Attractor.getRandomAttractor(
       attractorsHue,
       attractorsSaturationStrength,
@@ -280,5 +280,6 @@ class Configuration {
       attractorsValueStrength,
       attractorsValueOffset
     );
+    this.attractors = [];
   }
 }

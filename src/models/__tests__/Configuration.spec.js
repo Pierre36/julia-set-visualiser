@@ -1,10 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Configuration } from "../Configuration";
 import { Complex } from "../Complex";
 import { FractalFunction } from "../FractalFunction";
 import { Polynomial } from "../Polynomial";
 import { Attractor } from "../Attractor";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -399,6 +400,172 @@ describe("fillWith", () => {
         defaultAttractor2,
         infinityAttractor2,
         attractors2
+      )
+    );
+  });
+});
+
+describe("randomize", () => {
+  it("properly randomizes the configuration", () => {
+    const id = "ID";
+    const name = "Name";
+    const resolutionScale = 1;
+    const coordinatesScale = 1;
+    const coordinatesCenter = new Complex(1, 0);
+    const nbIterations = 10;
+    const epsilon = 0.1;
+    const juliaBound = 1;
+    const fractalFunction = new FractalFunction(
+      new Polynomial(),
+      new Polynomial(),
+      "DEFAULT",
+      new Complex(1, 0)
+    );
+    const juliaHSV = [1, 1, 1];
+    const defaultAttractor = new Attractor(null, 1, 1, 1, 0.5, 1.5);
+    const infinityAttractor = new Attractor(null, 1, 1, 1, 0.5, 1.5);
+    const attractors = [new Attractor(new Complex(1, 0), 1, 3, 6, 4, 2)];
+
+    const configuration = new Configuration(
+      id,
+      name,
+      resolutionScale,
+      coordinatesScale,
+      coordinatesCenter,
+      nbIterations,
+      epsilon,
+      juliaBound,
+      fractalFunction,
+      juliaHSV,
+      defaultAttractor,
+      infinityAttractor,
+      attractors
+    );
+
+    const randomFractalFunction = new FractalFunction(
+      new Polynomial(),
+      new Polynomial(),
+      "NEWTON",
+      new Complex(3, 6)
+    );
+    FractalFunction.getRandomFractalFunction = vi.fn(() => randomFractalFunction);
+    RandomUtils.floatBetween = vi.fn((min, max) => (min + max) / 2);
+    RandomUtils.integerBetween = vi.fn((min, max) => (min + max) / 2);
+    const randomComplex = new Complex(4, 2);
+    Complex.getRandomComplex = vi.fn(() => randomComplex);
+    const randomAttractor = new Attractor(null, 0, 1, 2, 3, 4);
+    Attractor.getRandomAttractor = vi.fn(() => randomAttractor);
+
+    const functionTypes = new Set(["functionType1", "functionType2"]);
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+    const juliaHueMinMax = { min: 8, max: 9 };
+    const juliaSaturationMinMax = { min: 9, max: 10 };
+    const juliaValueMinMax = { min: 10, max: 11 };
+    const attractorsHueMinMax = { min: 11, max: 12 };
+    const attractorsSaturationStrengthMinMax = { min: 12, max: 13 };
+    const attractorsSaturationOffsetMinMax = { min: 13, max: 14 };
+    const attractorsValueStrengthMinMax = { min: 14, max: 15 };
+    const attractorsValueOffsetMinMax = { min: 15, max: 16 };
+    const viewportScaleMinMax = { min: 16, max: 17 };
+    const viewportCenterModulusMinMax = { min: 17, max: 18 };
+    const nbIterationsMinMax = { min: 18, max: 19 };
+    const epsilonMinMax = { min: 19, max: 20 };
+    const juliaBoundMinMax = { min: 20, max: 21 };
+
+    configuration.randomize(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficientsMinMax,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax,
+      juliaHueMinMax,
+      juliaSaturationMinMax,
+      juliaValueMinMax,
+      attractorsHueMinMax,
+      attractorsSaturationStrengthMinMax,
+      attractorsSaturationOffsetMinMax,
+      attractorsValueStrengthMinMax,
+      attractorsValueOffsetMinMax,
+      viewportScaleMinMax,
+      viewportCenterModulusMinMax,
+      nbIterationsMinMax,
+      epsilonMinMax,
+      juliaBoundMinMax
+    );
+
+    expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficientsMinMax,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      viewportScaleMinMax.min,
+      viewportScaleMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(epsilonMinMax.min, epsilonMinMax.max);
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      juliaBoundMinMax.min,
+      juliaBoundMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      juliaSaturationMinMax.min,
+      juliaSaturationMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      juliaValueMinMax.min,
+      juliaValueMinMax.max
+    );
+    expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCenterModulusMinMax);
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
+      nbIterationsMinMax.min,
+      nbIterationsMinMax.max
+    );
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(juliaHueMinMax.min, juliaHueMinMax.max);
+    expect(Attractor.getRandomAttractor).toHaveBeenCalledWith(
+      attractorsHueMinMax,
+      attractorsSaturationStrengthMinMax,
+      attractorsSaturationOffsetMinMax,
+      attractorsValueStrengthMinMax,
+      attractorsValueOffsetMinMax
+    );
+    expect(Attractor.getRandomAttractor).toBeCalledTimes(2);
+
+    expect(configuration).toEqual(
+      new Configuration(
+        id,
+        name,
+        resolutionScale,
+        (viewportScaleMinMax.min + viewportScaleMinMax.max) / 2,
+        randomComplex,
+        (nbIterationsMinMax.min + nbIterationsMinMax.max) / 2,
+        (epsilonMinMax.min + epsilonMinMax.max) / 2,
+        (juliaBoundMinMax.min + juliaBoundMinMax.max) / 2,
+        randomFractalFunction,
+        [
+          (juliaHueMinMax.min + juliaHueMinMax.max) / 2,
+          (juliaSaturationMinMax.min + juliaSaturationMinMax.max) / 2,
+          (juliaValueMinMax.min + juliaValueMinMax.max) / 2,
+        ],
+        randomAttractor,
+        randomAttractor,
+        []
       )
     );
   });
