@@ -1,10 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { FractalFunction } from "../FractalFunction";
 import { Polynomial } from "../Polynomial";
 import { Complex } from "../Complex";
 import { Coefficient } from "../Coefficient";
 import { ComplexMultiplication } from "../ComplexMultiplication";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs default functions", () => {
@@ -680,5 +681,199 @@ describe("toMathML", () => {
     expectedMathML += denominator.toMathML();
     expectedMathML += "</math>";
     expect(fractalFunction.toMathML()).toBe(expectedMathML);
+  });
+});
+
+describe("getRandomFractalFunction", () => {
+  it("properly returns a random fractal function for default function type", () => {
+    RandomUtils.pickAmong = vi.fn(() => "DEFAULT");
+    const randomCoefficient = new Complex(2, 4);
+    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    RandomUtils.integerBetween = vi.fn((min, _) => min);
+    const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
+    Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
+
+    const functionTypes = new Set(["functionType1", "functionType2"]);
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomFractalFunction = FractalFunction.getRandomFractalFunction(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficientsMinMax,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
+    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      nbCoefficientsMinMax.max
+    );
+    expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(randomFractalFunction).toEqual(
+      new FractalFunction(
+        randomPolynomial,
+        new Polynomial({ 0: new Complex(1, 0) }),
+        "DEFAULT",
+        randomCoefficient
+      )
+    );
+  });
+
+  it("properly returns a random fractal function for newton function type", () => {
+    RandomUtils.pickAmong = vi.fn(() => "NEWTON");
+    const randomCoefficient = new Complex(2, 4);
+    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    RandomUtils.integerBetween = vi.fn((min, _) => min);
+    const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
+    Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
+
+    const functionTypes = new Set(["functionType1", "functionType2"]);
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomFractalFunction = FractalFunction.getRandomFractalFunction(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficientsMinMax,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
+    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      nbCoefficientsMinMax.max
+    );
+    expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(randomFractalFunction).toEqual(
+      new FractalFunction(
+        randomPolynomial,
+        randomPolynomial.getDerivative(),
+        "NEWTON",
+        randomCoefficient
+      )
+    );
+  });
+
+  it("properly returns a random fractal function for default function type", () => {
+    RandomUtils.pickAmong = vi.fn(() => "FRACTION");
+    const randomCoefficient = new Complex(2, 4);
+    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    RandomUtils.integerBetween = vi.fn((min, _) => min);
+    const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
+    Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
+
+    const functionTypes = new Set(["functionType1", "functionType2"]);
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomFractalFunction = FractalFunction.getRandomFractalFunction(
+      functionTypes,
+      coefficientTypes,
+      nbCoefficientsMinMax,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
+    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      nbCoefficientsMinMax.max
+    );
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(1, nbCoefficientsMinMax.min);
+    expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
+      nbCoefficientsMinMax.min,
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(Polynomial.getRandomPolynomial).toHaveBeenCalledTimes(2);
+
+    expect(randomFractalFunction).toEqual(
+      new FractalFunction(randomPolynomial, randomPolynomial, "FRACTION", randomCoefficient)
+    );
   });
 });
