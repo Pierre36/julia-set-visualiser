@@ -1,10 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Coefficient } from "../Coefficient";
 import { Complex } from "../Complex";
 import { ComplexCircle } from "../ComplexCircle";
 import { ComplexLine } from "../ComplexLine";
 import { Polynomial } from "../Polynomial";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("fromJSON", () => {
   it("properly constructs from JSON complex", () => {
@@ -113,5 +114,125 @@ describe("toJSON", () => {
     const json = Coefficient.toJSON(polynomial);
 
     expect(json).toEqual(polynomial.toJSON());
+  });
+});
+
+describe("getRandomCoefficient", () => {
+  it("properly returns a random coefficient when the type is a circle", () => {
+    RandomUtils.pickAmong = vi.fn(() => "CIRCLE");
+    const randomCircle = new ComplexCircle(new Complex(3, 6), 3, 6);
+    ComplexCircle.getRandomComplexCircle = vi.fn(() => randomCircle);
+
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomCoefficient = Coefficient.getRandomCoefficient(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
+    expect(ComplexCircle.getRandomComplexCircle).toHaveBeenCalledWith(
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax
+    );
+
+    expect(randomCoefficient).toEqual(randomCircle);
+  });
+
+  it("properly returns a random coefficient when the type is a line", () => {
+    RandomUtils.pickAmong = vi.fn(() => "LINE");
+    const randomLine = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16);
+    ComplexLine.getRandomComplexLine = vi.fn(() => randomLine);
+
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomCoefficient = Coefficient.getRandomCoefficient(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
+    expect(ComplexLine.getRandomComplexLine).toHaveBeenCalledWith(
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(randomCoefficient).toEqual(randomLine);
+  });
+
+  it("properly returns a random coefficient when the type is a constant", () => {
+    RandomUtils.pickAmong = vi.fn(() => "CONSTANT");
+    const randomComplex = new Complex(3, 6);
+    Complex.getRandomComplex = vi.fn(() => randomComplex);
+
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomCoefficient = Coefficient.getRandomCoefficient(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
+    expect(Complex.getRandomComplex).toHaveBeenCalledWith(complexModulusMinMax);
+
+    expect(randomCoefficient).toEqual(randomComplex);
+  });
+
+  it("properly throws an error when the type is incorrect", () => {
+    RandomUtils.pickAmong = vi.fn(() => "INCORRECT_TYPE");
+
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    expect(() =>
+      Coefficient.getRandomCoefficient(
+        coefficientTypes,
+        complexModulusMinMax,
+        centerModulusMinMax,
+        radiusMinMax,
+        circleDurationMinMax,
+        startEndModulusMinMax,
+        lineDurationMinMax
+      )
+    ).toThrow();
   });
 });

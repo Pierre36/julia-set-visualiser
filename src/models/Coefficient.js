@@ -13,6 +13,7 @@ class Coefficient {
    * Creates a coefficient from a JSON.
    * @param {Object} complexJSON An object containing the JSON for a coefficient.
    * @returns {ComplexCircle | ComplexLine | Complex} The coefficient made from the JSON.
+   * @throws Error if the coefficient type is incorrect
    */
   static fromJSON(coefficientJSON) {
     if (coefficientJSON == null) {
@@ -58,6 +59,7 @@ class Coefficient {
    * @param {Object} startEndModulusMinMax An object containing the min and max value of the start and end modulus for line coefficients.
    * @param {Object} lineDurationMinMax An object containing the min and max value of the duration for line coefficients.
    * @returns {Complex | ComplexCircle | ComplexLine} The new random coefficient.
+   * @throws Error if the coefficient type is incorrect
    */
   static getRandomCoefficient(
     coefficientTypes,
@@ -79,6 +81,10 @@ class Coefficient {
       return ComplexLine.getRandomComplexLine(startEndModulusMinMax, lineDurationMinMax);
     } else if (coefficientType == "CONSTANT") {
       return Complex.getRandomComplex(complexModulusMinMax);
+    } else {
+      throw Error(
+        `The type of the coefficient is incorrect! The type must be "CIRCLE", "LINE" or "CONSTANT", got ${coefficientType}`
+      );
     }
   }
 }
