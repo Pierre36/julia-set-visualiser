@@ -1,7 +1,8 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Complex } from "../Complex";
 import { Attractor } from "../Attractor";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -151,5 +152,55 @@ describe("copy", () => {
 
     expect(attractor.copy()).toEqual(attractor);
     expect(attractor.copy()).not.toBe(attractor);
+  });
+});
+
+describe("getRandomAttractor", () => {
+  it("properly returns a random attractor", () => {
+    RandomUtils.floatBetween = vi.fn((min, _) => min);
+    RandomUtils.integerBetween = vi.fn((min, _) => min);
+
+    const hueMinMax = { min: 11, max: 12 };
+    const saturationStrengthMinMax = { min: 12, max: 13 };
+    const saturationOffsetMinMax = { min: 13, max: 14 };
+    const valueStrengthMinMax = { min: 14, max: 15 };
+    const valueOffsetMinMax = { min: 15, max: 16 };
+
+    const randomAttractor = Attractor.getRandomAttractor(
+      hueMinMax,
+      saturationStrengthMinMax,
+      saturationOffsetMinMax,
+      valueStrengthMinMax,
+      valueOffsetMinMax
+    );
+
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(hueMinMax.min, hueMinMax.max);
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      saturationStrengthMinMax.min,
+      saturationStrengthMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      saturationOffsetMinMax.min,
+      saturationOffsetMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      valueStrengthMinMax.min,
+      valueStrengthMinMax.max
+    );
+    expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
+      valueOffsetMinMax.min,
+      valueOffsetMinMax.max
+    );
+
+    expect(randomAttractor).toEqual(
+      new Attractor(
+        null,
+        hueMinMax.min,
+        saturationStrengthMinMax.min,
+        saturationOffsetMinMax.min,
+        valueStrengthMinMax.min,
+        valueOffsetMinMax.min
+      )
+    );
   });
 });
