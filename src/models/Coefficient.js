@@ -2,6 +2,7 @@ import { ComplexCircle } from "./ComplexCircle";
 import { ComplexLine } from "./ComplexLine";
 import { Complex } from "./Complex";
 import { RandomUtils } from "../Utils/RandomUtils";
+import { CoefficientTypes } from "../enumerations/CoefficientTypes";
 
 export { Coefficient };
 
@@ -19,15 +20,15 @@ class Coefficient {
     if (coefficientJSON == null) {
       return null;
     }
-    if (coefficientJSON["type"] == "COMPLEX_CIRCLE") {
+    if (coefficientJSON["type"] == CoefficientTypes.CIRCLE) {
       return ComplexCircle.fromJSON(coefficientJSON);
-    } else if (coefficientJSON["type"] == "COMPLEX_LINE") {
+    } else if (coefficientJSON["type"] == CoefficientTypes.LINE) {
       return ComplexLine.fromJSON(coefficientJSON);
-    } else if (coefficientJSON["type"] == "COMPLEX") {
+    } else if (coefficientJSON["type"] == CoefficientTypes.CONSTANT) {
       return Complex.fromJSON(coefficientJSON);
     } else {
       throw Error(
-        `The type of the coefficient is incorrect! The type must be "COMPLEX_CIRCLE", "COMPLEX_LINE" or "COMPLEX", got ${coefficientJSON["type"]}`
+        `The type of the coefficient is incorrect! The type must be "${CoefficientTypes.CIRCLE}", "${CoefficientTypes.LINE}" or "${CoefficientTypes.CONSTANT}", got ${coefficientJSON["type"]}`
       );
     }
   }
@@ -40,11 +41,11 @@ class Coefficient {
   static toJSON(coefficient) {
     const coefficientJSON = coefficient.toJSON();
     if (coefficient instanceof ComplexCircle) {
-      coefficientJSON["type"] = "COMPLEX_CIRCLE";
+      coefficientJSON["type"] = CoefficientTypes.CIRCLE;
     } else if (coefficient instanceof ComplexLine) {
-      coefficientJSON["type"] = "COMPLEX_LINE";
+      coefficientJSON["type"] = CoefficientTypes.LINE;
     } else if (coefficient instanceof Complex) {
-      coefficientJSON["type"] = "COMPLEX";
+      coefficientJSON["type"] = CoefficientTypes.CONSTANT;
     }
     return coefficientJSON;
   }
@@ -71,19 +72,19 @@ class Coefficient {
     lineDurationMinMax
   ) {
     const coefficientType = RandomUtils.pickAmong(Array.from(coefficientTypes));
-    if (coefficientType == "CIRCLE") {
+    if (coefficientType == CoefficientTypes.CIRCLE) {
       return ComplexCircle.getRandomComplexCircle(
         centerModulusMinMax,
         radiusMinMax,
         circleDurationMinMax
       );
-    } else if (coefficientType == "LINE") {
+    } else if (coefficientType == CoefficientTypes.LINE) {
       return ComplexLine.getRandomComplexLine(startEndModulusMinMax, lineDurationMinMax);
-    } else if (coefficientType == "CONSTANT") {
+    } else if (coefficientType == CoefficientTypes.CONSTANT) {
       return Complex.getRandomComplex(complexModulusMinMax);
     } else {
       throw Error(
-        `The type of the coefficient is incorrect! The type must be "CIRCLE", "LINE" or "CONSTANT", got ${coefficientType}`
+        `The type of the coefficient is incorrect! The type must be "${CoefficientTypes.CIRCLE}", "${CoefficientTypes.LINE}" or "${CoefficientTypes.CONSTANT}", got ${coefficientType}`
       );
     }
   }

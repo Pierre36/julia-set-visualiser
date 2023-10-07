@@ -6,6 +6,7 @@ import { ComplexCircle } from "../ComplexCircle";
 import { ComplexLine } from "../ComplexLine";
 import { Polynomial } from "../Polynomial";
 import { RandomUtils } from "../../Utils/RandomUtils";
+import { CoefficientTypes } from "../../enumerations/CoefficientTypes";
 
 describe("fromJSON", () => {
   it("properly constructs from JSON complex", () => {
@@ -15,7 +16,7 @@ describe("fromJSON", () => {
     const coefficient = Coefficient.fromJSON({
       re: re,
       im: im,
-      type: "COMPLEX",
+      type: CoefficientTypes.CONSTANT,
     });
 
     expect(coefficient).toEqual(new Complex(re, im));
@@ -30,7 +31,7 @@ describe("fromJSON", () => {
       center: center,
       radius: radius,
       duration: duration,
-      type: "COMPLEX_CIRCLE",
+      type: CoefficientTypes.CIRCLE,
     });
 
     expect(coefficient).toEqual(new ComplexCircle(center, radius, duration));
@@ -45,17 +46,17 @@ describe("fromJSON", () => {
       start: start,
       end: end,
       duration: duration,
-      type: "COMPLEX_LINE",
+      type: CoefficientTypes.LINE,
     });
 
     expect(coefficient).toEqual(new ComplexLine(start, end, duration));
   });
 
   it("throws an error for incorrect JSON", () => {
-    expect(() => Coefficient.fromJSON({ type: "COMPLEX_THING" })).toThrowError();
+    expect(() => Coefficient.fromJSON({ type: "INCORRECT_TYPE" })).toThrowError();
   });
 
-  it("retruns null for null coefficient", () => {
+  it("returns null for null coefficient", () => {
     const coefficient = Coefficient.fromJSON(null);
 
     expect(coefficient).toBeNull();
@@ -73,7 +74,7 @@ describe("toJSON", () => {
     expect(json).toEqual({
       re: re,
       im: im,
-      type: "COMPLEX",
+      type: CoefficientTypes.CONSTANT,
     });
   });
 
@@ -89,7 +90,7 @@ describe("toJSON", () => {
       center: center,
       radius: radius,
       duration: duration,
-      type: "COMPLEX_CIRCLE",
+      type: CoefficientTypes.CIRCLE,
     });
   });
 
@@ -105,7 +106,7 @@ describe("toJSON", () => {
       start: start,
       end: end,
       duration: duration,
-      type: "COMPLEX_LINE",
+      type: CoefficientTypes.LINE,
     });
   });
 
@@ -119,7 +120,7 @@ describe("toJSON", () => {
 
 describe("getRandomCoefficient", () => {
   it("properly returns a random coefficient when the type is a circle", () => {
-    RandomUtils.pickAmong = vi.fn(() => "CIRCLE");
+    RandomUtils.pickAmong = vi.fn(() => CoefficientTypes.CIRCLE);
     const randomCircle = new ComplexCircle(new Complex(3, 6), 3, 6);
     ComplexCircle.getRandomComplexCircle = vi.fn(() => randomCircle);
 
@@ -152,7 +153,7 @@ describe("getRandomCoefficient", () => {
   });
 
   it("properly returns a random coefficient when the type is a line", () => {
-    RandomUtils.pickAmong = vi.fn(() => "LINE");
+    RandomUtils.pickAmong = vi.fn(() => CoefficientTypes.LINE);
     const randomLine = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16);
     ComplexLine.getRandomComplexLine = vi.fn(() => randomLine);
 
@@ -184,7 +185,7 @@ describe("getRandomCoefficient", () => {
   });
 
   it("properly returns a random coefficient when the type is a constant", () => {
-    RandomUtils.pickAmong = vi.fn(() => "CONSTANT");
+    RandomUtils.pickAmong = vi.fn(() => CoefficientTypes.CONSTANT);
     const randomComplex = new Complex(3, 6);
     Complex.getRandomComplex = vi.fn(() => randomComplex);
 

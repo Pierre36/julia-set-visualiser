@@ -11,22 +11,22 @@
     "fractalFunction": {
       "numerator": {
         "0": {
-          "type": "COMPLEX_CIRCLE",
+          "type": "CIRCLE",
           "center": { "re": 0, "im": 0 },
           "radius": 1,
           "duration": 5000
         },
-        "2": { "type": "COMPLEX", "re": 1, "im": 0 }
+        "2": { "type": "CONSTANT", "re": 1, "im": 0 }
       },
       "denominator": {
-        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+        "0": { "type": "CONSTANT", "re": 1, "im": 0 }
       },
       "functionType": "DEFAULT",
-      "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 }
+      "newtonCoefficient": { "type": "CONSTANT", "re": 1, "im": 0 }
     },
     "juliaHSV": [210, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210.0,
       "saturationStrength": 0.11,
       "saturationOffset": 0.0,
@@ -34,7 +34,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210.0,
       "saturationStrength": 0.11,
       "saturationOffset": 0.0,
@@ -58,19 +58,19 @@
           "center": { "re": 0.2, "im": 0 },
           "radius": 1.1,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         },
-        "4": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+        "4": { "re": 1.1, "im": 0, "type": "CONSTANT" }
       },
       "denominator": {
-        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+        "0": { "type": "CONSTANT", "re": 1, "im": 0 }
       },
       "functionType": "DEFAULT",
-      "newtonCoefficient": { "type": "COMPLEX", "re": 1, "im": 0 }
+      "newtonCoefficient": { "type": "CONSTANT", "re": 1, "im": 0 }
     },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 223,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -78,7 +78,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -98,23 +98,23 @@
     "juliaBound": -3.6,
     "fractalFunction": {
       "numerator": {
-        "0": { "re": 1, "im": 0, "type": "COMPLEX" },
-        "5": { "re": 1, "im": 0, "type": "COMPLEX" }
+        "0": { "re": 1, "im": 0, "type": "CONSTANT" },
+        "5": { "re": 1, "im": 0, "type": "CONSTANT" }
       },
       "denominator": {
-        "4": { "re": 5, "im": 0, "type": "COMPLEX" }
+        "4": { "re": 5, "im": 0, "type": "CONSTANT" }
       },
       "functionType": "NEWTON",
       "newtonCoefficient": {
         "center": { "re": 0, "im": 0 },
         "radius": 5,
         "duration": 40000,
-        "type": "COMPLEX_CIRCLE"
+        "type": "CIRCLE"
       }
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -122,7 +122,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -146,19 +146,19 @@
           "center": { "re": 0.2, "im": 0 },
           "radius": 1.1,
           "duration": 40000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         },
-        "9": { "re": 1.1, "im": 0, "type": "COMPLEX" }
+        "9": { "re": 1.1, "im": 0, "type": "CONSTANT" }
       },
       "denominator": {
-        "0": { "type": "COMPLEX", "re": 1, "im": 0 }
+        "0": { "type": "CONSTANT", "re": 1, "im": 0 }
       },
       "functionType": "DEFAULT",
-      "newtonCoefficient": { "re": 1, "im": 0, "type": "COMPLEX" }
+      "newtonCoefficient": { "re": 1, "im": 0, "type": "CONSTANT" }
     },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 223,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -166,7 +166,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -186,35 +186,35 @@
     "juliaBound": -2.6,
     "fractalFunction": {
       "numerator": {
-        "0": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "0": { "re": 1, "im": 0, "type": "CONSTANT" },
         "1": {
           "center": { "re": 1, "im": 0 },
           "radius": 10,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         },
-        "3": { "re": 1, "im": 0, "type": "COMPLEX" }
+        "3": { "re": 1, "im": 0, "type": "CONSTANT" }
       },
       "denominator": {
         "0": {
           "center": { "re": 1, "im": 0 },
           "radius": 10,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         },
-        "2": { "re": 3, "im": 0, "type": "COMPLEX" }
+        "2": { "re": 3, "im": 0, "type": "CONSTANT" }
       },
       "functionType": "NEWTON",
       "newtonCoefficient": {
         "center": { "re": 1, "im": 0 },
         "radius": 1.1,
         "duration": 20000,
-        "type": "COMPLEX_CIRCLE"
+        "type": "CIRCLE"
       }
     },
     "juliaHSV": [253, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 115,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -222,7 +222,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 203,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -242,21 +242,21 @@
     "juliaBound": -3,
     "fractalFunction": {
       "numerator": {
-        "0": { "re": 1, "im": 0, "type": "COMPLEX" },
-        "3": { "re": 1, "im": 0, "type": "COMPLEX" }
+        "0": { "re": 1, "im": 0, "type": "CONSTANT" },
+        "3": { "re": 1, "im": 0, "type": "CONSTANT" }
       },
-      "denominator": { "2": { "re": 3, "im": 0, "type": "COMPLEX" } },
+      "denominator": { "2": { "re": 3, "im": 0, "type": "CONSTANT" } },
       "functionType": "NEWTON",
       "newtonCoefficient": {
         "start": { "re": 0, "im": -1 },
         "end": { "re": 0, "im": 1 },
         "duration": 20000,
-        "type": "COMPLEX_LINE"
+        "type": "LINE"
       }
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -264,7 +264,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -284,21 +284,21 @@
     "juliaBound": -2,
     "fractalFunction": {
       "numerator": {
-        "2": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "2": { "re": 1, "im": 0, "type": "CONSTANT" },
         "7": {
           "center": { "re": 0, "im": 0 },
           "radius": 4,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         }
       },
       "denominator": {
-        "1": { "re": 2, "im": 0, "type": "COMPLEX" },
+        "1": { "re": 2, "im": 0, "type": "CONSTANT" },
         "6": {
           "center": { "re": 0, "im": 0 },
           "radius": 28,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         }
       },
       "functionType": "NEWTON",
@@ -306,12 +306,12 @@
         "center": { "re": 1.2, "im": 0 },
         "radius": 2,
         "duration": 30000,
-        "type": "COMPLEX_CIRCLE"
+        "type": "CIRCLE"
       }
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 40,
       "saturationStrength": 0.1,
       "saturationOffset": 3,
@@ -319,7 +319,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 0,
       "saturationStrength": 0,
       "saturationOffset": 0,
@@ -339,21 +339,21 @@
     "juliaBound": -4,
     "fractalFunction": {
       "numerator": {
-        "2": { "re": 1, "im": 0, "type": "COMPLEX" },
+        "2": { "re": 1, "im": 0, "type": "CONSTANT" },
         "12": {
           "center": { "re": 0.3, "im": 0 },
           "radius": 10,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         }
       },
       "denominator": {
-        "1": { "re": 2, "im": 0, "type": "COMPLEX" },
+        "1": { "re": 2, "im": 0, "type": "CONSTANT" },
         "11": {
           "center": { "re": 3.5999999999999996, "im": 0 },
           "radius": 120,
           "duration": 10000,
-          "type": "COMPLEX_CIRCLE"
+          "type": "CIRCLE"
         }
       },
       "functionType": "NEWTON",
@@ -361,12 +361,12 @@
         "start": { "re": 0, "im": 1 },
         "end": { "re": 30, "im": 0 },
         "duration": 60000,
-        "type": "COMPLEX_LINE"
+        "type": "LINE"
       }
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 175,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -374,7 +374,7 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
+      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,

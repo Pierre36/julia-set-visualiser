@@ -24,20 +24,20 @@ describe("Render", () => {
     // Get the DOM element
     const degreeDiv = coefficientItem.find(".degreePicker");
     const degreeTitle = degreeDiv.find("span");
-    const degreeCombobBox = degreeDiv.findComponent(ComboBox);
+    const degreeComboBox = degreeDiv.findComponent(ComboBox);
 
     // Check the title is correct
     expect(degreeTitle.text()).toBe("Degree");
 
     // Check the ComboBox is rendered correctly
-    expect(degreeCombobBox.vm.$props.options).toEqual([
+    expect(degreeComboBox.vm.$props.options).toEqual([
       { id: "1", text: "1" },
       { id: "2", text: "2" },
       { id: "3", text: "3" },
       { id: "6", text: "6" },
     ]);
-    expect(degreeCombobBox.vm.$props.selected).toBe(props.degree.toString());
-    expect(degreeCombobBox.vm.$props.label).toBe("Coefficient degree");
+    expect(degreeComboBox.vm.$props.selected).toBe(props.degree.toString());
+    expect(degreeComboBox.vm.$props.label).toBe("Coefficient degree");
   });
 
   it("displays a button to remove the coefficient", () => {
@@ -82,11 +82,11 @@ describe("Interactions", () => {
 
     // Get the DOM element
     const degreeDiv = coefficientItem.find(".degreePicker");
-    const degreeCombobBox = degreeDiv.findComponent(ComboBox);
+    const degreeComboBox = degreeDiv.findComponent(ComboBox);
 
     // Change the degree
     const newDegree = "2";
-    degreeCombobBox.vm.$emit("update:selected", newDegree);
+    degreeComboBox.vm.$emit("update:selected", newDegree);
 
     // Check an event is emitted
     expect(coefficientItem.emitted()["update:degree"]).toEqual([[newDegree]]);

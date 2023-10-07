@@ -3,6 +3,7 @@ import { mount } from "@vue/test-utils";
 import { Complex } from "../../models/Complex";
 import { ComplexCircle } from "../../models/ComplexCircle";
 import { ComplexLine } from "../../models/ComplexLine";
+import { CoefficientTypes } from "../../enumerations/CoefficientTypes";
 
 import CoefficientInput from "../CoefficientInput.vue";
 import ComboBox from "../ComboBox.vue";
@@ -25,9 +26,9 @@ describe("Render", () => {
     expect(firstHeading.text()).toBe("Type");
     const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.options).toEqual([
-      { id: "CONSTANT", text: "Constant" },
-      { id: "CIRCLE", text: "Circle" },
-      { id: "LINE", text: "Line" },
+      { id: CoefficientTypes.CONSTANT, text: "Constant" },
+      { id: CoefficientTypes.CIRCLE, text: "Circle" },
+      { id: CoefficientTypes.LINE, text: "Line" },
     ]);
     expect(firstComboBox.vm.$props.label).toBe("Coefficient type");
   });
@@ -54,7 +55,7 @@ describe("Render for type CONSTANT", () => {
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    expect(firstComboBox.vm.$props.selected).toBe("CONSTANT");
+    expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CONSTANT);
   });
 
   it("has a complex input for the value of the constant", () => {
@@ -88,7 +89,7 @@ describe("Render for type CIRCLE", () => {
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    expect(firstComboBox.vm.$props.selected).toBe("CIRCLE");
+    expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CIRCLE);
   });
 
   it("has a complex input for the center of the circle", () => {
@@ -150,7 +151,7 @@ describe("Render for type LINE", () => {
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    expect(firstComboBox.vm.$props.selected).toBe("LINE");
+    expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.LINE);
   });
 
   it("has a complex input for the start of the line", () => {
@@ -199,7 +200,7 @@ describe("Interactions", () => {
   it("correctly changes type to CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    typeComboBox.vm.$emit("update:selected", "CIRCLE");
+    typeComboBox.vm.$emit("update:selected", CoefficientTypes.CIRCLE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [new ComplexCircle(new Complex(0, 0), 1, 5000)],
@@ -209,7 +210,7 @@ describe("Interactions", () => {
   it("correctly changes type to LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    typeComboBox.vm.$emit("update:selected", "LINE");
+    typeComboBox.vm.$emit("update:selected", CoefficientTypes.LINE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000)],
@@ -220,7 +221,7 @@ describe("Interactions", () => {
     props.coefficient = new ComplexCircle(new Complex(0, 0), 1, 2000);
     const coefficientInput = mount(CoefficientInput, { props: props });
     const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
-    typeComboBox.vm.$emit("update:selected", "CONSTANT");
+    typeComboBox.vm.$emit("update:selected", CoefficientTypes.CONSTANT);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[new Complex(0, 0)]]);
   });

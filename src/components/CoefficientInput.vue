@@ -1,4 +1,5 @@
 <script>
+import { CoefficientTypes } from "../enumerations/CoefficientTypes";
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
@@ -20,9 +21,9 @@ export default {
   data() {
     return {
       typeOptions: [
-        { id: "CONSTANT", text: "Constant" },
-        { id: "CIRCLE", text: "Circle" },
-        { id: "LINE", text: "Line" },
+        { id: CoefficientTypes.CONSTANT, text: "Constant" },
+        { id: CoefficientTypes.CIRCLE, text: "Circle" },
+        { id: CoefficientTypes.LINE, text: "Line" },
       ],
       defaultValues: {
         CONSTANT: new Complex(0, 0),
@@ -34,12 +35,21 @@ export default {
   computed: {
     type() {
       if (this.coefficient instanceof ComplexCircle) {
-        return "CIRCLE";
+        return CoefficientTypes.CIRCLE;
       } else if (this.coefficient instanceof ComplexLine) {
-        return "LINE";
+        return CoefficientTypes.LINE;
       } else {
-        return "CONSTANT";
+        return CoefficientTypes.CONSTANT;
       }
+    },
+    isCircle() {
+      return this.type == CoefficientTypes.CIRCLE;
+    },
+    isLine() {
+      return this.type == CoefficientTypes.LINE;
+    },
+    isConstant() {
+      return this.type == CoefficientTypes.CONSTANT;
     },
     durationSecond() {
       return this.coefficient.duration / 1000;
@@ -90,7 +100,7 @@ export default {
       :selected="type"
       @update:selected="changeType"
     />
-    <template v-if="type == 'CONSTANT'">
+    <template v-if="isConstant">
       <component :is="heading">Value</component>
       <ComplexInput
         :complex="coefficient"
@@ -98,7 +108,7 @@ export default {
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
     </template>
-    <template v-else-if="type == 'CIRCLE'">
+    <template v-else-if="isCircle">
       <component :is="heading">Center</component>
       <ComplexInput
         :complex="coefficient.center"
@@ -122,7 +132,7 @@ export default {
         label="Duration"
       />
     </template>
-    <template v-else-if="type == 'LINE'">
+    <template v-else-if="isLine">
       <component :is="heading">Start</component>
       <ComplexInput :complex="coefficient.start" label="Line start" @update:complex="updateStart" />
       <component :is="heading">End</component>
