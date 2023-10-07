@@ -121,6 +121,9 @@ class FractalEngine {
     this.gl.viewport(0, 0, this.gl.drawingBufferWidth, this.gl.drawingBufferHeight);
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -187,6 +190,9 @@ class FractalEngine {
    */
   setCoordinatesScale(newCoordinatesScale) {
     this.gl.uniform1f(this.uniformLocations.coordinatesScale, newCoordinatesScale);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -198,6 +204,9 @@ class FractalEngine {
       this.uniformLocations.coordinatesCenter,
       new Float32Array([newCoordinatesCenter.re, newCoordinatesCenter.im])
     );
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -206,6 +215,9 @@ class FractalEngine {
    */
   setNbIterations(newNbIterations) {
     this.gl.uniform1i(this.uniformLocations.nbIterations, newNbIterations);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -214,6 +226,9 @@ class FractalEngine {
    */
   setEpsilon(newEpsilon) {
     this.gl.uniform1f(this.uniformLocations.epsilon, newEpsilon);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -222,6 +237,9 @@ class FractalEngine {
    */
   setJuliaBound(newJuliaBound) {
     this.gl.uniform1f(this.uniformLocations.juliaBound, newJuliaBound);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -230,6 +248,9 @@ class FractalEngine {
    */
   setJuliaHSV(newJuliaHSV) {
     this.gl.uniform3fv(this.uniformLocations.juliaHSV, newJuliaHSV);
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -247,6 +268,9 @@ class FractalEngine {
         newDefaultAttractor.valueOffset,
       ])
     );
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -264,6 +288,9 @@ class FractalEngine {
         newInfinityAttractor.valueOffset,
       ])
     );
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
@@ -274,6 +301,7 @@ class FractalEngine {
     this.fractalFunction = newFractalFunction;
     if (this.paused) {
       this.updateFractalFunction();
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
     }
   }
 
@@ -383,11 +411,7 @@ class FractalEngine {
     requestAnimationFrame((newTime) => {
       const frameDuration = newTime - time;
       this.updateFPS(frameDuration, nbFrames);
-      if (this.paused) {
-        this.render(newTime, 0, nbFrames + 1);
-      } else {
-        this.render(newTime, frameDuration, nbFrames + 1);
-      }
+      this.render(newTime, this.paused ? 0 : frameDuration, nbFrames + 1);
     });
   }
 
