@@ -531,7 +531,7 @@ describe("setFunctionType", () => {
   it("properly throws an error if the function type is incorrect", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEAULT";
+    const functionType = "INCORRECT_FUNCTION_TYPE";
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
