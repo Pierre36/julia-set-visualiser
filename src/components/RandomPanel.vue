@@ -1,4 +1,5 @@
 <script>
+import { CoefficientTypes } from "../enumerations/CoefficientTypes";
 import { FunctionTypes } from "../enumerations/FunctionTypes";
 import { Configuration } from "../models/Configuration";
 import Disclosure from "./Disclosure.vue";
