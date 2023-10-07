@@ -136,6 +136,11 @@ export default {
   font-family: var(--input-font-family, sans-serif);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
 .input:focus-visible {
   border-color: var(--input-border-color-focus, hsl(210, 70%, 30%));
 }
