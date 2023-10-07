@@ -131,6 +131,12 @@ describe("fromString", () => {
     expect(complex).toEqual(new Complex(0, -3));
   });
 
+  it("works with -0.5i", () => {
+    const complex = Complex.fromString("-0.5i");
+
+    expect(complex).toEqual(new Complex(0, -0.5));
+  });
+
   it("works with -2 + 2i", () => {
     const complex = Complex.fromString("-3i");
 

@@ -4,7 +4,7 @@ import { NumberUtils } from "../Utils/NumberUtils";
 export { Complex };
 
 const COMPLEX_REGEX =
-  /^\s*(?:(-?\d+(?:\.\d+)?)|(-?\d*|\d+\.\d+)i|(-?\d+(?:\.\d+)?)\s*([+-])\s*(\d*|\d+\.\d+)i)\s*$/;
+  /^\s*(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)\s*([+-])\s*(\d*|\d+\.\d+)i)\s*$/;
 
 /**
  * Representation of a complex number.
