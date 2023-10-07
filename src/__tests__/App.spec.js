@@ -113,7 +113,19 @@ describe("Interactions", () => {
 
   it("changes the selected configuration when the header emits event", async () => {
     // Mount the App
-    const app = mount(App, { shallow: true });
+    const resetFractalEngineTime = vi.fn();
+    const app = mount(App, {
+      global: {
+        stubs: {
+          MainHeader: true,
+          SideBar: true,
+          AnimationFrame: {
+            template: "<div></div>",
+            methods: { resetFractalEngineTime },
+          },
+        },
+      },
+    });
     await flushPromises();
 
     // Make the header emits the event
@@ -127,7 +139,8 @@ describe("Interactions", () => {
     const expectedCurrentConfiguration = Configuration.emptyConfiguration("", "");
     expectedCurrentConfiguration.fillWith(Configuration.defaultConfiguration());
     expect(header.vm.$props.configuration).toEqual(expectedCurrentConfiguration);
+
+    // Check the time is reset
+    expect(resetFractalEngineTime).toBeCalled();
   });
 });
-
-// Handles change in sidebar

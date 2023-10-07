@@ -15,16 +15,23 @@ export default {
       },
       selectedConfigurationId: "DEFAULT",
       configuration: Configuration.defaultConfiguration("", ""),
+      animationFrame: null,
     };
   },
   created() {
     this.getJSONConfigurations();
     this.getStorageConfiguration();
   },
+  mounted() {
+    this.animationFrame = this.$refs.animationFrame;
+  },
   methods: {
     updateConfiguration(newSelectedId) {
       this.selectedConfigurationId = newSelectedId;
       this.configuration.fillWith(this.configurations[newSelectedId]);
+      if (this.animationFrame != null) {
+        this.animationFrame.resetFractalEngineTime();
+      }
     },
     getStorageConfiguration() {
       const localConfiguration = localStorage.getItem("customConfiguration");
@@ -62,7 +69,7 @@ export default {
   />
   <main>
     <SideBar :configuration="configuration" @change="switchToCustomConfiguration" />
-    <AnimationFrame :configuration="configuration" />
+    <AnimationFrame ref="animationFrame" :configuration="configuration" />
   </main>
 </template>
 

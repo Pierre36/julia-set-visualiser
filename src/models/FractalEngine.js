@@ -38,6 +38,13 @@ class FractalEngine {
   }
 
   /**
+   * Resets the animation time to 0.
+   */
+  resetAnimationTime() {
+    this.animationTime = 0;
+  }
+
+  /**
    * Loads WebGL2 from the canvas.
    * @throws An exception if it is unable to load WebGL2.
    */
@@ -358,14 +365,14 @@ class FractalEngine {
   /**
    * Renders the current frame.
    * @param {Number} time The animation time in milliseconds.
-   * @param {Number} delay The delay time in milliseconds.
+   * @param {Number} timeIncrement The increment of the animation time.
    * @param {Number} nbFrames The number of frames since the beginning of the animation.
    */
-  render(time, delay, nbFrames) {
-    if (!this.paused) {
-      // Update animation time
-      this.animationTime = time - delay;
+  render(time, timeIncrement, nbFrames) {
+    // Update animation time
+    this.animationTime += timeIncrement;
 
+    if (!this.paused) {
       // Update the fractal function
       this.updateFractalFunction();
 
@@ -374,11 +381,12 @@ class FractalEngine {
     }
     // Render next frame
     requestAnimationFrame((newTime) => {
-      this.updateFPS(newTime - time, nbFrames);
+      const frameDuration = newTime - time;
+      this.updateFPS(frameDuration, nbFrames);
       if (this.paused) {
-        this.render(newTime, delay + newTime - time, nbFrames + 1);
+        this.render(newTime, 0, nbFrames + 1);
       } else {
-        this.render(newTime, delay, nbFrames + 1);
+        this.render(newTime, frameDuration, nbFrames + 1);
       }
     });
   }

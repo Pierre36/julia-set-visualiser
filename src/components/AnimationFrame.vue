@@ -10,6 +10,7 @@ export default {
   props: {
     configuration: { type: Configuration, required: true },
   },
+  expose: ["resetFractalEngineTime"],
   data() {
     return {
       fractalEngine: null,
@@ -93,6 +94,13 @@ export default {
 
     // Update fps every 0.3 seconds
     setInterval(() => (this.fps = Math.round(this.fractalEngine.fps)), 300);
+  },
+  methods: {
+    resetFractalEngineTime() {
+      console.debug("[>>] Resetting the FractalEngine time...");
+      this.fractalEngine.resetAnimationTime();
+      console.debug("[OK] FractalEngine time reset");
+    },
   },
 };
 </script>

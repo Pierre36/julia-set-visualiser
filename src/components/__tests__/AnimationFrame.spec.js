@@ -367,3 +367,39 @@ describe("Interactions", () => {
     expect(animationOverlay.vm.$props.fps).toBe(newFPS);
   });
 });
+
+describe("Exposed method: resetFractalEngineTime", () => {
+  let props;
+  let displayScene;
+  let resetAnimationTime;
+
+  beforeEach(() => {
+    // Prepare the props
+    props = {
+      configuration: Configuration.defaultConfiguration(),
+    };
+
+    // Mock the FractalEngine methods
+    displayScene = vi.spyOn(FractalEngine.prototype, "displayScene").mockImplementation(vi.fn());
+    resetAnimationTime = vi
+      .spyOn(FractalEngine.prototype, "resetAnimationTime")
+      .mockImplementation(vi.fn());
+
+    // Mock the ResizeObserver
+    vi.stubGlobal(
+      "ResizeObserver",
+      vi.fn(() => ({ observe: vi.fn() }))
+    );
+  });
+
+  it("resets the fractal engine animation time correctly", () => {
+    // Mount the AnimationFrame
+    const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
+
+    // Use resetFractalEngineTime
+    animationFrame.vm.resetFractalEngineTime();
+
+    // Check resetAnimationTime is called
+    expect(resetAnimationTime).toBeCalled();
+  });
+});
