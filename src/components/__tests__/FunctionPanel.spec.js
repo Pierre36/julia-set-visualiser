@@ -4,6 +4,7 @@ import { FractalFunction } from "../../models/FractalFunction";
 import { Polynomial } from "../../models/Polynomial";
 import { ComplexCircle } from "../../models/ComplexCircle";
 import { Complex } from "../../models/Complex";
+import { FunctionTypes } from "../../enumerations/FunctionTypes";
 
 import FunctionPanel from "../FunctionPanel.vue";
 import Disclosure from "../Disclosure.vue";
@@ -23,7 +24,7 @@ describe("Render", () => {
           2: new Complex(1, 0),
         }),
         new Polynomial(),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         new Complex(1, 0)
       ),
     };
@@ -82,16 +83,16 @@ describe("Render", () => {
     expect(subHeadings.length).toBe(1);
     expect(subHeadings[0].text()).toBe("Type");
     expect(comboBox.vm.$props.options).toEqual([
-      { id: "DEFAULT", text: "Default" },
-      { id: "NEWTON", text: "Newton" },
-      { id: "FRACTION", text: "Fraction" },
+      { id: FunctionTypes.DEFAULT, text: "Default" },
+      { id: FunctionTypes.NEWTON, text: "Newton" },
+      { id: FunctionTypes.FRACTION, text: "Fraction" },
     ]);
     expect(comboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
     expect(comboBox.vm.$props.label).toBe("Function type");
     expect(coefficientInput.exists()).toBe(false);
 
     // Mount the FunctionPanel with a NEWTON function
-    props.fractalFunction.setFunctionType("NEWTON");
+    props.fractalFunction.setFunctionType(FunctionTypes.NEWTON);
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -153,7 +154,7 @@ describe("Render", () => {
     expect(addButton.vm.$props.text).toBe("New Coefficient");
 
     // Mount the FunctionPanel with a FRACTION function
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -185,7 +186,7 @@ describe("Render", () => {
         15: new Complex(0, 0),
       }),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(1, 0)
     );
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
@@ -211,7 +212,7 @@ describe("Render", () => {
     expect(denominatorSection.exists()).toBe(false);
 
     // Mount the FunctionPanel with a NEWTON function
-    props.fractalFunction.setFunctionType("NEWTON");
+    props.fractalFunction.setFunctionType(FunctionTypes.NEWTON);
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -222,7 +223,7 @@ describe("Render", () => {
     expect(denominatorSection.exists()).toBe(false);
 
     // Mount the FunctionPanel with a FRACTION function
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -278,7 +279,7 @@ describe("Render", () => {
         14: new Complex(0, 0),
         15: new Complex(0, 0),
       }),
-      "FRACTION",
+      FunctionTypes.FRACTION,
       new Complex(1, 0)
     );
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
@@ -304,7 +305,7 @@ describe("Interactions", () => {
           2: new Complex(1, 0),
         }),
         new Polynomial(),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         new Complex(1, 0)
       ),
     };
@@ -321,7 +322,7 @@ describe("Interactions", () => {
     let comboBox = sectionContent.findComponent(ComboBox);
 
     // Make the combobox emits an update event
-    const newFunctionType = "FRACTION";
+    const newFunctionType = FunctionTypes.FRACTION;
     comboBox.vm.$emit("update:selected", newFunctionType);
 
     // Check the function type has changed accordingly
@@ -331,7 +332,7 @@ describe("Interactions", () => {
 
   it("changes the newton coefficient with the newton coefficient input", () => {
     // Mount the FunctionPanel
-    props.fractalFunction.setFunctionType("NEWTON");
+    props.fractalFunction.setFunctionType(FunctionTypes.NEWTON);
     const functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -424,7 +425,7 @@ describe("Interactions", () => {
 
   it("changes the denominator coefficient degree with the coefficient item", () => {
     // Mount the FunctionPanel
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     const functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -446,7 +447,7 @@ describe("Interactions", () => {
 
   it("changes the denominator coefficient value with the coefficient item", () => {
     // Mount the FunctionPanel
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     const functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -465,7 +466,7 @@ describe("Interactions", () => {
 
   it("deletes the denominator coefficient with the coefficient item", () => {
     // Mount the FunctionPanel
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     const functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -483,7 +484,7 @@ describe("Interactions", () => {
 
   it("adds a denominator coefficient with the add button", () => {
     // Mount the FunctionPanel
-    props.fractalFunction.setFunctionType("FRACTION");
+    props.fractalFunction.setFunctionType(FunctionTypes.FRACTION);
     const functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements

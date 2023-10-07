@@ -1,4 +1,5 @@
 <script>
+import { FunctionTypes } from "../enumerations/FunctionTypes";
 import { Configuration } from "../models/Configuration";
 import Disclosure from "./Disclosure.vue";
 import IconTextButton from "./IconTextButton.vue";
@@ -15,11 +16,15 @@ export default {
   data() {
     return {
       functionTypeOptions: [
-        { id: "DEFAULT", text: "Default" },
-        { id: "NEWTON", text: "Newton" },
-        { id: "FRACTION", text: "Fraction" },
+        { id: FunctionTypes.DEFAULT, text: "Default" },
+        { id: FunctionTypes.NEWTON, text: "Newton" },
+        { id: FunctionTypes.FRACTION, text: "Fraction" },
       ],
-      selectedFunctionTypes: new Set(["DEFAULT", "NEWTON", "FRACTION"]),
+      selectedFunctionTypes: new Set([
+        FunctionTypes.DEFAULT,
+        FunctionTypes.NEWTON,
+        FunctionTypes.FRACTION,
+      ]),
       coefficientTypeOptions: [
         { id: CoefficientTypes.CONSTANT, text: "Constant" },
         { id: CoefficientTypes.CIRCLE, text: "Circle" },

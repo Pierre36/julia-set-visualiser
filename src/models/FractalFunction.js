@@ -5,6 +5,7 @@ import { Complex } from "./Complex";
 import { Coefficient } from "./Coefficient";
 import { ComplexMultiplication } from "./ComplexMultiplication";
 import { RandomUtils } from "../Utils/RandomUtils";
+import { FunctionTypes } from "../enumerations/FunctionTypes";
 
 export { FractalFunction };
 
@@ -26,7 +27,7 @@ class FractalFunction {
     this.functionType = functionType;
     this.newtonCoefficient = newtonCoefficient;
     this.newtonNumerator = new Polynomial();
-    if (this.functionType == "NEWTON") {
+    if (this.functionType == FunctionTypes.NEWTON) {
       this.newtonNumerator = this.numerator.getNewtonNumerator(this.newtonCoefficient);
     }
   }
@@ -85,7 +86,7 @@ class FractalFunction {
   setCoefficient(power, inNumerator, coefficient) {
     if (inNumerator) {
       this.numerator.setCoefficient(power, coefficient);
-      if (this.functionType == "NEWTON") {
+      if (this.functionType == FunctionTypes.NEWTON) {
         this.newtonNumerator.setCoefficient(
           power,
           new ComplexMultiplication(
@@ -98,7 +99,7 @@ class FractalFunction {
         }
       }
     } else {
-      if (this.functionType == "FRACTION") {
+      if (this.functionType == FunctionTypes.FRACTION) {
         this.denominator.setCoefficient(power, coefficient);
       } else {
         throw Error(
@@ -118,14 +119,14 @@ class FractalFunction {
   removeCoefficient(power, inNumerator) {
     if (inNumerator) {
       this.numerator.removeCoefficient(power);
-      if (this.functionType == "NEWTON") {
+      if (this.functionType == FunctionTypes.NEWTON) {
         if (power >= 1) {
           this.denominator.removeCoefficient(power - 1);
         }
         this.newtonNumerator.removeCoefficient(power);
       }
     } else {
-      if (this.functionType == "FRACTION") {
+      if (this.functionType == FunctionTypes.FRACTION) {
         this.denominator.removeCoefficient(power);
       } else {
         throw Error(
@@ -142,7 +143,7 @@ class FractalFunction {
   updateWithTime(time) {
     this.numerator.updateWithTime(time);
     this.denominator.updateWithTime(time);
-    if (this.functionType == "NEWTON") {
+    if (this.functionType == FunctionTypes.NEWTON) {
       this.newtonNumerator.updateWithTime(time);
     }
   }
@@ -168,7 +169,7 @@ class FractalFunction {
    * @returns {Array} The array representation of the numerator.
    */
   getNumeratorArray() {
-    if (this.functionType == "NEWTON") {
+    if (this.functionType == FunctionTypes.NEWTON) {
       return this.newtonNumerator.getArrayRepresentation();
     } else {
       return this.numerator.getArrayRepresentation();
@@ -190,17 +191,20 @@ class FractalFunction {
    */
   setFunctionType(newFunctionType) {
     this.functionType = newFunctionType;
-    if (newFunctionType == "NEWTON") {
+    if (newFunctionType == FunctionTypes.NEWTON) {
       this.newtonCoefficient = new Complex(1, 0);
       this.denominator = this.numerator.getDerivative();
       this.newtonNumerator = this.numerator.getNewtonNumerator(this.newtonCoefficient);
-    } else if (newFunctionType == "DEFAULT" || newFunctionType == "FRACTION") {
+    } else if (
+      newFunctionType == FunctionTypes.DEFAULT ||
+      newFunctionType == FunctionTypes.FRACTION
+    ) {
       this.denominator = new Polynomial({ 0: new Complex(1, 0) });
       this.newtonCoefficient = new Complex(0, 0);
       this.newtonNumerator = new Polynomial();
     } else {
       throw Error(
-        `The function type must be "DEFAULT", "NEWTON" or "FRACTION", got ${newFunctionType}`
+        `The function type must be "${FunctionTypes.DEFAULT}",  "${FunctionTypes.NEWTON}" or "${FunctionTypes.FRACTION}", got ${newFunctionType}`
       );
     }
   }
@@ -211,7 +215,7 @@ class FractalFunction {
    */
   setNewtonCoefficient(newNewtonCoefficient) {
     this.newtonCoefficient = newNewtonCoefficient;
-    if (this.functionType == "NEWTON") {
+    if (this.functionType == FunctionTypes.NEWTON) {
       this.newtonNumerator = this.numerator.getNewtonNumerator(newNewtonCoefficient);
     }
   }
@@ -252,13 +256,13 @@ class FractalFunction {
 
     // Add function
     mathML += "<mrow><mi>f</mi>" + ofz + "<mo>=</mo></mrow>";
-    if (this.functionType != "DEFAULT") {
-      if (this.functionType == "NEWTON") {
+    if (this.functionType != FunctionTypes.DEFAULT) {
+      if (this.functionType == FunctionTypes.NEWTON) {
         mathML += "<mi>z</mi><mo>-</mo><mi>a</mi>";
       }
       mathML += "<mfrac>";
       mathML += "<mrow>" + p + ofz + "</mrow>";
-      if (this.functionType == "NEWTON") {
+      if (this.functionType == FunctionTypes.NEWTON) {
         mathML += "<mrow>" + dp + ofz + "</mrow>";
       } else {
         mathML += "<mrow>" + q + ofz + "</mrow>";
@@ -268,7 +272,7 @@ class FractalFunction {
       mathML += "<math display='block'>";
       mathML += "<mrow><mtext>with</mtext><mspace width='0.5em'/>" + p + ofz + "<mo>=</mo></mrow>";
       mathML += this.numerator.toMathML();
-      if (this.functionType == "FRACTION") {
+      if (this.functionType == FunctionTypes.FRACTION) {
         mathML += "</math><math display='block'>";
         mathML += "<mrow><mtext>and</mtext><mspace width='0.5em'/>" + q + ofz + "<mo>=</mo></mrow>";
         mathML += this.denominator.toMathML();
@@ -321,7 +325,7 @@ class FractalFunction {
       nbCoefficientsMinMax.max
     );
     let nbNumeratorCoefficients;
-    if (newFunctionType == "FRACTION") {
+    if (newFunctionType == FunctionTypes.FRACTION) {
       nbNumeratorCoefficients = RandomUtils.integerBetween(1, nbCoefficients);
     } else {
       nbNumeratorCoefficients = nbCoefficients;
@@ -337,9 +341,9 @@ class FractalFunction {
       lineDurationMinMax
     );
     let newDenominator;
-    if (newFunctionType == "DEFAULT") {
+    if (newFunctionType == FunctionTypes.DEFAULT) {
       newDenominator = new Polynomial({ 0: new Complex(1, 0) });
-    } else if (newFunctionType == "NEWTON") {
+    } else if (newFunctionType == FunctionTypes.NEWTON) {
       newDenominator = newNumerator.getDerivative();
     } else {
       newDenominator = Polynomial.getRandomPolynomial(

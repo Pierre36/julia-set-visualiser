@@ -6,6 +6,7 @@ import { FractalFunction } from "../FractalFunction";
 import { Polynomial } from "../Polynomial";
 import { Attractor } from "../Attractor";
 import { RandomUtils } from "../../Utils/RandomUtils";
+import { FunctionTypes } from "../../enumerations/FunctionTypes";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -20,7 +21,7 @@ describe("constructor", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(0, 0)
     );
     const juliaHSV = [0, 0, 0];
@@ -73,7 +74,7 @@ describe("fromJSON", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(0, 0)
     );
     const juliaHSV = [0, 0, 0];
@@ -131,7 +132,7 @@ describe("toJSON", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(0, 0)
     );
     const juliaHSV = [0, 0, 0];
@@ -178,7 +179,7 @@ describe("defaultConfiguration", () => {
   it("properly returns the default configuration", () => {
     expect(Configuration.defaultConfiguration()).toEqual(
       new Configuration(
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         "Default",
         1,
         2,
@@ -189,7 +190,7 @@ describe("defaultConfiguration", () => {
         new FractalFunction(
           new Polynomial({ 2: new Complex(1, 0) }),
           new Polynomial({ 0: new Complex(1, 0) }),
-          "DEFAULT",
+          FunctionTypes.DEFAULT,
           new Complex(1, 0)
         ),
         [0, 0, 1],
@@ -219,7 +220,7 @@ describe("emptyConfiguration", () => {
         new FractalFunction(
           new Polynomial(),
           new Polynomial({ 0: new Complex(1, 0) }),
-          "DEFAULT",
+          FunctionTypes.DEFAULT,
           new Complex(1, 0)
         ),
         [0, 0, 0],
@@ -244,7 +245,7 @@ describe("fillWith", () => {
     const fractalFunction1 = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(1, 0)
     );
     const juliaHSV1 = [1, 1, 1];
@@ -280,7 +281,7 @@ describe("fillWith", () => {
     const fractalFunction2 = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(2, 0)
     );
     const juliaHSV2 = [2, 2, 2];
@@ -322,7 +323,7 @@ describe("fillWith", () => {
     const fractalFunction1 = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(1, 0)
     );
     const juliaHSV1 = [1, 1, 1];
@@ -358,7 +359,7 @@ describe("fillWith", () => {
     const fractalFunction2 = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(2, 0)
     );
     const juliaHSV2 = [2, 2, 2];
@@ -418,7 +419,7 @@ describe("randomize", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "DEFAULT",
+      FunctionTypes.DEFAULT,
       new Complex(1, 0)
     );
     const juliaHSV = [1, 1, 1];
@@ -445,7 +446,7 @@ describe("randomize", () => {
     const randomFractalFunction = new FractalFunction(
       new Polynomial(),
       new Polynomial(),
-      "NEWTON",
+      FunctionTypes.NEWTON,
       new Complex(3, 6)
     );
     FractalFunction.getRandomFractalFunction = vi.fn(() => randomFractalFunction);

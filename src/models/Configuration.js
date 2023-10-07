@@ -3,6 +3,7 @@ import { Attractor } from "./Attractor";
 import { Complex } from "./Complex";
 import { FractalFunction } from "./FractalFunction";
 import { RandomUtils } from "../Utils/RandomUtils";
+import { FunctionTypes } from "../enumerations/FunctionTypes";
 
 export { Configuration };
 
@@ -132,7 +133,7 @@ class Configuration {
       new FractalFunction(
         new Polynomial({ 2: new Complex(1, 0) }),
         new Polynomial({ 0: new Complex(1, 0) }),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         new Complex(1, 0)
       ),
       [0, 0, 1],
@@ -159,7 +160,7 @@ class Configuration {
       new FractalFunction(
         new Polynomial(),
         new Polynomial({ 0: new Complex(1, 0) }),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         new Complex(1, 0)
       ),
       [0, 0, 0],

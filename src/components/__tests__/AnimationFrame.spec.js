@@ -7,6 +7,7 @@ import AnimationFrame from "../AnimationFrame.vue";
 import AnimationOverlay from "../AnimationOverlay.vue";
 import { Complex } from "../../models/Complex";
 import { Attractor } from "../../models/Attractor";
+import { FunctionTypes } from "../../enumerations/FunctionTypes";
 
 describe("Render", () => {
   let props;
@@ -292,7 +293,7 @@ describe("Interactions", () => {
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
 
     // Change the fractal function
-    animationFrame.vm.$props.configuration.fractalFunction.setFunctionType("NEWTON");
+    animationFrame.vm.$props.configuration.fractalFunction.setFunctionType(FunctionTypes.NEWTON);
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated

@@ -6,12 +6,13 @@ import { Complex } from "../Complex";
 import { Coefficient } from "../Coefficient";
 import { ComplexMultiplication } from "../ComplexMultiplication";
 import { RandomUtils } from "../../Utils/RandomUtils";
+import { FunctionTypes } from "../../enumerations/FunctionTypes";
 
 describe("constructor", () => {
   it("properly constructs default functions", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -33,7 +34,7 @@ describe("constructor", () => {
     const coefficient2 = new Complex(4, 2);
     const numerator = new Polynomial({ 0: coefficient0, 2: coefficient2 });
     const denominator = new Polynomial();
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -60,7 +61,7 @@ describe("fromJSON", () => {
   it("properly constructs from JSON", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = FractalFunction.fromJSON({
@@ -80,7 +81,7 @@ describe("toJSON", () => {
   it("properly exports to JSON", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const json = new FractalFunction(
@@ -104,7 +105,7 @@ describe("getCoefficient", () => {
     const coefficient = new Complex(3, 6);
     const numerator = new Polynomial({ 1: coefficient });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -121,7 +122,7 @@ describe("getCoefficient", () => {
     const coefficient = new Complex(3, 6);
     const numerator = new Polynomial();
     const denominator = new Polynomial({ 1: coefficient });
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -139,7 +140,7 @@ describe("setCoefficient", () => {
   it("properly sets coefficients in numerator", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -171,7 +172,7 @@ describe("setCoefficient", () => {
   it("properly sets coefficients in numerator in Newton function", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -197,7 +198,7 @@ describe("setCoefficient", () => {
   it("properly sets coefficients in numerator in Newton function wth power 0", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -223,7 +224,7 @@ describe("setCoefficient", () => {
   it("properly sets coefficients in denominator in fraction function", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial();
-    const functionType = "FRACTION";
+    const functionType = FunctionTypes.FRACTION;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -251,7 +252,7 @@ describe("removeCoefficient", () => {
   it("properly removes coefficients in numerator", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -277,7 +278,7 @@ describe("removeCoefficient", () => {
   it("properly removes coefficients from numerator in Newton function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -297,7 +298,7 @@ describe("removeCoefficient", () => {
   it("properly removes coefficients from numerator in Newton function with power 0", () => {
     const numerator = new Polynomial({ 0: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -317,7 +318,7 @@ describe("removeCoefficient", () => {
   it("properly removes coefficients in denominator of fraction function", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial({ 2: new Complex(3, 6) });
-    const functionType = "FRACTION";
+    const functionType = FunctionTypes.FRACTION;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -339,7 +340,7 @@ describe("updateWithTime", () => {
   it("properly updates default function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -362,7 +363,7 @@ describe("updateWithTime", () => {
     const coefficient2 = new Complex(3, 6);
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -391,7 +392,7 @@ describe("getNumeratorNbCoefficients", () => {
   it("properly gets the number of coefficients of the numerator", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -409,7 +410,7 @@ describe("getDenominatorNbCoefficients", () => {
   it("properly gets the number of coefficients of the denominator", () => {
     const numerator = new Polynomial();
     const denominator = new Polynomial({ 2: new Complex(3, 6) });
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -427,7 +428,7 @@ describe("getNumeratorArray", () => {
   it("properly gets an array representing the numerator in default function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -443,7 +444,7 @@ describe("getNumeratorArray", () => {
   it("properly gets an array representing the numerator in Newton function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -463,7 +464,7 @@ describe("getDenominatorArray", () => {
   it("properly gets an array representing the denominator", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -481,7 +482,7 @@ describe("setFunctionType", () => {
   it("properly sets the function type from DEFAULT to NEWTON", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -491,13 +492,13 @@ describe("setFunctionType", () => {
       newtonCoefficient
     );
 
-    fractalFunction.setFunctionType("NEWTON");
+    fractalFunction.setFunctionType(FunctionTypes.NEWTON);
 
     expect(fractalFunction).toEqual(
       new FractalFunction(
         numerator,
         new Polynomial({ 1: new Complex(6, 12) }),
-        "NEWTON",
+        FunctionTypes.NEWTON,
         new Complex(1, 0)
       )
     );
@@ -506,7 +507,7 @@ describe("setFunctionType", () => {
   it("properly sets the function type from NEWTON to DEFAULT", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -516,13 +517,13 @@ describe("setFunctionType", () => {
       newtonCoefficient
     );
 
-    fractalFunction.setFunctionType("DEFAULT");
+    fractalFunction.setFunctionType(FunctionTypes.DEFAULT);
 
     expect(fractalFunction).toEqual(
       new FractalFunction(
         numerator,
         new Polynomial({ 0: new Complex(1, 0) }),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         new Complex(0, 0)
       )
     );
@@ -549,7 +550,7 @@ describe("setNewtonCoefficient", () => {
   it("properly sets the newton coefficient on default function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(0, 0);
 
     const fractalFunction = new FractalFunction(
@@ -563,14 +564,14 @@ describe("setNewtonCoefficient", () => {
     fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
 
     expect(fractalFunction).toEqual(
-      new FractalFunction(numerator, denominator, "DEFAULT", newNewtonCoefficient)
+      new FractalFunction(numerator, denominator, FunctionTypes.DEFAULT, newNewtonCoefficient)
     );
   });
 
   it("properly sets the newton coefficient on Newton function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -584,7 +585,7 @@ describe("setNewtonCoefficient", () => {
     fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
 
     expect(fractalFunction).toEqual(
-      new FractalFunction(numerator, denominator, "NEWTON", newNewtonCoefficient)
+      new FractalFunction(numerator, denominator, FunctionTypes.NEWTON, newNewtonCoefficient)
     );
   });
 });
@@ -593,7 +594,7 @@ describe("copy", () => {
   it("properly copies", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -612,7 +613,7 @@ describe("toMathML", () => {
   it("properly returns the mathML string for default function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial();
-    const functionType = "DEFAULT";
+    const functionType = FunctionTypes.DEFAULT;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -632,7 +633,7 @@ describe("toMathML", () => {
   it("properly returns the mathML string for Newton function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "NEWTON";
+    const functionType = FunctionTypes.NEWTON;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -657,7 +658,7 @@ describe("toMathML", () => {
   it("properly returns the mathML string for fraction function", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = "FRACTION";
+    const functionType = FunctionTypes.FRACTION;
     const newtonCoefficient = new Complex(1, 0);
 
     const fractalFunction = new FractalFunction(
@@ -686,7 +687,7 @@ describe("toMathML", () => {
 
 describe("getRandomFractalFunction", () => {
   it("properly returns a random fractal function for default function type", () => {
-    RandomUtils.pickAmong = vi.fn(() => "DEFAULT");
+    RandomUtils.pickAmong = vi.fn(() => FunctionTypes.DEFAULT);
     const randomCoefficient = new Complex(2, 4);
     Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
@@ -744,14 +745,14 @@ describe("getRandomFractalFunction", () => {
       new FractalFunction(
         randomPolynomial,
         new Polynomial({ 0: new Complex(1, 0) }),
-        "DEFAULT",
+        FunctionTypes.DEFAULT,
         randomCoefficient
       )
     );
   });
 
   it("properly returns a random fractal function for newton function type", () => {
-    RandomUtils.pickAmong = vi.fn(() => "NEWTON");
+    RandomUtils.pickAmong = vi.fn(() => FunctionTypes.NEWTON);
     const randomCoefficient = new Complex(2, 4);
     Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
@@ -809,14 +810,14 @@ describe("getRandomFractalFunction", () => {
       new FractalFunction(
         randomPolynomial,
         randomPolynomial.getDerivative(),
-        "NEWTON",
+        FunctionTypes.NEWTON,
         randomCoefficient
       )
     );
   });
 
   it("properly returns a random fractal function for default function type", () => {
-    RandomUtils.pickAmong = vi.fn(() => "FRACTION");
+    RandomUtils.pickAmong = vi.fn(() => FunctionTypes.FRACTION);
     const randomCoefficient = new Complex(2, 4);
     Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
@@ -873,7 +874,12 @@ describe("getRandomFractalFunction", () => {
     expect(Polynomial.getRandomPolynomial).toHaveBeenCalledTimes(2);
 
     expect(randomFractalFunction).toEqual(
-      new FractalFunction(randomPolynomial, randomPolynomial, "FRACTION", randomCoefficient)
+      new FractalFunction(
+        randomPolynomial,
+        randomPolynomial,
+        FunctionTypes.FRACTION,
+        randomCoefficient
+      )
     );
   });
 });

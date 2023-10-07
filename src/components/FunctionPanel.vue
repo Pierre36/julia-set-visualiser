@@ -6,6 +6,7 @@ import CoefficientItem from "./CoefficientItem.vue";
 import Disclosure from "./Disclosure.vue";
 import { Complex } from "../models/Complex";
 import { FractalFunction } from "../models/FractalFunction";
+import { FunctionTypes } from "../enumerations/FunctionTypes";
 
 export default {
   name: "FunctionPanel",
@@ -23,9 +24,9 @@ export default {
   data() {
     return {
       functionTypeOptions: [
-        { id: "DEFAULT", text: "Default" },
-        { id: "NEWTON", text: "Newton" },
-        { id: "FRACTION", text: "Fraction" },
+        { id: FunctionTypes.DEFAULT, text: "Default" },
+        { id: FunctionTypes.NEWTON, text: "Newton" },
+        { id: FunctionTypes.FRACTION, text: "Fraction" },
       ],
     };
   },
@@ -55,7 +56,7 @@ export default {
       return this.denominatorAvailablePowers.length != 0;
     },
     numeratorHeading() {
-      if (this.fractalFunction.functionType == "FRACTION") {
+      if (this.fractalFunction.functionType == FunctionTypes.FRACTION) {
         return "Numerator coefficients";
       } else {
         return "Coefficients";
