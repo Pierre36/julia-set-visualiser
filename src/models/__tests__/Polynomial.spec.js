@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import { Polynomial } from "../Polynomial";
 import { ComplexCircle } from "../ComplexCircle";
@@ -6,6 +6,7 @@ import { Complex } from "../Complex";
 import { Coefficient } from "../Coefficient";
 import { ComplexLine } from "../ComplexLine";
 import { ComplexMultiplication } from "../ComplexMultiplication";
+import { RandomUtils } from "../../Utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -482,5 +483,53 @@ describe("getNbCoefficients", () => {
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
     expect(polynomial.getNbCoefficients()).toEqual(polynomial.nbCoefficients);
+  });
+});
+
+describe("getRandomPolynomial", () => {
+  it("properly returns a random polynomial", () => {
+    const randomCoefficient = new Complex(2, 4);
+    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    RandomUtils.distinctIntegersBetween = vi.fn(() => [0, 1]);
+
+    const nbCoefficients = 2;
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const centerModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+
+    const randomPolynomial = Polynomial.getRandomPolynomial(
+      nbCoefficients,
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+
+    expect(RandomUtils.distinctIntegersBetween).toHaveBeenCalledWith(
+      0,
+      Polynomial.MAX_DEGREE,
+      nbCoefficients
+    );
+    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+      coefficientTypes,
+      complexModulusMinMax,
+      centerModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax
+    );
+    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledTimes(2);
+
+    expect(randomPolynomial).toEqual(
+      new Polynomial({ 0: randomCoefficient, 1: randomCoefficient })
+    );
   });
 });
