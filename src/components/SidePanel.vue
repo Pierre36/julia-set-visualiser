@@ -18,14 +18,14 @@ export default {
 
 <template>
   <Transition name="panel-slide">
-    <div id="side-panel" :class="currentPanel" v-if="!collapsed" role="tabpanel">
+    <div id="side-panel" :class="currentPanel" v-show="!collapsed" role="tabpanel">
       <FunctionPanel
-        v-if="currentPanel == 'FUNCTION'"
+        v-show="currentPanel == 'FUNCTION'"
         :fractalFunction="configuration.fractalFunction"
         @change="$emit('change')"
       />
       <ColorsPanel
-        v-else-if="currentPanel == 'COLORS'"
+        v-show="currentPanel == 'COLORS'"
         :juliaHSV="configuration.juliaHSV"
         :defaultAttractor="configuration.defaultAttractor"
         :infinityAttractor="configuration.infinityAttractor"
@@ -33,12 +33,12 @@ export default {
         @change="$emit('change')"
       />
       <AdvancedSettingsPanel
-        v-else-if="currentPanel == 'ADVANCED'"
+        v-show="currentPanel == 'ADVANCED'"
         :configuration="configuration"
         @change="$emit('change')"
       />
       <RandomPanel
-        v-else-if="currentPanel == 'RANDOM'"
+        v-show="currentPanel == 'RANDOM'"
         :configuration="configuration"
         @change="$emit('change')"
       />
@@ -74,6 +74,13 @@ export default {
   #side-panel {
     position: initial;
   }
+}
+
+#side-panel .panel-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
 }
 
 #side-panel header {
