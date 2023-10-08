@@ -48,7 +48,7 @@ class FractalEngine {
    * Loads WebGL2 from the canvas.
    * @throws An exception if it is unable to load WebGL2.
    */
-  loadWebGL() {
+  _loadWebGL() {
     this.gl = this.canvas.getContext("webgl2", {
       alpha: false,
       antialias: false,
@@ -67,7 +67,7 @@ class FractalEngine {
    * @returns {WebGLShader} The shader.
    * @throws An exception if it is unable to compile the shader.
    */
-  loadShader(type, source) {
+  _loadShader(type, source) {
     // Load the source in a shader
     const shader = this.gl.createShader(type);
     this.gl.shaderSource(shader, source);
@@ -92,10 +92,10 @@ class FractalEngine {
    * @returns {WebGLProgram} The shader program.
    * @throws An exception if it is unable to create the program.
    */
-  initShaderProgram() {
+  _initShaderProgram() {
     // Load the shaders
-    const vertexShader = this.loadShader(this.gl.VERTEX_SHADER, vertexShaderSource);
-    const fragmentShader = this.loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
+    const vertexShader = this._loadShader(this.gl.VERTEX_SHADER, vertexShaderSource);
+    const fragmentShader = this._loadShader(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
 
     // Create the shader program
     this.program = this.gl.createProgram();
@@ -129,7 +129,7 @@ class FractalEngine {
   /**
    * Sets the position attributes in the shader program.
    */
-  setPositionAttributes() {
+  _setPositionAttributes() {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.gl.createBuffer());
     this.gl.bufferData(
       this.gl.ARRAY_BUFFER,
@@ -144,7 +144,7 @@ class FractalEngine {
   /**
    * Loads the uniform locations in the shader program.
    */
-  loadUniformLocations() {
+  _loadUniformLocations() {
     this.uniformLocations = {
       dimensionRatio: this.gl.getUniformLocation(this.program, "dimensionRatio"),
       coordinatesScale: this.gl.getUniformLocation(this.program, "coordinatesScale"),
@@ -300,7 +300,7 @@ class FractalEngine {
   setFractalFunction(newFractalFunction) {
     this.fractalFunction = newFractalFunction;
     if (this.paused) {
-      this.updateFractalFunction();
+      this._updateFractalFunction();
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
     }
   }
@@ -308,7 +308,7 @@ class FractalEngine {
   /**
    * Updates the fractal function.
    */
-  updateFractalFunction() {
+  _updateFractalFunction() {
     this.fractalFunction.updateWithTime(this.animationTime);
     this.gl.uniform1i(
       this.uniformLocations.numeratorNbCoefficients,
@@ -364,7 +364,7 @@ class FractalEngine {
    * Initializes the values of the uniforms.
    * @param {Configuration} configuration The configuration of the animation.
    */
-  initUniformValues(configuration) {
+  _initUniformValues(configuration) {
     this.updateDimensionRatio();
     this.setCoordinatesScale(configuration.coordinatesScale);
     this.setCoordinatesCenter(configuration.coordinatesCenter);
@@ -381,7 +381,7 @@ class FractalEngine {
    * @param {Number} frameDuration The duration of the frame in milliseconds.
    * @param {Number} nbFrames The number of frames since the beginning of the animation.
    */
-  updateFPS(frameDuration, nbFrames) {
+  _updateFPS(frameDuration, nbFrames) {
     let frameFPS = 1000 / (10 * frameDuration);
     if (frameFPS == Infinity) {
       frameFPS = 0;
@@ -396,13 +396,13 @@ class FractalEngine {
    * @param {Number} timeIncrement The increment of the animation time.
    * @param {Number} nbFrames The number of frames since the beginning of the animation.
    */
-  render(time, timeIncrement, nbFrames) {
+  _render(time, timeIncrement, nbFrames) {
     // Update animation time
     this.animationTime += timeIncrement;
 
     if (!this.paused) {
       // Update the fractal function
-      this.updateFractalFunction();
+      this._updateFractalFunction();
 
       // Draw the scene
       this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
@@ -410,8 +410,8 @@ class FractalEngine {
     // Render next frame
     requestAnimationFrame((newTime) => {
       const frameDuration = newTime - time;
-      this.updateFPS(frameDuration, nbFrames);
-      this.render(newTime, this.paused ? 0 : frameDuration, nbFrames + 1);
+      this._updateFPS(frameDuration, nbFrames);
+      this._render(newTime, this.paused ? 0 : frameDuration, nbFrames + 1);
     });
   }
 
@@ -420,14 +420,14 @@ class FractalEngine {
    * @param {Configuration} configuration The configuration of the animation.
    */
   displayScene(configuration) {
-    this.loadWebGL();
-    this.initShaderProgram();
+    this._loadWebGL();
+    this._initShaderProgram();
     this.createViewport(configuration.resolutionScale);
-    this.setPositionAttributes();
+    this._setPositionAttributes();
     this.gl.useProgram(this.program);
-    this.loadUniformLocations();
+    this._loadUniformLocations();
     this.setFractalFunction(configuration.fractalFunction);
-    this.initUniformValues(configuration);
-    requestAnimationFrame((time) => this.render(time, 0, 0, 0));
+    this._initUniformValues(configuration);
+    requestAnimationFrame((time) => this._render(time, 0, 0, 0));
   }
 }
