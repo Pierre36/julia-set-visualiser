@@ -132,4 +132,12 @@ class ComplexLine {
       RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
     );
   }
+
+  /**
+   * Returns a String representation of the complex line.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `ComplexLine(${this.start}, ${this.end}, ${this.duration})`;
+  }
 }

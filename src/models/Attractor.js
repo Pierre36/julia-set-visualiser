@@ -110,4 +110,12 @@ class Attractor {
       newValueOffset
     );
   }
+
+  /**
+   * Returns a String representation of the attractor.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `Attractor(${this.complex}, ${this.hue}, ${this.saturationStrength}, ${this.saturationOffset}, ${this.valueStrength}, ${this.valueOffset})`;
+  }
 }

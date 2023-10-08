@@ -204,3 +204,11 @@ describe("getRandomAttractor", () => {
     );
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the attractor", () => {
+    expect(new Attractor(new Complex(4, 2), 210, 3.6, 4.2, 3, 6).toString()).toBe(
+      "Attractor(4 + 2i, 210, 3.6, 4.2, 3, 6)"
+    );
+  });
+});

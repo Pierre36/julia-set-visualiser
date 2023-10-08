@@ -539,3 +539,19 @@ describe("getRandomPolynomial", () => {
     );
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the polynomial", () => {
+    expect(
+      new Polynomial({
+        0: new Complex(0, 0),
+        1: new Complex(1, 0),
+        2: new Complex(2, 0),
+      }).toString()
+    ).toBe("Polynomial(2z^2 + 1z + 0)");
+  });
+
+  it("properly returns a string representation of the polynomial when it is empty", () => {
+    expect(new Polynomial().toString()).toBe("Polynomial(0)");
+  });
+});

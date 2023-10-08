@@ -122,4 +122,12 @@ class ComplexCircle {
       RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
     );
   }
+
+  /**
+   * Returns a String representation of the circle.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `ComplexCircle(${this.center}, ${this.radius}, ${this.duration})`;
+  }
 }

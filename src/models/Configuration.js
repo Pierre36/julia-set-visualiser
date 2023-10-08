@@ -283,4 +283,18 @@ class Configuration {
     );
     this.attractors = [];
   }
+
+  /**
+   * Returns a String representation of the configuration.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
+      this.coordinatesScale
+    }, ${this.coordinatesCenter}, ${this.nbIterations}, ${this.epsilon}, ${this.juliaBound}, ${
+      this.fractalFunction
+    }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
+      this.infinityAttractor
+    }, [${this.attractors.join(", ")}])`;
+  }
 }

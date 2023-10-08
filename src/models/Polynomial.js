@@ -359,4 +359,29 @@ class Polynomial {
     }
     return new Polynomial(newCoefficients);
   }
+
+  /**
+   * Returns a String representation of the polynomial.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    var string = "";
+    const descendingPowers = this.descendingPowers();
+    for (let i = 0; i < descendingPowers.length; i++) {
+      let power = descendingPowers[i];
+      if (i != 0) {
+        string += " + ";
+      }
+      string += this.coefficients[power].toString();
+      if (power == 1) {
+        string += "z";
+      } else if (power != 0) {
+        string += `z^${power}`;
+      }
+    }
+    if (string == "") {
+      string = "0";
+    }
+    return `Polynomial(${string})`;
+  }
 }

@@ -883,3 +883,16 @@ describe("getRandomFractalFunction", () => {
     );
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the fractal function", () => {
+    expect(
+      new FractalFunction(
+        new Polynomial(),
+        new Polynomial(),
+        FunctionTypes.DEFAULT,
+        new Complex(1, 0)
+      ).toString()
+    ).toBe("FractalFunction(Polynomial(0), Polynomial(0), DEFAULT, 1)");
+  });
+});

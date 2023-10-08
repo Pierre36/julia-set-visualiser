@@ -29,4 +29,12 @@ class ComplexMultiplication {
   getAtTime(time) {
     return this.coefficient1.getAtTime(time).multipliedByComplex(this.coefficient2.getAtTime(time));
   }
+
+  /**
+   * Returns a String representation of the multiplication.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `ComplexMultiplication(${this.coefficient1}, ${this.coefficient2})`;
+  }
 }

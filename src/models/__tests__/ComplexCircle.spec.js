@@ -199,3 +199,11 @@ describe("getRandomComplexCircle", () => {
     expect(randomCircle).toEqual(new ComplexCircle(new Complex(1, 0), 1, 1000));
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the circle", () => {
+    expect(new ComplexCircle(new Complex(4, 2), 3, 6).toString()).toBe(
+      "ComplexCircle(4 + 2i, 3, 6)"
+    );
+  });
+});

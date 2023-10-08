@@ -360,4 +360,12 @@ class FractalFunction {
 
     return new FractalFunction(newNumerator, newDenominator, newFunctionType, newNewtonCoefficient);
   }
+
+  /**
+   * Returns a String representation of the fractal function.
+   * @returns {String} The String representation.
+   */
+  toString() {
+    return `FractalFunction(${this.numerator}, ${this.denominator}, ${this.functionType}, ${this.newtonCoefficient})`;
+  }
 }

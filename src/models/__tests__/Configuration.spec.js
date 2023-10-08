@@ -571,3 +571,53 @@ describe("randomize", () => {
     );
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the configuration", () => {
+    const configuration = new Configuration(
+      "ID",
+      "Name",
+      1,
+      1,
+      new Complex(1, 0),
+      10,
+      0.1,
+      1,
+      new FractalFunction(
+        new Polynomial(),
+        new Polynomial(),
+        FunctionTypes.DEFAULT,
+        new Complex(1, 0)
+      ),
+      [1, 1, 1],
+      new Attractor(null, 1, 1, 1, 0.5, 1.5),
+      new Attractor(null, 1, 1, 1, 0.5, 1.5),
+      []
+    );
+
+    expect(
+      new Configuration(
+        "ID",
+        "Name",
+        1,
+        1,
+        new Complex(1, 0),
+        10,
+        0.1,
+        1,
+        new FractalFunction(
+          new Polynomial(),
+          new Polynomial(),
+          FunctionTypes.DEFAULT,
+          new Complex(1, 0)
+        ),
+        [1, 1, 1],
+        new Attractor(null, 1, 1, 1, 0.5, 1.5),
+        new Attractor(null, 2, 2, 2, 1, 3),
+        []
+      ).toString()
+    ).toBe(
+      "Configuration(ID, Name, 1, 1, 1, 10, 0.1, 1, FractalFunction(Polynomial(0), Polynomial(0), DEFAULT, 1), [1, 1, 1], Attractor(null, 1, 1, 1, 0.5, 1.5), Attractor(null, 2, 2, 2, 1, 3), [])"
+    );
+  });
+});

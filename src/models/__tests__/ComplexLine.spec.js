@@ -211,3 +211,11 @@ describe("getRandomComplexLine", () => {
     expect(randomLine).toEqual(new ComplexLine(new Complex(1, 0), new Complex(1, 0), 1000));
   });
 });
+
+describe("toString", () => {
+  it("properly returns a string representation of the complex line", () => {
+    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 1).toString()).toBe(
+      "ComplexLine(3 + 6i, 4 + 2i, 1)"
+    );
+  });
+});
