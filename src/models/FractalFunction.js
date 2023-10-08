@@ -103,7 +103,7 @@ class FractalFunction {
         this.denominator.setCoefficient(power, coefficient);
       } else {
         throw Error(
-          "Coefficient should not be inserted in the denominator of NEWTON and DEAULT functions."
+          "Coefficient should not be inserted in the denominator of NEWTON and DEFAULT functions."
         );
       }
     }
@@ -130,7 +130,7 @@ class FractalFunction {
         this.denominator.removeCoefficient(power);
       } else {
         throw Error(
-          "Coefficient should not be removed from the denominator of NEWTON and DEAULT functions."
+          "Coefficient should not be removed from the denominator of NEWTON and DEFAULT functions."
         );
       }
     }
