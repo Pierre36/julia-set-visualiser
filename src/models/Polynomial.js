@@ -77,8 +77,8 @@ class Polynomial {
    * @throws An error if the power is superior to MAX_DEGREE.
    */
   getCoefficient(power) {
-    if (power > MAX_DEGREE) {
-      throw Error(`The power must be inferior to ${MAX_DEGREE}`);
+    if (0 > power || power > MAX_DEGREE) {
+      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
     }
     return this.coefficients[power];
   }
@@ -91,8 +91,8 @@ class Polynomial {
    * @throws An error if the provided coefficient is undefined.
    */
   setCoefficient(power, coefficient) {
-    if (power > MAX_DEGREE) {
-      throw Error(`The power must be inferior to ${MAX_DEGREE}`);
+    if (0 > power || power > MAX_DEGREE) {
+      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
     }
     if (coefficient == undefined) {
       throw Error("The provided coefficient is undefined");
@@ -112,13 +112,14 @@ class Polynomial {
    */
   removeCoefficient(power) {
     console.debug("[>>] Trying to remove coefficient at power %d from %s...", power, this);
-    if (power > MAX_DEGREE) {
+    if (0 > power || power > MAX_DEGREE) {
       console.debug(
-        "[KO] Tried to remove a coefficient at power %d but max power is %d",
+        "[KO] Tried to remove a coefficient at power %d but max power must be in [%d, %d]",
         power,
+        0,
         MAX_DEGREE
       );
-      throw Error(`The power must be inferior to ${MAX_DEGREE}`);
+      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
     }
 
     if (this.coefficients[power] == null) {
