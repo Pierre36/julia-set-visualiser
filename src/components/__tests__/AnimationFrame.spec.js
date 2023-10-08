@@ -35,7 +35,7 @@ describe("Render", () => {
     // Get the elements
     const canvas = animationFrame.find("canvas");
     const animationOverlay = animationFrame.findComponent(AnimationOverlay);
-    const errorMessage = animationFrame.find("#errorMessage");
+    const errorMessage = animationFrame.find("#error-message");
 
     // Check the AnimationFrame is rendered properly
     expect(canvas.exists()).toBe(true);
@@ -58,7 +58,7 @@ describe("Render", () => {
     await animationFrame.vm.$nextTick();
 
     // Get the errorMessage
-    const errorMessage = animationFrame.find("#errorMessage");
+    const errorMessage = animationFrame.find("#error-message");
 
     // Check the errorMessage renders correctly
     expect(errorMessage.exists()).toBe(true);

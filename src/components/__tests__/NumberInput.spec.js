@@ -151,7 +151,7 @@ describe("Wrong input handling", () => {
     input.element.value = "wrong value";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
-    const wrongSVG = numberInput.find(".wrongInputSVG");
+    const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
     expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
   });
@@ -162,7 +162,7 @@ describe("Wrong input handling", () => {
     input.element.value = "101";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
-    const wrongSVG = numberInput.find(".wrongInputSVG");
+    const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
     expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
   });
@@ -173,7 +173,7 @@ describe("Wrong input handling", () => {
     input.element.value = "-1";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
-    const wrongSVG = numberInput.find(".wrongInputSVG");
+    const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
     expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
   });
@@ -185,7 +185,7 @@ describe("Wrong input handling", () => {
     input.element.value = "1.1";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
-    let wrongSVG = numberInput.find(".wrongInputSVG");
+    let wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
     expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
 
@@ -195,7 +195,7 @@ describe("Wrong input handling", () => {
     input.element.value = "1.1";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("false");
-    wrongSVG = numberInput.find(".wrongInputSVG");
+    wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(false);
   });
 });

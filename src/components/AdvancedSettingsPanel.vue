@@ -52,23 +52,23 @@ export default {
 
   <div class="panel-content">
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Viewport">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Viewport">
         <p>In this section, you can change the viewport parameters:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Resolution</span>: This is the resolution of the
+            <span class="info-list-item-title">Resolution</span>: This is the resolution of the
             viewport. A value of 1 means that the resolution of the window is used. In order for any
             change to the resolution to be applied, the configuration has to be saved and the page
             reloaded.
           </li>
           <li>
-            <span class="infoListItemTitle">Scale</span>: This is the scale of the viewport. A scale
-            of 1 corresponds means the smallest axis of the viewport has a length of 2 (from -1 to 1
-            if the center of the viewport is 0).
+            <span class="info-list-item-title">Scale</span>: This is the scale of the viewport. A
+            scale of 1 corresponds means the smallest axis of the viewport has a length of 2 (from
+            -1 to 1 if the center of the viewport is 0).
           </li>
           <li>
-            <span class="infoListItemTitle">Center</span>: This is the complex number at the center
-            of the viewport. By default, it is 0.
+            <span class="info-list-item-title">Center</span>: This is the complex number at the
+            center of the viewport. By default, it is 0.
           </li>
         </ul>
       </Disclosure>
@@ -99,21 +99,21 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Computation">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Computation">
         <p>In this section, you can change the computation parameters:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Iterations</span>: This is the number of iterations of
-            the function for each point.
+            <span class="info-list-item-title">Iterations</span>: This is the number of iterations
+            of the function for each point.
           </li>
           <li>
-            <span class="infoListItemTitle">Epsilon</span>: This is the small number added to the
+            <span class="info-list-item-title">Epsilon</span>: This is the small number added to the
             initial complex number to compute the divergence.
           </li>
           <li>
-            <span class="infoListItemTitle">Julia bound</span>: This is the bound for the Julia set.
-            All points with a log-divergence lesser than the julia Bound will be considered in the
-            Julia Set.
+            <span class="info-list-item-title">Julia bound</span>: This is the bound for the Julia
+            set. All points with a log-divergence lesser than the julia Bound will be considered in
+            the Julia Set.
           </li>
         </ul>
       </Disclosure>

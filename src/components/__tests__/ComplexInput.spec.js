@@ -70,7 +70,7 @@ describe("Wrong input handling", () => {
     input.element.value = "wrong value";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
-    const wrongSVG = complexInput.find(".wrongInputSVG");
+    const wrongSVG = complexInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
   });
 });

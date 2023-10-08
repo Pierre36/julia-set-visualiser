@@ -24,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <div class="sliderInput">
+  <div class="slider-input">
     <component :is="heading">{{ label }}</component>
     <NumberInput
       :value="value"
@@ -58,7 +58,7 @@ export default {
 </template>
 
 <style scoped>
-.sliderInput {
+.slider-input {
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;

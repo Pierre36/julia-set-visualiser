@@ -65,7 +65,7 @@ export default {
 
   <div class="panel-content">
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Julia">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Julia">
         <p>
           In this section, you can change the color of the Julia Set. The color use the HSV color
           system (see the
@@ -75,9 +75,9 @@ export default {
       </Disclosure>
       <div class="content">
         <h4>Color</h4>
-        <div class="colorVisualizer" :style="'background-color:' + visualizerColor"></div>
+        <div class="color-visualizer" :style="'background-color:' + visualizerColor"></div>
         <SliderInput
-          class="span-2 juliaSliderInput"
+          class="span-2 julia-slider-input"
           :value="juliaHSV[0]"
           :min="0"
           :max="360"
@@ -88,7 +88,7 @@ export default {
           @update:value="(newHue) => updateJuliaHue(newHue)"
         />
         <SliderInput
-          class="span-2 juliaSliderInput"
+          class="span-2 julia-slider-input"
           :value="juliaHSV[1]"
           :min="0"
           :max="1"
@@ -98,7 +98,7 @@ export default {
           @update:value="(newSaturation) => updateJuliaSaturation(newSaturation)"
         />
         <SliderInput
-          class="span-2 juliaSliderInput"
+          class="span-2 julia-slider-input"
           :value="juliaHSV[2]"
           :min="0"
           :max="1"
@@ -110,7 +110,7 @@ export default {
       </div>
     </section>
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Fatou">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Fatou">
         <p>In this section, you can change the color of the Fatou Sets.</p>
         <p>
           You can choose the color parameters for the each attractor (including infinity). When
@@ -119,14 +119,14 @@ export default {
       </Disclosure>
       <div>
         <AttractorItem
-          class="attractorItem"
+          class="attractor-item"
           :isDefault="true"
           :isInfinity="false"
           :attractor="defaultAttractor"
           @change="$emit('change')"
         />
         <AttractorItem
-          class="attractorItem"
+          class="attractor-item"
           :isDefault="false"
           :isInfinity="true"
           :attractor="infinityAttractor"
@@ -134,7 +134,7 @@ export default {
         />
         <AttractorItem
           v-for="(attractor, index) in attractors"
-          class="attractorItem"
+          class="attractor-item"
           :key="index"
           :isDefault="false"
           :isInfinity="false"
@@ -155,7 +155,7 @@ export default {
 </template>
 
 <style scoped>
-.colorVisualizer {
+.color-visualizer {
   width: 2.5rem;
   height: 1.4rem;
   border: 2px solid var(--gray-100);
@@ -164,13 +164,13 @@ export default {
   margin-right: 0.25rem;
 }
 
-.juliaSliderInput {
+.julia-slider-input {
   padding-inline: 0.25rem;
   margin-bottom: 0.5rem;
   margin-top: 0.25rem;
 }
 
-.attractorItem {
+.attractor-item {
   margin-bottom: 0.75rem;
 }
 

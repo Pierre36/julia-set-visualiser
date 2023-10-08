@@ -22,7 +22,7 @@ describe("Render", () => {
     const coefficientItem = mount(CoefficientItem, { props: props });
 
     // Get the DOM element
-    const degreeDiv = coefficientItem.find(".degreePicker");
+    const degreeDiv = coefficientItem.find(".degree-picker");
     const degreeTitle = degreeDiv.find("span");
     const degreeComboBox = degreeDiv.findComponent(ComboBox);
 
@@ -45,7 +45,7 @@ describe("Render", () => {
     const coefficientItem = mount(CoefficientItem, { props: props });
 
     // Get the button
-    const degreeDiv = coefficientItem.find(".degreePicker");
+    const degreeDiv = coefficientItem.find(".degree-picker");
     const removeButton = degreeDiv.find({ ref: "removeButton" });
 
     // Check the button is rendered correctly
@@ -81,7 +81,7 @@ describe("Interactions", () => {
     const coefficientItem = mount(CoefficientItem, { props: props });
 
     // Get the DOM element
-    const degreeDiv = coefficientItem.find(".degreePicker");
+    const degreeDiv = coefficientItem.find(".degree-picker");
     const degreeComboBox = degreeDiv.findComponent(ComboBox);
 
     // Change the degree
@@ -97,7 +97,7 @@ describe("Interactions", () => {
     const coefficientItem = mount(CoefficientItem, { props: props });
 
     // Get the button
-    const degreeDiv = coefficientItem.find(".degreePicker");
+    const degreeDiv = coefficientItem.find(".degree-picker");
     const removeButton = degreeDiv.find({ ref: "removeButton" });
 
     // Click the button

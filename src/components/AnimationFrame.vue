@@ -106,7 +106,7 @@ export default {
 </script>
 
 <template>
-  <div id="animationFrame" ref="animationFrame">
+  <div id="animation-frame" ref="animationFrame">
     <canvas ref="animationCanvas"></canvas>
     <AnimationOverlay
       v-if="error == null"
@@ -115,7 +115,7 @@ export default {
       @pause="fractalEngine.pause()"
       @unpause="fractalEngine.unpause()"
     />
-    <div id="errorMessage" v-if="error != null">
+    <div id="error-message" v-if="error != null">
       <h2>Error</h2>
       <hr />
       <p>{{ error }}</p>

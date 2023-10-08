@@ -45,7 +45,7 @@ describe("Render", () => {
     const disclosure = juliaSection.findComponent(Disclosure);
     const sectionContent = juliaSection.find(".content");
     const subHeading = sectionContent.find("h4");
-    const colorVisualizer = sectionContent.find(".colorVisualizer");
+    const colorVisualizer = sectionContent.find(".color-visualizer");
     const sliderInputs = sectionContent.findAllComponents(SliderInput);
 
     // Check the info header renders correctly

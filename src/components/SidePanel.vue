@@ -98,7 +98,7 @@ export default {
   border-bottom: var(--divider-height) solid var(--divider-color);
 }
 
-.side-panel section .sectionHeader {
+.side-panel section .section-header {
   margin-bottom: 0.5rem;
 }
 
@@ -123,13 +123,13 @@ export default {
   margin-bottom: 0.5rem;
 }
 
-.side-panel .infoList {
+.side-panel .info-list {
   list-style: inside;
   padding-inline-start: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.side-panel .infoListItemTitle {
+.side-panel .info-list-item-title {
   font-weight: 500;
 }
 </style>

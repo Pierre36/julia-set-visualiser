@@ -29,7 +29,7 @@ export default {
 
 <template>
   <div class="frame">
-    <div class="degreePicker">
+    <div class="degree-picker">
       <span>Degree</span>
       <ComboBox
         :options="degreeOptions"
@@ -62,7 +62,7 @@ export default {
   padding: 0.5rem;
 }
 
-.degreePicker {
+.degree-picker {
   display: grid;
   grid-template-columns: auto 9.75rem 2rem;
   align-items: center;

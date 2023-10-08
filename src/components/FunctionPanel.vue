@@ -120,15 +120,15 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Function type">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Function type">
         <p>In this section, you can change the function type. There is 3 function types:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Default</span>: The polynomial function is directly used
-            as the final function.
+            <span class="info-list-item-title">Default</span>: The polynomial function is directly
+            used as the final function.
           </li>
           <li>
-            <span class="infoListItemTitle">Newton</span>: The final function is the generalized
+            <span class="info-list-item-title">Newton</span>: The final function is the generalized
             Newton's iteration and the coefficient can be edited (see
             <a
               href="https://en.wikipedia.org/wiki/Newton_fractal#Generalization_of_Newton_fractals"
@@ -138,7 +138,7 @@ export default {
             for more details).
           </li>
           <li>
-            <span class="infoListItemTitle">Fraction</span>: The function is a fraction of two
+            <span class="info-list-item-title">Fraction</span>: The function is a fraction of two
             polynomials.
           </li>
         </ul>
@@ -164,40 +164,40 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" :headingText="numeratorHeading">
+      <Disclosure class="section-header" :headingLevel="3" :headingText="numeratorHeading">
         <p>In this section, you can:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
+            <span class="info-list-item-title">Add</span> a coefficient by clicking on the "New
             Coefficient" button.
           </li>
           <li>
-            <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
-            in the fields of the coefficient frame.
+            <span class="info-list-item-title">Edit</span> a coefficient by picking and typing
+            values in the fields of the coefficient frame.
           </li>
           <li>
-            <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top right
-            button of the coefficient frame.
+            <span class="info-list-item-title">Remove</span> a coefficient by clicking on the top
+            right button of the coefficient frame.
           </li>
         </ul>
         <p>In the coefficient frame, you can:</p>
-        <ul class="infoList">
-          <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
-          <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
+        <ul class="info-list">
+          <li><span class="info-list-item-title">Choose</span> the degree of the coefficient.</li>
+          <li><span class="info-list-item-title">Choose</span> the type of coefficient.</li>
         </ul>
         <p>A coefficient can be of three types:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Constant</span>: the coefficient is the constant complex
-            number you choose.
+            <span class="info-list-item-title">Constant</span>: the coefficient is the constant
+            complex number you choose.
           </li>
           <li>
-            <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
+            <span class="info-list-item-title">Circle</span>: the coefficient is a point on a circle
             which you can edit by choosing its center and radius as well as the duration of one
             turn.
           </li>
           <li>
-            <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
+            <span class="info-list-item-title">Line</span>: the coefficient goes back and forth on a
             line. You can edit this line by choosing its starting and ending points as well as the
             duration of the round trip.
           </li>
@@ -226,40 +226,40 @@ export default {
     </section>
 
     <section v-if="fractalFunction.functionType == 'FRACTION'">
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Denominator coefficients">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Denominator coefficients">
         <p>In this section, you can:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Add</span> a coefficient by clicking on the "New
+            <span class="info-list-item-title">Add</span> a coefficient by clicking on the "New
             Coefficient" button.
           </li>
           <li>
-            <span class="infoListItemTitle">Edit</span> a coefficient by picking and typing values
-            in the fields of the coefficient frame.
+            <span class="info-list-item-title">Edit</span> a coefficient by picking and typing
+            values in the fields of the coefficient frame.
           </li>
           <li>
-            <span class="infoListItemTitle">Remove</span> a coefficient by clicking on the top right
-            button of the coefficient frame.
+            <span class="info-list-item-title">Remove</span> a coefficient by clicking on the top
+            right button of the coefficient frame.
           </li>
         </ul>
         <p>In the coefficient frame, you can:</p>
-        <ul class="infoList">
-          <li><span class="infoListItemTitle">Choose</span> the degree of the coefficient.</li>
-          <li><span class="infoListItemTitle">Choose</span> the type of coefficient.</li>
+        <ul class="info-list">
+          <li><span class="info-list-item-title">Choose</span> the degree of the coefficient.</li>
+          <li><span class="info-list-item-title">Choose</span> the type of coefficient.</li>
         </ul>
         <p>A coefficient can be of three types:</p>
-        <ul class="infoList">
+        <ul class="info-list">
           <li>
-            <span class="infoListItemTitle">Constant</span>: the coefficient is the constant complex
-            number you choose.
+            <span class="info-list-item-title">Constant</span>: the coefficient is the constant
+            complex number you choose.
           </li>
           <li>
-            <span class="infoListItemTitle">Circle</span>: the coefficient is a point on a circle
+            <span class="info-list-item-title">Circle</span>: the coefficient is a point on a circle
             which you can edit by choosing its center and radius as well as the duration of one
             turn.
           </li>
           <li>
-            <span class="infoListItemTitle">Line</span>: the coefficient goes back and forth on a
+            <span class="info-list-item-title">Line</span>: the coefficient goes back and forth on a
             line. You can edit this line by choosing its starting and ending points as well as the
             duration of the round trip.
           </li>

@@ -48,7 +48,7 @@ export default {
       role="textbox"
       @change="($event) => checkAndUpdate($event.target.value)"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="wrong">
+    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
       <title>Please enter a valid complex number</title>
       <path
         fill="currentColor"
@@ -91,7 +91,7 @@ export default {
   padding-right: calc(var(--warning-width) + var(--warning-margin) + 4px);
 }
 
-.wrongInputSVG {
+.wrong-input-svg {
   position: absolute;
   height: 100%;
   width: var(--warning-width);

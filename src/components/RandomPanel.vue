@@ -106,7 +106,7 @@ export default {
 
   <div class="panel-content">
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Function">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Function">
         <p>In this section, you can change the range of values the function parameters can take.</p>
         <p>
           For complex numbers, you can choose their min and max modulus. This means that the
@@ -261,7 +261,7 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Colors">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Colors">
         <p>In this section, you can change the range of values the colors parameters can take.</p>
       </Disclosure>
       <div class="content one-column">
@@ -405,7 +405,7 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Advanced Settings">
+      <Disclosure class="section-header" :headingLevel="3" headingText="Advanced Settings">
         <p>In this section, you can change the range of values the advanced parameters can take.</p>
         <p>
           Note that the resolution cannot be randomized. Therefore, the resolution chosen in the

@@ -81,7 +81,7 @@ export default {
       @keydown.end.prevent="goToMax"
       @change="($event) => checkAndUpdate($event.target.value)"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrongInputSVG" v-if="wrong">
+    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
       <title>{{ wrongInputMessage }}</title>
       <path
         fill="currentColor"
@@ -89,7 +89,7 @@ export default {
         d="M92-120q-9 0-15.652-4.125Q69.696-128.25 66-135q-4.167-6.6-4.583-14.3Q61-157 66-165l388-670q5-8 11.5-11.5T480-850q8 0 14.5 3.5T506-835l388 670q5 8 4.583 15.7-.416 7.7-4.583 14.3-3.696 6.75-10.348 10.875Q877-120 868-120H92Zm52-60h672L480-760 144-180Zm340.175-57q12.825 0 21.325-8.675 8.5-8.676 8.5-21.5 0-12.825-8.675-21.325-8.676-8.5-21.5-8.5-12.825 0-21.325 8.675-8.5 8.676-8.5 21.5 0 12.825 8.675 21.325 8.676 8.5 21.5 8.5Zm0-111q12.825 0 21.325-8.625T514-378v-164q0-12.75-8.675-21.375-8.676-8.625-21.5-8.625-12.825 0-21.325 8.625T454-542v164q0 12.75 8.675 21.375 8.676 8.625 21.5 8.625ZM480-470Z"
       />
     </svg>
-    <button class="button inputButton up" @click="stepUp" tabindex="-1">
+    <button class="button input-button up" @click="stepUp" tabindex="-1">
       <svg viewBox="0 -960 960 960" role="img">
         <title>Increase value</title>
         <path
@@ -99,7 +99,7 @@ export default {
         />
       </svg>
     </button>
-    <button class="button inputButton down" @click="stepDown" tabindex="-1">
+    <button class="button input-button down" @click="stepDown" tabindex="-1">
       <svg viewBox="0 -960 960 960" role="img">
         <title>Decrease value</title>
         <path
@@ -152,7 +152,7 @@ input::-webkit-inner-spin-button {
   );
 }
 
-.inputButton {
+.input-button {
   --button-border-radius: 0.15rem;
   --button-border-width: 1px;
   --button-color: var(--input-color, #000000);
@@ -171,7 +171,7 @@ input::-webkit-inner-spin-button {
   line-height: 0;
 }
 
-.inputButton.up {
+.input-button.up {
   top: 0;
   bottom: 50%;
   margin-bottom: calc(var(--buttons-margin) / 4);
@@ -179,7 +179,7 @@ input::-webkit-inner-spin-button {
   border-bottom-right-radius: 0;
 }
 
-.inputButton.down {
+.input-button.down {
   top: 50%;
   bottom: 0;
   margin-top: calc(var(--buttons-margin) / 4);
@@ -187,11 +187,11 @@ input::-webkit-inner-spin-button {
   border-top-right-radius: 0;
 }
 
-.inputButton svg {
+.input-button svg {
   height: 100%;
 }
 
-.wrongInputSVG {
+.wrong-input-svg {
   position: absolute;
   height: 100%;
   width: var(--warning-width);

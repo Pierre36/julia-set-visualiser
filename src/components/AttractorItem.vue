@@ -47,9 +47,9 @@ export default {
 </script>
 
 <template>
-  <div class="attractorItem">
-    <h4 v-if="isDefault" class="span-2 textAttractor">Default (no attractor)</h4>
-    <h4 v-else-if="isInfinity" class="span-2 textAttractor">Divergence to Infinity</h4>
+  <div class="attractor-item">
+    <h4 v-if="isDefault" class="span-2 text-attractor">Default (no attractor)</h4>
+    <h4 v-else-if="isInfinity" class="span-2 text-attractor">Divergence to Infinity</h4>
     <div v-else class="attractor span-2">
       <h4>Attractor</h4>
       <ComplexInput
@@ -117,7 +117,7 @@ export default {
 </template>
 
 <style scoped>
-.attractorItem {
+.attractor-item {
   display: grid;
   grid-template-columns: auto auto;
   gap: 0.25rem;
@@ -131,7 +131,7 @@ export default {
   grid-column: span 2;
 }
 
-.textAttractor {
+.text-attractor {
   margin-bottom: 0.5rem;
 }
 
