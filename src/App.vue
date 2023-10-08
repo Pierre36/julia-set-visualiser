@@ -32,8 +32,10 @@ export default {
       if (this.animationFrame != null) {
         this.animationFrame.resetFractalEngineTime();
       }
+      console.debug("[OK] Switched to configuration " + newSelectedId);
     },
     getStorageConfiguration() {
+      console.debug("[>>] Loading the local storage configuration...");
       const localConfiguration = localStorage.getItem("customConfiguration");
       if (localConfiguration != null) {
         try {
@@ -42,10 +44,14 @@ export default {
           customConfiguration.name = "Custom";
           this.configurations["CUSTOM"] = customConfiguration;
           this.selectedConfigurationId = "CUSTOM";
-        } finally {
-          this.updateConfiguration(this.selectedConfigurationId);
+        } catch (error) {
+          console.error("[KO] Could not load the local storage configuration: %s", error);
         }
+      } else {
+        this.selectedConfigurationId = "DEFAULT";
+        console.debug("[OK] No local storage found. Switching to default configuration...");
       }
+      this.updateConfiguration(this.selectedConfigurationId);
     },
     switchToCustomConfiguration() {
       this.selectedConfigurationId = "CUSTOM";

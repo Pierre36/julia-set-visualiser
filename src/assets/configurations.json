@@ -874,5 +874,77 @@
       "valueOffset": 1.4
     },
     "attractors": []
+  },
+  {
+    "id": "AMARANTH_GALAXY",
+    "name": "Amaranth Galaxy",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.5,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 11,
+    "epsilon": 0.0000067,
+    "juliaBound": -4,
+    "fractalFunction": {
+      "numerator": {
+        "4": {
+          "start": { "re": 4.7, "im": 5.8 },
+          "end": { "re": 0.53, "im": 3.1 },
+          "duration": 6000,
+          "type": "LINE"
+        },
+        "8": {
+          "center": { "re": 1.3, "im": -2.4 },
+          "radius": 6.7,
+          "duration": 20000,
+          "type": "CIRCLE"
+        },
+        "14": {
+          "center": { "re": 3.8, "im": -2.5 },
+          "radius": 7.3,
+          "duration": 26000,
+          "type": "CIRCLE"
+        }
+      },
+      "denominator": {
+        "3": {
+          "start": { "re": 18.8, "im": 23.2 },
+          "end": { "re": 2.12, "im": 12.4 },
+          "duration": 6000,
+          "type": "LINE"
+        },
+        "7": {
+          "center": { "re": 10.4, "im": -19.2 },
+          "radius": 53.6,
+          "duration": 20000,
+          "type": "CIRCLE"
+        },
+        "13": {
+          "center": { "re": 53.199999999999996, "im": -35 },
+          "radius": 102.2,
+          "duration": 26000,
+          "type": "CIRCLE"
+        }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": { "re": 1.3, "im": -3.2, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 340,
+      "saturationStrength": 0.082,
+      "saturationOffset": 0.039,
+      "valueStrength": 0.24,
+      "valueOffset": 0.46
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 172,
+      "saturationStrength": 0.19,
+      "saturationOffset": 0.97,
+      "valueStrength": 0.16,
+      "valueOffset": 0.49
+    },
+    "attractors": []
   }
 ]

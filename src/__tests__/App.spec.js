@@ -80,6 +80,36 @@ describe("Render", () => {
     // Check the animation frame renders correctly
     expect(animationFrame.vm.$props.configuration).toEqual(expectedCurrentConfiguration);
   });
+
+  it("renders correctly when local storage is malformed", async () => {
+    // Put a malformed configuration in the local storage
+    localStorage.setItem("customConfiguration", "incorrect configuration");
+
+    // Mount the App
+    const app = mount(App, { shallow: true });
+    await flushPromises();
+
+    // Get the DOM elements
+    const header = app.findComponent(MainHeader);
+    const sidebar = app.findComponent(SideBar);
+    const animationFrame = app.findComponent(AnimationFrame);
+
+    // Check the header renders properly
+    expect(header.vm.$props.configurations).toEqual({
+      DEFAULT: Configuration.defaultConfiguration(),
+      CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
+      SPECIAL: Configuration.defaultConfiguration("SPECIAL", "Special"),
+    });
+    expect(header.vm.$props.selectedConfigurationId).toBe("DEFAULT");
+    const expectedCurrentConfiguration = Configuration.defaultConfiguration("", "");
+    expect(header.vm.$props.configuration).toEqual(expectedCurrentConfiguration);
+
+    // Check the sidebar renders correctly
+    expect(sidebar.vm.$props.configuration).toEqual(expectedCurrentConfiguration);
+
+    // Check the animation frame renders correctly
+    expect(animationFrame.vm.$props.configuration).toEqual(expectedCurrentConfiguration);
+  });
 });
 
 describe("Interactions", () => {
