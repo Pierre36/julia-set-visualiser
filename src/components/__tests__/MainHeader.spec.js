@@ -33,8 +33,12 @@ describe("Render", () => {
     const logo = mainHeader.find(".logo");
     const heading = mainHeader.find("h1");
     const combobox = mainHeader.findComponent(ComboBox);
-    const saveButton = mainHeader.find("button");
-    const toast = mainHeader.findComponent(Toast);
+    const buttons = mainHeader.findAll("button");
+    const saveButton = buttons[0];
+    const downloadButton = buttons[1];
+    const toasts = mainHeader.findAllComponents(Toast);
+    const saveToast = toasts[0];
+    const downloadToast = toasts[1];
 
     // Check the logo is rendered correctly
     expect(logo.attributes().src).toBe("/logo.svg");
@@ -55,20 +59,34 @@ describe("Render", () => {
     expect(saveButton.text()).toBe("Save");
     expect(saveButton.attributes().disabled).toBeDefined();
 
-    // Check the Toast is rendered correctly
-    expect(toast.vm.$props.text).toBe("Custom configuration saved");
-    expect(toast.vm.$props.animationDuration).toBe(500);
-    expect(toast.vm.$props.displayDuration).toBe(1500);
+    // Check the save Toast is rendered correctly
+    expect(saveToast.vm.$props.text).toBe("Custom configuration saved!");
+    expect(saveToast.vm.$props.animationDuration).toBe(500);
+    expect(saveToast.vm.$props.displayDuration).toBe(1500);
+
+    // Check the download button is rendered correctly
+    expect(downloadButton.text()).toBe("Download");
+    expect(downloadButton.attributes().disabled).toBeDefined();
+
+    // Check the download Toast is rendered correctly
+    expect(downloadToast.vm.$props.text).toBe("Custom configuration downloaded!");
+    expect(downloadToast.vm.$props.animationDuration).toBe(500);
+    expect(downloadToast.vm.$props.displayDuration).toBe(1500);
   });
 
-  it("enables the save button when the selected configuration is CUSTOM", () => {
+  it("enables the save and download buttons when the selected configuration is CUSTOM", () => {
     // Mount the MainHeader
     props.selectedConfigurationId = "CUSTOM";
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
 
     // Check the save button is enable
-    const saveButton = mainHeader.find("button");
+    const buttons = mainHeader.findAll("button");
+    const saveButton = buttons[0];
     expect(saveButton.attributes().disabled).toBeUndefined();
+
+    // Check the download button is enable
+    const downloadButton = buttons[1];
+    expect(downloadButton.attributes().disabled).toBeUndefined();
   });
 });
 
@@ -93,14 +111,14 @@ describe("Interactions", () => {
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
 
     // Get DOM elements
-    const saveButton = mainHeader.find("button");
-    const toast = mainHeader.findComponent(Toast);
+    const saveButton = mainHeader.findAll("button")[0];
+    const saveToast = mainHeader.findAllComponents(Toast)[0];
 
     // Change the configuration
     props.configuration.juliaHSV = [36, 42, 16];
 
     // Mock the toast show
-    toast.vm.show = vi.fn();
+    saveToast.vm.show = vi.fn();
 
     // Click the saveButton
     saveButton.trigger("click");
@@ -109,10 +127,33 @@ describe("Interactions", () => {
     expect(localStorage.getItem("customConfiguration")).toBe(
       JSON.stringify(props.configuration.toJSON())
     );
-    expect(toast.vm.show).toBeCalled();
+    expect(saveToast.vm.show).toBeCalled();
     const expectedConfiguration = Configuration.emptyConfiguration("CUSTOM", "Custom");
     expectedConfiguration.fillWith(props.configuration);
     expect(props.configurations["CUSTOM"]).toEqual(expectedConfiguration);
+  });
+
+  it("downloads the configuration when the download button is clicked", () => {
+    // Mount the MainHeader
+    props.selectedConfigurationId = "CUSTOM";
+    const mainHeader = mount(MainHeader, { props: props, shallow: true });
+
+    // Get DOM elements
+    const downloadButton = mainHeader.findAll("button")[1];
+    const downloadToast = mainHeader.findAllComponents(Toast)[1];
+
+    // Mock jsdom missing functions
+    window.URL.createObjectURL = vi.fn(() => "url");
+    window.URL.revokeObjectURL = vi.fn();
+
+    // Mock the toast show
+    downloadToast.vm.show = vi.fn();
+
+    // Click the saveButton
+    downloadButton.trigger("click");
+
+    // Check the configuration is downloaded
+    expect(downloadToast.vm.show).toBeCalled();
   });
 
   it("emits selection change event when the combobox is updated", () => {

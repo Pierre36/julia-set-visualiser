@@ -24,7 +24,20 @@ export default {
     saveConfiguration() {
       localStorage.setItem("customConfiguration", JSON.stringify(this.configuration.toJSON()));
       this.configurations["CUSTOM"].fillWith(this.configuration);
-      this.$refs.toast.show();
+      this.$refs.saveToast.show();
+    },
+    downloadConfiguration() {
+      console.debug("[>>] Downloading the current custom configuration...");
+      var fileContent = JSON.stringify(this.configuration.toJSON());
+      var blob = new Blob([fileContent], { type: "application/json" });
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = `custom_configuration.json`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      this.$refs.downloadToast.show();
+      console.debug("[OK] Configuration downloaded");
     },
   },
 };
@@ -55,7 +68,22 @@ export default {
         />
       </svg>
     </button>
-    <Toast ref="toast" text="Custom configuration saved" />
+    <button
+      class="icon-button"
+      @click="downloadConfiguration"
+      :disabled="selectedConfigurationId !== 'CUSTOM'"
+    >
+      <svg viewBox="0 -960 960 960" role="img">
+        <title>Download</title>
+        <path
+          fill="currentColor"
+          fill-rule="evenodd"
+          d="M480-343.539q-7.231 0-13.461-2.308-6.231-2.307-11.846-7.923L330.309-478.153q-8.923-8.923-8.807-20.884.115-11.961 8.807-21.269 9.308-9.307 21.384-9.615 12.077-.308 21.385 9l76.923 76.923v-306.001q0-12.769 8.615-21.384 8.615-8.616 21.384-8.616t21.384 8.616q8.615 8.615 8.615 21.384v306.001l76.923-76.923q8.923-8.923 21.192-8.808 12.269.116 21.577 9.423 8.692 9.308 8.999 21.077.308 11.769-8.999 21.076L505.307-353.77q-5.615 5.616-11.846 7.923-6.23 2.308-13.461 2.308ZM252.309-180.001q-30.308 0-51.308-21t-21-51.308v-78.461q0-12.769 8.616-21.384 8.615-8.615 21.384-8.615t21.384 8.615Q240-343.539 240-330.77v78.461q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h455.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-78.461q0-12.769 8.615-21.384t21.384-8.615q12.769 0 21.384 8.615 8.616 8.615 8.616 21.384v78.461q0 30.308-21 51.308t-51.308 21H252.309Z"
+        />
+      </svg>
+    </button>
+    <Toast ref="saveToast" text="Custom configuration saved!" />
+    <Toast ref="downloadToast" text="Custom configuration downloaded!" />
   </header>
 </template>
 
@@ -65,9 +93,7 @@ header {
   min-width: var(--page-min-width);
   background-color: var(--gray-400);
   display: grid;
-  grid-template-columns:
-    var(--sideNav-width) auto minmax(min-content, 15rem)
-    max-content;
+  grid-template-columns: var(--sideNav-width) auto minmax(min-content, 15rem) max-content max-content;
   align-items: center;
   gap: 0.75rem;
   padding-right: 0.5rem;
