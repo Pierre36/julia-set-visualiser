@@ -182,6 +182,9 @@ class FractalEngine {
       this.uniformLocations.dimensionRatio,
       this.canvas.clientWidth / this.canvas.clientHeight
     );
+    if (this.paused) {
+      this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
+    }
   }
 
   /**
