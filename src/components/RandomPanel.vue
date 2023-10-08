@@ -94,12 +94,25 @@ export default {
 
 <template>
   <header>
-    <Disclosure :headingCentered="true" :headingLevel="2" headingText="Randomize"> </Disclosure>
+    <Disclosure :headingCentered="true" :headingLevel="2" headingText="Randomize">
+      <p>This panel allows to randomize the parameters of the fractal.</p>
+      <p>You can edit the range of values the parameters can take.</p>
+      <p>
+        Click the randomize button at the bottom to give random values to all parameters of the
+        fractal.
+      </p>
+    </Disclosure>
   </header>
 
   <div class="panel-content">
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Function"> </Disclosure>
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Function">
+        <p>In this section, you can change the range of values the function parameters can take.</p>
+        <p>
+          For complex numbers, you can choose their min and max modulus. This means that the
+          distance between the complex number and zero will be between the min and max you set.
+        </p>
+      </Disclosure>
       <div class="content one-column">
         <h4>Function types</h4>
         <MultiComboBox
@@ -248,7 +261,9 @@ export default {
     </section>
 
     <section>
-      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Colors"> </Disclosure>
+      <Disclosure class="sectionHeader" :headingLevel="3" headingText="Colors">
+        <p>In this section, you can change the range of values the colors parameters can take.</p>
+      </Disclosure>
       <div class="content one-column">
         <Disclosure
           headingText="Julia Color"
@@ -391,6 +406,11 @@ export default {
 
     <section>
       <Disclosure class="sectionHeader" :headingLevel="3" headingText="Advanced Settings">
+        <p>In this section, you can change the range of values the advanced parameters can take.</p>
+        <p>
+          Note that the resolution cannot be randomized. Therefore, the resolution chosen in the
+          advanced panel will stay the same.
+        </p>
       </Disclosure>
       <div class="content one-column">
         <Disclosure
