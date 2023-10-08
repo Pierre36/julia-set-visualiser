@@ -32,6 +32,7 @@ export default {
     <div class="degree-picker">
       <span>Degree</span>
       <ComboBox
+        id="degree-combobox"
         :options="degreeOptions"
         :selected="degree.toString()"
         label="Coefficient degree"

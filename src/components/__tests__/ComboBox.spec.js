@@ -8,6 +8,7 @@ describe("Button render", () => {
 
   beforeEach(() => {
     props = {
+      id: "id",
       options: [
         { id: "0", text: "option0" },
         { id: "1", text: "option1" },
@@ -48,7 +49,7 @@ describe("Button render", () => {
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
     expect(button.attributes().role).toBe("combobox");
-    expect(button.attributes()["aria-controls"]).toBe("popup");
+    expect(button.attributes()["aria-controls"]).toBe(props.id + "_popup");
   });
 });
 
@@ -58,6 +59,7 @@ describe("List render", () => {
 
   beforeEach(() => {
     props = {
+      id: "id",
       options: [
         { id: "0", text: "option0" },
         { id: "1", text: "option1" },
@@ -70,7 +72,7 @@ describe("List render", () => {
 
   it("has the role 'listbox'", () => {
     const comboBox = mount(ComboBox, { props: props });
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
     expect(popup.attributes().role).toBe("listbox");
   });
 
@@ -108,7 +110,7 @@ describe("List render", () => {
   it("is closed by default", () => {
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
     expect(popup.isVisible()).toBe(false);
     expect(button.attributes()["aria-expanded"]).toBe("false");
   });
@@ -119,6 +121,7 @@ describe("Combobox interactions with popup closed", () => {
 
   beforeEach(() => {
     props = {
+      id: "id",
       options: [
         { id: "0", text: "option0" },
         { id: "1", text: "option1" },
@@ -132,7 +135,7 @@ describe("Combobox interactions with popup closed", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Click the button
     await button.trigger("click");
@@ -146,7 +149,7 @@ describe("Combobox interactions with popup closed", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Press key "down"
     await button.trigger("keydown.down");
@@ -159,7 +162,7 @@ describe("Combobox interactions with popup closed", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Press key "enter"
     await button.trigger("keydown.enter");
@@ -174,6 +177,7 @@ describe("Combobox focus interactions", () => {
 
   beforeEach(() => {
     props = {
+      id: "id",
       options: [
         { id: "0", text: "option0" },
         { id: "1", text: "option1" },
@@ -283,6 +287,7 @@ describe("Combobox interactions with popup open", () => {
 
   beforeEach(() => {
     props = {
+      id: "id",
       options: [
         { id: "0", text: "option0" },
         { id: "1", text: "option1" },
@@ -296,7 +301,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup
     await button.trigger("click");
@@ -313,7 +318,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup
     await button.trigger("click");
@@ -329,7 +334,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup
     await button.trigger("click");
@@ -345,7 +350,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup and click inside it
     await button.trigger("click");
@@ -359,7 +364,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup
     await button.trigger("click");
@@ -381,7 +386,7 @@ describe("Combobox interactions with popup open", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
 
     // Open the popup
     await button.trigger("click");
@@ -406,7 +411,7 @@ describe("Combobox popup scroll behavior", () => {
   let props;
 
   beforeEach(() => {
-    props = { options: [], selected: "0" };
+    props = { id: "id", options: [], selected: "0" };
     for (let i = 0; i < nbOptions; i++) {
       props.options.push({ id: i.toString(), text: `option${i}` });
     }
@@ -417,7 +422,7 @@ describe("Combobox popup scroll behavior", () => {
     // Mount the ComboBox
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    const popup = comboBox.find("#popup");
+    const popup = comboBox.find("#" + props.id + "_popup");
     const optionItems = comboBox.findAll("[role='option']");
 
     // Mock scroll related methods

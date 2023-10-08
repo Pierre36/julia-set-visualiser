@@ -95,6 +95,7 @@ export default {
   <div class="container">
     <component :is="heading">Type</component>
     <ComboBox
+      id="coefficient-type-combobox"
       :options="typeOptions"
       label="Coefficient type"
       :selected="type"

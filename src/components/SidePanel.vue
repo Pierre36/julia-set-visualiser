@@ -18,7 +18,7 @@ export default {
 
 <template>
   <Transition name="panel-slide">
-    <div :id="currentPanel" class="side-panel" v-if="!collapsed" role="tabpanel">
+    <div id="side-panel" :class="currentPanel" v-if="!collapsed" role="tabpanel">
       <FunctionPanel
         v-if="currentPanel == 'FUNCTION'"
         :fractalFunction="configuration.fractalFunction"
@@ -47,7 +47,7 @@ export default {
 </template>
 
 <style>
-.side-panel {
+#side-panel {
   --divider-height: 1px;
   --divider-color: var(--gray-350);
   position: absolute;
@@ -71,17 +71,17 @@ export default {
 }
 
 @media (min-width: 1000px) {
-  .side-panel {
+  #side-panel {
     position: initial;
   }
 }
 
-.side-panel header {
+#side-panel header {
   padding: 0.5rem;
   border-bottom: calc(var(--divider-height) * 2) solid var(--divider-color);
 }
 
-.side-panel .panel-content {
+#side-panel .panel-content {
   overflow-y: auto;
   flex-grow: 1;
   border: 2px solid transparent;
@@ -89,25 +89,25 @@ export default {
   border-radius: 0.1rem;
 }
 
-.side-panel .panel-content:focus-visible {
+#side-panel .panel-content:focus-visible {
   border-color: var(--blue-100);
 }
 
-.side-panel section {
+#side-panel section {
   padding: 0.5rem;
   border-bottom: var(--divider-height) solid var(--divider-color);
 }
 
-.side-panel section .section-header {
+#side-panel section .section-header {
   margin-bottom: 0.5rem;
 }
 
-.side-panel section:last-of-type {
+#side-panel section:last-of-type {
   border-bottom: none;
   flex-grow: 1;
 }
 
-.side-panel section .content {
+#side-panel section .content {
   display: grid;
   grid-template-columns: auto 12rem;
   align-items: center;
@@ -115,21 +115,21 @@ export default {
   padding-left: 0.25rem;
 }
 
-.side-panel section .content.one-column {
+#side-panel section .content.one-column {
   grid-template-columns: auto;
 }
 
-.side-panel p {
+#side-panel p {
   margin-bottom: 0.5rem;
 }
 
-.side-panel .info-list {
+#side-panel .info-list {
   list-style: inside;
   padding-inline-start: 1rem;
   margin-bottom: 0.75rem;
 }
 
-.side-panel .info-list-item-title {
+#side-panel .info-list-item-title {
   font-weight: 500;
 }
 </style>

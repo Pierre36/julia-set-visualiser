@@ -25,7 +25,7 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Check nothing is displayed
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     expect(panelContainer.exists()).toBe(false);
   });
 
@@ -34,11 +34,11 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panel container
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
 
     // Check the panel container is rendered correctly
     expect(panelContainer.exists()).toBe(true);
-    expect(panelContainer.attributes().id).toBe(props.currentPanel);
+    expect(panelContainer.attributes().class).toBe(props.currentPanel);
     expect(panelContainer.attributes().role).toBe("tabpanel");
   });
 
@@ -48,7 +48,7 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
@@ -70,7 +70,7 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
@@ -95,7 +95,7 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
@@ -117,7 +117,7 @@ describe("Render", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
@@ -151,7 +151,7 @@ describe("Interactions", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the FUNCTION panel
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
 
     // Make FUNCTION panel emit change and check the SidePanel emits change
@@ -165,7 +165,7 @@ describe("Interactions", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the COLORS panel
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const colorsPanel = panelContainer.findComponent(ColorsPanel);
 
     // Make COLORS panel emit change and check the SidePanel emits change
@@ -179,7 +179,7 @@ describe("Interactions", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the ADVANCED panel
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
 
     // Make ADVANCED panel emit change and check the SidePanel emits change
@@ -193,7 +193,7 @@ describe("Interactions", () => {
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the ADVANCED panel
-    const panelContainer = sidePanel.find(".side-panel");
+    const panelContainer = sidePanel.find("#side-panel");
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Make ADVANCED panel emit change and check the SidePanel emits change

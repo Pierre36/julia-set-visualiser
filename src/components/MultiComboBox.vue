@@ -2,6 +2,7 @@
 export default {
   name: "MultiComboBox",
   props: {
+    id: { type: String, required: true },
     options: { type: Array, default: [] },
     selected: { type: Set, default: new Set() },
     label: { type: String, default: "" },
@@ -125,7 +126,7 @@ export default {
       @keydown.home.prevent="moveFocusToFirst"
       @keydown.end.prevent="moveFocusToLast"
       @keydown.tab="closePopup"
-      aria-controls="popup"
+      :aria-controls="id + '_popup'"
       :aria-expanded="popupOpen"
       :aria-activedescendant="options[focusedIndex].id"
       :aria-label="label"
@@ -134,6 +135,7 @@ export default {
     >
       <span class="input-text">{{ inputText }}</span>
       <svg class="input-icon" viewBox="0 -960 960 960" role="img">
+        <title>down-arrow</title>
         <path
           fill="currentColor"
           fill-rule="evenodd"
@@ -141,7 +143,7 @@ export default {
         />
       </svg>
     </button>
-    <ul ref="popup" id="popup" class="popup" v-show="popupOpen" role="listbox">
+    <ul ref="popup" :id="id + '_popup'" class="popup" v-show="popupOpen" role="listbox">
       <li
         ref="optionItems"
         v-for="(option, index) in options"
@@ -153,6 +155,7 @@ export default {
         role="option"
       >
         <svg class="input-icon" viewBox="0 -960 960 960" role="img">
+          <title>checkbox</title>
           <path
             fill="currentColor"
             fill-rule="evenodd"

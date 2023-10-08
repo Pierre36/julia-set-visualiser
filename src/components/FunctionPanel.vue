@@ -146,6 +146,7 @@ export default {
       <div class="content">
         <h4>Type</h4>
         <ComboBox
+          id="function-type-combobox"
           label="Function type"
           :options="functionTypeOptions"
           :selected="fractalFunction.functionType"

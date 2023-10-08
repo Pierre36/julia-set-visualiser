@@ -116,6 +116,7 @@ export default {
       <div class="content one-column">
         <h4>Function types</h4>
         <MultiComboBox
+          id="function-types-multi-combobox"
           :options="functionTypeOptions"
           v-model:selected="selectedFunctionTypes"
           label="Function types"
@@ -124,6 +125,7 @@ export default {
         />
         <h4>Coefficient types</h4>
         <MultiComboBox
+          id="coefficient-types-multi-combobox"
           :options="coefficientTypeOptions"
           v-model:selected="selectedCoefficientTypes"
           label="Coefficient types"

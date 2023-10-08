@@ -32,9 +32,10 @@ export default {
 
 <template>
   <header>
-    <img class="logo" src="/logo.svg" />
+    <img class="logo" src="/logo.svg" alt="logo" />
     <h1>Julia Set Visualizer</h1>
     <ComboBox
+      id="configuration-combobox"
       label="Configuration"
       :options="configurationOptions"
       :selected="selectedConfigurationId"
