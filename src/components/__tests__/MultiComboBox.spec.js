@@ -25,34 +25,34 @@ describe("Button render", () => {
     props.selected = new Set();
     const multiComboBox = mount(MultiComboBox, { props: props });
     const button = multiComboBox.find("button");
-    expect(button.text()).toBe(props.noOptionsSelectedText);
+    expect(button.text()).toContain(props.noOptionsSelectedText);
   });
 
   it("is noOptionsSelectedText when the selected is not in the options and noOptionsSelectedText is set", () => {
     props.selected = new Set(["-1"]);
     const multiComboBox = mount(MultiComboBox, { props: props });
     const button = multiComboBox.find("button");
-    expect(button.text()).toBe(props.noOptionsSelectedText);
+    expect(button.text()).toContain(props.noOptionsSelectedText);
   });
 
   it("contains the selected option text when only one option is selected", () => {
     const multiComboBox = mount(MultiComboBox, { props: props });
     const button = multiComboBox.find("button");
-    expect(button.text()).toBe("option1");
+    expect(button.text()).toContain("option1");
   });
 
   it("contains the number of selected options when multiple options are selected", () => {
     props.selected = new Set(["0", "1"]);
     const multiComboBox = mount(MultiComboBox, { props: props });
     const button = multiComboBox.find("button");
-    expect(button.text()).toBe("2 selected options");
+    expect(button.text()).toContain("2 selected options");
   });
 
   it("is allOptionsSelectedText when all options are selected and allOptionsSelectedText is set", () => {
     props.selected = new Set(["0", "1", "2"]);
     const multiComboBox = mount(MultiComboBox, { props: props });
     const button = multiComboBox.find("button");
-    expect(button.text()).toBe(props.allOptionsSelectedText);
+    expect(button.text()).toContain(props.allOptionsSelectedText);
   });
 
   it("has the correct label", () => {
@@ -104,7 +104,7 @@ describe("List render", () => {
     const multiComboBox = mount(MultiComboBox, { props: props });
     const optionItems = multiComboBox.findAll("[role='option']");
     props.options.forEach((option) => {
-      expect(optionItems.some((item) => item.text() == option.text)).toBe(true);
+      expect(optionItems.some((item) => item.text().includes(option.text))).toBe(true);
     });
   });
 

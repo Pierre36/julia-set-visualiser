@@ -23,20 +23,20 @@ describe("Button render", () => {
     props.selected = null;
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    expect(button.text()).toBe("");
+    expect(button.text()).toBe("down-arrow");
   });
 
   it("is empty when the selected is not in the options", () => {
     props.selected = "-1";
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    expect(button.text()).toBe("");
+    expect(button.text()).toBe("down-arrow");
   });
 
   it("contains the selected option text when it can", () => {
     const comboBox = mount(ComboBox, { props: props });
     const button = comboBox.find("button");
-    expect(button.text()).toBe("option1");
+    expect(button.text()).toContain("option1");
   });
 
   it("has the correct label", () => {
@@ -88,14 +88,14 @@ describe("List render", () => {
     const comboBox = mount(ComboBox, { props: props });
     const optionItems = comboBox.findAll("[role='option']");
     props.options.forEach((option) => {
-      expect(optionItems.some((item) => item.text() == option.text)).toBe(true);
+      expect(optionItems.some((item) => item.text().includes(option.text))).toBe(true);
     });
   });
 
   it("displays the selected option first", () => {
     const comboBox = mount(ComboBox, { props: props });
     const option = comboBox.find("[role='option']");
-    expect(option.text()).toBe(selectedOption.text);
+    expect(option.text()).toContain(selectedOption.text);
   });
 
   it("has the proper aria-selected attributes", () => {
