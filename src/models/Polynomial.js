@@ -23,7 +23,7 @@ class Polynomial {
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
-    this.nbCoefficients = 0;
+    this._nbCoefficients = 0;
     this.coefficients = {};
     for (let power = 0; power <= MAX_DEGREE; power++) {
       if (coefficients != undefined && coefficients[power] != undefined) {
@@ -98,22 +98,34 @@ class Polynomial {
       throw Error("The provided coefficient is undefined");
     }
     if (this.coefficients[power] == null || this.coefficients[power] == undefined) {
-      this.arrayRepresentation[3 * this.nbCoefficients + 2] = Number(power);
-      this.nbCoefficients += 1;
+      this.arrayRepresentation[3 * this._nbCoefficients + 2] = Number(power);
+      this._nbCoefficients += 1;
     }
     this.coefficients[power] = coefficient;
     this.degree = Math.max(this.degree, power);
   }
 
   /**
-   * Removes the coefficient at a given power by replacing by null.
+   * Removes the coefficient at a given power by replacing it by null.
    * @param {Number} power The power associated to the wanted coefficient.
    * @throws An error if the power is superior to MAX_DEGREE.
    */
   removeCoefficient(power) {
+    console.debug("[>>] Trying to remove coefficient at power %d from %s...", power, this);
     if (power > MAX_DEGREE) {
+      console.debug(
+        "[KO] Tried to remove a coefficient at power %d but max power is %d",
+        power,
+        MAX_DEGREE
+      );
       throw Error(`The power must be inferior to ${MAX_DEGREE}`);
     }
+
+    if (this.coefficients[power] == null) {
+      console.debug("[KO] Tried to remove an inexistent coefficient");
+      throw Error(`Tried to remove an inexistent coefficient at power ${power}`);
+    }
+
     // Remove the coefficient
     this.coefficients[power] = null;
 
@@ -124,13 +136,13 @@ class Polynomial {
 
     // Update the array representation
     let rank;
-    for (let n = 0; n < this.nbCoefficients; n++) {
+    for (let n = 0; n < this._nbCoefficients; n++) {
       if (this.arrayRepresentation[3 * n + 2] == power) {
         rank = n;
         break;
       }
     }
-    for (let n = rank; n < this.nbCoefficients; n++) {
+    for (let n = rank; n < this._nbCoefficients; n++) {
       if (n == MAX_DEGREE) {
         this.arrayRepresentation[3 * n] = 0;
         this.arrayRepresentation[3 * n + 1] = 0;
@@ -141,7 +153,8 @@ class Polynomial {
         this.arrayRepresentation[3 * n + 2] = this.arrayRepresentation[3 * (n + 1) + 2];
       }
     }
-    this.nbCoefficients -= 1;
+    this._nbCoefficients -= 1;
+    console.debug("[OK] Successfully removed coefficient. The polynomial is now %s.", this);
   }
 
   /**
@@ -216,7 +229,7 @@ class Polynomial {
   updateWithTime(time) {
     let power;
     let coefficient;
-    for (let n = 0; n < this.nbCoefficients; n++) {
+    for (let n = 0; n < this._nbCoefficients; n++) {
       power = this.arrayRepresentation[3 * n + 2];
       coefficient = this.getCoefficient(power).getAtTime(time);
       this.arrayRepresentation[3 * n] = coefficient.mod();
@@ -306,7 +319,7 @@ class Polynomial {
    * @returns {Number} The number of coefficients of the polynomial.
    */
   getNbCoefficients() {
-    return this.nbCoefficients;
+    return this._nbCoefficients;
   }
 
   /**

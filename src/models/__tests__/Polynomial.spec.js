@@ -38,7 +38,7 @@ describe("constructor", () => {
 
     expect(polynomial.degree).toBe(2);
     expect(polynomial.coefficients).toEqual(expectedCoefficients);
-    expect(polynomial.nbCoefficients).toEqual(2);
+    expect(polynomial._nbCoefficients).toEqual(2);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -121,7 +121,7 @@ describe("setCoefficient", () => {
       new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2 })
     );
     expect(polynomial.degree).toBe(2);
-    expect(polynomial.nbCoefficients).toBe(3);
+    expect(polynomial._nbCoefficients).toBe(3);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -134,7 +134,7 @@ describe("setCoefficient", () => {
       new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2, 5: newCoefficient5 })
     );
     expect(polynomial.degree).toBe(5);
-    expect(polynomial.nbCoefficients).toBe(4);
+    expect(polynomial._nbCoefficients).toBe(4);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -166,7 +166,7 @@ describe("removeCoefficient", () => {
 
     expect(polynomial).toEqual(new Polynomial({ 1: coefficient1, 2: coefficient2 }));
     expect(polynomial.degree).toBe(2);
-    expect(polynomial.nbCoefficients).toBe(2);
+    expect(polynomial._nbCoefficients).toBe(2);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -176,7 +176,7 @@ describe("removeCoefficient", () => {
 
     expect(polynomial).toEqual(new Polynomial({ 1: coefficient1 }));
     expect(polynomial.degree).toBe(1);
-    expect(polynomial.nbCoefficients).toBe(1);
+    expect(polynomial._nbCoefficients).toBe(1);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -227,7 +227,7 @@ describe("removeCoefficient", () => {
       })
     );
     expect(polynomial.degree).toBe(14);
-    expect(polynomial.nbCoefficients).toBe(15);
+    expect(polynomial._nbCoefficients).toBe(15);
     expect(polynomial.arrayRepresentation).toEqual([
       0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0,
       0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 0,
@@ -238,6 +238,12 @@ describe("removeCoefficient", () => {
     const polynomial = new Polynomial();
 
     expect(() => polynomial.removeCoefficient(36)).toThrowError();
+  });
+
+  it("properly throws error when removing an inexistent coefficient", () => {
+    const polynomial = new Polynomial();
+
+    expect(() => polynomial.removeCoefficient(0)).toThrowError();
   });
 });
 
@@ -482,7 +488,7 @@ describe("getNbCoefficients", () => {
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
-    expect(polynomial.getNbCoefficients()).toEqual(polynomial.nbCoefficients);
+    expect(polynomial.getNbCoefficients()).toEqual(polynomial._nbCoefficients);
   });
 });
 
