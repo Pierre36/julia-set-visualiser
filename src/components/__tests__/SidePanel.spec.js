@@ -26,7 +26,7 @@ describe("Render", () => {
 
     // Check nothing is displayed
     const panelContainer = sidePanel.find("#side-panel");
-    expect(panelContainer.exists()).toBe(false);
+    expect(panelContainer.isVisible()).toBe(false);
   });
 
   it("renders properly when expanded", () => {
@@ -55,10 +55,10 @@ describe("Render", () => {
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the FUNCTION panel is displayed
-    expect(functionPanel.exists()).toBe(true);
-    expect(colorsPanel.exists()).toBe(false);
-    expect(advancedPanel.exists()).toBe(false);
-    expect(randomPanel.exists()).toBe(false);
+    expect(functionPanel.isVisible()).toBe(true);
+    expect(colorsPanel.isVisible()).toBe(false);
+    expect(advancedPanel.isVisible()).toBe(false);
+    expect(randomPanel.isVisible()).toBe(false);
 
     // Check the FUNCTION panel is rendered properly
     expect(functionPanel.vm.$props.fractalFunction).toEqual(props.configuration.fractalFunction);
@@ -77,10 +77,10 @@ describe("Render", () => {
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the COLORS panel is displayed
-    expect(functionPanel.exists()).toBe(false);
-    expect(colorsPanel.exists()).toBe(true);
-    expect(advancedPanel.exists()).toBe(false);
-    expect(randomPanel.exists()).toBe(false);
+    expect(functionPanel.isVisible()).toBe(false);
+    expect(colorsPanel.isVisible()).toBe(true);
+    expect(advancedPanel.isVisible()).toBe(false);
+    expect(randomPanel.isVisible()).toBe(false);
 
     // Check the COLORS panel is rendered properly
     expect(colorsPanel.vm.$props.juliaHSV).toEqual(props.configuration.juliaHSV);
@@ -102,10 +102,10 @@ describe("Render", () => {
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the ADVANCED panel is displayed
-    expect(functionPanel.exists()).toBe(false);
-    expect(colorsPanel.exists()).toBe(false);
-    expect(advancedPanel.exists()).toBe(true);
-    expect(randomPanel.exists()).toBe(false);
+    expect(functionPanel.isVisible()).toBe(false);
+    expect(colorsPanel.isVisible()).toBe(false);
+    expect(advancedPanel.isVisible()).toBe(true);
+    expect(randomPanel.isVisible()).toBe(false);
 
     // Check the ADVANCED panel is rendered properly
     expect(advancedPanel.vm.$props.configuration).toEqual(props.configuration);
@@ -124,10 +124,10 @@ describe("Render", () => {
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the ADVANCED panel is displayed
-    expect(functionPanel.exists()).toBe(false);
-    expect(colorsPanel.exists()).toBe(false);
-    expect(advancedPanel.exists()).toBe(false);
-    expect(randomPanel.exists()).toBe(true);
+    expect(functionPanel.isVisible()).toBe(false);
+    expect(colorsPanel.isVisible()).toBe(false);
+    expect(advancedPanel.isVisible()).toBe(false);
+    expect(randomPanel.isVisible()).toBe(true);
 
     // Check the ADVANCED panel is rendered properly
     expect(randomPanel.vm.$props.configuration).toEqual(props.configuration);
