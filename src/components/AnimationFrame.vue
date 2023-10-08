@@ -124,7 +124,7 @@ export default {
 </template>
 
 <style scoped>
-#animationFrame {
+#animation-frame {
   position: relative;
   flex-grow: 1;
 }
@@ -135,7 +135,7 @@ canvas {
   height: 100%;
 }
 
-#errorMessage {
+#error-message {
   position: absolute;
   inset: 0;
   margin: 20% auto auto auto;
@@ -147,7 +147,7 @@ canvas {
   overflow: auto;
 }
 
-#errorMessage hr {
+#error-message hr {
   height: 1px;
   margin-block: 0.5rem;
   border: 0;
