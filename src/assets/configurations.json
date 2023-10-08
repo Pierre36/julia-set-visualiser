@@ -382,5 +382,497 @@
       "valueOffset": 1.4
     },
     "attractors": []
+  },
+  {
+    "id": "SHURIKEN",
+    "name": "Shuriken",
+    "resolutionScale": 1,
+    "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
+    "fractalFunction": {
+      "numerator": {
+        "0": {
+          "start": { "re": 0, "im": -0.1 },
+          "end": { "re": 0, "im": 0.1 },
+          "duration": 10000,
+          "type": "LINE"
+        },
+        "3": { "re": 2, "im": 0, "type": "CONSTANT" }
+      },
+      "denominator": { "1": { "re": 2, "im": 0, "type": "CONSTANT" } },
+      "functionType": "FRACTION",
+      "newtonCoefficient": { "re": 0, "im": 0, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
+  },
+  {
+    "id": "SNAKE_BALL",
+    "name": "Snake Ball",
+    "resolutionScale": 1,
+    "coordinatesScale": 2.3,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 19,
+    "epsilon": 0.000005,
+    "juliaBound": -3.5,
+    "fractalFunction": {
+      "numerator": {
+        "2": { "re": 3, "im": -5.9, "type": "CONSTANT" },
+        "9": {
+          "center": { "re": -0.2, "im": 2.8 },
+          "radius": 9.5,
+          "duration": 7000,
+          "type": "CIRCLE"
+        },
+        "12": { "re": 0.17, "im": -0.09, "type": "CONSTANT" }
+      },
+      "denominator": {
+        "1": { "re": 6, "im": -11.8, "type": "CONSTANT" },
+        "8": {
+          "center": { "re": -1.8, "im": 25.2 },
+          "radius": 85.5,
+          "duration": 7000,
+          "type": "CIRCLE"
+        },
+        "11": { "re": 2.04, "im": -1.08, "type": "CONSTANT" }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "center": { "re": -3.4, "im": 2.7 },
+        "radius": 0.2,
+        "duration": 29000,
+        "type": "CIRCLE"
+      }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 110,
+      "saturationStrength": 0.08,
+      "saturationOffset": 0.16,
+      "valueStrength": 0.46,
+      "valueOffset": 0.78
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 230,
+      "saturationStrength": 0.02,
+      "saturationOffset": 0.15,
+      "valueStrength": 0.24,
+      "valueOffset": 1.7
+    },
+    "attractors": []
+  },
+  {
+    "id": "GOLDEN_EYE",
+    "name": "Golden Eye",
+    "resolutionScale": 1,
+    "coordinatesScale": 2.8,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 13,
+    "epsilon": 0.00001,
+    "juliaBound": -4.6,
+    "fractalFunction": {
+      "numerator": {
+        "2": {
+          "center": { "re": -7.6, "im": -0.9 },
+          "radius": 6.05,
+          "duration": 6000,
+          "type": "CIRCLE"
+        },
+        "4": {
+          "center": { "re": 0.6, "im": 2.5 },
+          "radius": 6.8,
+          "duration": 17000,
+          "type": "CIRCLE"
+        }
+      },
+      "denominator": {
+        "5": {
+          "start": { "re": -0.04, "im": -0.37 },
+          "end": { "re": 0.7, "im": -1.3 },
+          "duration": 26000,
+          "type": "LINE"
+        }
+      },
+      "functionType": "FRACTION",
+      "newtonCoefficient": { "re": 0.08, "im": 0.64, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 29,
+      "saturationStrength": 0.12,
+      "saturationOffset": 0.65,
+      "valueStrength": 0.42,
+      "valueOffset": 0.53
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 290,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0.76,
+      "valueStrength": 0.15,
+      "valueOffset": 2.8
+    },
+    "attractors": []
+  },
+  {
+    "id": "ROSE_WINDOW",
+    "name": "Rose Window",
+    "resolutionScale": 1,
+    "coordinatesScale": 2.7,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 25,
+    "epsilon": 0.0000081,
+    "juliaBound": -4.4,
+    "fractalFunction": {
+      "numerator": {
+        "9": { "re": -0.33, "im": -0.052, "type": "CONSTANT" },
+        "12": {
+          "center": { "re": -2.7, "im": 1.3 },
+          "radius": 7.2,
+          "duration": 26000,
+          "type": "CIRCLE"
+        }
+      },
+      "denominator": { "10": { "re": 3.1, "im": 7.9, "type": "CONSTANT" } },
+      "functionType": "FRACTION",
+      "newtonCoefficient": { "re": 1.1, "im": 1, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 219,
+      "saturationStrength": 0.085,
+      "saturationOffset": 0.97,
+      "valueStrength": 0.18,
+      "valueOffset": 0.67
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 199,
+      "saturationStrength": 0.084,
+      "saturationOffset": 0.9,
+      "valueStrength": 0.29,
+      "valueOffset": 1.9
+    },
+    "attractors": []
+  },
+  {
+    "id": "GREEN_BROTH",
+    "name": "Green Broth",
+    "resolutionScale": 1,
+    "coordinatesScale": 3,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 11,
+    "epsilon": 0.0000064,
+    "juliaBound": -3.7,
+    "fractalFunction": {
+      "numerator": {
+        "3": {
+          "center": { "re": -0.35, "im": 0.015 },
+          "radius": 2.4,
+          "duration": 24000,
+          "type": "CIRCLE"
+        },
+        "10": {
+          "center": { "re": 3.2, "im": -4.8 },
+          "radius": 5.3,
+          "duration": 9000,
+          "type": "CIRCLE"
+        },
+        "13": {
+          "start": { "re": 1.8, "im": -1.8 },
+          "end": { "re": -0.63, "im": -0.31 },
+          "duration": 16000,
+          "type": "LINE"
+        }
+      },
+      "denominator": {
+        "9": {
+          "center": { "re": 0.61, "im": 8.6 },
+          "radius": 6.8,
+          "duration": 27000,
+          "type": "CIRCLE"
+        },
+        "11": { "re": -5.2, "im": 2.5, "type": "CONSTANT" }
+      },
+      "functionType": "FRACTION",
+      "newtonCoefficient": { "re": -5, "im": -3.9, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 84,
+      "saturationStrength": 0.2,
+      "saturationOffset": 0.53,
+      "valueStrength": 0.39,
+      "valueOffset": 1.5
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 343,
+      "saturationStrength": 0.19,
+      "saturationOffset": 0.49,
+      "valueStrength": 0.48,
+      "valueOffset": 2.8
+    },
+    "attractors": []
+  },
+  {
+    "id": "PINK_FLEA",
+    "name": "Pink Flea",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.9,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 36,
+    "epsilon": 0.00005,
+    "juliaBound": -3.3,
+    "fractalFunction": {
+      "numerator": {
+        "4": {
+          "start": { "re": 1.5, "im": -2.8 },
+          "end": { "re": -4.1, "im": -4.7 },
+          "duration": 26000,
+          "type": "LINE"
+        },
+        "14": {
+          "center": { "re": -0.047, "im": -0.42 },
+          "radius": 6.3,
+          "duration": 5000,
+          "type": "CIRCLE"
+        },
+        "15": { "re": -3.6, "im": -2.8, "type": "CONSTANT" }
+      },
+      "denominator": { "0": { "re": 1, "im": 0, "type": "CONSTANT" } },
+      "functionType": "DEFAULT",
+      "newtonCoefficient": { "re": 0.25, "im": 3.5, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 359,
+      "saturationStrength": 0.16,
+      "saturationOffset": 0.78,
+      "valueStrength": 0.47,
+      "valueOffset": 0.61
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 276,
+      "saturationStrength": 0.12,
+      "saturationOffset": 0.021,
+      "valueStrength": 0.25,
+      "valueOffset": 0.96
+    },
+    "attractors": []
+  },
+  {
+    "id": "BLUE_STARFISH",
+    "name": "Blue Starfish",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.9,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 13,
+    "epsilon": 0.0000063,
+    "juliaBound": -3.7,
+    "fractalFunction": {
+      "numerator": {
+        "5": {
+          "center": { "re": 1.6, "im": 0.8 },
+          "radius": 9.7,
+          "duration": 27000,
+          "type": "CIRCLE"
+        },
+        "7": { "re": 0.94, "im": 3.4, "type": "CONSTANT" },
+        "10": {
+          "start": { "re": 3, "im": 0.36 },
+          "end": { "re": -0.3, "im": -1.4 },
+          "duration": 18000,
+          "type": "LINE"
+        }
+      },
+      "denominator": {
+        "4": {
+          "center": { "re": 8, "im": 4 },
+          "radius": 48.5,
+          "duration": 27000,
+          "type": "CIRCLE"
+        },
+        "6": { "re": 6.58, "im": 23.8, "type": "CONSTANT" },
+        "9": {
+          "start": { "re": 30, "im": 3.6 },
+          "end": { "re": -3, "im": -14 },
+          "duration": 18000,
+          "type": "LINE"
+        }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "center": { "re": -3.3, "im": 0.81 },
+        "radius": 4.7,
+        "duration": 17000,
+        "type": "CIRCLE"
+      }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 224,
+      "saturationStrength": 0.051,
+      "saturationOffset": 0.5,
+      "valueStrength": 0.42,
+      "valueOffset": 1.3
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 327,
+      "saturationStrength": 0.1,
+      "saturationOffset": 0.16,
+      "valueStrength": 0.39,
+      "valueOffset": 3
+    },
+    "attractors": []
+  },
+  {
+    "id": "PULSATING_FLOWER",
+    "name": "Pulsating Flower",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.4,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 19,
+    "epsilon": 0.0000085,
+    "juliaBound": -3.5,
+    "fractalFunction": {
+      "numerator": {
+        "2": {
+          "start": { "re": 1, "im": 3.7 },
+          "end": { "re": -2.1, "im": -3 },
+          "duration": 13000,
+          "type": "LINE"
+        },
+        "9": { "re": 2.2, "im": -2.6, "type": "CONSTANT" }
+      },
+      "denominator": {
+        "11": {
+          "center": { "re": 6.3, "im": 1.4 },
+          "radius": 8.8,
+          "duration": 20000,
+          "type": "CIRCLE"
+        }
+      },
+      "functionType": "FRACTION",
+      "newtonCoefficient": {
+        "center": { "re": -0.031, "im": -2.5 },
+        "radius": 4.8,
+        "duration": 27000,
+        "type": "CIRCLE"
+      }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 336,
+      "saturationStrength": 0.048,
+      "saturationOffset": 0.83,
+      "valueStrength": 0.35,
+      "valueOffset": 1.1
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 309,
+      "saturationStrength": 0.2,
+      "saturationOffset": 0.54,
+      "valueStrength": 0.47,
+      "valueOffset": 1.7
+    },
+    "attractors": []
+  },
+  {
+    "id": "MATRIX_HEART",
+    "name": "Matrix Heart",
+    "resolutionScale": 1,
+    "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 18,
+    "epsilon": 0.00001,
+    "juliaBound": -3.4,
+    "fractalFunction": {
+      "numerator": {
+        "5": { "re": -8.5, "im": -2.2, "type": "CONSTANT" },
+        "12": {
+          "center": { "re": 8.8, "im": 0.15 },
+          "radius": 3.5,
+          "duration": 10000,
+          "type": "CIRCLE"
+        },
+        "13": {
+          "start": { "re": -3, "im": -6.8 },
+          "end": { "re": 1.4, "im": 1.4 },
+          "duration": 9000,
+          "type": "LINE"
+        }
+      },
+      "denominator": {
+        "4": { "re": -42.5, "im": -11, "type": "CONSTANT" },
+        "11": {
+          "center": { "re": 105, "im": 1.8 },
+          "radius": 42,
+          "duration": 10000,
+          "type": "CIRCLE"
+        },
+        "12": {
+          "start": { "re": -39, "im": -88 },
+          "end": { "re": 18.2, "im": 18.2 },
+          "duration": 9000,
+          "type": "LINE"
+        }
+      },
+      "functionType": "NEWTON",
+      "newtonCoefficient": {
+        "start": { "re": 1.5, "im": 8.6 },
+        "end": { "re": 0.51, "im": 1.3 },
+        "duration": 27000,
+        "type": "LINE"
+      }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 89,
+      "saturationStrength": 0.087,
+      "saturationOffset": 0.091,
+      "valueStrength": 0.41,
+      "valueOffset": 0.057
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 199,
+      "saturationStrength": 0.14,
+      "saturationOffset": 0.69,
+      "valueStrength": 0.43,
+      "valueOffset": 1.4
+    },
+    "attractors": []
   }
 ]
