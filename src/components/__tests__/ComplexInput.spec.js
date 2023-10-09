@@ -18,7 +18,6 @@ describe("Render", () => {
     const complexInput = mount(ComplexInput, { props: props });
     const input = complexInput.find("input");
     expect(input.element.value).toBe(props.complex.toString());
-    expect(input.attributes()["aria-valuenow"]).toBe(props.complex.toString());
   });
 
   it("has the correct role", () => {

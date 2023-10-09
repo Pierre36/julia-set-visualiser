@@ -22,7 +22,6 @@ describe("Render", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
     expect(input.element.value).toBe(props.value.toString());
-    expect(input.attributes()["aria-valuenow"]).toBe(props.value.toString());
   });
 
   it("has the correct min, max and step", () => {

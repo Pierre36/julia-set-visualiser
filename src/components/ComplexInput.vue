@@ -42,7 +42,6 @@ export default {
       class="input"
       type="text"
       :value="value"
-      :aria-valuenow="value.toString()"
       :aria-label="label"
       :aria-invalid="wrong"
       role="textbox"

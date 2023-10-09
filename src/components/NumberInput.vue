@@ -66,7 +66,6 @@ export default {
       class="input"
       type="number"
       :value="inputValue"
-      :aria-valuenow="inputValue"
       :min="min"
       :aria-valuemin="min"
       :max="max"
