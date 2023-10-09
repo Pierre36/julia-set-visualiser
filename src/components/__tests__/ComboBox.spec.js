@@ -199,7 +199,9 @@ describe("Combobox focus interactions", () => {
     // Check the first option item is focused
     const firstOptionItem = optionItems[0];
     expect(firstOptionItem.classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(firstOptionItem.attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      firstOptionItem.attributes()["data-id"]
+    );
 
     // Check the other option item are not focused
     for (let i = 1; i < optionItems.length; i++) {
@@ -219,13 +221,19 @@ describe("Combobox focus interactions", () => {
     // Press key "down" and check the focus is correct
     await button.trigger("keydown.down");
     expect(optionItems[1].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[1].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[1].attributes()["data-id"]
+    );
     await button.trigger("keydown.down");
     expect(optionItems[2].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[2].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[2].attributes()["data-id"]
+    );
     await button.trigger("keydown.down");
     expect(optionItems[0].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[0].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[0].attributes()["data-id"]
+    );
   });
 
   it("moves the focus up when pressing 'up'", async () => {
@@ -240,13 +248,19 @@ describe("Combobox focus interactions", () => {
     // Press key "up" and check the focus is correct
     await button.trigger("keydown.up");
     expect(optionItems[2].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[2].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[2].attributes()["data-id"]
+    );
     await button.trigger("keydown.up");
     expect(optionItems[1].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[1].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[1].attributes()["data-id"]
+    );
     await button.trigger("keydown.up");
     expect(optionItems[0].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[0].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[0].attributes()["data-id"]
+    );
   });
 
   it("moves the focus to the first option when pressing 'home'", async () => {
@@ -262,7 +276,9 @@ describe("Combobox focus interactions", () => {
     // Press key "home" and check the focus is correct
     await button.trigger("keydown.home");
     expect(optionItems[0].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[0].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[0].attributes()["data-id"]
+    );
   });
 
   it("moves the focus to the last option when pressing 'end'", async () => {
@@ -278,7 +294,9 @@ describe("Combobox focus interactions", () => {
     // Press key "home" and check the focus is correct
     await button.trigger("keydown.end");
     expect(optionItems[2].classes()).toContain("focused");
-    expect(button.attributes()["aria-activedescendant"]).toBe(optionItems[2].attributes().id);
+    expect(button.attributes()["aria-activedescendant"]).toBe(
+      optionItems[2].attributes()["data-id"]
+    );
   });
 });
 

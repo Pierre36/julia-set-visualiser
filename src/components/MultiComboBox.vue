@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     makeFocusedVisible() {
-      const optionItem = this.$refs.optionItems.find((o) => o.id == this.focusedOption.id);
+      const optionItem = this.$refs.optionItems.find((o) => o.dataset.id == this.focusedOption.id);
       const popup = this.$refs.popup;
 
       const top = optionItem.offsetTop - popup.scrollTop;
@@ -148,7 +148,7 @@ export default {
         ref="optionItems"
         v-for="(option, index) in options"
         :key="option.id"
-        :id="option.id"
+        :data-id="option.id"
         :class="{ focused: index == focusedIndex }"
         :aria-selected="this.selected.has(option.id)"
         @click="toggleOptionSelected(option.id)"
