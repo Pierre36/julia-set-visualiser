@@ -44,7 +44,7 @@ export default {
   methods: {
     updateNbDisplayedPanels() {
       this.nbDisplayedPanels = Math.max(
-        Math.floor(this.$refs.nav.clientHeight / this.$refs.moreListItem.clientHeight) - 1,
+        Math.floor(this.$refs.tablist.clientHeight / this.$refs.moreListItem.clientHeight) - 1,
         0
       );
     },
@@ -81,13 +81,13 @@ export default {
     onFocusIn() {
       if (!this.hasFocus) {
         this.hasFocus = true;
-        if (this.$refs.nav.matches(":focus-visible")) {
+        if (this.$refs.tablist.matches(":focus-visible")) {
           this.changeFocus(this.currentPanelIndex);
         }
       }
     },
     onFocusOut() {
-      if (!this.$refs.nav.matches(":focus-within")) {
+      if (!this.$refs.tablist.matches(":focus-within")) {
         this.hasFocus = false;
         this.popupShown = false;
       }
@@ -97,22 +97,23 @@ export default {
 </script>
 
 <template>
-  <nav
-    ref="nav"
-    role="tablist"
-    :aria-label="label"
-    aria-orientation="vertical"
-    tabindex="0"
-    @keyup.up="moveFocusUp"
-    @keyup.down="moveFocusDown"
-    @keyup.home="moveFocusToFirst"
-    @keyup.end="moveFocusToLast"
-    @keyup.enter="changePanel(focusedPanel)"
-    @keyup.space="changePanel(focusedPanel)"
-    @focusin="onFocusIn"
-    @focusout="onFocusOut"
-  >
-    <ul :class="{ 'panels-expanded': !sidePanelCollapsed }">
+  <nav>
+    <ul
+      ref="tablist"
+      :class="{ 'panels-expanded': !sidePanelCollapsed }"
+      role="tablist"
+      :aria-label="label"
+      aria-orientation="vertical"
+      tabindex="0"
+      @keyup.up="moveFocusUp"
+      @keyup.down="moveFocusDown"
+      @keyup.home="moveFocusToFirst"
+      @keyup.end="moveFocusToLast"
+      @keyup.enter="changePanel(focusedPanel)"
+      @keyup.space="changePanel(focusedPanel)"
+      @focusin="onFocusIn"
+      @focusout="onFocusOut"
+    >
       <li
         v-for="panel in displayedPanels"
         :key="panel.id"
@@ -161,12 +162,16 @@ export default {
 <style scoped>
 nav {
   height: calc(100% - var(--expand-button-height));
+}
+
+[role="tablist"] {
+  height: 100%;
   outline: none;
   border: 2px solid transparent;
   border-radius: 0.1rem;
 }
 
-nav:focus-visible {
+[role="tablist"]:focus-visible {
   border-color: var(--blue-100);
 }
 
@@ -177,7 +182,7 @@ nav:focus-visible {
   text-align: center;
 }
 
-nav:focus-visible .nav-item.focused button {
+[role="tablist"]:focus-visible .nav-item.focused button {
   color: var(--button-color-focus-visible);
   background-color: var(--button-background-color-focus-visible);
   border-color: var(--button-border-color-focus-visible);
@@ -229,7 +234,7 @@ nav:focus-visible .nav-item.focused button {
   margin-block: var(--option-margin-block, 0.1rem);
 }
 
-nav:focus-visible .popup [role="tab"].focused,
+[role="tablist"]:focus-visible .popup [role="tab"].focused,
 .popup [role="tab"]:hover {
   background-color: var(--option-background-color-highlighted, hsl(210, 70%, 60%));
 }

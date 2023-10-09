@@ -30,19 +30,18 @@ describe("Render", () => {
     );
   });
 
-  it("displays the nav correctly", () => {
+  it("displays the tab list correctly", () => {
     // Mount SideNav
     const sidenav = mount(SideNav, { props: props });
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const firstUL = nav.find("ul:nth-of-type(1)");
+    const tabList = sidenav.find("[role='tablist']");
 
     // Check nav renders correctly
-    expect(nav.attributes()["aria-label"]).toBe(props.label);
-    expect(nav.attributes()["aria-orientation"]).toBe("vertical");
-    expect(nav.attributes().tabindex).toBe("0");
-    expect(firstUL.classes()).toContain("panels-expanded");
+    expect(tabList.attributes()["aria-label"]).toBe(props.label);
+    expect(tabList.attributes()["aria-orientation"]).toBe("vertical");
+    expect(tabList.attributes().tabindex).toBe("0");
+    expect(tabList.classes()).toContain("panels-expanded");
   });
 
   it("has nav items with role 'tab'", async () => {
@@ -302,12 +301,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -316,7 +315,7 @@ describe("Interactions", () => {
     });
 
     // Focus in and check the correct tab is focused
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
     expect(navTabs[1].classes()).toContain("focused");
   });
 
@@ -328,12 +327,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -342,11 +341,11 @@ describe("Interactions", () => {
     });
 
     // Focus in
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
 
     // Change tab, focus in again and check the focus element is not the selected
-    await nav.trigger("keyup.up");
-    await nav.trigger("focusin");
+    await tabList.trigger("keyup.up");
+    await tabList.trigger("focusin");
     expect(navTabs[0].classes()).toContain("focused");
   });
 
@@ -358,12 +357,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return false;
       } else {
@@ -372,7 +371,7 @@ describe("Interactions", () => {
     });
 
     // Focus in and check the correct tab is focused
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
     expect(navTabs[1].classes()).not.toContain("focused");
   });
 
@@ -384,13 +383,13 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
-    const popupTabs = nav.findAll("[role='tab']:not(.nav-item)");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
+    const popupTabs = tabList.findAll("[role='tab']:not(.nav-item)");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -399,14 +398,14 @@ describe("Interactions", () => {
     });
 
     // Focus in
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
 
     // Press key "up" and check the focus is correct
-    await nav.trigger("keyup.up");
+    await tabList.trigger("keyup.up");
     expect(navTabs[0].classes()).toContain("focused");
-    await nav.trigger("keyup.up");
+    await tabList.trigger("keyup.up");
     expect(popupTabs[0].classes()).toContain("focused");
-    await nav.trigger("keyup.up");
+    await tabList.trigger("keyup.up");
     expect(navTabs[1].classes()).toContain("focused");
   });
 
@@ -418,13 +417,13 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
-    const popupTabs = nav.findAll("[role='tab']:not(.nav-item)");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
+    const popupTabs = tabList.findAll("[role='tab']:not(.nav-item)");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -433,14 +432,14 @@ describe("Interactions", () => {
     });
 
     // Focus in
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
 
     // Press key "down" and check the focus is correct
-    await nav.trigger("keyup.down");
+    await tabList.trigger("keyup.down");
     expect(popupTabs[0].classes()).toContain("focused");
-    await nav.trigger("keyup.down");
+    await tabList.trigger("keyup.down");
     expect(navTabs[0].classes()).toContain("focused");
-    await nav.trigger("keyup.down");
+    await tabList.trigger("keyup.down");
     expect(navTabs[1].classes()).toContain("focused");
   });
 
@@ -452,12 +451,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const navTabs = nav.findAll("[role='tab'].nav-item");
+    const tabList = sidenav.find("[role='tablist']");
+    const navTabs = tabList.findAll("[role='tab'].nav-item");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -466,10 +465,10 @@ describe("Interactions", () => {
     });
 
     // Focus in
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
 
     // Press key "home" and check the focus is correct
-    await nav.trigger("keyup.home");
+    await tabList.trigger("keyup.home");
     expect(navTabs[0].classes()).toContain("focused");
   });
 
@@ -481,12 +480,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const popupTabs = nav.findAll("[role='tab']:not(.nav-item)");
+    const tabList = sidenav.find("[role='tablist']");
+    const popupTabs = tabList.findAll("[role='tab']:not(.nav-item)");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -495,10 +494,10 @@ describe("Interactions", () => {
     });
 
     // Focus in
-    await nav.trigger("focusin");
+    await tabList.trigger("focusin");
 
     // Press key "end" and check the focus is correct
-    await nav.trigger("keyup.end");
+    await tabList.trigger("keyup.end");
     expect(popupTabs[0].classes()).toContain("focused");
   });
 
@@ -509,9 +508,9 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
+    const tabList = sidenav.find("[role='tablist']");
     const moreButton = sidenav.find({ ref: "moreButton" });
-    const popup = nav.find(".popup");
+    const popup = tabList.find(".popup");
 
     // Show popup
     await moreButton.trigger("click");
@@ -530,12 +529,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const popup = nav.find(".popup");
+    const tabList = sidenav.find("[role='tablist']");
+    const popup = tabList.find(".popup");
 
     // Mock matches focus-visible and focus-within
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else if (selectors == ":focus-within") {
@@ -546,11 +545,11 @@ describe("Interactions", () => {
     });
 
     // Focus in and focus last element
-    await nav.trigger("focusin");
-    await nav.trigger("keyup.end");
+    await tabList.trigger("focusin");
+    await tabList.trigger("keyup.end");
 
     // Focus out and check the popup is hidden
-    await nav.trigger("focusout");
+    await tabList.trigger("focusout");
     expect(popup.isVisible()).toBe(false);
   });
 
@@ -562,12 +561,12 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
-    const popup = nav.find(".popup");
+    const tabList = sidenav.find("[role='tablist']");
+    const popup = tabList.find(".popup");
 
     // Mock matches focus-visible and focus-within
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else if (selectors == ":focus-within") {
@@ -578,11 +577,11 @@ describe("Interactions", () => {
     });
 
     // Focus in and focus last element
-    await nav.trigger("focusin");
-    await nav.trigger("keyup.end");
+    await tabList.trigger("focusin");
+    await tabList.trigger("keyup.end");
 
     // Focus out and check the popup is hidden
-    await nav.trigger("focusout");
+    await tabList.trigger("focusout");
     expect(popup.isVisible()).toBe(true);
   });
 
@@ -594,11 +593,11 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
+    const tabList = sidenav.find("[role='tablist']");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -607,11 +606,11 @@ describe("Interactions", () => {
     });
 
     // Focus in and focus a nav tab
-    await nav.trigger("focusin");
-    await nav.trigger("keyup.home");
+    await tabList.trigger("focusin");
+    await tabList.trigger("keyup.home");
 
     // Press key 'enter' and check an event is emitted
-    await nav.trigger("keyup.enter");
+    await tabList.trigger("keyup.enter");
     expect(sidenav.emitted()["update:currentPanel"]).toEqual([[props.panels[0].id]]);
   });
 
@@ -623,11 +622,11 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
+    const tabList = sidenav.find("[role='tablist']");
 
     // Mock matches focus-visible
-    const originalMatches = nav.element.matches;
-    nav.element.matches = vi.fn((selectors) => {
+    const originalMatches = tabList.element.matches;
+    tabList.element.matches = vi.fn((selectors) => {
       if (selectors == ":focus-visible") {
         return true;
       } else {
@@ -636,11 +635,11 @@ describe("Interactions", () => {
     });
 
     // Focus in and focus a nav tab
-    await nav.trigger("focusin");
-    await nav.trigger("keyup.home");
+    await tabList.trigger("focusin");
+    await tabList.trigger("keyup.home");
 
     // Press key 'enter' and check an event is emitted
-    await nav.trigger("keyup.space");
+    await tabList.trigger("keyup.space");
     expect(sidenav.emitted()["update:currentPanel"]).toEqual([[props.panels[0].id]]);
   });
 
