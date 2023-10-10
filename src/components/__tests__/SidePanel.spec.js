@@ -38,7 +38,6 @@ describe("Render", () => {
 
     // Check the panel container is rendered correctly
     expect(panelContainer.exists()).toBe(true);
-    expect(panelContainer.attributes().class).toBe(props.currentPanel);
     expect(panelContainer.attributes().role).toBe("tabpanel");
   });
 

@@ -72,7 +72,7 @@ describe("Render", () => {
     expect(tabs.length).toBe(props.panels.length);
     tabs.forEach((tab, index) => {
       expect(tab.attributes()["aria-selected"]).toBe((index === 1).toString());
-      expect(tab.attributes()["aria-controls"]).toBe(props.panels[index].id);
+      expect(tab.attributes()["aria-controls"]).toBe("side-panel");
     });
   });
 
@@ -126,7 +126,7 @@ describe("Render", () => {
     // Check the tabs popup items are rendered correctly
     tabs.forEach((tab, index) => {
       expect(tab.attributes()["aria-selected"]).toBe((index === 1).toString());
-      expect(tab.attributes()["aria-controls"]).toBe(props.panels[index].id);
+      expect(tab.attributes()["aria-controls"]).toBe("side-panel");
       expect(tab.text()).toBe(props.panels[index].name);
     });
   });

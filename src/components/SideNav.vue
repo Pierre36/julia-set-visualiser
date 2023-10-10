@@ -120,7 +120,7 @@ export default {
         class="nav-item"
         :class="{ focused: focusedPanel == panel.id }"
         role="tab"
-        :aria-controls="panel.id"
+        aria-controls="side-panel"
         :aria-selected="currentPanel == panel.id"
       >
         <button class="icon-button" tabindex="-1" @click="changePanel(panel.id)">
@@ -146,7 +146,7 @@ export default {
             v-for="panel in hiddenPanels"
             role="tab"
             :class="{ focused: focusedPanel == panel.id }"
-            :aria-controls="panel.id"
+            aria-controls="side-panel"
             :aria-selected="currentPanel == panel.id"
             @click="changePanel(panel.id)"
           >

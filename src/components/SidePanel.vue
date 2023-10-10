@@ -18,7 +18,7 @@ export default {
 
 <template>
   <Transition name="panel-slide">
-    <div id="side-panel" :class="currentPanel" v-show="!collapsed" role="tabpanel">
+    <div id="side-panel" v-show="!collapsed" role="tabpanel">
       <FunctionPanel
         v-show="currentPanel == 'FUNCTION'"
         :fractalFunction="configuration.fractalFunction"
