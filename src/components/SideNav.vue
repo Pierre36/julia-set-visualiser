@@ -130,7 +130,12 @@ export default {
           </svg>
         </button>
       </li>
-      <li ref="moreListItem" class="nav-item more" :class="{ hidden: hiddenPanels.length == 0 }">
+      <li
+        ref="moreListItem"
+        class="nav-item more"
+        :class="{ hidden: hiddenPanels.length == 0 }"
+        aria-hidden="true"
+      >
         <button ref="moreButton" class="icon-button" tabindex="-1" @click="switchPopup">
           <svg viewBox="0 -960 960 960" role="img">
             <title>More</title>
