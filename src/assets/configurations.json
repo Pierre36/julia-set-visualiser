@@ -88,6 +88,85 @@
     "attractors": []
   },
   {
+    "id": "Z2+CZ",
+    "name": "z² + cz",
+    "resolutionScale": 1,
+    "coordinatesScale": 2,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
+    "fractalFunction": {
+      "numerator": {
+        "1": { "center": { "re": 0, "im": 0 }, "radius": 1, "duration": 10000, "type": "CIRCLE" },
+        "2": { "re": 1, "im": 0, "type": "CONSTANT" }
+      },
+      "denominator": { "0": { "re": 1, "im": 0, "type": "CONSTANT" } },
+      "functionType": "DEFAULT",
+      "newtonCoefficient": { "re": 1, "im": 0, "type": "CONSTANT" }
+    },
+    "juliaHSV": [0, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 210,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "attractors": []
+  },
+  {
+    "id": "JULIA_SIERPINSKI",
+    "name": "Julia & Sierpiński",
+    "resolutionScale": 1,
+    "coordinatesScale": 1.8,
+    "coordinatesCenter": { "re": 0, "im": 0 },
+    "nbIterations": 20,
+    "epsilon": 0.00001,
+    "juliaBound": -4,
+    "fractalFunction": {
+      "numerator": {
+        "0": { "re": -1, "im": 0, "type": "CONSTANT" },
+        "3": {
+          "start": { "re": 1, "im": 0 },
+          "end": { "re": 3, "im": 0 },
+          "duration": 5000,
+          "type": "LINE"
+        }
+      },
+      "denominator": { "1": { "re": 2, "im": 0, "type": "CONSTANT" } },
+      "functionType": "FRACTION",
+      "newtonCoefficient": { "re": 0, "im": 0, "type": "CONSTANT" }
+    },
+    "juliaHSV": [50, 0, 1],
+    "defaultAttractor": {
+      "complex": null,
+      "hue": 223,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.26,
+      "valueOffset": 1.4
+    },
+    "infinityAttractor": {
+      "complex": null,
+      "hue": 193,
+      "saturationStrength": 0.11,
+      "saturationOffset": 0,
+      "valueStrength": 0.5,
+      "valueOffset": 1.4
+    },
+    "attractors": []
+  },
+  {
     "id": "PSYCHEDELIC",
     "name": "Psychedelic",
     "resolutionScale": 1,
