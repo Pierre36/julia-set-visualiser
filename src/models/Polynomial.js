@@ -345,7 +345,11 @@ class Polynomial {
     startEndModulusMinMax,
     lineDurationMinMax
   ) {
-    const powers = RandomUtils.distinctIntegersBetween(0, MAX_DEGREE, nbCoefficients);
+    const powers = RandomUtils.distinctIntegersBetween(
+      0,
+      MAX_DEGREE,
+      Math.min(nbCoefficients, MAX_DEGREE + 1)
+    );
     const newCoefficients = {};
     for (let power of powers) {
       newCoefficients[power] = Coefficient.getRandomCoefficient(
