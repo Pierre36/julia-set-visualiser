@@ -123,7 +123,7 @@ export default {
             :options="functionTypeOptions"
             v-model:selected="selectedFunctionTypes"
             label="Function types"
-            noOptionsSelectedText="No function types"
+            noOptionsSelectedText="No function type"
             allOptionsSelectedText="All function types"
           />
           <h4>Coefficient types</h4>
@@ -132,7 +132,7 @@ export default {
             :options="coefficientTypeOptions"
             v-model:selected="selectedCoefficientTypes"
             label="Coefficient types"
-            noOptionsSelectedText="No coefficient types"
+            noOptionsSelectedText="No coefficient type"
             allOptionsSelectedText="All coefficient types"
           />
           <h4>Number of coefficients</h4>
@@ -213,12 +213,12 @@ export default {
               class="parameter-input"
               :minValue="circleDuration.min"
               :maxValue="circleDuration.max"
-              :min="0"
+              :min="1"
               :max="300"
               :step="1"
               :integerOnly="true"
-              minLabel="Minimum duration of line coefficients"
-              maxLabel="Maximum duration of line coefficients"
+              minLabel="Minimum duration of circle coefficients"
+              maxLabel="Maximum duration of circle coefficients"
               @update:minValue="(newMin) => (circleDuration.min = newMin)"
               @update:maxValue="(newMax) => (circleDuration.max = newMax)"
               :level="6"
@@ -231,7 +231,7 @@ export default {
             buttonTitle="Show"
             :buttonSvgPath="disclosureSvgPath"
           >
-            <h5>Start and End modulus</h5>
+            <h5>Start and end modulus</h5>
             <MinMaxInput
               class="parameter-input"
               :minValue="startEndModulus.min"
@@ -251,8 +251,8 @@ export default {
               class="parameter-input"
               :minValue="lineDuration.min"
               :maxValue="lineDuration.max"
-              :min="0"
-              :max="60"
+              :min="1"
+              :max="300"
               :step="1"
               :integerOnly="true"
               minLabel="Minimum duration of line coefficients"
@@ -271,7 +271,7 @@ export default {
         </Disclosure>
         <div class="content one-column">
           <Disclosure
-            headingText="Julia Color"
+            headingText="Julia color"
             :headingLevel="4"
             :rotateWhenExpand="true"
             buttonTitle="Show"
@@ -345,7 +345,7 @@ export default {
               @update:maxValue="(newMax) => (attractorsHue.max = newMax)"
               :level="6"
             />
-            <h5>Saturation Strength</h5>
+            <h5>Saturation strength</h5>
             <MinMaxInput
               class="parameter-input"
               :minValue="attractorsSaturationStrength.min"
@@ -360,7 +360,7 @@ export default {
               @update:maxValue="(newMax) => (attractorsSaturationStrength.max = newMax)"
               :level="6"
             />
-            <h5>Saturation Offset</h5>
+            <h5>Saturation offset</h5>
             <MinMaxInput
               class="parameter-input"
               :minValue="attractorsSaturationOffset.min"
@@ -375,7 +375,7 @@ export default {
               @update:maxValue="(newMax) => (attractorsSaturationOffset.max = newMax)"
               :level="6"
             />
-            <h5>Value Strength</h5>
+            <h5>Value strength</h5>
             <MinMaxInput
               class="parameter-input"
               :minValue="attractorsValueStrength.min"
@@ -390,7 +390,7 @@ export default {
               @update:maxValue="(newMax) => (attractorsValueStrength.max = newMax)"
               :level="6"
             />
-            <h5>Value Offset</h5>
+            <h5>Value offset</h5>
             <MinMaxInput
               class="parameter-input"
               :minValue="attractorsValueOffset.min"
@@ -483,8 +483,8 @@ export default {
             <h5>Epsilon</h5>
             <MinMaxInput
               class="parameter-input"
-              :minValue="nbIterations.min"
-              :maxValue="nbIterations.max"
+              :minValue="epsilon.min"
+              :maxValue="epsilon.max"
               :min="0.0000001"
               :max="0.001"
               :step="0.000001"
