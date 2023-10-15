@@ -525,7 +525,6 @@ describe("randomize", () => {
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      lineDurationMinMax,
       ellipseCenterModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
