@@ -30,19 +30,26 @@ export default {
         { id: CoefficientTypes.CONSTANT, text: "Constant" },
         { id: CoefficientTypes.CIRCLE, text: "Circle" },
         { id: CoefficientTypes.LINE, text: "Line" },
+        { id: CoefficientTypes.ELLIPSE, text: "Ellipse" },
       ],
       selectedCoefficientTypes: new Set([
         CoefficientTypes.CONSTANT,
         CoefficientTypes.CIRCLE,
         CoefficientTypes.LINE,
+        CoefficientTypes.ELLIPSE,
       ]),
       nbCoefficients: { min: 2, max: 5 },
       complexModulus: { min: 0.1, max: 10 },
-      centerModulus: { min: 0.1, max: 10 },
+      circleCenterModulus: { min: 0.1, max: 10 },
       radius: { min: 0.1, max: 10 },
       circleDuration: { min: 5, max: 30 },
       startEndModulus: { min: 0.1, max: 10 },
       lineDuration: { min: 5, max: 30 },
+      ellipseCenterModulus: { min: 0.1, max: 10 },
+      halfWidth: { min: 0.1, max: 10 },
+      halfHeight: { min: 0.1, max: 10 },
+      rotationAngle: { min: 0, max: 360 },
+      ellipseDuration: { min: 5, max: 30 },
       juliaHue: { min: 0, max: 0 },
       juliaSaturation: { min: 0, max: 0 },
       juliaValue: { min: 1, max: 1 },
@@ -67,11 +74,16 @@ export default {
         this.selectedCoefficientTypes,
         this.nbCoefficients,
         this.complexModulus,
-        this.centerModulus,
+        this.circleCenterModulus,
         this.radius,
         this.circleDuration,
         this.startEndModulus,
         this.lineDuration,
+        this.ellipseCenterModulus,
+        this.halfWidth,
+        this.halfHeight,
+        this.rotationAngle,
+        this.ellipseDuration,
         this.juliaHue,
         this.juliaSaturation,
         this.juliaValue,
@@ -181,16 +193,16 @@ export default {
             <h5>Center modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              :minValue="centerModulus.min"
-              :maxValue="centerModulus.max"
+              :minValue="circleCenterModulus.min"
+              :maxValue="circleCenterModulus.max"
               :min="0"
               :max="100"
               :step="0.1"
               :integerOnly="false"
               minLabel="Minimum modulus of circle coefficients centers"
               maxLabel="Maximum modulus of circle coefficients centers"
-              @update:minValue="(newMin) => (centerModulus.min = newMin)"
-              @update:maxValue="(newMax) => (centerModulus.max = newMax)"
+              @update:minValue="(newMin) => (circleCenterModulus.min = newMin)"
+              @update:maxValue="(newMax) => (circleCenterModulus.max = newMax)"
               :level="6"
             />
             <h5>Radius</h5>
@@ -259,6 +271,89 @@ export default {
               maxLabel="Maximum duration of line coefficients"
               @update:minValue="(newMin) => (lineDuration.min = newMin)"
               @update:maxValue="(newMax) => (lineDuration.max = newMax)"
+              :level="6"
+            />
+          </Disclosure>
+          <Disclosure
+            headingText="Ellipse coefficients"
+            :headingLevel="4"
+            :rotateWhenExpand="true"
+            buttonTitle="Show"
+            :buttonSvgPath="disclosureSvgPath"
+          >
+            <h5>Center modulus</h5>
+            <MinMaxInput
+              class="parameter-input"
+              :maxValue="ellipseCenterModulus.max"
+              :minValue="ellipseCenterModulus.min"
+              :min="0"
+              :max="100"
+              :step="0.1"
+              :integerOnly="false"
+              minLabel="Minimum modulus of ellipse coefficients centers"
+              maxLabel="Maximum modulus of ellipse coefficients centers"
+              @update:minValue="(newMin) => (ellipseCenterModulus.min = newMin)"
+              @update:maxValue="(newMax) => (ellipseCenterModulus.max = newMax)"
+              :level="6"
+            />
+            <h5>Half-width</h5>
+            <MinMaxInput
+              class="parameter-input"
+              :minValue="halfWidth.min"
+              :maxValue="halfWidth.max"
+              :min="0"
+              :max="100"
+              :step="0.1"
+              :integerOnly="false"
+              minLabel="Minimum half-width of ellipse coefficients"
+              maxLabel="Maximum half-width of ellipse coefficients"
+              @update:minValue="(newMin) => (halfWidth.min = newMin)"
+              @update:maxValue="(newMax) => (halfWidth.max = newMax)"
+              :level="6"
+            />
+            <h5>Half-height</h5>
+            <MinMaxInput
+              class="parameter-input"
+              :minValue="halfHeight.min"
+              :maxValue="halfHeight.max"
+              :min="0"
+              :max="100"
+              :step="0.1"
+              :integerOnly="false"
+              minLabel="Minimum half-height of ellipse coefficients"
+              maxLabel="Maximum half-height of ellipse coefficients"
+              @update:minValue="(newMin) => (halfHeight.min = newMin)"
+              @update:maxValue="(newMax) => (halfHeight.max = newMax)"
+              :level="6"
+            />
+            <h5>Rotation angle</h5>
+            <MinMaxInput
+              class="parameter-input"
+              :minValue="rotationAngle.min"
+              :maxValue="rotationAngle.max"
+              :min="0"
+              :max="360"
+              :step="1"
+              :integerOnly="false"
+              minLabel="Minimum rotation angle of ellipse coefficients"
+              maxLabel="Maximum rotation angle of ellipse coefficients"
+              @update:minValue="(newMin) => (rotationAngle.min = newMin)"
+              @update:maxValue="(newMax) => (rotationAngle.max = newMax)"
+              :level="6"
+            />
+            <h5>Duration</h5>
+            <MinMaxInput
+              class="parameter-input"
+              :minValue="ellipseDuration.min"
+              :maxValue="ellipseDuration.max"
+              :min="1"
+              :max="300"
+              :step="1"
+              :integerOnly="true"
+              minLabel="Minimum duration of ellipse coefficients"
+              maxLabel="Maximum duration of ellipse coefficients"
+              @update:minValue="(newMin) => (ellipseDuration.min = newMin)"
+              @update:maxValue="(newMax) => (ellipseDuration.max = newMax)"
               :level="6"
             />
           </Disclosure>

@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { Coefficient } from "../Coefficient";
 import { Complex } from "../Complex";
 import { ComplexCircle } from "../ComplexCircle";
+import { ComplexEllipse } from "../ComplexEllipse";
 import { ComplexLine } from "../ComplexLine";
 import { Polynomial } from "../Polynomial";
 import { RandomUtils } from "../../Utils/RandomUtils";
@@ -50,6 +51,27 @@ describe("fromJSON", () => {
     });
 
     expect(coefficient).toEqual(new ComplexLine(start, end, duration));
+  });
+
+  it("properly constructs from JSON complex ellipse", () => {
+    const center = new Complex(3, 6);
+    const halfWidth = 36;
+    const halfHeight = 42;
+    const rotationAngle = 16;
+    const duration = 2000;
+
+    const coefficient = Coefficient.fromJSON({
+      center: center,
+      halfWidth: halfWidth,
+      halfHeight: halfHeight,
+      rotationAngle: rotationAngle,
+      duration: duration,
+      type: CoefficientTypes.ELLIPSE,
+    });
+
+    expect(coefficient).toEqual(
+      new ComplexEllipse(center, halfWidth, halfHeight, rotationAngle, duration)
+    );
   });
 
   it("throws an error for incorrect JSON", () => {
@@ -110,6 +132,26 @@ describe("toJSON", () => {
     });
   });
 
+  it("properly exports complex ellipse to JSON", () => {
+    const center = new Complex(3, 6);
+    const halfWidth = 36;
+    const halfHeight = 42;
+    const rotationAngle = 16;
+    const duration = 2000;
+
+    const ellipse = new ComplexEllipse(center, halfWidth, halfHeight, rotationAngle, duration);
+    const json = Coefficient.toJSON(ellipse);
+
+    expect(json).toEqual({
+      center: center,
+      halfWidth: halfWidth,
+      halfHeight: halfHeight,
+      rotationAngle: rotationAngle,
+      duration: duration,
+      type: CoefficientTypes.ELLIPSE,
+    });
+  });
+
   it("properly exports anything else to JSON", () => {
     const polynomial = new Polynomial();
     const json = Coefficient.toJSON(polynomial);
@@ -126,30 +168,85 @@ describe("getRandomCoefficient", () => {
 
     const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
     const complexModulusMinMax = { min: 1, max: 2 };
-    const centerModulusMinMax = { min: 2, max: 3 };
+    const circleCenterModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
+    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const halfWidthMinMax = { min: 10, max: 11 };
+    const halfHeightMinMax = { min: 12, max: 13 };
+    const rotationAngleMinMax = { min: 14, max: 15 };
+    const ellipseDurationMinMax = { min: 16, max: 17 };
 
     const randomCoefficient = Coefficient.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
     expect(ComplexCircle.getRandomComplexCircle).toHaveBeenCalledWith(
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax
     );
 
     expect(randomCoefficient).toEqual(randomCircle);
+  });
+
+  it("properly returns a random coefficient when the type is an ellipse", () => {
+    RandomUtils.pickAmong = vi.fn(() => CoefficientTypes.ELLIPSE);
+    const randomEllipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
+    ComplexEllipse.getRandomComplexEllipse = vi.fn(() => randomEllipse);
+
+    const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
+    const complexModulusMinMax = { min: 1, max: 2 };
+    const circleCenterModulusMinMax = { min: 2, max: 3 };
+    const radiusMinMax = { min: 3, max: 4 };
+    const circleDurationMinMax = { min: 4, max: 5 };
+    const startEndModulusMinMax = { min: 5, max: 6 };
+    const lineDurationMinMax = { min: 6, max: 7 };
+    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const halfWidthMinMax = { min: 10, max: 11 };
+    const halfHeightMinMax = { min: 12, max: 13 };
+    const rotationAngleMinMax = { min: 14, max: 15 };
+    const ellipseDurationMinMax = { min: 16, max: 17 };
+
+    const randomCoefficient = Coefficient.getRandomCoefficient(
+      coefficientTypes,
+      complexModulusMinMax,
+      circleCenterModulusMinMax,
+      radiusMinMax,
+      circleDurationMinMax,
+      startEndModulusMinMax,
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
+    );
+
+    expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
+    expect(ComplexEllipse.getRandomComplexEllipse).toHaveBeenCalledWith(
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
+    );
+
+    expect(randomCoefficient).toEqual(randomEllipse);
   });
 
   it("properly returns a random coefficient when the type is a line", () => {
@@ -159,20 +256,30 @@ describe("getRandomCoefficient", () => {
 
     const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
     const complexModulusMinMax = { min: 1, max: 2 };
-    const centerModulusMinMax = { min: 2, max: 3 };
+    const circleCenterModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
+    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const halfWidthMinMax = { min: 10, max: 11 };
+    const halfHeightMinMax = { min: 12, max: 13 };
+    const rotationAngleMinMax = { min: 14, max: 15 };
+    const ellipseDurationMinMax = { min: 16, max: 17 };
 
     const randomCoefficient = Coefficient.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
@@ -191,20 +298,30 @@ describe("getRandomCoefficient", () => {
 
     const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
     const complexModulusMinMax = { min: 1, max: 2 };
-    const centerModulusMinMax = { min: 2, max: 3 };
+    const circleCenterModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
+    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const halfWidthMinMax = { min: 10, max: 11 };
+    const halfHeightMinMax = { min: 12, max: 13 };
+    const rotationAngleMinMax = { min: 14, max: 15 };
+    const ellipseDurationMinMax = { min: 16, max: 17 };
 
     const randomCoefficient = Coefficient.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));

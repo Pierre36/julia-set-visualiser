@@ -461,35 +461,45 @@ describe("randomize", () => {
     const coefficientTypes = new Set(["coefficientType1", "coefficientType2"]);
     const nbCoefficientsMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
-    const centerModulusMinMax = { min: 2, max: 3 };
+    const circleCenterModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
-    const juliaHueMinMax = { min: 8, max: 9 };
-    const juliaSaturationMinMax = { min: 9, max: 10 };
-    const juliaValueMinMax = { min: 10, max: 11 };
-    const attractorsHueMinMax = { min: 11, max: 12 };
-    const attractorsSaturationStrengthMinMax = { min: 12, max: 13 };
-    const attractorsSaturationOffsetMinMax = { min: 13, max: 14 };
-    const attractorsValueStrengthMinMax = { min: 14, max: 15 };
-    const attractorsValueOffsetMinMax = { min: 15, max: 16 };
-    const viewportScaleMinMax = { min: 16, max: 17 };
-    const viewportCenterModulusMinMax = { min: 17, max: 18 };
-    const nbIterationsMinMax = { min: 18, max: 19 };
-    const epsilonMinMax = { min: 19, max: 20 };
-    const juliaBoundMinMax = { min: 20, max: 21 };
+    const ellipseCenterModulusMinMax = { min: 7, max: 8 };
+    const halfWidthMinMax = { min: 8, max: 9 };
+    const halfHeightMinMax = { min: 9, max: 10 };
+    const rotationAngleMinMax = { min: 10, max: 11 };
+    const ellipseDurationMinMax = { min: 11, max: 12 };
+    const juliaHueMinMax = { min: 12, max: 13 };
+    const juliaSaturationMinMax = { min: 13, max: 14 };
+    const juliaValueMinMax = { min: 14, max: 15 };
+    const attractorsHueMinMax = { min: 15, max: 16 };
+    const attractorsSaturationStrengthMinMax = { min: 16, max: 17 };
+    const attractorsSaturationOffsetMinMax = { min: 17, max: 18 };
+    const attractorsValueStrengthMinMax = { min: 18, max: 19 };
+    const attractorsValueOffsetMinMax = { min: 19, max: 20 };
+    const viewportScaleMinMax = { min: 20, max: 21 };
+    const viewportCenterModulusMinMax = { min: 21, max: 22 };
+    const nbIterationsMinMax = { min: 22, max: 23 };
+    const epsilonMinMax = { min: 23, max: 24 };
+    const juliaBoundMinMax = { min: 24, max: 25 };
 
     configuration.randomize(
       functionTypes,
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax,
       juliaHueMinMax,
       juliaSaturationMinMax,
       juliaValueMinMax,
@@ -510,11 +520,17 @@ describe("randomize", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(
       viewportScaleMinMax.min,

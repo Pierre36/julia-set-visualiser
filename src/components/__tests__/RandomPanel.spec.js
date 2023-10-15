@@ -23,6 +23,11 @@ const complexModulusMaxMax = 100;
 const viewportCenterModulusMinDefault = 0;
 const viewportCenterModulusMaxDefault = 0;
 
+const rotationAngleMinDefault = 0;
+const rotationAngleMinMin = 0;
+const rotationAngleMaxDefault = 360;
+const rotationAngleMaxMax = 360;
+
 const durationMinDefault = 5;
 const durationMinMin = 1;
 const durationMaxDefault = 30;
@@ -143,9 +148,15 @@ describe("Render", () => {
       { id: CoefficientTypes.CONSTANT, text: "Constant" },
       { id: CoefficientTypes.CIRCLE, text: "Circle" },
       { id: CoefficientTypes.LINE, text: "Line" },
+      { id: CoefficientTypes.ELLIPSE, text: "Ellipse" },
     ]);
     expect(multiComboBoxes[1].vm.$props.selected).toEqual(
-      new Set([CoefficientTypes.CONSTANT, CoefficientTypes.CIRCLE, CoefficientTypes.LINE])
+      new Set([
+        CoefficientTypes.CONSTANT,
+        CoefficientTypes.CIRCLE,
+        CoefficientTypes.LINE,
+        CoefficientTypes.ELLIPSE,
+      ])
     );
     expect(multiComboBoxes[1].vm.$props.label).toBe("Coefficient types");
     expect(multiComboBoxes[1].vm.$props.noOptionsSelectedText).toBe("No coefficient type");
@@ -187,7 +198,7 @@ describe("Render", () => {
     );
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
 
-    // Check the constant coefficients part renders correctly
+    // Check the circle coefficients part renders correctly
     disclosure = disclosures[1];
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
@@ -264,6 +275,74 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
+
+    // Check the circle coefficients part renders correctly
+    disclosure = disclosures[3];
+    headings5 = disclosure.findAll("h5");
+    minMaxInputs = disclosure.findAllComponents(MinMaxInput);
+    expect(disclosure.vm.$props.headingText).toBe("Ellipse coefficients");
+    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingLevel).toBe(4);
+    expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
+    expect(disclosure.vm.$props.buttonTitle).toBe("Show");
+    expect(headings5[0].text()).toBe("Center modulus");
+    expect(minMaxInputs[0].vm.$props.minValue).toBe(complexModulusMinDefault);
+    expect(minMaxInputs[0].vm.$props.maxValue).toBe(complexModulusMaxDefault);
+    expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
+    expect(minMaxInputs[0].vm.$props.max).toBe(complexModulusMaxMax);
+    expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
+    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.minLabel).toBe(
+      "Minimum modulus of ellipse coefficients centers"
+    );
+    expect(minMaxInputs[0].vm.$props.maxLabel).toBe(
+      "Maximum modulus of ellipse coefficients centers"
+    );
+    expect(minMaxInputs[0].vm.$props.level).toBe(6);
+    expect(headings5[1].text()).toBe("Half-width");
+    expect(minMaxInputs[1].vm.$props.minValue).toBe(complexModulusMinDefault);
+    expect(minMaxInputs[1].vm.$props.maxValue).toBe(complexModulusMaxDefault);
+    expect(minMaxInputs[1].vm.$props.min).toBe(complexModulusMinMin);
+    expect(minMaxInputs[1].vm.$props.max).toBe(complexModulusMaxMax);
+    expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
+    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum half-width of ellipse coefficients");
+    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum half-width of ellipse coefficients");
+    expect(minMaxInputs[1].vm.$props.level).toBe(6);
+    expect(headings5[2].text()).toBe("Half-height");
+    expect(minMaxInputs[2].vm.$props.minValue).toBe(complexModulusMinDefault);
+    expect(minMaxInputs[2].vm.$props.maxValue).toBe(complexModulusMaxDefault);
+    expect(minMaxInputs[2].vm.$props.min).toBe(complexModulusMinMin);
+    expect(minMaxInputs[2].vm.$props.max).toBe(complexModulusMaxMax);
+    expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
+    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum half-height of ellipse coefficients");
+    expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum half-height of ellipse coefficients");
+    expect(minMaxInputs[2].vm.$props.level).toBe(6);
+    expect(headings5[3].text()).toBe("Rotation angle");
+    expect(minMaxInputs[3].vm.$props.minValue).toBe(rotationAngleMinDefault);
+    expect(minMaxInputs[3].vm.$props.maxValue).toBe(rotationAngleMaxDefault);
+    expect(minMaxInputs[3].vm.$props.min).toBe(rotationAngleMinMin);
+    expect(minMaxInputs[3].vm.$props.max).toBe(rotationAngleMaxMax);
+    expect(minMaxInputs[3].vm.$props.step).toBe(1);
+    expect(minMaxInputs[3].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[3].vm.$props.minLabel).toBe(
+      "Minimum rotation angle of ellipse coefficients"
+    );
+    expect(minMaxInputs[3].vm.$props.maxLabel).toBe(
+      "Maximum rotation angle of ellipse coefficients"
+    );
+    expect(minMaxInputs[3].vm.$props.level).toBe(6);
+    expect(headings5[4].text()).toBe("Duration");
+    expect(minMaxInputs[4].vm.$props.minValue).toBe(durationMinDefault);
+    expect(minMaxInputs[4].vm.$props.maxValue).toBe(durationMaxDefault);
+    expect(minMaxInputs[4].vm.$props.min).toBe(durationMinMin);
+    expect(minMaxInputs[4].vm.$props.max).toBe(durationMaxMax);
+    expect(minMaxInputs[4].vm.$props.step).toBe(1);
+    expect(minMaxInputs[4].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum duration of ellipse coefficients");
+    expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum duration of ellipse coefficients");
+    expect(minMaxInputs[4].vm.$props.level).toBe(6);
   });
 
   it("renders the colors section correctly", async () => {
@@ -571,7 +650,12 @@ describe("Interactions", () => {
       { min: 32, max: 33 },
       { min: 34, max: 35 },
       { min: 36, max: 37 },
-      { min: 38, max: 39 }
+      { min: 38, max: 39 },
+      { min: 40, max: 41 },
+      { min: 42, max: 43 },
+      { min: 44, max: 45 },
+      { min: 46, max: 47 },
+      { min: 48, max: 49 }
     );
   });
 });

@@ -3,6 +3,7 @@ import { CoefficientTypes } from "../enumerations/CoefficientTypes";
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
 import { ComplexLine } from "../models/ComplexLine";
+import { ComplexEllipse } from "../models/ComplexEllipse";
 import ComboBox from "./ComboBox.vue";
 import ComplexInput from "./ComplexInput.vue";
 import NumberInput from "./NumberInput.vue";
@@ -12,7 +13,7 @@ export default {
   components: { ComboBox, ComplexInput, NumberInput },
   props: {
     coefficient: {
-      type: [Complex, ComplexCircle, ComplexLine],
+      type: [Complex, ComplexCircle, ComplexLine, ComplexEllipse],
       default: new Complex(0, 0),
     },
     level: { type: Number, default: 4 },
@@ -24,11 +25,13 @@ export default {
         { id: CoefficientTypes.CONSTANT, text: "Constant" },
         { id: CoefficientTypes.CIRCLE, text: "Circle" },
         { id: CoefficientTypes.LINE, text: "Line" },
+        { id: CoefficientTypes.ELLIPSE, text: "Ellipse" },
       ],
       defaultValues: {
         CONSTANT: new Complex(0, 0),
         CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000),
         LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
+        ELLIPSE: new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000),
       },
     };
   },
@@ -38,6 +41,8 @@ export default {
         return CoefficientTypes.CIRCLE;
       } else if (this.coefficient instanceof ComplexLine) {
         return CoefficientTypes.LINE;
+      } else if (this.coefficient instanceof ComplexEllipse) {
+        return CoefficientTypes.ELLIPSE;
       } else {
         return CoefficientTypes.CONSTANT;
       }
@@ -47,6 +52,9 @@ export default {
     },
     isLine() {
       return this.type == CoefficientTypes.LINE;
+    },
+    isEllipse() {
+      return this.type == CoefficientTypes.ELLIPSE;
     },
     isConstant() {
       return this.type == CoefficientTypes.CONSTANT;
@@ -62,29 +70,9 @@ export default {
     changeType(newType) {
       this.$emit("update:coefficient", this.defaultValues[newType].copy());
     },
-    updateCenter(newCenter) {
+    update(property, newValue) {
       const newCoefficient = this.coefficient.copy();
-      newCoefficient.center = newCenter;
-      this.$emit("update:coefficient", newCoefficient);
-    },
-    updateStart(newStart) {
-      const newCoefficient = this.coefficient.copy();
-      newCoefficient.start = newStart;
-      this.$emit("update:coefficient", newCoefficient);
-    },
-    updateEnd(newEnd) {
-      const newCoefficient = this.coefficient.copy();
-      newCoefficient.end = newEnd;
-      this.$emit("update:coefficient", newCoefficient);
-    },
-    updateRadius(newRadius) {
-      const newCoefficient = this.coefficient.copy();
-      newCoefficient.radius = newRadius;
-      this.$emit("update:coefficient", newCoefficient);
-    },
-    updateDuration(newDuration) {
-      const newCoefficient = this.coefficient.copy();
-      newCoefficient.duration = newDuration * 1000;
+      newCoefficient[property] = newValue;
       this.$emit("update:coefficient", newCoefficient);
     },
   },
@@ -114,7 +102,7 @@ export default {
       <ComplexInput
         :complex="coefficient.center"
         label="Circle center"
-        @update:complex="updateCenter"
+        @update:complex="(newCenter) => update('center', newCenter)"
       />
       <component :is="heading">Radius</component>
       <NumberInput
@@ -122,28 +110,76 @@ export default {
         :min="0"
         :step="0.1"
         label="Circle radius"
-        @update:value="updateRadius"
+        @update:value="(newRadius) => update('radius', newRadius)"
       />
       <component :is="heading">Duration</component>
       <NumberInput
         :value="durationSecond"
         :min="0"
         :step="1"
-        @update:value="updateDuration"
+        @update:value="(newDuration) => update('duration', newDuration * 1000)"
         label="Duration"
       />
     </template>
     <template v-else-if="isLine">
       <component :is="heading">Start</component>
-      <ComplexInput :complex="coefficient.start" label="Line start" @update:complex="updateStart" />
+      <ComplexInput
+        :complex="coefficient.start"
+        label="Line start"
+        @update:complex="(newStart) => update('start', newStart)"
+      />
       <component :is="heading">End</component>
-      <ComplexInput :complex="coefficient.end" label="Line end" @update:complex="updateEnd" />
+      <ComplexInput
+        :complex="coefficient.end"
+        label="Line end"
+        @update:complex="(newEnd) => update('end', newEnd)"
+      />
       <component :is="heading">Duration</component>
       <NumberInput
         :value="durationSecond"
         :min="0"
         :step="1"
-        @update:value="updateDuration"
+        @update:value="(newDuration) => update('duration', newDuration * 1000)"
+        label="Duration"
+      />
+    </template>
+    <template v-else-if="isEllipse">
+      <component :is="heading">Center</component>
+      <ComplexInput
+        :complex="coefficient.center"
+        label="Ellipse center"
+        @update:complex="(newCenter) => update('center', newCenter)"
+      />
+      <component :is="heading">Half-width</component>
+      <NumberInput
+        :value="coefficient.halfWidth"
+        :min="0"
+        :step="0.1"
+        label="Ellipse half-width"
+        @update:value="(newHalfWidth) => update('halfWidth', newHalfWidth)"
+      />
+      <component :is="heading">Half-height</component>
+      <NumberInput
+        :value="coefficient.halfHeight"
+        :min="0"
+        :step="0.1"
+        label="Ellipse half-height"
+        @update:value="(newHalfHeight) => update('halfHeight', newHalfHeight)"
+      />
+      <component :is="heading">Rotation angle</component>
+      <NumberInput
+        :value="coefficient.rotationAngle"
+        :min="0"
+        :step="1"
+        label="Ellipse rotation angle"
+        @update:value="(newRotationAngle) => update('rotationAngle', newRotationAngle)"
+      />
+      <component :is="heading">Duration</component>
+      <NumberInput
+        :value="durationSecond"
+        :min="0"
+        :step="1"
+        @update:value="(newDuration) => update('duration', newDuration * 1000)"
         label="Duration"
       />
     </template>

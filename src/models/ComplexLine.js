@@ -8,7 +8,7 @@ export { ComplexLine };
  */
 class ComplexLine {
   /**
-   * Complex circle constructor
+   * Complex line constructor
    * @param {Complex} start The start of the line.
    * @param {Complex} end The end of the line.
    * @param {Number} duration The duration of the animation in milliseconds.
@@ -65,9 +65,9 @@ class ComplexLine {
   }
 
   /**
-   * Computes a MathML representation of the complex circle.
+   * Computes a MathML representation of the complex line.
    * @param {Number} power The power associated with the coefficient.
-   * @returns {String} A MathML representation of the complex circle.
+   * @returns {String} A MathML representation of the complex line.
    */
   toMathML(power) {
     return `<msub><mi>l</mi><mn>${power}</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>`;

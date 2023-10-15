@@ -1,6 +1,7 @@
 <script>
 import { Complex } from "../models/Complex";
 import { ComplexCircle } from "../models/ComplexCircle";
+import { ComplexEllipse } from "../models/ComplexEllipse";
 import { ComplexLine } from "../models/ComplexLine";
 import ComboBox from "./ComboBox.vue";
 import CoefficientInput from "./CoefficientInput.vue";
@@ -11,7 +12,7 @@ export default {
   props: {
     degree: { type: Number, required: true },
     coefficient: {
-      type: [Complex, ComplexCircle, ComplexLine],
+      type: [Complex, ComplexCircle, ComplexLine, ComplexEllipse],
       required: true,
     },
     availablePowers: { type: Array, required: true },

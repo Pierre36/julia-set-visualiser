@@ -205,11 +205,16 @@ class Configuration {
    * @param {Set} coefficientTypes A set the available coefficient types.
    * @param {Object} nbCoefficients An object containing the min and max value of the number of coefficients.
    * @param {Object} complexModulus An object containing the min and max value of the modulus for constant coefficients.
-   * @param {Object} centerModulus An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} circleCenterModulus An object containing the min and max value of the center modulus for circle coefficients.
    * @param {Object} radius An object containing the min and max value of the radius for circle coefficients.
    * @param {Object} circleDuration An object containing the min and max value of the duration for circle coefficients.
    * @param {Object} startEndModulus An object containing the min and max value of the start and end modulus for line coefficients.
    * @param {Object} lineDuration An object containing the min and max value of the duration for line coefficients.
+   * @param {Object} ellipseCenterModulus An object containing the min and max value of the center modulus for ellipse coefficients.
+   * @param {Object} halfWidth An object containing the min and max value of the half-width for ellipse coefficients.
+   * @param {Object} halfHeight An object containing the min and max value of the half-height for ellipse coefficients.
+   * @param {Object} rotationAngle An object containing the min and max value of the rotation angle for ellipse coefficients.
+   * @param {Object} ellipseDuration An object containing the min and max value of the duration for ellipse coefficients.
    * @param {Object} juliaHue An object containing the min and max value of the Julia hue.
    * @param {Object} juliaSaturation An object containing the min and max value of the Julia saturation.
    * @param {Object} juliaValue An object containing the min and max value of the Julia value.
@@ -229,11 +234,16 @@ class Configuration {
     coefficientTypes,
     nbCoefficients,
     complexModulus,
-    centerModulus,
+    circleCenterModulus,
     radius,
     circleDuration,
     startEndModulus,
     lineDuration,
+    ellipseCenterModulus,
+    halfWidth,
+    halfHeight,
+    rotationAngle,
+    ellipseDuration,
     juliaHue,
     juliaSaturation,
     juliaValue,
@@ -258,11 +268,16 @@ class Configuration {
       coefficientTypes,
       nbCoefficients,
       complexModulus,
-      centerModulus,
+      circleCenterModulus,
       radius,
       circleDuration,
       startEndModulus,
-      lineDuration
+      lineDuration,
+      ellipseCenterModulus,
+      halfWidth,
+      halfHeight,
+      rotationAngle,
+      ellipseDuration
     );
     this.juliaHSV[0] = RandomUtils.integerBetween(juliaHue.min, juliaHue.max);
     this.juliaHSV[1] = RandomUtils.floatBetween(juliaSaturation.min, juliaSaturation.max);

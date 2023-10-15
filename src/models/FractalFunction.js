@@ -292,11 +292,16 @@ class FractalFunction {
    * @param {Set} coefficientTypes A set the available coefficient types.
    * @param {Object} nbCoefficientsMinMax An object containing the min and max value of the number of coefficients.
    * @param {Object} complexModulusMinMax An object containing the min and max value of the modulus for constant coefficients.
-   * @param {Object} centerModulusMinMax An object containing the min and max value of the center modulus for circle coefficients.
+   * @param {Object} circleCenterModulusMinMax An object containing the min and max value of the center modulus for circle coefficients.
    * @param {Object} radiusMinMax An object containing the min and max value of the radius for circle coefficients.
    * @param {Object} circleDurationMinMax An object containing the min and max value of the duration for circle coefficients.
    * @param {Object} startEndModulusMinMax An object containing the min and max value of the start and end modulus for line coefficients.
    * @param {Object} lineDurationMinMax An object containing the min and max value of the duration for line coefficients.
+   * @param {Object} ellipseCenterModulusMinMax An object containing the min and max value of the center modulus for ellipse coefficients.
+   * @param {Object} halfWidthMinMax An object containing the min and max value of the half-width for ellipse coefficients.
+   * @param {Object} halfHeightMinMax An object containing the min and max value of the half-height for ellipse coefficients.
+   * @param {Object} rotationAngleMinMax An object containing the min and max value of the rotation angle for ellipse coefficients.
+   * @param {Object} ellipseDurationMinMax An object containing the min and max value of the duration for ellipse coefficients.
    * @returns {FractalFunction} The new random fractal function.
    */
   static getRandomFractalFunction(
@@ -304,21 +309,31 @@ class FractalFunction {
     coefficientTypes,
     nbCoefficientsMinMax,
     complexModulusMinMax,
-    centerModulusMinMax,
+    circleCenterModulusMinMax,
     radiusMinMax,
     circleDurationMinMax,
     startEndModulusMinMax,
-    lineDurationMinMax
+    lineDurationMinMax,
+    ellipseCenterModulusMinMax,
+    halfWidthMinMax,
+    halfHeightMinMax,
+    rotationAngleMinMax,
+    ellipseDurationMinMax
   ) {
     const newFunctionType = RandomUtils.pickAmong(Array.from(functionTypes));
     const newNewtonCoefficient = Coefficient.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
     const nbCoefficients = RandomUtils.integerBetween(
       nbCoefficientsMinMax.min,
@@ -334,11 +349,16 @@ class FractalFunction {
       nbCoefficients,
       coefficientTypes,
       complexModulusMinMax,
-      centerModulusMinMax,
+      circleCenterModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
-      lineDurationMinMax
+      lineDurationMinMax,
+      ellipseCenterModulusMinMax,
+      halfWidthMinMax,
+      halfHeightMinMax,
+      rotationAngleMinMax,
+      ellipseDurationMinMax
     );
     let newDenominator;
     if (newFunctionType == FunctionTypes.DEFAULT) {
@@ -350,11 +370,16 @@ class FractalFunction {
         Math.max(1, nbCoefficients - nbNumeratorCoefficients),
         coefficientTypes,
         complexModulusMinMax,
-        centerModulusMinMax,
+        circleCenterModulusMinMax,
         radiusMinMax,
         circleDurationMinMax,
         startEndModulusMinMax,
-        lineDurationMinMax
+        lineDurationMinMax,
+        ellipseCenterModulusMinMax,
+        halfWidthMinMax,
+        halfHeightMinMax,
+        rotationAngleMinMax,
+        ellipseDurationMinMax
       );
     }
 

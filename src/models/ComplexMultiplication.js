@@ -10,8 +10,8 @@ export { ComplexMultiplication };
 class ComplexMultiplication {
   /**
    * Complex multiplication constructor
-   * @param { Complex | ComplexCircle | ComplexLine } coefficient1 The first coefficient.
-   * @param { Complex | ComplexCircle | ComplexLine } coefficient2 The second coefficient.
+   * @param { Complex | ComplexCircle | ComplexLine | ComplexEllipse } coefficient1 The first coefficient.
+   * @param { Complex | ComplexCircle | ComplexLine | ComplexEllipse } coefficient2 The second coefficient.
    */
   constructor(coefficient1, coefficient2) {
     this.coefficient1 = coefficient1;

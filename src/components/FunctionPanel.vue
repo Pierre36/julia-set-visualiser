@@ -199,6 +199,11 @@ export default {
               one turn.
             </li>
             <li>
+              <span class="info-list-item-title">Ellipse</span>: the coefficient is a point on an
+              ellipse which you can edit by choosing its center, half-width, half-height and angle
+              of rotation as well as the duration of one turn.
+            </li>
+            <li>
               <span class="info-list-item-title">Line</span>: the coefficient goes back and forth on
               a line. You can edit this line by choosing its starting and ending points as well as
               the duration of the round trip.
@@ -259,6 +264,11 @@ export default {
               <span class="info-list-item-title">Circle</span>: the coefficient is a point on a
               circle which you can edit by choosing its center and radius as well as the duration of
               one turn.
+            </li>
+            <li>
+              <span class="info-list-item-title">Ellipse</span>: the coefficient is a point on an
+              ellipse which you can edit by choosing its center, half-width, half-height and angle
+              of rotation as well as the duration of one turn.
             </li>
             <li>
               <span class="info-list-item-title">Line</span>: the coefficient goes back and forth on
