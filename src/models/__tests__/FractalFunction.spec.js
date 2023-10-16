@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import { FractalFunction } from "../FractalFunction";
 import { Polynomial } from "../Polynomial";
 import { Complex } from "../Complex";
+import { ComplexCircle } from "../ComplexCircle";
 import { Coefficient } from "../Coefficient";
 import { ComplexMultiplication } from "../ComplexMultiplication";
 import { RandomUtils } from "../../Utils/RandomUtils";
@@ -630,11 +631,11 @@ describe("toMathML", () => {
     expect(fractalFunction.toMathML()).toBe(expectedMathML);
   });
 
-  it("properly returns the mathML string for Newton function", () => {
+  it("properly returns the mathML string for Newton function with constant positive Newton coefficient", () => {
     const numerator = new Polynomial({ 2: new Complex(3, 6) });
     const denominator = new Polynomial({ 1: new Complex(6, 12) });
     const functionType = FunctionTypes.NEWTON;
-    const newtonCoefficient = new Complex(1, 0);
+    const newtonCoefficient = new Complex(3, 0);
 
     const fractalFunction = new FractalFunction(
       numerator,
@@ -645,8 +646,64 @@ describe("toMathML", () => {
 
     let expectedMathML =
       "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += "<mi>z</mi><mo>-</mo>";
+    expectedMathML += newtonCoefficient.toMathML();
     expectedMathML +=
-      "<mi>z</mi><mo>-</mo><mi>a</mi><mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+      "<mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+    expectedMathML += "</math>";
+    expectedMathML +=
+      "<math display='block'><mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += numerator.toMathML();
+    expectedMathML += "</math>";
+    expect(fractalFunction.toMathML()).toBe(expectedMathML);
+  });
+
+  it("properly returns the mathML string for Newton function with constant negative Newton coefficient", () => {
+    const numerator = new Polynomial({ 2: new Complex(3, 6) });
+    const denominator = new Polynomial({ 1: new Complex(6, 12) });
+    const functionType = FunctionTypes.NEWTON;
+    const newtonCoefficient = new Complex(-6, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    let expectedMathML =
+      "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += "<mi>z</mi><mo>+</mo>";
+    expectedMathML += newtonCoefficient.toMathML();
+    expectedMathML +=
+      "<mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
+    expectedMathML += "</math>";
+    expectedMathML +=
+      "<math display='block'><mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += numerator.toMathML();
+    expectedMathML += "</math>";
+    expect(fractalFunction.toMathML()).toBe(expectedMathML);
+  });
+
+  it("properly returns the mathML string for Newton function with non constant Newton coefficient", () => {
+    const numerator = new Polynomial({ 2: new Complex(3, 6) });
+    const denominator = new Polynomial({ 1: new Complex(6, 12) });
+    const functionType = FunctionTypes.NEWTON;
+    const newtonCoefficient = new ComplexCircle(new Complex(0, 0), 0, 0);
+
+    const fractalFunction = new FractalFunction(
+      numerator,
+      denominator,
+      functionType,
+      newtonCoefficient
+    );
+
+    let expectedMathML =
+      "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";
+    expectedMathML += "<mi>z</mi><mo>-</mo>";
+    expectedMathML += newtonCoefficient.toMathML("N");
+    expectedMathML +=
+      "<mfrac><mrow><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow><mrow><msup><mi>P</mi><mo lspace='0em' rspace='0em' class='tml-prime'>′</mo></msup><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo></mrow></mfrac>";
     expectedMathML += "</math>";
     expectedMathML +=
       "<math display='block'><mrow><mtext>with</mtext><mspace width='0.5em'/><mi>P</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";

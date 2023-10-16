@@ -258,7 +258,17 @@ class FractalFunction {
     mathML += "<mrow><mi>f</mi>" + ofz + "<mo>=</mo></mrow>";
     if (this.functionType != FunctionTypes.DEFAULT) {
       if (this.functionType == FunctionTypes.NEWTON) {
-        mathML += "<mi>z</mi><mo>-</mo><mi>a</mi>";
+        mathML += "<mi>z</mi>";
+        if (this.newtonCoefficient.showMinus()) {
+          mathML += "<mo>+</mo>";
+        } else {
+          mathML += "<mo>-</mo>";
+        }
+        if (this.newtonCoefficient instanceof Complex) {
+          mathML += this.newtonCoefficient.toMathML(false);
+        } else {
+          mathML += this.newtonCoefficient.toMathML("N");
+        }
       }
       mathML += "<mfrac>";
       mathML += "<mrow>" + p + ofz + "</mrow>";
