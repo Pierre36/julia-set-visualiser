@@ -19,6 +19,7 @@ coverage
 
 # Editor directories and files
 .vscode/*
+.prettierignore
 .idea
 *.suo
 *.ntvs*
@@ -26,6 +27,3 @@ coverage
 *.sln
 *.sw?
 
-# Specific
-TODO.md
-.prettierignore
