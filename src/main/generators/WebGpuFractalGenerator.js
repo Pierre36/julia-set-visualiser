@@ -2,9 +2,7 @@ import vertexShaderSource from "@/shaders/vertex_shader.wgsl?raw";
 import fragmentShaderSource from "@/shaders/fragment_shader.wgsl?raw";
 import { Polynomial } from "@/models/Polynomial";
 import { Configuration } from "@/models/Configuration";
-import { Complex } from "@/models/Complex";
 import { FractalFunction } from "@/models/FractalFunction";
-import { Attractor } from "@/models/Attractor";
 import { FractalGeneratorParameters } from "@/generators/FractalGeneratorParameters";
 
 export { WebGpuFractalGenerator };
