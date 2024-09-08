@@ -19,8 +19,8 @@ class Configuration {
    * @param {Number} coordinatesScale The scale of the coordinates.
    * @param {Complex} coordinatesCenter The center of the coordinates.
    * @param {Number} nbIterations The number of iterations.
-   * @param {Number} epsilon The epsilon added to the complex number before to compute the divergence.
-   * @param {Number} juliaBound The highest value of log-divergence in the Julia Set.
+   * @param {Number} epsilon The epsilon added to the complex number before computing the divergence.
+   * @param {Number} juliaBound The highest value of log-divergence in the Fatou Set.
    * @param {FractalFunction} fractalFunction The function used for the fractal.
    * @param {Array} juliaHSV The hue, saturation and value of the Julia Set.
    * @param {Attractor} defaultAttractor The default attractor to use if no attractor is closer.

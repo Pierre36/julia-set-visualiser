@@ -1,9 +1,10 @@
 <script>
-import { FractalEngine } from "@/engines/FractalEngine";
+import { WebGpuFractalGenerator } from "@/generators/WebGpuFractalGenerator";
 import { Configuration } from "@/models/Configuration";
 
 import AnimationOverlay from "./AnimationOverlay.vue";
 import { shallowRef } from "vue";
+
 export default {
   name: "AnimationFrame",
   components: { AnimationOverlay },
@@ -13,70 +14,70 @@ export default {
   expose: ["resetFractalEngineTime"],
   data() {
     return {
-      fractalEngine: null,
+      fractalGenerator: null,
       error: null,
       fps: 0,
     };
   },
   watch: {
     "configuration.resolutionScale"(newResolutionScale) {
-      this.fractalEngine.createViewport(newResolutionScale);
+      this.fractalGenerator.updateCanvasResolution(newResolutionScale);
     },
     "configuration.coordinatesScale"(newCoordinatesScale) {
-      this.fractalEngine.setCoordinatesScale(newCoordinatesScale);
+      this.fractalGenerator.updateViewportScale(newCoordinatesScale);
     },
     "configuration.coordinatesCenter"(newCoordinatesCenter) {
-      this.fractalEngine.setCoordinatesCenter(newCoordinatesCenter);
+      this.fractalGenerator.updateViewportCenter(newCoordinatesCenter);
     },
     "configuration.nbIterations"(newNbIterations) {
-      this.fractalEngine.setNbIterations(newNbIterations);
+      this.fractalGenerator.updateIterationsCount(newNbIterations);
     },
     "configuration.epsilon"(newEpsilon) {
-      this.fractalEngine.setEpsilon(newEpsilon);
+      this.fractalGenerator.updateEpsilon(newEpsilon);
     },
     "configuration.juliaBound"(newJuliaBound) {
-      this.fractalEngine.setJuliaBound(newJuliaBound);
+      this.fractalGenerator.updateJuliaBound(newJuliaBound);
     },
     "configuration.fractalFunction": {
       handler(_) {
-        this.fractalEngine.setFractalFunction(this.configuration.fractalFunction.copy());
+        this.fractalGenerator.setFractalFunction(this.configuration.fractalFunction.copy());
       },
       deep: true,
     },
     "configuration.juliaHSV": {
       handler(newJuliaHSV) {
-        this.fractalEngine.setJuliaHSV(newJuliaHSV);
+        this.fractalGenerator.updateJuliaHSV(newJuliaHSV);
       },
       deep: true,
     },
     "configuration.defaultAttractor": {
       handler(newDefaultAttractor) {
-        this.fractalEngine.setDefaultAttractor(newDefaultAttractor);
+        this.fractalGenerator.updateDefaultAttractor(newDefaultAttractor);
       },
       deep: true,
     },
     "configuration.infinityAttractor": {
       handler(newInfinityAttractor) {
-        this.fractalEngine.setInfinityAttractor(newInfinityAttractor);
+        this.fractalGenerator.updateInfinityAttractor(newInfinityAttractor);
       },
       deep: true,
     },
     "configuration.attractors": {
       handler(newAttractors) {
-        this.fractalEngine.setAttractors(newAttractors);
+        this.fractalGenerator.updateAttractors(newAttractors);
       },
       deep: true,
     },
   },
-  mounted() {
+  async mounted() {
     // Initialize fractal engine
-    this.fractalEngine = shallowRef(new FractalEngine(this.$refs.animationCanvas));
+    this.fractalGenerator = shallowRef(new WebGpuFractalGenerator(this.$refs.animationCanvas));
 
     // Try to display the scene
     try {
       const configuration = new Configuration();
       configuration.fillWith(this.configuration);
-      this.fractalEngine.displayScene(configuration);
+      await this.fractalGenerator.initialise(configuration);
     } catch (error) {
       this.error = error;
       console.error(error);
@@ -84,21 +85,21 @@ export default {
 
     // Update dimension ratio when canvas changes size
     new ResizeObserver(() => {
-      this.fractalEngine.updateDimensionRatio();
+      this.fractalGenerator.updateViewportDimensionRatio();
     }).observe(this.$refs.animationCanvas);
 
     // Update resolution on window resize
     window.addEventListener("resize", () => {
-      this.fractalEngine.createViewport(this.configuration.resolutionScale);
+      this.fractalGenerator.updateCanvasResolution(this.configuration.resolutionScale);
     });
 
     // Update fps every 0.3 seconds
-    setInterval(() => (this.fps = Math.round(this.fractalEngine.fps)), 300);
+    setInterval(() => (this.fps = Math.round(this.fractalGenerator.fps)), 300);
   },
   methods: {
     resetFractalEngineTime() {
       console.debug("[>>] Resetting the FractalEngine time...");
-      this.fractalEngine.resetAnimationTime();
+      this.fractalGenerator.resetAnimationTime();
       console.debug("[OK] FractalEngine time reset");
     },
   },
@@ -112,8 +113,8 @@ export default {
       v-if="error == null"
       :fps="fps"
       @fullscreen="$refs.animationFrame.requestFullscreen()"
-      @pause="fractalEngine.pause()"
-      @unpause="fractalEngine.unpause()"
+      @pause="fractalGenerator.pause()"
+      @unpause="fractalGenerator.unpause()"
     />
     <div id="error-message" v-if="error != null">
       <h2>Error</h2>
