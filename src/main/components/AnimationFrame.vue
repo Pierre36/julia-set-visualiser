@@ -1,5 +1,6 @@
 <script>
 import { WebGpuFractalGenerator } from "@/generators/WebGpuFractalGenerator";
+import { FractalGeneratorParameters } from "@/generators/FractalGeneratorParameters";
 import { Configuration } from "@/models/Configuration";
 
 import AnimationOverlay from "./AnimationOverlay.vue";
@@ -24,19 +25,28 @@ export default {
       this.fractalGenerator.updateCanvasResolution(newResolutionScale);
     },
     "configuration.coordinatesScale"(newCoordinatesScale) {
-      this.fractalGenerator.updateViewportScale(newCoordinatesScale);
+      this.fractalGenerator.updateParameter(
+        FractalGeneratorParameters.COORDINATES_SCALE,
+        newCoordinatesScale
+      );
     },
     "configuration.coordinatesCenter"(newCoordinatesCenter) {
-      this.fractalGenerator.updateViewportCenter(newCoordinatesCenter);
+      this.fractalGenerator.updateParameter(
+        FractalGeneratorParameters.COORDINATES_CENTER,
+        newCoordinatesCenter
+      );
     },
-    "configuration.nbIterations"(newNbIterations) {
-      this.fractalGenerator.updateIterationsCount(newNbIterations);
+    "configuration.nbIterations"(newIterationsCount) {
+      this.fractalGenerator.updateParameter(
+        FractalGeneratorParameters.ITERATIONS_COUNT,
+        newIterationsCount
+      );
     },
     "configuration.epsilon"(newEpsilon) {
-      this.fractalGenerator.updateEpsilon(newEpsilon);
+      this.fractalGenerator.updateParameter(FractalGeneratorParameters.EPSILON, newEpsilon);
     },
     "configuration.juliaBound"(newJuliaBound) {
-      this.fractalGenerator.updateJuliaBound(newJuliaBound);
+      this.fractalGenerator.updateParameter(FractalGeneratorParameters.JULIA_BOUND, newJuliaBound);
     },
     "configuration.fractalFunction": {
       handler(_) {
@@ -46,25 +56,52 @@ export default {
     },
     "configuration.juliaHSV": {
       handler(newJuliaHSV) {
-        this.fractalGenerator.updateJuliaHSV(newJuliaHSV);
+        this.fractalGenerator.updateParameter(FractalGeneratorParameters.JULIA_HSV, newJuliaHSV);
       },
       deep: true,
     },
     "configuration.defaultAttractor": {
       handler(newDefaultAttractor) {
-        this.fractalGenerator.updateDefaultAttractor(newDefaultAttractor);
+        this.fractalGenerator.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
+          newDefaultAttractor.hue,
+          newDefaultAttractor.saturationStrength,
+          newDefaultAttractor.saturationOffset,
+          newDefaultAttractor.valueStrength,
+          newDefaultAttractor.valueOffset,
+        ]);
       },
       deep: true,
     },
     "configuration.infinityAttractor": {
       handler(newInfinityAttractor) {
-        this.fractalGenerator.updateInfinityAttractor(newInfinityAttractor);
+        this.fractalGenerator.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
+          newInfinityAttractor.hue,
+          newInfinityAttractor.saturationStrength,
+          newInfinityAttractor.saturationOffset,
+          newInfinityAttractor.valueStrength,
+          newInfinityAttractor.valueOffset,
+        ]);
       },
       deep: true,
     },
     "configuration.attractors": {
       handler(newAttractors) {
-        this.fractalGenerator.updateAttractors(newAttractors);
+        this.fractalGenerator.updateParameter(
+          FractalGeneratorParameters.ATTRACTORS_COUNT,
+          newAttractors.length
+        );
+        this.fractalGenerator.updateParameter(
+          FractalGeneratorParameters.ATTRACTORS,
+          newAttractors.flatMap((attractor) => [
+            attractor.complex.mod(),
+            attractor.complex.arg(),
+            attractor.hue,
+            attractor.saturationStrength,
+            attractor.saturationOffset,
+            attractor.valueStrength,
+            attractor.valueOffset,
+          ])
+        );
       },
       deep: true,
     },

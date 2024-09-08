@@ -5,14 +5,109 @@ import { Configuration } from "@/models/Configuration";
 import { Complex } from "@/models/Complex";
 import { FractalFunction } from "@/models/FractalFunction";
 import { Attractor } from "@/models/Attractor";
+import { FractalGeneratorParameters } from "@/generators/FractalGeneratorParameters";
 
 export { WebGpuFractalGenerator };
 
-const NB_VERTICES = 6;
-
-// TODO Add more logging
 // TODO Handle the pause better (refresh the canvas)
-// TODO Try to find a way to generalise uniforms update
+
+/** @type {Number} Number of vertices to render */
+const VERTICES_COUNT = 6;
+
+/** @type {Readonly<Object>} Enumeration for the buffers names */
+const BUFFERS_NAMES = Object.freeze({
+  VERTEX: "VERTEX_BUFFER",
+  VIEWPORT_UNIFORMS: "VIEWPORT_UNIFORMS_BUFFER",
+  FUNCTION_UNIFORMS: "FUNCTION_UNIFORMS_BUFFER",
+  FUNCTION_STORAGE: "FUNCTION_STORAGE_BUFFER",
+  FRACTAL_UNIFORMS: "FRACTAL_UNIFORMS_BUFFER",
+  ATTRACTORS_STORAGE: "ATTRACTORS_STORAGE_BUFFER",
+});
+
+/** @type {Readonly<Object>} Enumeration for the buffers views */
+const BUFFERS_VIEWS = Object.freeze({
+  UINT32: "UINT32",
+  FLOAT32: "FLOAT32",
+});
+
+/**
+ * @type {Map<String, {buffer: String, offset: Number, isArray: Boolean, view: String}>} Mapping between the parameters and their
+ * buffers
+ */
+const BUFFER_MAPPING = new Map()
+  .set(FractalGeneratorParameters.DIMENSION_RATIO, {
+    buffer: BUFFERS_NAMES.VIEWPORT_UNIFORMS,
+    offset: 0,
+  })
+  .set(FractalGeneratorParameters.COORDINATES_SCALE, {
+    buffer: BUFFERS_NAMES.VIEWPORT_UNIFORMS,
+    offset: 1,
+  })
+  .set(FractalGeneratorParameters.COORDINATES_CENTER, {
+    buffer: BUFFERS_NAMES.VIEWPORT_UNIFORMS,
+    offset: 2,
+  })
+  .set(FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT, {
+    buffer: BUFFERS_NAMES.FUNCTION_UNIFORMS,
+    offset: 0,
+  })
+  .set(FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT, {
+    buffer: BUFFERS_NAMES.FUNCTION_UNIFORMS,
+    offset: 1,
+  })
+  .set(FractalGeneratorParameters.NUMERATOR, {
+    buffer: BUFFERS_NAMES.FUNCTION_STORAGE,
+    offset: 0,
+    isArray: true,
+  })
+  .set(FractalGeneratorParameters.DENOMINATOR, {
+    buffer: BUFFERS_NAMES.FUNCTION_STORAGE,
+    offset: (Polynomial.MAX_DEGREE + 1) * 3,
+    isArray: true,
+  })
+  .set(FractalGeneratorParameters.ITERATIONS_COUNT, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 0,
+    view: BUFFERS_VIEWS.UINT32,
+  })
+  .set(FractalGeneratorParameters.EPSILON, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 1,
+    view: BUFFERS_VIEWS.FLOAT32,
+  })
+  .set(FractalGeneratorParameters.JULIA_BOUND, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 2,
+    view: BUFFERS_VIEWS.FLOAT32,
+  })
+  .set(FractalGeneratorParameters.ATTRACTORS_COUNT, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 3,
+    view: BUFFERS_VIEWS.UINT32,
+  })
+  .set(FractalGeneratorParameters.DEFAULT_COLOUR, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 4,
+    view: BUFFERS_VIEWS.FLOAT32,
+    isArray: true,
+  })
+  .set(FractalGeneratorParameters.INFINITY_COLOUR, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 12,
+    view: BUFFERS_VIEWS.FLOAT32,
+    isArray: true,
+  })
+  .set(FractalGeneratorParameters.JULIA_HSV, {
+    buffer: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+    offset: 20,
+    view: BUFFERS_VIEWS.FLOAT32,
+    isArray: true,
+  })
+  .set(FractalGeneratorParameters.ATTRACTORS, {
+    buffer: BUFFERS_NAMES.ATTRACTORS_STORAGE,
+    offset: 0,
+    isArray: true,
+  });
 
 /**
  * Implementation of a fractal engine using WebGPU.
@@ -43,54 +138,8 @@ class WebGpuFractalGenerator {
   /** @type {GPUCanvasContext} WebGPU context object */
   _context;
 
-  /** @type {GPUBuffer} Buffer for the vertices used by the vertex shader */
-  _vertexBuffer;
-
-  /** @type {Float32Array} Values of the viewport uniforms (dimension ratio, scale and center) */
-  _viewportUniformsValues;
-
-  /** @type {GPUBuffer} Buffer for the viewport uniforms (dimension ratio, scale and center) */
-  _viewportUniformsBuffer;
-
-  /**
-   * @type {Int32Array} Values of the function uniforms (number of coefficients in the numerator,
-   * number of coefficients in the denominator)
-   */
-  _functionUniformsValues;
-
-  /**
-   * @type {GPUBuffer} Buffer for the function uniforms (number of coefficients in the numerator,
-   * number of coefficients in the denominator)
-   */
-  _functionUniformsBuffer;
-
-  /** @type {Float32Array} Values of the function storage (numerator and denominator) */
-  _functionStorageValues;
-
-  /** @type {GPUBuffer} Buffer for the function storage (numerator and denominator) */
-  _functionStorageBuffer;
-
-  /**
-   * @type {ArrayBuffer} Values of the fractal uniforms (iterations count, epsilon, Julia set
-   * bound, Julia set HSV, default attractor colour, infinity attractor colour)
-   */
-  _fractalUniformsValues;
-
-  /**
-   * @type {GPUBuffer} Buffer for the fractal uniforms (iterations count, epsilon, Julia set bound,
-   * Julia set HSV, default attractor colour, infinity attractor colour)
-   */
-  _fractalUniformsBuffer;
-
-  /**
-   * @type {Float32Array} Values of the attractors storage (complex number and colour parameters)
-   */
-  _attractorsStorageValues;
-
-  /**
-   * @type {GPUBuffer} Buffer for the attractors storage (complex number and colour parameters)
-   */
-  _attractorsStorageBuffer;
+  /** @type {Map<String, {buffer: GPUBuffer, values: any, views: Map<String, any>}>} Map of buffers and their values */
+  _buffers;
 
   /** @type {GPUBindGroup} WebGPU bind group defining the resources bindings */
   _bindGroup;
@@ -109,6 +158,47 @@ class WebGpuFractalGenerator {
     this.fps = 0;
     this._last10FPS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this._canvas = canvas;
+    this._buffers = new Map();
+  }
+
+  /**
+   * Add a write buffer task to the GPU device queue
+   *
+   * @param {String} bufferName name of the buffer (see `BUFFERS_NAMES`)
+   */
+  _writeBuffer(bufferName) {
+    this._gpuDevice.queue.writeBuffer(
+      this._buffers.get(bufferName).buffer,
+      0,
+      this._buffers.get(bufferName).values
+    );
+  }
+
+  /**
+   * Update a parameter of the fractal generation
+   *
+   * @param {String} parameter key corresponding to the parameter (see {@link FractalGeneratorParameters})
+   * @param {any} value value of the parameter
+   */
+  updateParameter(parameter, value) {
+    const { buffer, offset, isArray, view } = BUFFER_MAPPING.get(parameter);
+
+    let values;
+    if (view) {
+      values = this._buffers.get(buffer).views.get(view);
+    } else {
+      values = this._buffers.get(buffer).values;
+    }
+
+    if (isArray) {
+      values.set(value, offset);
+    } else {
+      values[offset] = value;
+    }
+
+    this._writeBuffer(buffer);
+
+    console.debug("[OK] Updated %s with value %s", parameter, value);
   }
 
   /**
@@ -118,9 +208,27 @@ class WebGpuFractalGenerator {
    */
   setFractalFunction(newFractalFunction) {
     this._fractalFunction = newFractalFunction;
-    // TODO Uncomment when possible because it is important to do this, especially the number of coefficients
-    // this.updateFunctionUniforms();
-    // this.updateFunctionStorage();
+
+    this.updateParameter(
+      FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
+      this._fractalFunction.getNumeratorNbCoefficients()
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
+      this._fractalFunction.getDenominatorNbCoefficients()
+    );
+
+    this._fractalFunction.updateWithTime(this._animationTime);
+    this.updateParameter(
+      FractalGeneratorParameters.NUMERATOR,
+      this._fractalFunction.getNumeratorArray(),
+      true
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.DENOMINATOR,
+      this._fractalFunction.getDenominatorArray(),
+      true
+    );
   }
 
   /**
@@ -137,185 +245,9 @@ class WebGpuFractalGenerator {
    * Update the viewport dimension ratio
    */
   updateViewportDimensionRatio() {
-    this._viewportUniformsValues.set([this._canvas.clientWidth / this._canvas.clientHeight], 0);
-    this._gpuDevice.queue.writeBuffer(
-      this._viewportUniformsBuffer,
-      0,
-      this._viewportUniformsValues
-    );
-  }
-
-  /**
-   * Update the viewport scale i.e. the scaling factor used for the grid coordinates
-   *
-   * @param {Number} scale scale of the coordinates
-   */
-  updateViewportScale(scale) {
-    this._viewportUniformsValues.set([scale], 1);
-    this._gpuDevice.queue.writeBuffer(
-      this._viewportUniformsBuffer,
-      0,
-      this._viewportUniformsValues
-    );
-  }
-
-  /**
-   * Update the viewport center i.e. the coordinates of the center of the grid coordinates
-   *
-   * @param {Complex} center center of the coordinates
-   */
-  updateViewportCenter(center) {
-    this._viewportUniformsValues.set([center.re, center.im], 2);
-    this._gpuDevice.queue.writeBuffer(
-      this._viewportUniformsBuffer,
-      0,
-      this._viewportUniformsValues
-    );
-  }
-
-  /**
-   * Update the function uniforms (number of coefficients in the numerator)
-   */
-  updateFunctionUniforms() {
-    this._functionUniformsValues.set(
-      [
-        this._fractalFunction.getNumeratorNbCoefficients(),
-        this._fractalFunction.getDenominatorNbCoefficients(),
-      ],
-      0
-    );
-    this._gpuDevice.queue.writeBuffer(
-      this._functionUniformsBuffer,
-      0,
-      this._functionUniformsValues
-    );
-  }
-
-  /**
-   * Update the function storage (numerator and denominator)
-   */
-  updateFunctionStorage() {
-    console.debug("[>>] Updating function storage with numerator and denominator");
-    this._fractalFunction.updateWithTime(this._animationTime);
-    this._functionStorageValues.set(this._fractalFunction.getNumeratorArray(), 0);
-    this._functionStorageValues.set(
-      this._fractalFunction.getDenominatorArray(),
-      (Polynomial.MAX_DEGREE + 1) * 3
-    );
-    this._gpuDevice.queue.writeBuffer(this._functionStorageBuffer, 0, this._functionStorageValues);
-    console.debug("[OK] Updated function storage with [%s]", this._functionStorageValues);
-  }
-
-  /**
-   * Update the iterations count
-   *
-   * @param {Number} iterationsCount number of iterations of the fractal function
-   */
-  updateIterationsCount(iterationsCount) {
-    const uint32View = new Uint32Array(this._fractalUniformsValues);
-    uint32View[0] = iterationsCount;
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the epsilon value
-   *
-   * @param {Number} epsilon value added to the complex number before computing its divergence
-   */
-  updateEpsilon(epsilon) {
-    const float32View = new Float32Array(this._fractalUniformsValues);
-    float32View.set([epsilon], 1);
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the Julia Set bound
-   *
-   * @param {Number} juliaBound highest value of log-divergence in the Fatou Set
-   */
-  updateJuliaBound(juliaBound) {
-    const float32View = new Float32Array(this._fractalUniformsValues);
-    float32View.set([juliaBound], 2);
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the Julia Set colour
-   *
-   * @param {Array<Number>} juliaHSV colour of the Julia Set in Hue Saturation Value notation
-   */
-  updateJuliaHSV(juliaHSV) {
-    const float32View = new Float32Array(this._fractalUniformsValues);
-    float32View.set(juliaHSV, 20);
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the default attractor colour parameters
-   *
-   * @param {Attractor} defaultAttractor default attractor (if no other attractor is closer)
-   */
-  updateDefaultAttractor(defaultAttractor) {
-    const float32View = new Float32Array(this._fractalUniformsValues);
-    float32View.set(
-      [
-        defaultAttractor.hue,
-        defaultAttractor.saturationStrength,
-        defaultAttractor.saturationOffset,
-        defaultAttractor.valueStrength,
-        defaultAttractor.valueOffset,
-      ],
-      4
-    );
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the infinity attractor colour parameters
-   *
-   * @param {Attractor} infinityAttractor infinity attractor (for points converging towards infinity)
-   */
-  updateInfinityAttractor(infinityAttractor) {
-    const float32View = new Float32Array(this._fractalUniformsValues);
-    float32View.set(
-      [
-        infinityAttractor.hue,
-        infinityAttractor.saturationStrength,
-        infinityAttractor.saturationOffset,
-        infinityAttractor.valueStrength,
-        infinityAttractor.valueOffset,
-      ],
-      12
-    );
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-  }
-
-  /**
-   * Update the attractors
-   *
-   * @param {Array<Attractor>} attractors the attractors
-   */
-  updateAttractors(attractors) {
-    const uint32View = new Uint32Array(this._fractalUniformsValues);
-    uint32View[3] = attractors.length;
-    this._gpuDevice.queue.writeBuffer(this._fractalUniformsBuffer, 0, this._fractalUniformsValues);
-
-    this._attractorsStorageValues.set(
-      attractors.flatMap((attractor) => [
-        attractor.complex.mod(),
-        attractor.complex.arg(),
-        attractor.hue,
-        attractor.saturationStrength,
-        attractor.saturationOffset,
-        attractor.valueStrength,
-        attractor.valueOffset,
-      ]),
-      0
-    );
-    this._gpuDevice.queue.writeBuffer(
-      this._attractorsStorageBuffer,
-      0,
-      this._attractorsStorageValues
+    this.updateParameter(
+      FractalGeneratorParameters.DIMENSION_RATIO,
+      this._canvas.clientWidth / this._canvas.clientHeight
     );
   }
 
@@ -352,21 +284,6 @@ class WebGpuFractalGenerator {
   }
 
   /**
-   * Initialise the vertex buffer with vertices and write it the GPU device queue
-   */
-  _initVertexBuffer() {
-    const vertices = new Float32Array([
-      -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
-    ]);
-    this._vertexBuffer = this._gpuDevice.createBuffer({
-      label: "Vertices",
-      size: vertices.byteLength,
-      usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
-    });
-    this._gpuDevice.queue.writeBuffer(this._vertexBuffer, 0, vertices);
-  }
-
-  /**
    * Create the bind group layout for the fractal pipeline
    *
    * @returns {GPUBindGroupLayout} the GPU bind group layout
@@ -393,90 +310,98 @@ class WebGpuFractalGenerator {
   }
 
   /**
-   * Initialise the viewport uniforms buffer (dimension ratio, scale and center)
-   *
-   * @param {Number} scale scale of the coordinates
-   * @param {Complex} center center of the coordinates
+   * Initialise the buffers
    */
-  _initViewportUniformsBuffer(scale, center) {
-    this._viewportUniformsValues = new Float32Array(4);
-    this._viewportUniformsBuffer = this._gpuDevice.createBuffer({
-      label: "Viewport Uniforms",
-      size: this._viewportUniformsValues.byteLength,
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  _initBuffers() {
+    this._initVertexBuffer();
+    this._initViewportUniformsBuffer();
+    this._initFunctionUniformsBuffer();
+    this._initFunctionStorageBuffer();
+    this._initFractalBuffers();
+  }
+
+  /**
+   * Initialise the vertex buffer with vertices and write it the GPU device queue
+   */
+  _initVertexBuffer() {
+    this._buffers.set(BUFFERS_NAMES.VERTEX, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.VERTEX,
+        size: VERTICES_COUNT * 2 * 4,
+        usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
+      }),
+      values: new Float32Array([-1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0]),
     });
-    this.updateViewportDimensionRatio();
-    this.updateViewportScale(scale);
-    this.updateViewportCenter(center);
+    this._writeBuffer(BUFFERS_NAMES.VERTEX);
+  }
+
+  /**
+   * Initialise the viewport uniforms buffer (dimension ratio, scale and center)
+   */
+  _initViewportUniformsBuffer() {
+    this._buffers.set(BUFFERS_NAMES.VIEWPORT_UNIFORMS, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.VIEWPORT_UNIFORMS,
+        size: 4 * 4,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      }),
+      values: new Float32Array(4),
+    });
   }
 
   /**
    * Initialise the function uniforms buffer (number of numerator and denominator coefficients)
    */
   _initFunctionUniformsBuffer() {
-    this._functionUniformsValues = new Int32Array(2);
-    this._functionUniformsBuffer = this._gpuDevice.createBuffer({
-      label: "Function Uniforms",
-      size: this._functionUniformsValues.byteLength,
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    this._buffers.set(BUFFERS_NAMES.FUNCTION_UNIFORMS, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.FUNCTION_UNIFORMS,
+        size: 2 * 4,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      }),
+      values: new Int32Array(2),
     });
-    this.updateFunctionUniforms();
   }
 
   /**
-   * Initialise the function storage (numerator and denominator)
+   * Initialise the function storage buffer (numerator and denominator)
    */
-  _initFunctionStorage() {
-    this._functionStorageValues = new Float32Array((Polynomial.MAX_DEGREE + 1) * 3 * 2);
-    this._functionStorageBuffer = this._gpuDevice.createBuffer({
-      label: "Function Storage",
-      size: this._functionStorageValues.byteLength,
-      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+  _initFunctionStorageBuffer() {
+    this._buffers.set(BUFFERS_NAMES.FUNCTION_STORAGE, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.FUNCTION_STORAGE,
+        size: (Polynomial.MAX_DEGREE + 1) * 3 * 2 * 4,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+      }),
+      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 3 * 2),
     });
-    this.updateFunctionStorage();
   }
 
   /**
-   * Initialise th fractal buffers (uniform and storage buffers)
-   *
-   * @param {Number} iterationsCount number of iterations
-   * @param {Number} epsilon value added to the complex number before computing its divergence
-   * @param {Number} juliaBound highest value of log-divergence in the Fatou Set
-   * @param {Array<Number>} juliaHSV colour of the Julia Set in Hue Saturation Value notation
-   * @param {Attractor} defaultAttractor default attractor (if no other attractor is closer)
-   * @param {Attractor} infinityAttractor infinity attractor (for points converging towards infinity)
-   * @param {Array<Attractor>} attractors the other attractors
+   * Initialise the fractal buffers (uniform and storage buffers)
    */
-  _initFractalBuffers(
-    iterationsCount,
-    epsilon,
-    juliaBound,
-    juliaHSV,
-    defaultAttractor,
-    infinityAttractor,
-    attractors
-  ) {
-    this._fractalUniformsValues = new ArrayBuffer(24 * 4);
-    this._fractalUniformsBuffer = this._gpuDevice.createBuffer({
-      label: "Fractal Uniforms",
-      size: this._fractalUniformsValues.byteLength,
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  _initFractalBuffers() {
+    const arrayBuffer = new ArrayBuffer(24 * 4);
+    this._buffers.set(BUFFERS_NAMES.FRACTAL_UNIFORMS, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.FRACTAL_UNIFORMS,
+        size: arrayBuffer.byteLength,
+        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      }),
+      values: arrayBuffer,
+      views: new Map()
+        .set(BUFFERS_VIEWS.UINT32, new Uint32Array(arrayBuffer))
+        .set(BUFFERS_VIEWS.FLOAT32, new Float32Array(arrayBuffer)),
     });
 
-    this._attractorsStorageValues = new Float32Array((2 + 5) * 16);
-    this._attractorsStorageBuffer = this._gpuDevice.createBuffer({
-      label: "Attractors Storage",
-      size: this._attractorsStorageValues.byteLength,
-      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+    this._buffers.set(BUFFERS_NAMES.ATTRACTORS_STORAGE, {
+      buffer: this._gpuDevice.createBuffer({
+        label: BUFFERS_NAMES.ATTRACTORS_STORAGE,
+        size: (2 + 5) * 16 * 4,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+      }),
+      values: new Float32Array((2 + 5) * 16),
     });
-
-    this.updateIterationsCount(iterationsCount);
-    this.updateEpsilon(epsilon);
-    this.updateJuliaBound(juliaBound);
-    this.updateJuliaHSV(juliaHSV);
-    this.updateDefaultAttractor(defaultAttractor);
-    this.updateInfinityAttractor(infinityAttractor);
-    this.updateAttractors(attractors);
   }
 
   /**
@@ -485,34 +410,31 @@ class WebGpuFractalGenerator {
    * @param {BindGroupLayout} bindGroupLayout bind group layout to use
    * @param {Configuration} configuration fractal animation configuration
    */
-  _initBindGroup(bindGroupLayout, configuration) {
-    this._initViewportUniformsBuffer(
-      configuration.coordinatesScale,
-      configuration.coordinatesCenter
-    );
-
-    this._initFunctionUniformsBuffer();
-    this._initFunctionStorage();
-
-    this._initFractalBuffers(
-      configuration.nbIterations,
-      configuration.epsilon,
-      configuration.juliaBound,
-      configuration.juliaHSV,
-      configuration.defaultAttractor,
-      configuration.infinityAttractor,
-      configuration.attractors
-    );
-
+  _initBindGroup(bindGroupLayout) {
     this._bindGroup = this._gpuDevice.createBindGroup({
       label: "Fractal renderer bind group",
       layout: bindGroupLayout,
       entries: [
-        { binding: 0, resource: { buffer: this._viewportUniformsBuffer } },
-        { binding: 1, resource: { buffer: this._functionUniformsBuffer } },
-        { binding: 2, resource: { buffer: this._functionStorageBuffer } },
-        { binding: 3, resource: { buffer: this._fractalUniformsBuffer } },
-        { binding: 4, resource: { buffer: this._attractorsStorageBuffer } },
+        {
+          binding: 0,
+          resource: { buffer: this._buffers.get(BUFFERS_NAMES.VIEWPORT_UNIFORMS).buffer },
+        },
+        {
+          binding: 1,
+          resource: { buffer: this._buffers.get(BUFFERS_NAMES.FUNCTION_UNIFORMS).buffer },
+        },
+        {
+          binding: 2,
+          resource: { buffer: this._buffers.get(BUFFERS_NAMES.FUNCTION_STORAGE).buffer },
+        },
+        {
+          binding: 3,
+          resource: { buffer: this._buffers.get(BUFFERS_NAMES.FRACTAL_UNIFORMS).buffer },
+        },
+        {
+          binding: 4,
+          resource: { buffer: this._buffers.get(BUFFERS_NAMES.ATTRACTORS_STORAGE).buffer },
+        },
       ],
     });
   }
@@ -602,7 +524,17 @@ class WebGpuFractalGenerator {
 
       const encoder = this._gpuDevice.createCommandEncoder();
 
-      this.updateFunctionStorage();
+      this._fractalFunction.updateWithTime(this._animationTime);
+      this.updateParameter(
+        FractalGeneratorParameters.NUMERATOR,
+        this._fractalFunction.getNumeratorArray(),
+        true
+      );
+      this.updateParameter(
+        FractalGeneratorParameters.DENOMINATOR,
+        this._fractalFunction.getDenominatorArray(),
+        true
+      );
 
       const renderPass = encoder.beginRenderPass({
         colorAttachments: [
@@ -616,8 +548,8 @@ class WebGpuFractalGenerator {
       });
       renderPass.setPipeline(this._fractalPipeline);
       renderPass.setBindGroup(0, this._bindGroup);
-      renderPass.setVertexBuffer(0, this._vertexBuffer);
-      renderPass.draw(NB_VERTICES);
+      renderPass.setVertexBuffer(0, this._buffers.get(BUFFERS_NAMES.VERTEX).buffer);
+      renderPass.draw(VERTICES_COUNT);
       renderPass.end();
 
       this._gpuDevice.queue.submit([encoder.finish()]);
@@ -631,6 +563,60 @@ class WebGpuFractalGenerator {
   }
 
   /**
+   * Initialise the buffer values with the configuration
+   *
+   * @param {Configuration} configuration
+   */
+  _initBufferValues(configuration) {
+    this.updateViewportDimensionRatio();
+    this.updateParameter(
+      FractalGeneratorParameters.COORDINATES_SCALE,
+      configuration.coordinatesScale
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.COORDINATES_CENTER,
+      configuration.coordinatesCenter
+    );
+
+    this.setFractalFunction(configuration.fractalFunction);
+    this.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, configuration.nbIterations);
+    this.updateParameter(FractalGeneratorParameters.EPSILON, configuration.epsilon);
+    this.updateParameter(FractalGeneratorParameters.JULIA_BOUND, configuration.juliaBound);
+    this.updateParameter(FractalGeneratorParameters.JULIA_HSV, configuration.juliaHSV);
+    this.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
+      configuration.defaultAttractor.hue,
+      configuration.defaultAttractor.saturationStrength,
+      configuration.defaultAttractor.saturationOffset,
+      configuration.defaultAttractor.valueStrength,
+      configuration.defaultAttractor.valueOffset,
+    ]);
+    this.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
+      configuration.infinityAttractor.hue,
+      configuration.infinityAttractor.saturationStrength,
+      configuration.infinityAttractor.saturationOffset,
+      configuration.infinityAttractor.valueStrength,
+      configuration.infinityAttractor.valueOffset,
+    ]);
+
+    this.updateParameter(
+      FractalGeneratorParameters.ATTRACTORS_COUNT,
+      configuration.attractors.length
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.ATTRACTORS,
+      configuration.attractors.flatMap((attractor) => [
+        attractor.complex.mod(),
+        attractor.complex.arg(),
+        attractor.hue,
+        attractor.saturationStrength,
+        attractor.saturationOffset,
+        attractor.valueStrength,
+        attractor.valueOffset,
+      ])
+    );
+  }
+
+  /**
    * Initialise the Web GPU fractal generator and start the animation
    *
    * @param {Configuration} configuration
@@ -638,14 +624,12 @@ class WebGpuFractalGenerator {
   async initialise(configuration) {
     await this._loadWebGPU();
 
-    this.setFractalFunction(configuration.fractalFunction);
+    this._initBuffers();
+    this._initBufferValues(configuration);
 
     this.updateCanvasResolution(configuration.resolutionScale);
-
     const canvasFormat = navigator.gpu.getPreferredCanvasFormat();
     this._initContext(canvasFormat);
-
-    this._initVertexBuffer();
 
     const bindGroupLayout = this._createBindGroupLayout();
 
