@@ -9,8 +9,6 @@ import { FractalGeneratorParameters } from "@/generators/FractalGeneratorParamet
 
 export { WebGpuFractalGenerator };
 
-// TODO Handle the pause better (refresh the canvas)
-
 /** @type {Number} Number of vertices to render */
 const VERTICES_COUNT = 6;
 
@@ -197,6 +195,10 @@ class WebGpuFractalGenerator {
     }
 
     this._writeBuffer(buffer);
+
+    if (this._paused) {
+      this._drawFractal();
+    }
 
     console.debug("[OK] Updated %s with value %s", parameter, value);
   }
@@ -512,6 +514,31 @@ class WebGpuFractalGenerator {
   }
 
   /**
+   * Draw the fractal on the canvas
+   */
+  _drawFractal() {
+    const encoder = this._gpuDevice.createCommandEncoder();
+
+    const renderPass = encoder.beginRenderPass({
+      colorAttachments: [
+        {
+          view: this._context.getCurrentTexture().createView(),
+          loadOp: "clear",
+          clearValue: { r: 0, g: 0, b: 0, a: 1.0 },
+          storeOp: "store",
+        },
+      ],
+    });
+    renderPass.setPipeline(this._fractalPipeline);
+    renderPass.setBindGroup(0, this._bindGroup);
+    renderPass.setVertexBuffer(0, this._buffers.get(BUFFERS_NAMES.VERTEX).buffer);
+    renderPass.draw(VERTICES_COUNT);
+    renderPass.end();
+
+    this._gpuDevice.queue.submit([encoder.finish()]);
+  }
+
+  /**
    * Render the current frame
    *
    * @param {Number} time animation time in milliseconds
@@ -522,37 +549,17 @@ class WebGpuFractalGenerator {
     if (!this._paused) {
       this._animationTime += timeIncrement;
 
-      const encoder = this._gpuDevice.createCommandEncoder();
-
       this._fractalFunction.updateWithTime(this._animationTime);
       this.updateParameter(
         FractalGeneratorParameters.NUMERATOR,
-        this._fractalFunction.getNumeratorArray(),
-        true
+        this._fractalFunction.getNumeratorArray()
       );
       this.updateParameter(
         FractalGeneratorParameters.DENOMINATOR,
-        this._fractalFunction.getDenominatorArray(),
-        true
+        this._fractalFunction.getDenominatorArray()
       );
 
-      const renderPass = encoder.beginRenderPass({
-        colorAttachments: [
-          {
-            view: this._context.getCurrentTexture().createView(),
-            loadOp: "clear",
-            clearValue: { r: 0, g: 0, b: 0, a: 1.0 },
-            storeOp: "store",
-          },
-        ],
-      });
-      renderPass.setPipeline(this._fractalPipeline);
-      renderPass.setBindGroup(0, this._bindGroup);
-      renderPass.setVertexBuffer(0, this._buffers.get(BUFFERS_NAMES.VERTEX).buffer);
-      renderPass.draw(VERTICES_COUNT);
-      renderPass.end();
-
-      this._gpuDevice.queue.submit([encoder.finish()]);
+      this._drawFractal();
     }
 
     requestAnimationFrame((newTime) => {
