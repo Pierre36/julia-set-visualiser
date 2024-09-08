@@ -42,6 +42,7 @@ const BUFFER_MAPPING = new Map()
   .set(FractalGeneratorParameters.COORDINATES_CENTER, {
     buffer: BUFFERS_NAMES.VIEWPORT_UNIFORMS,
     offset: 2,
+    isArray: true,
   })
   .set(FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT, {
     buffer: BUFFERS_NAMES.FUNCTION_UNIFORMS,

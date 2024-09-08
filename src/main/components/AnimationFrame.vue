@@ -31,10 +31,10 @@ export default {
       );
     },
     "configuration.coordinatesCenter"(newCoordinatesCenter) {
-      this.fractalGenerator.updateParameter(
-        FractalGeneratorParameters.COORDINATES_CENTER,
-        newCoordinatesCenter
-      );
+      this.fractalGenerator.updateParameter(FractalGeneratorParameters.COORDINATES_CENTER, [
+        newCoordinatesCenter.re,
+        newCoordinatesCenter.im,
+      ]);
     },
     "configuration.nbIterations"(newIterationsCount) {
       this.fractalGenerator.updateParameter(
