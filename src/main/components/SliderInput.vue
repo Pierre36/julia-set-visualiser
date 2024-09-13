@@ -1,7 +1,8 @@
-<script>
-import NumberInput from "./NumberInput.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import NumberInput from "@/components/NumberInput.vue";
 
-export default {
+export default defineComponent({
   name: "SliderInput",
   components: { NumberInput },
   props: {
@@ -20,7 +21,7 @@ export default {
     },
   },
   methods: {},
-};
+});
 </script>
 
 <template>
@@ -52,7 +53,7 @@ export default {
       @keydown.right.prevent="$emit('update:value', value + step)"
       @keydown.home.prevent="$emit('update:value', min)"
       @keydown.end.prevent="$emit('update:value', max)"
-      @input="($event) => $emit('update:value', Number($event.target.value))"
+      @input="($event) => $emit('update:value', Number(($event.target as HTMLInputElement).value))"
     />
   </div>
 </template>

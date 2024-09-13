@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
+import { defineComponent } from "vue";
 import Disclosure from "./Disclosure.vue";
 import ComplexInput from "./ComplexInput.vue";
 import NumberInput from "./NumberInput.vue";
 
-export default {
+export default defineComponent({
   name: "AdvancedSettingsPanel",
   components: { Disclosure, ComplexInput, NumberInput },
   props: {
@@ -11,32 +12,32 @@ export default {
   },
   emits: ["change"],
   methods: {
-    updateResolutionScale(newResolutionScale) {
+    updateResolutionScale(newResolutionScale: number) {
       this.configuration.resolutionScale = newResolutionScale;
       this.$emit("change");
     },
-    updateCoordinatesScale(newCoordinatesScale) {
+    updateCoordinatesScale(newCoordinatesScale: number) {
       this.configuration.coordinatesScale = newCoordinatesScale;
       this.$emit("change");
     },
-    updateCoordinatesCenter(newCoordinatesCenter) {
+    updateCoordinatesCenter(newCoordinatesCenter: number) {
       this.configuration.coordinatesCenter = newCoordinatesCenter;
       this.$emit("change");
     },
-    updateNbIterations(newNbIterations) {
+    updateNbIterations(newNbIterations: number) {
       this.configuration.nbIterations = newNbIterations;
       this.$emit("change");
     },
-    updateEpsilon(newEpsilon) {
+    updateEpsilon(newEpsilon: number) {
       this.configuration.epsilon = newEpsilon;
       this.$emit("change");
     },
-    updateJuliaBound(newJuliaBound) {
+    updateJuliaBound(newJuliaBound: number) {
       this.configuration.juliaBound = newJuliaBound;
       this.$emit("change");
     },
   },
-};
+});
 </script>
 
 <template>

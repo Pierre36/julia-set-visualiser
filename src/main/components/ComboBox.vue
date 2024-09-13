@@ -1,9 +1,16 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "ComboBox",
   props: {
     id: { type: String, required: true },
-    options: { type: Array, default: [] },
+    options: {
+      type: Array<{ id: string; text: string }>,
+      default() {
+        return [];
+      },
+    },
     selected: { type: String, default: null },
     label: { type: String, default: "" },
   },
@@ -27,7 +34,9 @@ export default {
     },
     sortedOptions() {
       const sortedOptions = this.options.slice();
-      return sortedOptions.sort((a, b) => -(a.id == this.selected) + (b.id == this.selected));
+      return sortedOptions.sort(
+        (a, b) => -(a.id == this.selected ? 1 : 0) + (b.id == this.selected ? 1 : 0)
+      );
     },
     focusedOption() {
       return this.sortedOptions[this.focusedIndex];
@@ -38,8 +47,10 @@ export default {
   },
   methods: {
     makeFocusedVisible() {
-      const optionItem = this.$refs.optionItems.find((o) => o.dataset.id == this.focusedOption.id);
-      const popup = this.$refs.popup;
+      const optionItem = (this.$refs.optionItems as HTMLLIElement[]).find(
+        (o) => o.dataset.id == this.focusedOption.id
+      ) as HTMLLIElement;
+      const popup = this.$refs.popup as HTMLElement;
 
       const top = optionItem.offsetTop - popup.scrollTop;
       const bottom = top + optionItem.clientHeight;
@@ -50,8 +61,10 @@ export default {
         popup.scrollTo(0, optionItem.offsetTop - popup.clientHeight + optionItem.clientHeight);
       }
     },
-    closePopupIfClickIsOutside(e) {
-      this.popupOpen &&= this.$refs.popup.contains(e.target) || this.$refs.input.contains(e.target);
+    closePopupIfClickIsOutside(e: any) {
+      this.popupOpen &&=
+        (this.$refs.popup as HTMLElement).contains(e.target) ||
+        (this.$refs.input as HTMLElement).contains(e.target);
     },
     openPopup() {
       this.moveFocusToFirst();
@@ -59,7 +72,7 @@ export default {
     },
     closePopup() {
       this.popupOpen = false;
-      this.$refs.input.focus();
+      (this.$refs.input as HTMLElement).focus();
     },
     moveFocusDown() {
       this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
@@ -77,7 +90,7 @@ export default {
       this.focusedIndex = this.options.length - 1;
       this.makeFocusedVisible();
     },
-    selectOption(optionId) {
+    selectOption(optionId: string) {
       this.$emit("update:selected", optionId);
       this.closePopup();
     },
@@ -96,7 +109,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
@@ -137,7 +150,7 @@ export default {
         :data-id="option.id"
         :id="id + '_option_' + option.id"
         :class="{ focused: index == focusedIndex }"
-        :aria-selected="option.id == this.selected"
+        :aria-selected="option.id == selected"
         @click="selectOption(option.id)"
         role="option"
       >

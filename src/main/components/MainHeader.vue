@@ -1,9 +1,10 @@
-<script>
-import { Configuration } from "@/models/Configuration";
-import ComboBox from "./ComboBox.vue";
-import Toast from "./Toast.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Configuration from "@/models/Configuration";
+import ComboBox from "@/components/ComboBox.vue";
+import Toast from "@/components/Toast.vue";
 
-export default {
+export default defineComponent({
   name: "MainHeader",
   components: { ComboBox, Toast },
   props: {
@@ -24,7 +25,8 @@ export default {
     saveConfiguration() {
       localStorage.setItem("customConfiguration", JSON.stringify(this.configuration.toJSON()));
       this.configurations["CUSTOM"].fillWith(this.configuration);
-      this.$refs.saveToast.show();
+      // FIXME Fix this when switching to Composition API
+      (this.$refs.saveToast as any).show();
     },
     downloadConfiguration() {
       console.debug("[>>] Downloading the current custom configuration...");
@@ -36,11 +38,12 @@ export default {
       a.download = `custom_configuration.json`;
       a.click();
       window.URL.revokeObjectURL(url);
-      this.$refs.downloadToast.show();
+      // FIXME Fix this when switching to Composition API
+      (this.$refs.downloadToast as any).show();
       console.debug("[OK] Configuration downloaded");
     },
   },
-};
+});
 </script>
 
 <template>

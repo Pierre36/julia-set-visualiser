@@ -1,12 +1,13 @@
-<script>
-import { Attractor } from "@/models/Attractor";
-import AttractorItem from "./AttractorItem.vue";
-import Disclosure from "./Disclosure.vue";
-import SliderInput from "./SliderInput.vue";
-import IconTextButton from "./IconTextButton.vue";
-import { Complex } from "@/models/Complex";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
+import AttractorItem from "@/components/AttractorItem.vue";
+import Disclosure from "@/components/Disclosure.vue";
+import SliderInput from "@/components/SliderInput.vue";
+import IconTextButton from "@/components/IconTextButton.vue";
 
-export default {
+export default defineComponent({
   name: "ColorsPanel",
   components: {
     Disclosure,
@@ -15,10 +16,10 @@ export default {
     IconTextButton,
   },
   props: {
-    juliaHSV: { type: Array, required: true },
+    juliaHSV: { type: Array<number>, required: true },
     defaultAttractor: { type: Attractor, required: true },
     infinityAttractor: { type: Attractor, required: true },
-    attractors: { type: Array, required: true },
+    attractors: { type: Array<Attractor>, required: true },
   },
   emits: ["change"],
   computed: {
@@ -32,15 +33,15 @@ export default {
     },
   },
   methods: {
-    updateJuliaHue(newHue) {
+    updateJuliaHue(newHue: number) {
       this.juliaHSV[0] = newHue;
       this.$emit("change");
     },
-    updateJuliaSaturation(newSaturation) {
+    updateJuliaSaturation(newSaturation: number) {
       this.juliaHSV[1] = newSaturation;
       this.$emit("change");
     },
-    updateJuliaValue(newValue) {
+    updateJuliaValue(newValue: number) {
       this.juliaHSV[2] = newValue;
       this.$emit("change");
     },
@@ -48,12 +49,12 @@ export default {
       this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
       this.$emit("change");
     },
-    deleteAttractor(index) {
+    deleteAttractor(index: number) {
       this.attractors.splice(index, 1);
       this.$emit("change");
     },
   },
-};
+});
 </script>
 
 <template>

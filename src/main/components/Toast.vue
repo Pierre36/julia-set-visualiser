@@ -1,12 +1,13 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "Toast",
   props: {
     text: { type: String, default: "" },
     animationDuration: { type: Number, default: 500 },
     displayDuration: { type: Number, default: 1500 },
   },
-  expose: ["show"],
   data() {
     return {
       shown: false,
@@ -18,12 +19,12 @@ export default {
       setTimeout(() => (this.shown = false), this.displayDuration + this.animationDuration);
     },
   },
-};
+});
 </script>
 
 <template>
   <Transition>
-    <div role="alert" :style="`--duration: ${this.animationDuration}ms`" v-if="shown">
+    <div role="alert" :style="`--duration: ${animationDuration}ms`" v-if="shown">
       {{ text }}
     </div>
   </Transition>

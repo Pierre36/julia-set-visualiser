@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "AnimationOverlay",
   props: {
     fps: { type: Number, default: 0 },
@@ -10,7 +12,7 @@ export default {
       metricsDisplayed: false,
       paused: false,
       isFullscreen: false,
-      mouseMoveTimer: null,
+      mouseMoveTimer: null as any,
       menuDisplayed: false,
     };
   },
@@ -21,8 +23,8 @@ export default {
     });
 
     // Add a shortcut to switch fullscreen
-    document.addEventListener("keyup", (event) => {
-      if (event.target.tagName.toLowerCase() !== "input" && event.key == "f") {
+    document.addEventListener("keyup", (event: KeyboardEvent) => {
+      if (!(event.target instanceof HTMLInputElement) && event.key == "f") {
         this.updateFullscreen();
       }
     });
@@ -45,14 +47,14 @@ export default {
     },
     onMouseMove() {
       this.menuDisplayed = true;
-      this.timer = setTimeout(() => (this.menuDisplayed = false), 3000);
+      this.mouseMoveTimer = setTimeout(() => (this.menuDisplayed = false), 3000);
     },
     onMouseLeave() {
       this.menuDisplayed = false;
-      clearTimeout(this.timer);
+      if (this.mouseMoveTimer) clearTimeout(this.mouseMoveTimer);
     },
   },
-};
+});
 </script>
 
 <template>

@@ -1,7 +1,8 @@
-<script>
-import { Complex } from "@/models/Complex";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Complex from "@/models/Complex";
 
-export default {
+export default defineComponent({
   name: "ComplexInput",
   props: {
     complex: { type: Complex, default: new Complex(0, 0) },
@@ -16,14 +17,14 @@ export default {
   computed: {
     value() {
       if (this.wrong) {
-        return this.$refs.input.value;
+        return (this.$refs.input as HTMLInputElement).value;
       } else {
         return this.complex.toString();
       }
     },
   },
   methods: {
-    checkAndUpdate(complexString) {
+    checkAndUpdate(complexString: string) {
       try {
         this.$emit("update:complex", Complex.fromString(complexString));
         this.wrong = false;
@@ -32,7 +33,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
@@ -45,7 +46,7 @@ export default {
       :aria-label="label"
       :aria-invalid="wrong"
       role="textbox"
-      @change="($event) => checkAndUpdate($event.target.value)"
+      @change="($event) => checkAndUpdate(($event.target as HTMLInputElement).value)"
     />
     <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
       <title>Please enter a valid complex number</title>

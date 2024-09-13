@@ -1,19 +1,21 @@
-<script>
-import FunctionPanel from "./FunctionPanel.vue";
-import ColorsPanel from "./ColorsPanel.vue";
-import AdvancedSettingsPanel from "./AdvancedSettingsPanel.vue";
-import RandomPanel from "./RandomPanel.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import FunctionPanel from "@/components/FunctionPanel.vue";
+import ColorsPanel from "@/components/ColorsPanel.vue";
+import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
+import RandomPanel from "@/components/RandomPanel.vue";
+import Configuration from "@/models/Configuration";
 
-export default {
+export default defineComponent({
   name: "SidePanel",
   components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel, RandomPanel },
   props: {
     currentPanel: { type: String, required: true },
-    configuration: { type: Object, required: true },
+    configuration: { type: Configuration, required: true },
     collapsed: { type: Boolean, default: true },
   },
   emits: ["change"],
-};
+});
 </script>
 
 <template>

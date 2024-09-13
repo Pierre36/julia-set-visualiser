@@ -1,13 +1,14 @@
-<script>
-import { CoefficientTypes } from "@/constants/CoefficientTypes";
-import { FunctionTypes } from "@/constants/FunctionTypes";
-import { Configuration } from "@/models/Configuration";
-import Disclosure from "./Disclosure.vue";
-import IconTextButton from "./IconTextButton.vue";
-import MinMaxInput from "./MinMaxInput.vue";
-import MultiComboBox from "./MultiComboBox.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import CoefficientTypes from "@/constants/CoefficientTypes";
+import FunctionTypes from "@/constants/FunctionTypes";
+import Configuration from "@/models/Configuration";
+import Disclosure from "@/components/Disclosure.vue";
+import IconTextButton from "@/components/IconTextButton.vue";
+import MinMaxInput from "@/components/MinMaxInput.vue";
+import MultiComboBox from "@/components/MultiComboBox.vue";
 
-export default {
+export default defineComponent({
   name: "RandomPanel",
   components: { IconTextButton, Disclosure, MinMaxInput, MultiComboBox },
   props: {
@@ -101,7 +102,7 @@ export default {
       this.$emit("change");
     },
   },
-};
+});
 </script>
 
 <template>

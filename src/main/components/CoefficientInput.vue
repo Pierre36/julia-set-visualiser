@@ -1,14 +1,15 @@
-<script>
-import { CoefficientTypes } from "@/constants/CoefficientTypes";
-import { Complex } from "@/models/Complex";
-import { ComplexCircle } from "@/models/ComplexCircle";
-import { ComplexLine } from "@/models/ComplexLine";
-import { ComplexEllipse } from "@/models/ComplexEllipse";
+<script lang="ts">
+import { defineComponent } from "vue";
+import CoefficientTypes from "@/constants/CoefficientTypes";
+import Complex from "@/models/Complex";
+import ComplexCircle from "@/models/ComplexCircle";
+import ComplexLine from "@/models/ComplexLine";
+import ComplexEllipse from "@/models/ComplexEllipse";
 import ComboBox from "./ComboBox.vue";
 import ComplexInput from "./ComplexInput.vue";
 import NumberInput from "./NumberInput.vue";
 
-export default {
+export default defineComponent({
   name: "CoefficientInput",
   components: { ComboBox, ComplexInput, NumberInput },
   props: {
@@ -60,6 +61,9 @@ export default {
       return this.type == CoefficientTypes.CONSTANT;
     },
     durationSecond() {
+      if (this.coefficient instanceof Complex) {
+        return 0;
+      }
       return this.coefficient.duration / 1000;
     },
     heading() {
@@ -67,16 +71,17 @@ export default {
     },
   },
   methods: {
-    changeType(newType) {
+    changeType(newType: CoefficientTypes) {
       this.$emit("update:coefficient", this.defaultValues[newType].copy());
     },
-    update(property, newValue) {
+    update(property: string, newValue: any) {
       const newCoefficient = this.coefficient.copy();
-      newCoefficient[property] = newValue;
+      // FIXME when switching to Composition API
+      (newCoefficient as any)[property] = newValue;
       this.$emit("update:coefficient", newCoefficient);
     },
   },
-};
+});
 </script>
 
 <template>
@@ -92,7 +97,7 @@ export default {
     <template v-if="isConstant">
       <component :is="heading">Value</component>
       <ComplexInput
-        :complex="coefficient"
+        :complex="coefficient as Complex"
         label="Coefficient value"
         @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
       />
@@ -100,13 +105,13 @@ export default {
     <template v-else-if="isCircle">
       <component :is="heading">Center</component>
       <ComplexInput
-        :complex="coefficient.center"
+        :complex="(coefficient as ComplexCircle).center"
         label="Circle center"
         @update:complex="(newCenter) => update('center', newCenter)"
       />
       <component :is="heading">Radius</component>
       <NumberInput
-        :value="coefficient.radius"
+        :value="(coefficient as ComplexCircle).radius"
         :min="0"
         :step="0.1"
         label="Circle radius"
@@ -124,13 +129,13 @@ export default {
     <template v-else-if="isLine">
       <component :is="heading">Start</component>
       <ComplexInput
-        :complex="coefficient.start"
+        :complex="(coefficient as ComplexLine).start"
         label="Line start"
         @update:complex="(newStart) => update('start', newStart)"
       />
       <component :is="heading">End</component>
       <ComplexInput
-        :complex="coefficient.end"
+        :complex="(coefficient as ComplexLine).end"
         label="Line end"
         @update:complex="(newEnd) => update('end', newEnd)"
       />
@@ -146,13 +151,13 @@ export default {
     <template v-else-if="isEllipse">
       <component :is="heading">Center</component>
       <ComplexInput
-        :complex="coefficient.center"
+        :complex="(coefficient as ComplexEllipse).center"
         label="Ellipse center"
         @update:complex="(newCenter) => update('center', newCenter)"
       />
       <component :is="heading">Half-width</component>
       <NumberInput
-        :value="coefficient.halfWidth"
+        :value="(coefficient as ComplexEllipse).halfWidth"
         :min="0"
         :step="0.1"
         label="Ellipse half-width"
@@ -160,7 +165,7 @@ export default {
       />
       <component :is="heading">Half-height</component>
       <NumberInput
-        :value="coefficient.halfHeight"
+        :value="(coefficient as ComplexEllipse).halfHeight"
         :min="0"
         :step="0.1"
         label="Ellipse half-height"
@@ -168,7 +173,7 @@ export default {
       />
       <component :is="heading">Rotation angle</component>
       <NumberInput
-        :value="coefficient.rotationAngle"
+        :value="(coefficient as ComplexEllipse).rotationAngle"
         :min="0"
         :step="1"
         label="Ellipse rotation angle"

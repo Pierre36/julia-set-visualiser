@@ -1,7 +1,8 @@
-<script>
-import NumberInput from "./NumberInput.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import NumberInput from "@/components/NumberInput.vue";
 
-export default {
+export default defineComponent({
   name: "MinMaxInput",
   components: { NumberInput },
   emits: ["update:minValue", "update:maxValue"],
@@ -21,7 +22,7 @@ export default {
       return `h${this.level}`;
     },
   },
-};
+});
 </script>
 
 <template>

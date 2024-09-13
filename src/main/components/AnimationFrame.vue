@@ -1,68 +1,69 @@
-<script>
-import { WebGpuFractalGenerator } from "@/generators/WebGpuFractalGenerator";
-import { FractalGeneratorParameters } from "@/generators/FractalGeneratorParameters";
-import { Configuration } from "@/models/Configuration";
+<script lang="ts">
+import { defineComponent } from "vue";
+import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
+import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import Configuration from "@/models/Configuration";
+import AnimationOverlay from "@/components/AnimationOverlay.vue";
+import Complex from "@/models/Complex";
+import FractalFunction from "@/models/FractalFunction";
+import Attractor from "@/models/Attractor";
 
-import AnimationOverlay from "./AnimationOverlay.vue";
-import { shallowRef } from "vue";
-
-export default {
+export default defineComponent({
   name: "AnimationFrame",
   components: { AnimationOverlay },
   props: {
     configuration: { type: Configuration, required: true },
   },
-  expose: ["resetFractalEngineTime"],
   data() {
     return {
-      fractalGenerator: null,
-      error: null,
-      fps: 0,
+      fractalGenerator: null as WebGpuFractalGenerator | null,
+      error: null as any,
+      fps: 0 as number,
     };
   },
   watch: {
-    "configuration.resolutionScale"(newResolutionScale) {
-      this.fractalGenerator.updateCanvasResolution(newResolutionScale);
+    "configuration.resolutionScale"(newResolutionScale: number) {
+      this.fractalGenerator?.updateCanvasResolution(newResolutionScale);
     },
-    "configuration.coordinatesScale"(newCoordinatesScale) {
-      this.fractalGenerator.updateParameter(
+    "configuration.coordinatesScale"(newCoordinatesScale: number) {
+      this.fractalGenerator?.updateParameter(
         FractalGeneratorParameters.COORDINATES_SCALE,
         newCoordinatesScale
       );
     },
-    "configuration.coordinatesCenter"(newCoordinatesCenter) {
-      this.fractalGenerator.updateParameter(FractalGeneratorParameters.COORDINATES_CENTER, [
+    "configuration.coordinatesCenter"(newCoordinatesCenter: Complex) {
+      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTER, [
         newCoordinatesCenter.re,
         newCoordinatesCenter.im,
       ]);
     },
-    "configuration.nbIterations"(newIterationsCount) {
-      this.fractalGenerator.updateParameter(
+    "configuration.nbIterations"(newIterationsCount: number) {
+      this.fractalGenerator?.updateParameter(
         FractalGeneratorParameters.ITERATIONS_COUNT,
         newIterationsCount
       );
     },
-    "configuration.epsilon"(newEpsilon) {
-      this.fractalGenerator.updateParameter(FractalGeneratorParameters.EPSILON, newEpsilon);
+    "configuration.epsilon"(newEpsilon: number) {
+      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, newEpsilon);
     },
-    "configuration.juliaBound"(newJuliaBound) {
-      this.fractalGenerator.updateParameter(FractalGeneratorParameters.JULIA_BOUND, newJuliaBound);
+    "configuration.juliaBound"(newJuliaBound: number) {
+      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, newJuliaBound);
     },
     "configuration.fractalFunction": {
-      handler(_) {
-        this.fractalGenerator.setFractalFunction(this.configuration.fractalFunction.copy());
+      handler(_: FractalFunction) {
+        this.fractalGenerator?.setFractalFunction(this.configuration.fractalFunction.copy());
       },
       deep: true,
     },
     "configuration.juliaHSV": {
-      handler(newJuliaHSV) {
-        this.fractalGenerator.updateParameter(FractalGeneratorParameters.JULIA_HSV, newJuliaHSV);
+      handler(newJuliaHSV: number[]) {
+        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_HSV, newJuliaHSV);
       },
       deep: true,
     },
     "configuration.defaultAttractor": {
-      handler(newDefaultAttractor) {
-        this.fractalGenerator.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
+      handler(newDefaultAttractor: Attractor) {
+        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
           newDefaultAttractor.hue,
           newDefaultAttractor.saturationStrength,
           newDefaultAttractor.saturationOffset,
@@ -73,8 +74,8 @@ export default {
       deep: true,
     },
     "configuration.infinityAttractor": {
-      handler(newInfinityAttractor) {
-        this.fractalGenerator.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
+      handler(newInfinityAttractor: Attractor) {
+        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
           newInfinityAttractor.hue,
           newInfinityAttractor.saturationStrength,
           newInfinityAttractor.saturationOffset,
@@ -85,16 +86,16 @@ export default {
       deep: true,
     },
     "configuration.attractors": {
-      handler(newAttractors) {
-        this.fractalGenerator.updateParameter(
+      handler(newAttractors: Attractor[]) {
+        this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.ATTRACTORS_COUNT,
           newAttractors.length
         );
-        this.fractalGenerator.updateParameter(
+        this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.ATTRACTORS,
           newAttractors.flatMap((attractor) => [
-            attractor.complex.mod(),
-            attractor.complex.arg(),
+            attractor.complex?.mod() || 0,
+            attractor.complex?.arg() || 0,
             attractor.hue,
             attractor.saturationStrength,
             attractor.saturationOffset,
@@ -108,39 +109,45 @@ export default {
   },
   async mounted() {
     // Initialize fractal engine
-    this.fractalGenerator = shallowRef(new WebGpuFractalGenerator(this.$refs.animationCanvas));
-
-    // Try to display the scene
-    try {
-      const configuration = new Configuration();
-      configuration.fillWith(this.configuration);
-      await this.fractalGenerator.initialise(configuration);
-    } catch (error) {
-      this.error = error;
-      console.error(error);
+    const configuration = Configuration.emptyConfiguration("", "");
+    configuration.fillWith(this.configuration);
+    const fractalGeneratorInit = await WebGpuFractalGenerator.initialise(
+      this.$refs.animationCanvas as HTMLCanvasElement,
+      configuration.fractalFunction
+    );
+    if (fractalGeneratorInit instanceof Error) {
+      this.error = fractalGeneratorInit;
+      console.error(this.error);
+      return;
     }
+    this.fractalGenerator = fractalGeneratorInit;
+
+    // Start the animation
+    this.fractalGenerator.startAnimation(configuration);
 
     // Update dimension ratio when canvas changes size
     new ResizeObserver(() => {
-      this.fractalGenerator.updateViewportDimensionRatio();
-    }).observe(this.$refs.animationCanvas);
+      this.fractalGenerator?.updateViewportDimensionRatio();
+    }).observe(this.$refs.animationCanvas as HTMLCanvasElement);
 
     // Update resolution on window resize
     window.addEventListener("resize", () => {
-      this.fractalGenerator.updateCanvasResolution(this.configuration.resolutionScale);
+      this.fractalGenerator?.updateCanvasResolution(this.configuration.resolutionScale);
     });
 
     // Update fps every 0.3 seconds
-    setInterval(() => (this.fps = Math.round(this.fractalGenerator.fps)), 300);
+    setInterval(() => (this.fps = Math.round(this.fractalGenerator?.fps || 0)), 300);
   },
   methods: {
+    // TODO Rename
+    // TODO Expose after switch to composition API
     resetFractalEngineTime() {
       console.debug("[>>] Resetting the FractalEngine time...");
-      this.fractalGenerator.resetAnimationTime();
+      this.fractalGenerator?.resetAnimationTime();
       console.debug("[OK] FractalEngine time reset");
     },
   },
-};
+});
 </script>
 
 <template>
@@ -150,8 +157,8 @@ export default {
       v-if="error == null"
       :fps="fps"
       @fullscreen="$refs.animationFrame.requestFullscreen()"
-      @pause="fractalGenerator.pause()"
-      @unpause="fractalGenerator.unpause()"
+      @pause="fractalGenerator?.pause()"
+      @unpause="fractalGenerator?.unpause()"
     />
     <div id="error-message" v-if="error != null">
       <h2>Error</h2>

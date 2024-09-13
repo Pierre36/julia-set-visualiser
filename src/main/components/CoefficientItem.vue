@@ -1,12 +1,13 @@
-<script>
-import { Complex } from "@/models/Complex";
-import { ComplexCircle } from "@/models/ComplexCircle";
-import { ComplexEllipse } from "@/models/ComplexEllipse";
-import { ComplexLine } from "@/models/ComplexLine";
-import ComboBox from "./ComboBox.vue";
-import CoefficientInput from "./CoefficientInput.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Complex from "@/models/Complex";
+import ComplexCircle from "@/models/ComplexCircle";
+import ComplexEllipse from "@/models/ComplexEllipse";
+import ComplexLine from "@/models/ComplexLine";
+import ComboBox from "@/components/ComboBox.vue";
+import CoefficientInput from "@/components/CoefficientInput.vue";
 
-export default {
+export default defineComponent({
   name: "CoefficientItem",
   components: { ComboBox, CoefficientInput },
   props: {
@@ -15,17 +16,17 @@ export default {
       type: [Complex, ComplexCircle, ComplexLine, ComplexEllipse],
       required: true,
     },
-    availablePowers: { type: Array, required: true },
+    availablePowers: { type: Array<number>, required: true },
   },
   emits: ["update:degree", "update:coefficient", "delete:coefficient"],
   computed: {
-    degreeOptions() {
+    degreeOptions(): { id: string; text: string }[] {
       return this.availablePowers
-        .map((power) => ({ id: power, text: power }))
+        .map((power) => ({ id: power.toString(), text: power.toString() }))
         .concat({ id: this.degree.toString(), text: this.degree.toString() });
     },
   },
-};
+});
 </script>
 
 <template>

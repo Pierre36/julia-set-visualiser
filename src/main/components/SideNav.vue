@@ -1,9 +1,12 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+import { PANELS_IDS } from "./SideBar.vue";
+
+export default defineComponent({
   name: "SideNav",
   props: {
     currentPanel: { type: String, required: true },
-    panels: { type: Array, required: true },
+    panels: { type: Array<{ id: PANELS_IDS; name: string; icon: string }>, required: true },
     sidePanelCollapsed: { type: Boolean, default: true },
     label: { type: String, default: "" },
   },
@@ -44,11 +47,14 @@ export default {
   methods: {
     updateNbDisplayedPanels() {
       this.nbDisplayedPanels = Math.max(
-        Math.floor(this.$refs.tablist.clientHeight / this.$refs.moreListItem.clientHeight) - 1,
+        Math.floor(
+          (this.$refs.tablist as HTMLElement).clientHeight /
+            (this.$refs.moreListItem as HTMLElement).clientHeight
+        ) - 1,
         0
       );
     },
-    changePanel(newPanel) {
+    changePanel(newPanel: PANELS_IDS) {
       this.$emit("update:currentPanel", newPanel);
       if (this.sidePanelCollapsed || newPanel == this.currentPanel) {
         this.$emit("update:sidePanelCollapsed");
@@ -57,12 +63,12 @@ export default {
     switchPopup() {
       this.popupShown = !this.popupShown;
     },
-    closePopup(event) {
-      if (this.popupShown && !this.$refs.moreButton.contains(event.target)) {
+    closePopup(event: any) {
+      if (this.popupShown && !(this.$refs.moreButton as HTMLElement).contains(event.target)) {
         this.popupShown = false;
       }
     },
-    changeFocus(newFocusedIndex) {
+    changeFocus(newFocusedIndex: number) {
       this.focusedIndex = newFocusedIndex;
       this.popupShown = newFocusedIndex >= this.nbDisplayedPanels;
     },
@@ -81,19 +87,19 @@ export default {
     onFocusIn() {
       if (!this.hasFocus) {
         this.hasFocus = true;
-        if (this.$refs.tablist.matches(":focus-visible")) {
+        if ((this.$refs.tablist as HTMLElement).matches(":focus-visible")) {
           this.changeFocus(this.currentPanelIndex);
         }
       }
     },
     onFocusOut() {
-      if (!this.$refs.tablist.matches(":focus-within")) {
+      if (!(this.$refs.tablist as HTMLElement).matches(":focus-within")) {
         this.hasFocus = false;
         this.popupShown = false;
       }
     },
   },
-};
+});
 </script>
 
 <template>

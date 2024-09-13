@@ -1,9 +1,11 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "MultiComboBox",
   props: {
     id: { type: String, required: true },
-    options: { type: Array, default: [] },
+    options: { type: Array<{ id: string; text: string }>, default: [] },
     selected: { type: Set, default: new Set() },
     label: { type: String, default: "" },
     noOptionsSelectedText: { type: String, default: null },
@@ -45,8 +47,10 @@ export default {
   },
   methods: {
     makeFocusedVisible() {
-      const optionItem = this.$refs.optionItems.find((o) => o.dataset.id == this.focusedOption.id);
-      const popup = this.$refs.popup;
+      const optionItem = (this.$refs.optionItems as HTMLUListElement[]).find(
+        (o) => o.dataset.id == this.focusedOption.id
+      ) as HTMLUListElement;
+      const popup = this.$refs.popup as HTMLElement;
 
       const top = optionItem.offsetTop - popup.scrollTop;
       const bottom = top + optionItem.clientHeight;
@@ -57,8 +61,10 @@ export default {
         popup.scrollTo(0, optionItem.offsetTop - popup.clientHeight + optionItem.clientHeight);
       }
     },
-    closePopupIfClickIsOutside(e) {
-      this.popupOpen &&= this.$refs.popup.contains(e.target) || this.$refs.input.contains(e.target);
+    closePopupIfClickIsOutside(e: any) {
+      this.popupOpen &&=
+        (this.$refs.popup as HTMLElement).contains(e.target) ||
+        (this.$refs.input as HTMLElement).contains(e.target);
     },
     openPopup() {
       this.moveFocusToFirst();
@@ -66,7 +72,7 @@ export default {
     },
     closePopup() {
       this.popupOpen = false;
-      this.$refs.input.focus();
+      (this.$refs.input as HTMLElement).focus();
     },
     moveFocusDown() {
       this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
@@ -84,7 +90,7 @@ export default {
       this.focusedIndex = this.options.length - 1;
       this.makeFocusedVisible();
     },
-    toggleOptionSelected(optionId) {
+    toggleOptionSelected(optionId: string) {
       this.focusedIndex = this.options.findIndex((option) => option.id == optionId);
       const newSelected = new Set();
       this.selected.forEach((id) => newSelected.add(id));
@@ -110,7 +116,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
@@ -151,7 +157,7 @@ export default {
         :id="id + '_option_' + option.id"
         :data-id="option.id"
         :class="{ focused: index == focusedIndex }"
-        :aria-selected="this.selected.has(option.id)"
+        :aria-selected="selected.has(option.id)"
         @click="toggleOptionSelected(option.id)"
         role="option"
       >

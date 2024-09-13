@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "Disclosure",
   props: {
     headingCentered: { type: Boolean, default: false },
@@ -28,7 +30,7 @@ export default {
       this.expanded = !this.expanded;
     },
   },
-};
+});
 </script>
 
 <template>

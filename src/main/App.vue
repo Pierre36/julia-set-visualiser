@@ -1,10 +1,11 @@
-<script>
-import MainHeader from "./components/MainHeader.vue";
-import SideBar from "./components/SideBar.vue";
-import AnimationFrame from "./components/AnimationFrame.vue";
-import { Configuration } from "./models/Configuration";
+<script lang="ts">
+import { defineComponent } from "vue";
+import MainHeader from "@/components/MainHeader.vue";
+import SideBar from "@/components/SideBar.vue";
+import AnimationFrame from "@/components/AnimationFrame.vue";
+import Configuration from "@/models/Configuration";
 
-export default {
+export default defineComponent({
   name: "App",
   components: { MainHeader, SideBar, AnimationFrame },
   data() {
@@ -12,7 +13,7 @@ export default {
       configurations: {
         DEFAULT: Configuration.defaultConfiguration(),
         CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
-      },
+      } as Record<string, Configuration>,
       selectedConfigurationId: "DEFAULT",
       configuration: Configuration.defaultConfiguration("", ""),
       animationFrame: null,
@@ -23,14 +24,15 @@ export default {
     this.getStorageConfiguration();
   },
   mounted() {
-    this.animationFrame = this.$refs.animationFrame;
+    this.animationFrame = this.$refs.animationFrame as any;
   },
   methods: {
-    updateConfiguration(newSelectedId) {
+    updateConfiguration(newSelectedId: string) {
       this.selectedConfigurationId = newSelectedId;
       this.configuration.fillWith(this.configurations[newSelectedId]);
       if (this.animationFrame != null) {
-        this.animationFrame.resetFractalEngineTime();
+        // FIXME Fix when switching to Composition API
+        (this.animationFrame as any).resetFractalEngineTime();
       }
       console.debug("[OK] Switched to configuration " + newSelectedId);
     },
@@ -63,19 +65,22 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 <template>
   <MainHeader
     :configurations="configurations"
     :selectedConfigurationId="selectedConfigurationId"
-    :configuration="configuration"
+    :configuration="configuration as Configuration"
     @update:selectedConfigurationId="(newSelectedId) => updateConfiguration(newSelectedId)"
   />
   <main>
-    <SideBar :configuration="configuration" @change="switchToCustomConfiguration" />
-    <AnimationFrame ref="animationFrame" :configuration="configuration" />
+    <SideBar
+      :configuration="configuration as Configuration"
+      @change="switchToCustomConfiguration"
+    />
+    <AnimationFrame ref="animationFrame" :configuration="configuration as Configuration" />
   </main>
 </template>
 

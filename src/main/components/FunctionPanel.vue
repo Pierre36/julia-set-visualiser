@@ -1,14 +1,18 @@
-<script>
-import ComboBox from "./ComboBox.vue";
-import CoefficientInput from "./CoefficientInput.vue";
-import IconTextButton from "./IconTextButton.vue";
-import CoefficientItem from "./CoefficientItem.vue";
-import Disclosure from "./Disclosure.vue";
-import { Complex } from "@/models/Complex";
-import { FractalFunction } from "@/models/FractalFunction";
-import { FunctionTypes } from "@/constants/FunctionTypes";
+<script lang="ts">
+import { defineComponent } from "vue";
+import ComboBox from "@/components/ComboBox.vue";
+import CoefficientInput from "@/components/CoefficientInput.vue";
+import IconTextButton from "@/components/IconTextButton.vue";
+import CoefficientItem from "@/components/CoefficientItem.vue";
+import Disclosure from "@/components/Disclosure.vue";
+import Complex from "@/models/Complex";
+import FractalFunction from "@/models/FractalFunction";
+import FunctionTypes from "@/constants/FunctionTypes";
+import type ComplexCircle from "@/models/ComplexCircle";
+import type ComplexEllipse from "@/models/ComplexEllipse";
+import type ComplexLine from "@/models/ComplexLine";
 
-export default {
+export default defineComponent({
   name: "FunctionPanel",
   components: {
     ComboBox,
@@ -64,15 +68,17 @@ export default {
     },
   },
   methods: {
-    updateFunctionType(newFunctionType) {
+    updateFunctionType(newFunctionType: FunctionTypes) {
       this.fractalFunction.setFunctionType(newFunctionType);
       this.$emit("change");
     },
-    updateNewtonCoefficient(newNewtonCoefficient) {
+    updateNewtonCoefficient(
+      newNewtonCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine
+    ) {
       this.fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
       this.$emit("change");
     },
-    updateDegree(previousDegree, newDegree, inNumerator) {
+    updateDegree(previousDegree: number, newDegree: number, inNumerator: boolean) {
       if (previousDegree != newDegree) {
         this.fractalFunction.setCoefficient(
           newDegree,
@@ -83,20 +89,24 @@ export default {
         this.$emit("change");
       }
     },
-    updateCoefficient(power, newCoefficient, inNumerator) {
+    updateCoefficient(
+      power: number,
+      newCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine,
+      inNumerator: boolean
+    ) {
       this.fractalFunction.setCoefficient(power, inNumerator, newCoefficient);
       this.$emit("change");
     },
-    deleteCoefficient(power, inNumerator) {
+    deleteCoefficient(power: number, inNumerator: boolean) {
       this.fractalFunction.removeCoefficient(power, inNumerator);
       this.$emit("change");
     },
-    addCoefficient(power, inNumerator) {
+    addCoefficient(power: number, inNumerator: boolean) {
       this.fractalFunction.setCoefficient(power, inNumerator, new Complex(0, 0));
       this.$emit("change");
     },
   },
-};
+});
 </script>
 
 <template>

@@ -1,11 +1,12 @@
-<script>
-import { Complex } from "@/models/Complex";
-import { Attractor } from "@/models/Attractor";
+<script lang="ts">
+import { defineComponent } from "vue";
+import Complex from "@/models/Complex";
+import Attractor from "@/models/Attractor";
 import SliderInput from "./SliderInput.vue";
 import ComplexInput from "./ComplexInput.vue";
 import NumberInput from "./NumberInput.vue";
 
-export default {
+export default defineComponent({
   name: "AttractorItem",
   components: { ComplexInput, SliderInput, NumberInput },
   props: {
@@ -18,32 +19,32 @@ export default {
   },
   emits: ["delete:attractor", "change"],
   methods: {
-    updateComplex(newComplex) {
+    updateComplex(newComplex: Complex) {
       this.attractor.complex = newComplex;
       this.$emit("change");
     },
-    updateHue(newHue) {
+    updateHue(newHue: number) {
       this.attractor.hue = newHue;
       this.$emit("change");
     },
-    updateSaturationStrength(newSaturationStrength) {
+    updateSaturationStrength(newSaturationStrength: number) {
       this.attractor.saturationStrength = newSaturationStrength;
       this.$emit("change");
     },
-    updateSaturationOffset(newSaturationOffset) {
+    updateSaturationOffset(newSaturationOffset: number) {
       this.attractor.saturationOffset = newSaturationOffset;
       this.$emit("change");
     },
-    updateValueStrength(newValueStrength) {
+    updateValueStrength(newValueStrength: number) {
       this.attractor.valueStrength = newValueStrength;
       this.$emit("change");
     },
-    updateValueOffset(newValueOffset) {
+    updateValueOffset(newValueOffset: number) {
       this.attractor.valueOffset = newValueOffset;
       this.$emit("change");
     },
   },
-};
+});
 </script>
 
 <template>

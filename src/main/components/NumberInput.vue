@@ -1,5 +1,7 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "NumberInput",
   emits: ["update:value"],
   props: {
@@ -19,7 +21,7 @@ export default {
   computed: {
     inputValue() {
       if (this.wrong) {
-        return this.$refs.input.value;
+        return (this.$refs.input as HTMLInputElement).value;
       } else {
         return String(this.value);
       }
@@ -27,8 +29,8 @@ export default {
   },
   methods: {
     stepDown() {
-      this.$refs.input.stepDown();
-      this.$refs.input.dispatchEvent(new Event("change"));
+      (this.$refs.input as HTMLInputElement).stepDown();
+      (this.$refs.input as HTMLInputElement).dispatchEvent(new Event("change"));
     },
     goToMin() {
       if (this.min != undefined) {
@@ -41,10 +43,10 @@ export default {
       }
     },
     stepUp() {
-      this.$refs.input.stepUp();
-      this.$refs.input.dispatchEvent(new Event("change"));
+      (this.$refs.input as HTMLInputElement).stepUp();
+      (this.$refs.input as HTMLInputElement).dispatchEvent(new Event("change"));
     },
-    checkAndUpdate(stringValue) {
+    checkAndUpdate(stringValue: string) {
       let newValue = parseFloat(stringValue);
       this.wrong =
         isNaN(newValue) ||
@@ -56,7 +58,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <template>
@@ -78,7 +80,7 @@ export default {
       @keydown.up.prevent="stepUp"
       @keydown.home.prevent="goToMin"
       @keydown.end.prevent="goToMax"
-      @change="($event) => checkAndUpdate($event.target.value)"
+      @change="($event) => checkAndUpdate(($event.target as HTMLInputElement).value)"
     />
     <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
       <title>{{ wrongInputMessage }}</title>
