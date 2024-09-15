@@ -161,24 +161,24 @@ describe("toString", () => {
   });
 });
 
-describe("getEllipsisParameters", () => {
+describe("getEllipseParameters", () => {
   const duration = 1000;
 
-  it("properly returns the ellipsis parameters of a line", () => {
+  it("properly returns the ellipse parameters of a line", () => {
     const line = new ComplexLine(new Complex(0, 0), new Complex(0, 0), duration);
 
-    expect(line.getEllipsisParameters()).toEqual([duration, 0, 0, 0, 0, 0]);
+    expect(line.getEllipseParameters()).toEqual([duration, 0, 0, 0, 0, 0]);
   });
 
-  it("properly returns the ellipsis parameters of a line", () => {
+  it("properly returns the ellipse parameters of a line", () => {
     const line = new ComplexLine(new Complex(-1, 0), new Complex(1, 0), duration);
 
-    expect(line.getEllipsisParameters()).toEqual([duration, 0, 1, 0, 0, 0]);
+    expect(line.getEllipseParameters()).toEqual([duration, 0, 1, 0, 0, 0]);
   });
 
-  it("properly returns the ellipsis parameters of a line", () => {
+  it("properly returns the ellipse parameters of a line", () => {
     const line = new ComplexLine(new Complex(0, -1), new Complex(0, 1), duration);
 
-    expect(line.getEllipsisParameters()).toEqual([duration, Math.PI / 2, 1, 0, 0, 0]);
+    expect(line.getEllipseParameters()).toEqual([duration, Math.PI / 2, 1, 0, 0, 0]);
   });
 });

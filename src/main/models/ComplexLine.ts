@@ -121,12 +121,12 @@ export default class ComplexLine {
 
   // TODO Add test
   /**
-   * Get the ellipsis parameters corresponding to the complex line (duration, angle, half-width,
+   * Get the ellipse parameters corresponding to the complex line (duration, angle, half-width,
    * half-height, offset modulus and offset argument)
    *
-   * @returns the ellipsis parameters
+   * @returns the ellipse parameters
    */
-  public getEllipsisParameters(): number[] {
+  public getEllipseParameters(): number[] {
     const center = this.getCenter();
     const centredLineEnd = new Complex(this.end.re - center.re, this.end.im - center.im);
     return [

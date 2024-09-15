@@ -17,15 +17,6 @@ const INFINITY: f32 = 10000000000;
 // const DEFAULT_VAL_OFFSET: f32 = 1.4;
 // const JULIA_BOUND: f32 = 3;
 
-struct EllipsisParameters {
-  duration: f32,
-  angle: f32,
-  half_width: f32,
-  half_height: f32,
-  offset_mod: f32,
-  offset_arg: f32,
-};
-
 struct ColourParameters {
   hue: f32,
   sat_strength: f32,

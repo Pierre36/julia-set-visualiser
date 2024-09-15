@@ -362,12 +362,12 @@ export default class Polynomial {
   /**
    * Get the polynomial coefficients parameters
    *
-   * @returns the ellipsis equation parameters of the polynomial coefficients
+   * @returns the ellipse equation parameters of the polynomial coefficients
    */
   public getCoefficientsParameters(): number[] {
     return Object.keys(this.coefficients)
       .map(Number)
       .sort((a, b) => a - b)
-      .flatMap((power) => this.coefficients[power]?.getEllipsisParameters() || [0, 0, 0, 0, 0, 0]);
+      .flatMap((power) => this.coefficients[power]?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]);
   }
 }

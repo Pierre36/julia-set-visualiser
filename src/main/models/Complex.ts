@@ -237,12 +237,12 @@ export default class Complex {
 
   // TODO Add test
   /**
-   * Get the ellipsis parameters corresponding to the complex number (duration, angle, half-width,
+   * Get the ellipse parameters corresponding to the complex number (duration, angle, half-width,
    * half-height, offset modulus and offset argument)
    *
-   * @returns the ellipsis parameters
+   * @returns the ellipse parameters
    */
-  public getEllipsisParameters(): number[] {
+  public getEllipseParameters(): number[] {
     return [0, 0, 0, 0, this.mod(), this.arg()];
   }
 }

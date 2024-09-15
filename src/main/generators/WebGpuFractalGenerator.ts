@@ -554,7 +554,7 @@ export default class WebGpuFractalGenerator {
     );
     this.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      configuration.fractalFunction.newtonCoefficient.getEllipsisParameters()
+      configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
     );
 
     this.updateParameter(

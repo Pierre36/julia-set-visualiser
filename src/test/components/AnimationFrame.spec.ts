@@ -302,7 +302,7 @@ describe("Interactions", () => {
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      props.configuration.fractalFunction.newtonCoefficient.getEllipsisParameters()
+      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NUMERATOR,

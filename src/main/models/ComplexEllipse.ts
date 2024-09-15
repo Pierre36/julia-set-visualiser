@@ -149,12 +149,12 @@ export default class ComplexEllipse {
 
   // TODO Add test
   /**
-   * Get the ellipsis parameters corresponding to the complex ellipsis (duration, angle, half-width,
+   * Get the ellipse parameters corresponding to the complex ellipse (duration, angle, half-width,
    * half-height, offset modulus and offset argument)
    *
-   * @returns the ellipsis parameters
+   * @returns the ellipse parameters
    */
-  public getEllipsisParameters(): number[] {
+  public getEllipseParameters(): number[] {
     return [
       this.duration,
       this.rotationAngle,

@@ -58,7 +58,7 @@ export default defineComponent({
         );
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.NEWTON_COEFFICIENT,
-          newFractalFunction.newtonCoefficient.getEllipsisParameters()
+          newFractalFunction.newtonCoefficient.getEllipseParameters()
         );
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.NUMERATOR,

@@ -4,10 +4,10 @@ struct FunctionParameters {
   is_newton: u32,
   numerator_coefs_count: u32,
   denominator_coefs_count: u32,
-  @align(16) newton_coef: EllipsisParameters,
+  @align(16) newton_coef: EllipseParameters,
 };
 
-struct EllipsisParameters {
+struct EllipseParameters {
   duration: f32,
   angle: f32,
   half_width: f32,
@@ -18,10 +18,10 @@ struct EllipsisParameters {
 
 @group(0) @binding(1) var<uniform> time: f32;
 @group(0) @binding(2) var<uniform> function_params: FunctionParameters;
-@group(0) @binding(3) var<storage> coefficient_params: array<EllipsisParameters>;
+@group(0) @binding(3) var<storage> coefficient_params: array<EllipseParameters>;
 @group(0) @binding(4) var<storage, read_write> fraction: array<vec2f>;
 
-fn evaluate(params: EllipsisParameters) -> vec2f {
+fn evaluate(params: EllipseParameters) -> vec2f {
   let theta = select(2 * PI * (time % params.duration) / params.duration, 0, params.duration <= 0);
   return vec2f(
     params.offset_mod * cos(params.offset_arg - params.angle) + params.half_width * cos(theta),
@@ -37,11 +37,11 @@ fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   return vec2f(z1.x * z2.x, z1.y + z2.y);
 }
 
-fn evaluateWithoutNewton(params: EllipsisParameters) -> vec2f{
+fn evaluateWithoutNewton(params: EllipseParameters) -> vec2f{
   return polarWithAngle(evaluate(params), params.angle);
 }
 
-fn evaluateWithNewton(params: EllipsisParameters, newton_params: EllipsisParameters, power: f32) -> vec2f {
+fn evaluateWithNewton(params: EllipseParameters, newton_params: EllipseParameters, power: f32) -> vec2f {
   return multiply(
     evaluateWithoutNewton(params), 
     polarWithAngle(

@@ -119,12 +119,12 @@ export default class ComplexCircle {
 
   // TODO Add test
   /**
-   * Get the ellipsis parameters corresponding to the complex circle (duration, angle, half-width,
+   * Get the ellipse parameters corresponding to the complex circle (duration, angle, half-width,
    * half-height, offset modulus and offset argument)
    *
-   * @returns the ellipsis parameters
+   * @returns the ellipse parameters
    */
-  public getEllipsisParameters(): number[] {
+  public getEllipseParameters(): number[] {
     return [this.duration, 0, this.radius, this.radius, this.center.mod(), this.center.arg()];
   }
 }
