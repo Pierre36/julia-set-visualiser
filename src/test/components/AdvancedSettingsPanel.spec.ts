@@ -25,7 +25,7 @@ describe("Render", () => {
     const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingCentred).toBe(true);
     expect(disclosure.vm.$props.headingLevel).toBe(2);
     expect(disclosure.vm.$props.headingText).toBe("Advanced settings");
   });
@@ -44,7 +44,7 @@ describe("Render", () => {
     const complexInput = sectionContent.findComponent(ComplexInput);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Viewport");
 
@@ -66,10 +66,10 @@ describe("Render", () => {
     expect(numberInputs[1].vm.$props.integerOnly).toBe(false);
     expect(numberInputs[1].vm.$props.label).toBe("Coordinates scale");
 
-    // Check the coordinates center part renders correctly
-    expect(subHeadings[2].text()).toBe("Center");
-    expect(complexInput.vm.$props.complex).toEqual(props.configuration.coordinatesCenter);
-    expect(complexInput.vm.$props.label).toBe("Coordinates center");
+    // Check the coordinates centre part renders correctly
+    expect(subHeadings[2].text()).toBe("Centre");
+    expect(complexInput.vm.$props.complex).toEqual(props.configuration.coordinatesCentre);
+    expect(complexInput.vm.$props.label).toBe("Coordinates centre");
   });
 
   it("renders the computation section correctly", () => {
@@ -85,7 +85,7 @@ describe("Render", () => {
     const numberInputs = sectionContent.findAllComponents(NumberInput);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Computation");
 
@@ -164,7 +164,7 @@ describe("Interactions", () => {
     expect(advancedPanel.emitted().change).toBeDefined();
   });
 
-  it("changes the coordinates center when updating the center input", () => {
+  it("changes the coordinates centre when updating the centre input", () => {
     // Mount the AdvancedSettingsPanel
     const advancedPanel = mount(AdvancedSettingsPanel, { props: props, shallow: true });
 
@@ -172,12 +172,12 @@ describe("Interactions", () => {
     const content = advancedPanel.find(".panel-content");
     const viewportSection = content.find("section:nth-of-type(1)");
     const sectionContent = viewportSection.find(".content");
-    const centerInput = sectionContent.findComponent(ComplexInput);
+    const centreInput = sectionContent.findComponent(ComplexInput);
 
-    // Update the center input and check the coordinates center changes
-    const newCenter = new Complex(4, 2);
-    centerInput.vm.$emit("update:complex", newCenter);
-    expect(props.configuration.coordinatesCenter).toBe(newCenter);
+    // Update the centre input and check the coordinates centre changes
+    const newCentre = new Complex(4, 2);
+    centreInput.vm.$emit("update:complex", newCentre);
+    expect(props.configuration.coordinatesCentre).toBe(newCentre);
     expect(advancedPanel.emitted().change).toBeDefined();
   });
 

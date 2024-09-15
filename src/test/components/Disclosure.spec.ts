@@ -4,7 +4,7 @@ import Disclosure from "@/components/Disclosure.vue";
 
 describe("Render", () => {
   let props: {
-    headingCentered?: boolean;
+    headingCentred?: boolean;
     headingLevel?: number;
     headingText?: string;
     buttonTitle?: string;
@@ -14,7 +14,7 @@ describe("Render", () => {
 
   beforeEach(() => {
     props = {
-      headingCentered: true,
+      headingCentred: true,
       headingLevel: 2,
       headingText: "heading text",
       buttonTitle: "button title",
@@ -32,7 +32,7 @@ describe("Render", () => {
 
     // Check the header is rendered correctly
     expect(header.element.matches("h" + props.headingLevel)).toBe(true);
-    expect(header.classes()).toContain("centered");
+    expect(header.classes()).toContain("centred");
     expect(header.text()).toBe(props.headingText);
   });
 
@@ -73,7 +73,7 @@ describe("Render", () => {
 
 describe("Interactions", () => {
   let props: {
-    headingCentered?: boolean;
+    headingCentred?: boolean;
     headingLevel?: number;
     headingText?: string;
     buttonTitle?: string;
@@ -83,7 +83,7 @@ describe("Interactions", () => {
 
   beforeEach(() => {
     props = {
-      headingCentered: true,
+      headingCentred: true,
       headingLevel: 2,
       headingText: "heading text",
       buttonSvgPath: "button svg path",

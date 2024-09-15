@@ -112,7 +112,7 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentered="true" :headingLevel="2" headingText="Function">
+      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Function">
         <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
         <p>
           By adding, editing and removing coefficients, you can edit a polynomial or fractional
@@ -205,12 +205,12 @@ export default defineComponent({
             </li>
             <li>
               <span class="info-list-item-title">Circle</span>: the coefficient is a point on a
-              circle which you can edit by choosing its center and radius as well as the duration of
+              circle which you can edit by choosing its centre and radius as well as the duration of
               one turn.
             </li>
             <li>
               <span class="info-list-item-title">Ellipse</span>: the coefficient is a point on an
-              ellipse which you can edit by choosing its center, half-width, half-height and angle
+              ellipse which you can edit by choosing its centre, half-width, half-height and angle
               of rotation as well as the duration of one turn.
             </li>
             <li>
@@ -272,12 +272,12 @@ export default defineComponent({
             </li>
             <li>
               <span class="info-list-item-title">Circle</span>: the coefficient is a point on a
-              circle which you can edit by choosing its center and radius as well as the duration of
+              circle which you can edit by choosing its centre and radius as well as the duration of
               one turn.
             </li>
             <li>
               <span class="info-list-item-title">Ellipse</span>: the coefficient is a point on an
-              ellipse which you can edit by choosing its center, half-width, half-height and angle
+              ellipse which you can edit by choosing its centre, half-width, half-height and angle
               of rotation as well as the duration of one turn.
             </li>
             <li>

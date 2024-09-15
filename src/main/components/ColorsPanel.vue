@@ -60,7 +60,7 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentered="true" :headingLevel="2" headingText="Colors">
+      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Colors">
         <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
       </Disclosure>
     </header>

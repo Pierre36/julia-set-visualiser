@@ -599,12 +599,12 @@ describe("getRandomFractalFunction", () => {
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
     const nbCoefficientsMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
-    const circleCenterModulusMinMax = { min: 2, max: 3 };
+    const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
-    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const ellipseCentreModulusMinMax = { min: 8, max: 9 };
     const halfWidthMinMax = { min: 10, max: 11 };
     const halfHeightMinMax = { min: 12, max: 13 };
     const rotationAngleMinMax = { min: 14, max: 15 };
@@ -615,12 +615,12 @@ describe("getRandomFractalFunction", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -631,12 +631,12 @@ describe("getRandomFractalFunction", () => {
     expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -650,12 +650,12 @@ describe("getRandomFractalFunction", () => {
       nbCoefficientsMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -684,12 +684,12 @@ describe("getRandomFractalFunction", () => {
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
     const nbCoefficientsMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
-    const circleCenterModulusMinMax = { min: 2, max: 3 };
+    const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
-    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const ellipseCentreModulusMinMax = { min: 8, max: 9 };
     const halfWidthMinMax = { min: 10, max: 11 };
     const halfHeightMinMax = { min: 12, max: 13 };
     const rotationAngleMinMax = { min: 14, max: 15 };
@@ -700,12 +700,12 @@ describe("getRandomFractalFunction", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -716,12 +716,12 @@ describe("getRandomFractalFunction", () => {
     expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -735,12 +735,12 @@ describe("getRandomFractalFunction", () => {
       nbCoefficientsMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -769,12 +769,12 @@ describe("getRandomFractalFunction", () => {
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
     const nbCoefficientsMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
-    const circleCenterModulusMinMax = { min: 2, max: 3 };
+    const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
-    const ellipseCenterModulusMinMax = { min: 8, max: 9 };
+    const ellipseCentreModulusMinMax = { min: 8, max: 9 };
     const halfWidthMinMax = { min: 10, max: 11 };
     const halfHeightMinMax = { min: 12, max: 13 };
     const rotationAngleMinMax = { min: 14, max: 15 };
@@ -785,12 +785,12 @@ describe("getRandomFractalFunction", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -801,12 +801,12 @@ describe("getRandomFractalFunction", () => {
     expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -821,12 +821,12 @@ describe("getRandomFractalFunction", () => {
       nbCoefficientsMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,

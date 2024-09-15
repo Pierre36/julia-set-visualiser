@@ -103,11 +103,11 @@ export default defineComponent({
       />
     </template>
     <template v-else-if="isCircle">
-      <component :is="heading">Center</component>
+      <component :is="heading">Centre</component>
       <ComplexInput
-        :complex="(coefficient as ComplexCircle).center"
-        label="Circle center"
-        @update:complex="(newCenter) => update('center', newCenter)"
+        :complex="(coefficient as ComplexCircle).centre"
+        label="Circle centre"
+        @update:complex="(newCentre) => update('centre', newCentre)"
       />
       <component :is="heading">Radius</component>
       <NumberInput
@@ -149,11 +149,11 @@ export default defineComponent({
       />
     </template>
     <template v-else-if="isEllipse">
-      <component :is="heading">Center</component>
+      <component :is="heading">Centre</component>
       <ComplexInput
-        :complex="(coefficient as ComplexEllipse).center"
-        label="Ellipse center"
-        @update:complex="(newCenter) => update('center', newCenter)"
+        :complex="(coefficient as ComplexEllipse).centre"
+        label="Ellipse centre"
+        @update:complex="(newCentre) => update('centre', newCentre)"
       />
       <component :is="heading">Half-width</component>
       <NumberInput

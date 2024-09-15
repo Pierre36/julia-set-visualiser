@@ -5,15 +5,15 @@ import RandomUtils from "@/utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const halfWidth = 36;
     const halfHeight = 42;
     const rotationAngle = 16;
     const duration = 2000;
 
-    const ellipse = new ComplexEllipse(center, halfWidth, halfHeight, rotationAngle, duration);
+    const ellipse = new ComplexEllipse(centre, halfWidth, halfHeight, rotationAngle, duration);
 
-    expect(ellipse.center).toBe(center);
+    expect(ellipse.centre).toBe(centre);
     expect(ellipse.halfWidth).toBe(halfWidth);
     expect(ellipse.halfHeight).toBe(halfHeight);
     expect(ellipse.rotationAngle).toBe(rotationAngle);
@@ -23,14 +23,14 @@ describe("constructor", () => {
 
 describe("fromJSON", () => {
   it("properly constructs from JSON", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const halfWidth = 36;
     const halfHeight = 42;
     const rotationAngle = 16;
     const duration = 2000;
 
     const ellipse = ComplexEllipse.fromJSON({
-      center: center.toJSON(),
+      centre: centre.toJSON(),
       halfWidth: halfWidth,
       halfHeight: halfHeight,
       rotationAngle: rotationAngle,
@@ -38,21 +38,21 @@ describe("fromJSON", () => {
     });
 
     expect(ellipse).toEqual(
-      new ComplexEllipse(center, halfWidth, halfHeight, rotationAngle, duration)
+      new ComplexEllipse(centre, halfWidth, halfHeight, rotationAngle, duration)
     );
   });
 });
 
 describe("toJSON", () => {
   it("properly exports to JSON", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const halfWidth = 36;
     const halfHeight = 42;
     const rotationAngle = 16;
     const duration = 2000;
 
     const json = new ComplexEllipse(
-      center,
+      centre,
       halfWidth,
       halfHeight,
       rotationAngle,
@@ -60,7 +60,7 @@ describe("toJSON", () => {
     ).toJSON();
 
     expect(json).toEqual({
-      center: center.toJSON(),
+      centre: centre.toJSON(),
       halfWidth: halfWidth,
       halfHeight: halfHeight,
       rotationAngle: rotationAngle,
@@ -140,13 +140,13 @@ describe("getRandomComplexEllipse", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
-    const centerModulusMinMax = { min: 0, max: 2 };
+    const centreModulusMinMax = { min: 0, max: 2 };
     const halfWidthMinMax = { min: 1, max: 2 };
     const halfHeightMinMax = { min: 3, max: 4 };
     const rotationAngleMinMax = { min: 5, max: 6 };
     const durationMinMax = { min: 0, max: 2 };
     const randomEllipse = ComplexEllipse.getRandomComplexEllipse(
-      centerModulusMinMax,
+      centreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -160,7 +160,7 @@ describe("getRandomComplexEllipse", () => {
       rotationAngleMinMax.max
     );
     expect(RandomUtils.integerBetween).toBeCalledWith(durationMinMax.min, durationMinMax.max);
-    expect(Complex.getRandomComplex).toBeCalledWith(centerModulusMinMax);
+    expect(Complex.getRandomComplex).toBeCalledWith(centreModulusMinMax);
 
     expect(randomEllipse).toEqual(new ComplexEllipse(new Complex(1, 0), 1, 1, 1, 1000));
   });

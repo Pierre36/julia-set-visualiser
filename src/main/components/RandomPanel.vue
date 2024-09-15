@@ -41,12 +41,12 @@ export default defineComponent({
       ]),
       nbCoefficients: { min: 2, max: 5 },
       complexModulus: { min: 0.1, max: 10 },
-      circleCenterModulus: { min: 0.1, max: 10 },
+      circleCentreModulus: { min: 0.1, max: 10 },
       radius: { min: 0.1, max: 10 },
       circleDuration: { min: 5, max: 30 },
       startEndModulus: { min: 0.1, max: 10 },
       lineDuration: { min: 5, max: 30 },
-      ellipseCenterModulus: { min: 0.1, max: 10 },
+      ellipseCentreModulus: { min: 0.1, max: 10 },
       halfWidth: { min: 0.1, max: 10 },
       halfHeight: { min: 0.1, max: 10 },
       rotationAngle: { min: 0, max: 360 },
@@ -60,7 +60,7 @@ export default defineComponent({
       attractorsValueStrength: { min: 0.1, max: 0.5 },
       attractorsValueOffset: { min: 0, max: 3 },
       viewportScale: { min: 1, max: 3 },
-      viewportCenterModulus: { min: 0, max: 0 },
+      viewportCentreModulus: { min: 0, max: 0 },
       nbIterations: { min: 10, max: 40 },
       epsilon: { min: 0.000005, max: 0.000015 },
       juliaBound: { min: -5, max: -3 },
@@ -75,12 +75,12 @@ export default defineComponent({
         this.selectedCoefficientTypes,
         this.nbCoefficients,
         this.complexModulus,
-        this.circleCenterModulus,
+        this.circleCentreModulus,
         this.radius,
         this.circleDuration,
         this.startEndModulus,
         this.lineDuration,
-        this.ellipseCenterModulus,
+        this.ellipseCentreModulus,
         this.halfWidth,
         this.halfHeight,
         this.rotationAngle,
@@ -94,7 +94,7 @@ export default defineComponent({
         this.attractorsValueStrength,
         this.attractorsValueOffset,
         this.viewportScale,
-        this.viewportCenterModulus,
+        this.viewportCentreModulus,
         this.nbIterations,
         this.epsilon,
         this.juliaBound
@@ -108,7 +108,7 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentered="true" :headingLevel="2" headingText="Randomize">
+      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Randomize">
         <p>This panel allows to randomize the parameters of the fractal.</p>
         <p>You can edit the range of values the parameters can take.</p>
         <p>
@@ -191,19 +191,19 @@ export default defineComponent({
             buttonTitle="Show"
             :buttonSvgPath="disclosureSvgPath"
           >
-            <h5>Center modulus</h5>
+            <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              :minValue="circleCenterModulus.min"
-              :maxValue="circleCenterModulus.max"
+              :minValue="circleCentreModulus.min"
+              :maxValue="circleCentreModulus.max"
               :min="0"
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum modulus of circle coefficients centers"
-              maxLabel="Maximum modulus of circle coefficients centers"
-              @update:minValue="(newMin) => (circleCenterModulus.min = newMin)"
-              @update:maxValue="(newMax) => (circleCenterModulus.max = newMax)"
+              minLabel="Minimum modulus of circle coefficients centres"
+              maxLabel="Maximum modulus of circle coefficients centres"
+              @update:minValue="(newMin) => (circleCentreModulus.min = newMin)"
+              @update:maxValue="(newMax) => (circleCentreModulus.max = newMax)"
               :level="6"
             />
             <h5>Radius</h5>
@@ -282,19 +282,19 @@ export default defineComponent({
             buttonTitle="Show"
             :buttonSvgPath="disclosureSvgPath"
           >
-            <h5>Center modulus</h5>
+            <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              :maxValue="ellipseCenterModulus.max"
-              :minValue="ellipseCenterModulus.min"
+              :maxValue="ellipseCentreModulus.max"
+              :minValue="ellipseCentreModulus.min"
               :min="0"
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum modulus of ellipse coefficients centers"
-              maxLabel="Maximum modulus of ellipse coefficients centers"
-              @update:minValue="(newMin) => (ellipseCenterModulus.min = newMin)"
-              @update:maxValue="(newMax) => (ellipseCenterModulus.max = newMax)"
+              minLabel="Minimum modulus of ellipse coefficients centres"
+              maxLabel="Maximum modulus of ellipse coefficients centres"
+              @update:minValue="(newMin) => (ellipseCentreModulus.min = newMin)"
+              @update:maxValue="(newMax) => (ellipseCentreModulus.max = newMax)"
               :level="6"
             />
             <h5>Half-width</h5>
@@ -538,19 +538,19 @@ export default defineComponent({
               @update:maxValue="(newMax) => (viewportScale.max = newMax)"
               :level="6"
             />
-            <h5>Center modulus</h5>
+            <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              :minValue="viewportCenterModulus.min"
-              :maxValue="viewportCenterModulus.max"
+              :minValue="viewportCentreModulus.min"
+              :maxValue="viewportCentreModulus.max"
               :min="0"
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum modulus of viewport center"
-              maxLabel="Maximum modulus of viewport center"
-              @update:minValue="(newMin) => (viewportCenterModulus.min = newMin)"
-              @update:maxValue="(newMax) => (viewportCenterModulus.max = newMax)"
+              minLabel="Minimum modulus of viewport centre"
+              maxLabel="Maximum modulus of viewport centre"
+              @update:minValue="(newMin) => (viewportCentreModulus.min = newMin)"
+              @update:maxValue="(newMax) => (viewportCentreModulus.max = newMax)"
               :level="6"
             />
           </Disclosure>

@@ -277,12 +277,12 @@ export default class Polynomial {
    * @param nbCoefficients number of coefficients of the new polynomial
    * @param coefficientTypes set the available coefficient types
    * @param complexModulusMinMax min and max modulus for constant coefficients
-   * @param circleCenterModulusMinMax min and max center modulus for circle coefficients
+   * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
    * @param radiusMinMax min and max radius for circle coefficients
    * @param circleDurationMinMax min and max duration for circle coefficients
    * @param startEndModulusMinMax min and max start and end modulus for line coefficients
    * @param lineDurationMinMax min and max duration for line coefficients
-   * @param ellipseCenterModulusMinMax min and max center modulus for ellipse coefficients
+   * @param ellipseCentreModulusMinMax min and max centre modulus for ellipse coefficients
    * @param halfWidthMinMax min and max half-width for ellipse coefficients
    * @param halfHeightMinMax min and max half-height for ellipse coefficients
    * @param rotationAngleMinMax min and max rotation angle for ellipse coefficients
@@ -293,12 +293,12 @@ export default class Polynomial {
     nbCoefficients: number,
     coefficientTypes: Set<CoefficientTypes>,
     complexModulusMinMax: { min: number; max: number },
-    circleCenterModulusMinMax: { min: number; max: number },
+    circleCentreModulusMinMax: { min: number; max: number },
     radiusMinMax: { min: number; max: number },
     circleDurationMinMax: { min: number; max: number },
     startEndModulusMinMax: { min: number; max: number },
     lineDurationMinMax: { min: number; max: number },
-    ellipseCenterModulusMinMax: { min: number; max: number },
+    ellipseCentreModulusMinMax: { min: number; max: number },
     halfWidthMinMax: { min: number; max: number },
     halfHeightMinMax: { min: number; max: number },
     rotationAngleMinMax: { min: number; max: number },
@@ -315,12 +315,12 @@ export default class Polynomial {
       newCoefficients[power] = Coefficient.getRandomCoefficient(
         coefficientTypes,
         complexModulusMinMax,
-        circleCenterModulusMinMax,
+        circleCentreModulusMinMax,
         radiusMinMax,
         circleDurationMinMax,
         startEndModulusMinMax,
         lineDurationMinMax,
-        ellipseCenterModulusMinMax,
+        ellipseCentreModulusMinMax,
         halfWidthMinMax,
         halfHeightMinMax,
         rotationAngleMinMax,

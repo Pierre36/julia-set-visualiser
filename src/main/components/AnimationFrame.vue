@@ -32,10 +32,10 @@ export default defineComponent({
         newCoordinatesScale
       );
     },
-    "configuration.coordinatesCenter"(newCoordinatesCenter: Complex) {
-      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTER, [
-        newCoordinatesCenter.re,
-        newCoordinatesCenter.im,
+    "configuration.coordinatesCentre"(newCoordinatesCentre: Complex) {
+      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
+        newCoordinatesCentre.re,
+        newCoordinatesCentre.im,
       ]);
     },
     "configuration.nbIterations"(newIterationsCount: number) {

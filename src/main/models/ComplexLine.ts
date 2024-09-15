@@ -127,24 +127,24 @@ export default class ComplexLine {
    * @returns the ellipse parameters
    */
   public getEllipseParameters(): number[] {
-    const center = this.getCenter();
-    const centredLineEnd = new Complex(this.end.re - center.re, this.end.im - center.im);
+    const centre = this.getCentre();
+    const centredLineEnd = new Complex(this.end.re - centre.re, this.end.im - centre.im);
     return [
       this.duration,
       centredLineEnd.arg(),
       centredLineEnd.mod(),
       0,
-      center.mod(),
-      center.arg(),
+      centre.mod(),
+      centre.arg(),
     ];
   }
 
   /**
-   * Get the center of the line
+   * Get the centre of the line
    *
-   * @returns the center of the line
+   * @returns the centre of the line
    */
-  private getCenter(): Complex {
+  private getCentre(): Complex {
     return new Complex((this.start.re + this.end.re) / 2, (this.start.im + this.end.im) / 2);
   }
 }

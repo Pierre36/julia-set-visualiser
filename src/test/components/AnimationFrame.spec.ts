@@ -218,20 +218,20 @@ describe("Interactions", () => {
     );
   });
 
-  it("updates the fractal engine when the coordinates center changes", async () => {
+  it("updates the fractal engine when the coordinates centre changes", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
     await flushPromises();
 
-    // Change the coordinates center
-    const newCoordinatesCenter = new Complex(3, 6);
-    animationFrame.vm.$props.configuration.coordinatesCenter = newCoordinatesCenter;
+    // Change the coordinates centre
+    const newCoordinatesCentre = new Complex(3, 6);
+    animationFrame.vm.$props.configuration.coordinatesCentre = newCoordinatesCentre;
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
-      FractalGeneratorParameters.COORDINATES_CENTER,
-      [newCoordinatesCenter.re, newCoordinatesCenter.im]
+      FractalGeneratorParameters.COORDINATES_CENTRE,
+      [newCoordinatesCentre.re, newCoordinatesCentre.im]
     );
   });
 

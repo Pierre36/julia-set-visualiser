@@ -20,8 +20,8 @@ export default defineComponent({
       this.configuration.coordinatesScale = newCoordinatesScale;
       this.$emit("change");
     },
-    updateCoordinatesCenter(newCoordinatesCenter: number) {
-      this.configuration.coordinatesCenter = newCoordinatesCenter;
+    updateCoordinatesCentre(newCoordinatesCentre: number) {
+      this.configuration.coordinatesCentre = newCoordinatesCentre;
       this.$emit("change");
     },
     updateNbIterations(newNbIterations: number) {
@@ -43,7 +43,7 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentered="true" :headingLevel="2" headingText="Advanced settings">
+      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Advanced settings">
         <p>This panel allows to change advanced settings.</p>
         <p>
           Be careful when editing those, small changes can greatly affect the results and the
@@ -66,11 +66,11 @@ export default defineComponent({
             <li>
               <span class="info-list-item-title">Scale</span>: This is the scale of the viewport. A
               scale of 1 corresponds means the smallest axis of the viewport has a length of 2 (from
-              -1 to 1 if the center of the viewport is 0).
+              -1 to 1 if the centre of the viewport is 0).
             </li>
             <li>
-              <span class="info-list-item-title">Center</span>: This is the complex number at the
-              center of the viewport. By default, it is 0.
+              <span class="info-list-item-title">Centre</span>: This is the complex number at the
+              centre of the viewport. By default, it is 0.
             </li>
           </ul>
         </Disclosure>
@@ -91,11 +91,11 @@ export default defineComponent({
             label="Coordinates scale"
             @update:value="updateCoordinatesScale"
           />
-          <h4>Center</h4>
+          <h4>Centre</h4>
           <ComplexInput
-            :complex="configuration.coordinatesCenter"
-            label="Coordinates center"
-            @update:complex="updateCoordinatesCenter"
+            :complex="configuration.coordinatesCentre"
+            label="Coordinates centre"
+            @update:complex="updateCoordinatesCentre"
           />
         </div>
       </section>

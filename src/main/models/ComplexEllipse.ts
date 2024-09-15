@@ -8,14 +8,14 @@ export default class ComplexEllipse {
   /**
    * Complex ellipse constructor
    *
-   * @param center center of the ellipse
+   * @param centre centre of the ellipse
    * @param halfWidth half-width of the ellipse
    * @param halfHeight half-height of the ellipse
    * @param rotationAngle rotation angle of the ellipse (in degrees)
    * @param duration duration of the animation in milliseconds.
    */
   public constructor(
-    public center: Complex,
+    public centre: Complex,
     public halfWidth: number,
     public halfHeight: number,
     public rotationAngle: number,
@@ -30,7 +30,7 @@ export default class ComplexEllipse {
    */
   public static fromJSON(complexEllipseJSON: any): ComplexEllipse {
     return new ComplexEllipse(
-      Complex.fromJSON(complexEllipseJSON["center"]) || new Complex(0, 0),
+      Complex.fromJSON(complexEllipseJSON["centre"]) || new Complex(0, 0),
       complexEllipseJSON["halfWidth"],
       complexEllipseJSON["halfHeight"],
       complexEllipseJSON["rotationAngle"],
@@ -45,7 +45,7 @@ export default class ComplexEllipse {
    */
   public toJSON(): any {
     return {
-      center: this.center.toJSON(),
+      centre: this.centre.toJSON(),
       halfWidth: this.halfWidth,
       halfHeight: this.halfHeight,
       rotationAngle: this.rotationAngle,
@@ -69,7 +69,7 @@ export default class ComplexEllipse {
    * @returns `true` if the complex ellipse is always 0 + 0i, `false` otherwise
    */
   public isZero(): boolean {
-    return this.center.isZero() && this.halfWidth == 0 && this.halfHeight == 0;
+    return this.centre.isZero() && this.halfWidth == 0 && this.halfHeight == 0;
   }
 
   /**
@@ -88,7 +88,7 @@ export default class ComplexEllipse {
    */
   public copy(): ComplexEllipse {
     return new ComplexEllipse(
-      this.center.copy(),
+      this.centre.copy(),
       this.halfWidth,
       this.halfHeight,
       this.rotationAngle,
@@ -104,7 +104,7 @@ export default class ComplexEllipse {
    */
   public multipliedBy(factor: number): ComplexEllipse {
     return new ComplexEllipse(
-      this.center.multipliedBy(factor),
+      this.centre.multipliedBy(factor),
       this.halfWidth * factor,
       this.halfHeight * factor,
       this.rotationAngle,
@@ -115,7 +115,7 @@ export default class ComplexEllipse {
   /**
    * Return a random complex ellipse with the provided settings
    *
-   * @param centerModulusMinMax object containing the min and max value of the center modulus
+   * @param centreModulusMinMax object containing the min and max value of the centre modulus
    * @param halfWidthMinMax object containing the min and max value of the half-width
    * @param halfHeightMinMax object containing the min and max value of the half-height
    * @param rotationAngleMinMax object containing the min and max value of the rotation angle
@@ -123,14 +123,14 @@ export default class ComplexEllipse {
    * @returns the new complex ellipse
    */
   public static getRandomComplexEllipse(
-    centerModulusMinMax: { min: number; max: number },
+    centreModulusMinMax: { min: number; max: number },
     halfWidthMinMax: { min: number; max: number },
     halfHeightMinMax: { min: number; max: number },
     rotationAngleMinMax: { min: number; max: number },
     durationMinMax: { min: number; max: number }
   ): ComplexEllipse {
     return new ComplexEllipse(
-      Complex.getRandomComplex(centerModulusMinMax),
+      Complex.getRandomComplex(centreModulusMinMax),
       RandomUtils.floatBetween(halfWidthMinMax.min, halfWidthMinMax.max),
       RandomUtils.floatBetween(halfHeightMinMax.min, halfHeightMinMax.max),
       RandomUtils.floatBetween(rotationAngleMinMax.min, rotationAngleMinMax.max),
@@ -144,7 +144,7 @@ export default class ComplexEllipse {
    * @returns the string representation
    */
   public toString(): string {
-    return `ComplexEllipse(${this.center}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
+    return `ComplexEllipse(${this.centre}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
   }
 
   // TODO Add test
@@ -160,8 +160,8 @@ export default class ComplexEllipse {
       this.rotationAngle,
       this.halfWidth,
       this.halfHeight,
-      this.center.mod(),
-      this.center.arg(),
+      this.centre.mod(),
+      this.centre.arg(),
     ];
   }
 }

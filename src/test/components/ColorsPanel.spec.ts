@@ -34,7 +34,7 @@ describe("Render", () => {
     const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingCentred).toBe(true);
     expect(disclosure.vm.$props.headingLevel).toBe(2);
     expect(disclosure.vm.$props.headingText).toBe("Colors");
   });
@@ -53,7 +53,7 @@ describe("Render", () => {
     const sliderInputs = sectionContent.findAllComponents(SliderInput);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Julia");
 
@@ -99,7 +99,7 @@ describe("Render", () => {
     let addButton = fatouSection.findComponent(IconTextButton);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Fatou");
 

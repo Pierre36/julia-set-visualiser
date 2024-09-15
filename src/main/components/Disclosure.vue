@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Disclosure",
   props: {
-    headingCentered: { type: Boolean, default: false },
+    headingCentred: { type: Boolean, default: false },
     headingLevel: { type: Number, default: 2 },
     headingText: { type: String, default: "" },
     buttonTitle: { type: String, default: "Info" },
@@ -36,7 +36,7 @@ export default defineComponent({
 <template>
   <div class="disclosure">
     <div class="header">
-      <component :is="heading" class="title" :class="{ centered: headingCentered }">
+      <component :is="heading" class="title" :class="{ centred: headingCentred }">
         {{ headingText }}
       </component>
       <div class="button-container">
@@ -81,7 +81,7 @@ export default defineComponent({
   flex-grow: 1;
 }
 
-.title.centered {
+.title.centred {
   flex-grow: 1;
   text-align: center;
   margin-left: var(--button-container-width);

@@ -49,7 +49,7 @@ const PARAMS_MAPPING: {
   TIME: { bufferName: BufferNames.TIME_UNIFORM, offset: 0 },
   DIMENSION_RATIO: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 0 },
   COORDINATES_SCALE: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 1 },
-  COORDINATES_CENTER: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 2, isArray: true },
+  COORDINATES_CENTRE: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 2, isArray: true },
   IS_NEWTON: { bufferName: BufferNames.FUNCTION_UNIFORMS, offset: 0, view: BufferViews.UINT32 },
   NEWTON_COEFFICIENT: {
     bufferName: BufferNames.FUNCTION_UNIFORMS,
@@ -236,7 +236,7 @@ export default class WebGpuFractalGenerator {
   }
 
   /**
-   * Initialise the viewport uniforms buffer (dimension ratio, scale and center)
+   * Initialise the viewport uniforms buffer (dimension ratio, scale and centre)
    *
    * @param gpuDevice GPU device to create the buffer
    * @returns the viewport uniforms buffer details
@@ -542,8 +542,8 @@ export default class WebGpuFractalGenerator {
       configuration.coordinatesScale
     );
     this.updateParameter(
-      FractalGeneratorParameters.COORDINATES_CENTER,
-      configuration.coordinatesCenter
+      FractalGeneratorParameters.COORDINATES_CENTRE,
+      configuration.coordinatesCentre
     );
 
     this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime);

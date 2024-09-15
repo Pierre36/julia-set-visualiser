@@ -1,7 +1,7 @@
 struct ViewportUniforms {
   dimension_ratio: f32,
   scale: f32,
-  center: vec2f,
+  centre: vec2f,
 };
 
 struct VertexOutput {
@@ -18,7 +18,7 @@ fn vertexMain(@location(0) pos: vec2f) -> VertexOutput {
   output.position = vec4f(pos, 0, 1);
 
   let dimension_ratio_coef = select(vec2(1, 1 / viewport.dimension_ratio), vec2(viewport.dimension_ratio, 1), viewport.dimension_ratio >= 1);
-  output.coords = viewport.scale * pos * dimension_ratio_coef + viewport.center;
+  output.coords = viewport.scale * pos * dimension_ratio_coef + viewport.centre;
   
   return output;
 }

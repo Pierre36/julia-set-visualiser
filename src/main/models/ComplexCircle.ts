@@ -8,11 +8,11 @@ export default class ComplexCircle {
   /**
    * Complex circle constructor
    *
-   * @param center center of the circle
+   * @param centre centre of the circle
    * @param radius radius of the circle
    * @param duration duration of the animation in milliseconds
    */
-  public constructor(public center: Complex, public radius: number, public duration: number) {}
+  public constructor(public centre: Complex, public radius: number, public duration: number) {}
 
   /**
    * Create a complex circle from a JSON
@@ -22,7 +22,7 @@ export default class ComplexCircle {
    */
   public static fromJSON(complexCircleJSON: any): ComplexCircle {
     return new ComplexCircle(
-      Complex.fromJSON(complexCircleJSON["center"]) || new Complex(0, 0),
+      Complex.fromJSON(complexCircleJSON["centre"]) || new Complex(0, 0),
       complexCircleJSON["radius"],
       complexCircleJSON["duration"]
     );
@@ -35,7 +35,7 @@ export default class ComplexCircle {
    */
   public toJSON(): any {
     return {
-      center: this.center.toJSON(),
+      centre: this.centre.toJSON(),
       radius: this.radius,
       duration: this.duration,
     };
@@ -57,7 +57,7 @@ export default class ComplexCircle {
    * @returns `true` if the complex circle is always 0 + 0i, `false` otherwise
    */
   public isZero(): boolean {
-    return this.center.isZero() && this.radius == 0;
+    return this.centre.isZero() && this.radius == 0;
   }
 
   /**
@@ -75,7 +75,7 @@ export default class ComplexCircle {
    * @returns the copy of the complex circle
    */
   public copy(): ComplexCircle {
-    return new ComplexCircle(this.center.copy(), this.radius, this.duration);
+    return new ComplexCircle(this.centre.copy(), this.radius, this.duration);
   }
 
   /**
@@ -85,24 +85,24 @@ export default class ComplexCircle {
    * @returns the complex circle multiplied by the factor
    */
   public multipliedBy(factor: number): ComplexCircle {
-    return new ComplexCircle(this.center.multipliedBy(factor), this.radius * factor, this.duration);
+    return new ComplexCircle(this.centre.multipliedBy(factor), this.radius * factor, this.duration);
   }
 
   /**
    * Return a random complex circle with the provided settings
    *
-   * @param centerModulusMinMax object containing the min and max value of the center modulus
+   * @param centreModulusMinMax object containing the min and max value of the centre modulus
    * @param radiusMinMax object containing the min and max value of the radius
    * @param durationMinMax object containing the min and max value of the duration
    * @returns the new complex circle.
    */
   public static getRandomComplexCircle(
-    centerModulusMinMax: { min: number; max: number },
+    centreModulusMinMax: { min: number; max: number },
     radiusMinMax: { min: number; max: number },
     durationMinMax: { min: number; max: number }
   ): ComplexCircle {
     return new ComplexCircle(
-      Complex.getRandomComplex(centerModulusMinMax),
+      Complex.getRandomComplex(centreModulusMinMax),
       RandomUtils.floatBetween(radiusMinMax.min, radiusMinMax.max),
       RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
     );
@@ -114,7 +114,7 @@ export default class ComplexCircle {
    * @returns the String representation
    */
   public toString(): string {
-    return `ComplexCircle(${this.center}, ${this.radius}, ${this.duration})`;
+    return `ComplexCircle(${this.centre}, ${this.radius}, ${this.duration})`;
   }
 
   // TODO Add test
@@ -125,6 +125,6 @@ export default class ComplexCircle {
    * @returns the ellipse parameters
    */
   public getEllipseParameters(): number[] {
-    return [this.duration, 0, this.radius, this.radius, this.center.mod(), this.center.arg()];
+    return [this.duration, 0, this.radius, this.radius, this.centre.mod(), this.centre.arg()];
   }
 }

@@ -5,13 +5,13 @@ import RandomUtils from "@/utils/RandomUtils";
 
 describe("constructor", () => {
   it("properly constructs", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const radius = 42;
     const duration = 2000;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
-    expect(circle.center).toBe(center);
+    expect(circle.centre).toBe(centre);
     expect(circle.radius).toBe(radius);
     expect(circle.duration).toBe(duration);
   });
@@ -19,30 +19,30 @@ describe("constructor", () => {
 
 describe("fromJSON", () => {
   it("properly constructs from JSON", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const radius = 42;
     const duration = 2000;
 
     const circle = ComplexCircle.fromJSON({
-      center: center.toJSON(),
+      centre: centre.toJSON(),
       radius: radius,
       duration: duration,
     });
 
-    expect(circle).toEqual(new ComplexCircle(center, radius, duration));
+    expect(circle).toEqual(new ComplexCircle(centre, radius, duration));
   });
 });
 
 describe("toJSON", () => {
   it("properly exports to JSON", () => {
-    const center = new Complex(3, 6);
+    const centre = new Complex(3, 6);
     const radius = 42;
     const duration = 2000;
 
-    const json = new ComplexCircle(center, radius, duration).toJSON();
+    const json = new ComplexCircle(centre, radius, duration).toJSON();
 
     expect(json).toEqual({
-      center: center.toJSON(),
+      centre: centre.toJSON(),
       radius: radius,
       duration: duration,
     });
@@ -51,11 +51,11 @@ describe("toJSON", () => {
 
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () => {
-    const center = new Complex(0, 0);
+    const centre = new Complex(0, 0);
     const radius = 0;
     const duration = 0;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
     expect(circle.toMathML(1)).toBe(
       "<msub><mi>c</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>"
@@ -65,21 +65,21 @@ describe("toMathML", () => {
 
 describe("isZero", () => {
   it("properly works with zero", () => {
-    const center = new Complex(0, 0);
+    const centre = new Complex(0, 0);
     const radius = 0;
     const duration = 0;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
     expect(circle.isZero()).toBe(true);
   });
 
   it("properly works with not zero", () => {
-    const center = new Complex(1, 0);
+    const centre = new Complex(1, 0);
     const radius = 0;
     const duration = 0;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
     expect(circle.isZero()).toBe(false);
   });
@@ -87,11 +87,11 @@ describe("isZero", () => {
 
 describe("showMinus", () => {
   it("returns false", () => {
-    const center = new Complex(0, 0);
+    const centre = new Complex(0, 0);
     const radius = 0;
     const duration = 0;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
     expect(circle.showMinus()).toBe(false);
   });
@@ -99,11 +99,11 @@ describe("showMinus", () => {
 
 describe("copy", () => {
   it("properly copies", () => {
-    const center = new Complex(0, 0);
+    const centre = new Complex(0, 0);
     const radius = 0;
     const duration = 0;
 
-    const circle = new ComplexCircle(center, radius, duration);
+    const circle = new ComplexCircle(centre, radius, duration);
 
     expect(circle.copy()).toEqual(circle);
     expect(circle.copy()).not.toBe(circle);
@@ -136,18 +136,18 @@ describe("getRandomComplexCircle", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
-    const centerModulusMinMax = { min: 0, max: 2 };
+    const centreModulusMinMax = { min: 0, max: 2 };
     const radiusMinMax = { min: 1, max: 4 };
     const durationMinMax = { min: 0, max: 2 };
     const randomCircle = ComplexCircle.getRandomComplexCircle(
-      centerModulusMinMax,
+      centreModulusMinMax,
       radiusMinMax,
       durationMinMax
     );
 
     expect(RandomUtils.floatBetween).toBeCalledWith(radiusMinMax.min, radiusMinMax.max);
     expect(RandomUtils.integerBetween).toBeCalledWith(durationMinMax.min, durationMinMax.max);
-    expect(Complex.getRandomComplex).toBeCalledWith(centerModulusMinMax);
+    expect(Complex.getRandomComplex).toBeCalledWith(centreModulusMinMax);
 
     expect(randomCircle).toEqual(new ComplexCircle(new Complex(1, 0), 1, 1000));
   });

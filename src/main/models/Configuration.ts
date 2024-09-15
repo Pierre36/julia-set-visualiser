@@ -17,7 +17,7 @@ export default class Configuration {
    * @param name name of the configuration
    * @param resolutionScale scale of the resolution (if 1, use the resolution of the viewport)
    * @param coordinatesScale scale of the coordinates
-   * @param coordinatesCenter center of the coordinates
+   * @param coordinatesCentre centre of the coordinates
    * @param nbIterations number of iterations
    * @param epsilon epsilon added to the complex number before computing the divergence
    * @param juliaBound highest value of log-divergence in the Fatou Set
@@ -32,7 +32,7 @@ export default class Configuration {
     public name: string,
     public resolutionScale: number,
     public coordinatesScale: number,
-    public coordinatesCenter: Complex,
+    public coordinatesCentre: Complex,
     public nbIterations: number,
     public epsilon: number,
     public juliaBound: number,
@@ -55,7 +55,7 @@ export default class Configuration {
       json.name,
       json.resolutionScale,
       json.coordinatesScale,
-      Complex.fromJSON(json.coordinatesCenter),
+      Complex.fromJSON(json.coordinatesCentre),
       json.nbIterations,
       json.epsilon,
       json.juliaBound,
@@ -78,7 +78,7 @@ export default class Configuration {
       name: this.name,
       resolutionScale: this.resolutionScale,
       coordinatesScale: this.coordinatesScale,
-      coordinatesCenter: this.coordinatesCenter.toJSON(),
+      coordinatesCentre: this.coordinatesCentre.toJSON(),
       nbIterations: this.nbIterations,
       epsilon: this.epsilon,
       juliaBound: this.juliaBound,
@@ -157,7 +157,7 @@ export default class Configuration {
     }
     this.resolutionScale = configuration.resolutionScale;
     this.coordinatesScale = configuration.coordinatesScale;
-    this.coordinatesCenter = configuration.coordinatesCenter.copy();
+    this.coordinatesCentre = configuration.coordinatesCentre.copy();
     this.nbIterations = configuration.nbIterations;
     this.epsilon = configuration.epsilon;
     this.juliaBound = configuration.juliaBound;
@@ -182,12 +182,12 @@ export default class Configuration {
    * @param coefficientTypes set the available coefficient types
    * @param nbCoefficients min and max number of coefficients
    * @param complexModulus min and max modulus for constant coefficients
-   * @param circleCenterModulus min and max center modulus for circle coefficients
+   * @param circleCentreModulus min and max centre modulus for circle coefficients
    * @param radius min and max radius for circle coefficients
    * @param circleDuration min and max duration for circle coefficients
    * @param startEndModulus min and max start and end modulus for line coefficients
    * @param lineDuration min and max duration for line coefficients
-   * @param ellipseCenterModulus min and max center modulus for ellipse coefficients
+   * @param ellipseCentreModulus min and max centre modulus for ellipse coefficients
    * @param halfWidth min and max half-width for ellipse coefficients
    * @param halfHeight min and max half-height for ellipse coefficients
    * @param rotationAngle min and max rotation angle for ellipse coefficients
@@ -201,7 +201,7 @@ export default class Configuration {
    * @param attractorsValueStrength min and max attractors value strength
    * @param attractorsValueOffset min and max attractors value offset
    * @param viewportScale min and max value viewport scale
-   * @param viewportCenterModulus min and max viewport center modulus
+   * @param viewportCentreModulus min and max viewport centre modulus
    * @param nbIterations min and max number of iterations
    * @param epsilon min and max epsilon
    * @param juliaBound min and max Julia bound
@@ -211,12 +211,12 @@ export default class Configuration {
     coefficientTypes: Set<CoefficientTypes>,
     nbCoefficients: { min: number; max: number },
     complexModulus: { min: number; max: number },
-    circleCenterModulus: { min: number; max: number },
+    circleCentreModulus: { min: number; max: number },
     radius: { min: number; max: number },
     circleDuration: { min: number; max: number },
     startEndModulus: { min: number; max: number },
     lineDuration: { min: number; max: number },
-    ellipseCenterModulus: { min: number; max: number },
+    ellipseCentreModulus: { min: number; max: number },
     halfWidth: { min: number; max: number },
     halfHeight: { min: number; max: number },
     rotationAngle: { min: number; max: number },
@@ -230,13 +230,13 @@ export default class Configuration {
     attractorsValueStrength: { min: number; max: number },
     attractorsValueOffset: { min: number; max: number },
     viewportScale: { min: number; max: number },
-    viewportCenterModulus: { min: number; max: number },
+    viewportCentreModulus: { min: number; max: number },
     nbIterations: { min: number; max: number },
     epsilon: { min: number; max: number },
     juliaBound: { min: number; max: number }
   ) {
     this.coordinatesScale = RandomUtils.floatBetween(viewportScale.min, viewportScale.max);
-    this.coordinatesCenter = Complex.getRandomComplex(viewportCenterModulus);
+    this.coordinatesCentre = Complex.getRandomComplex(viewportCentreModulus);
     this.nbIterations = RandomUtils.integerBetween(nbIterations.min, nbIterations.max);
     this.epsilon = RandomUtils.floatBetween(epsilon.min, epsilon.max);
     this.juliaBound = RandomUtils.floatBetween(juliaBound.min, juliaBound.max);
@@ -245,12 +245,12 @@ export default class Configuration {
       coefficientTypes,
       nbCoefficients,
       complexModulus,
-      circleCenterModulus,
+      circleCentreModulus,
       radius,
       circleDuration,
       startEndModulus,
       lineDuration,
-      ellipseCenterModulus,
+      ellipseCentreModulus,
       halfWidth,
       halfHeight,
       rotationAngle,
@@ -284,7 +284,7 @@ export default class Configuration {
   public toString(): string {
     return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
       this.coordinatesScale
-    }, ${this.coordinatesCenter}, ${this.nbIterations}, ${this.epsilon}, ${this.juliaBound}, ${
+    }, ${this.coordinatesCentre}, ${this.nbIterations}, ${this.epsilon}, ${this.juliaBound}, ${
       this.fractalFunction
     }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
       this.infinityAttractor

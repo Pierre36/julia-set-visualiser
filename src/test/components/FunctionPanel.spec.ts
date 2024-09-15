@@ -38,7 +38,7 @@ describe("Render", () => {
     const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingCentred).toBe(true);
     expect(disclosure.vm.$props.headingLevel).toBe(2);
     expect(disclosure.vm.$props.headingText).toBe("Function");
   });
@@ -74,7 +74,7 @@ describe("Render", () => {
     let coefficientInput = sectionContent.findComponent(CoefficientInput);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Function type");
 
@@ -124,7 +124,7 @@ describe("Render", () => {
     let addButton = numeratorSection.findComponent(IconTextButton);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Coefficients");
 
@@ -236,7 +236,7 @@ describe("Render", () => {
     expect(denominatorSection.exists()).toBe(true);
 
     // Check the info header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Denominator coefficients");
 

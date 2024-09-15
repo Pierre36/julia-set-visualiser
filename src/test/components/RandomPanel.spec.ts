@@ -19,8 +19,8 @@ const complexModulusMinDefault = 0.1;
 const complexModulusMinMin = 0;
 const complexModulusMaxDefault = 10;
 const complexModulusMaxMax = 100;
-const viewportCenterModulusMinDefault = 0;
-const viewportCenterModulusMaxDefault = 0;
+const viewportCentreModulusMinDefault = 0;
+const viewportCentreModulusMaxDefault = 0;
 
 const rotationAngleMinDefault = 0;
 const rotationAngleMinMin = 0;
@@ -100,7 +100,7 @@ describe("Render", () => {
     const disclosure = header.findComponent(Disclosure);
 
     // Check the header renders correctly
-    expect(disclosure.vm.$props.headingCentered).toBe(true);
+    expect(disclosure.vm.$props.headingCentred).toBe(true);
     expect(disclosure.vm.$props.headingLevel).toBe(2);
     expect(disclosure.vm.$props.headingText).toBe("Randomize");
   });
@@ -125,7 +125,7 @@ describe("Render", () => {
     }
 
     // Check the section header renders correctly
-    expect(headerDisclosure.vm.$props.headingCentered).toBe(false);
+    expect(headerDisclosure.vm.$props.headingCentred).toBe(false);
     expect(headerDisclosure.vm.$props.headingLevel).toBe(3);
     expect(headerDisclosure.vm.$props.headingText).toBe("Function");
 
@@ -180,7 +180,7 @@ describe("Render", () => {
     let headings5 = disclosure.findAll("h5");
     let minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Constant coefficients");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
@@ -204,11 +204,11 @@ describe("Render", () => {
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Circle coefficients");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
-    expect(headings5[0].text()).toBe("Center modulus");
+    expect(headings5[0].text()).toBe("Centre modulus");
     expect(minMaxInputs[0].vm.$props.minValue).toBe(complexModulusMinDefault);
     expect(minMaxInputs[0].vm.$props.maxValue).toBe(complexModulusMaxDefault);
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
@@ -216,10 +216,10 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
-      "Minimum modulus of circle coefficients centers"
+      "Minimum modulus of circle coefficients centres"
     );
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe(
-      "Maximum modulus of circle coefficients centers"
+      "Maximum modulus of circle coefficients centres"
     );
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
     expect(headings5[1].text()).toBe("Radius");
@@ -248,7 +248,7 @@ describe("Render", () => {
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Line coefficients");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
@@ -282,11 +282,11 @@ describe("Render", () => {
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Ellipse coefficients");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
-    expect(headings5[0].text()).toBe("Center modulus");
+    expect(headings5[0].text()).toBe("Centre modulus");
     expect(minMaxInputs[0].vm.$props.minValue).toBe(complexModulusMinDefault);
     expect(minMaxInputs[0].vm.$props.maxValue).toBe(complexModulusMaxDefault);
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
@@ -294,10 +294,10 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
-      "Minimum modulus of ellipse coefficients centers"
+      "Minimum modulus of ellipse coefficients centres"
     );
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe(
-      "Maximum modulus of ellipse coefficients centers"
+      "Maximum modulus of ellipse coefficients centres"
     );
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
     expect(headings5[1].text()).toBe("Half-width");
@@ -363,7 +363,7 @@ describe("Render", () => {
     }
 
     // Check the section header renders correctly
-    expect(headerDisclosure.vm.$props.headingCentered).toBe(false);
+    expect(headerDisclosure.vm.$props.headingCentred).toBe(false);
     expect(headerDisclosure.vm.$props.headingLevel).toBe(3);
     expect(headerDisclosure.vm.$props.headingText).toBe("Colors");
 
@@ -372,7 +372,7 @@ describe("Render", () => {
     let headings5 = disclosure.findAll("h5");
     let minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Julia color");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
@@ -412,7 +412,7 @@ describe("Render", () => {
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Attractors");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
@@ -493,7 +493,7 @@ describe("Render", () => {
     }
 
     // Check the section header renders correctly
-    expect(headerDisclosure.vm.$props.headingCentered).toBe(false);
+    expect(headerDisclosure.vm.$props.headingCentred).toBe(false);
     expect(headerDisclosure.vm.$props.headingLevel).toBe(3);
     expect(headerDisclosure.vm.$props.headingText).toBe("Advanced Settings");
 
@@ -502,7 +502,7 @@ describe("Render", () => {
     let headings5 = disclosure.findAll("h5");
     let minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Viewport");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
@@ -516,15 +516,15 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum scale of viewport");
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum scale of viewport");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
-    expect(headings5[1].text()).toBe("Center modulus");
-    expect(minMaxInputs[1].vm.$props.minValue).toBe(viewportCenterModulusMinDefault);
-    expect(minMaxInputs[1].vm.$props.maxValue).toBe(viewportCenterModulusMaxDefault);
+    expect(headings5[1].text()).toBe("Centre modulus");
+    expect(minMaxInputs[1].vm.$props.minValue).toBe(viewportCentreModulusMinDefault);
+    expect(minMaxInputs[1].vm.$props.maxValue).toBe(viewportCentreModulusMaxDefault);
     expect(minMaxInputs[1].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
-    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum modulus of viewport center");
-    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum modulus of viewport center");
+    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum modulus of viewport centre");
+    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum modulus of viewport centre");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
 
     // Check the computation part renders correctly
@@ -532,7 +532,7 @@ describe("Render", () => {
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
     expect(disclosure.vm.$props.headingText).toBe("Computation");
-    expect(disclosure.vm.$props.headingCentered).toBe(false);
+    expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");

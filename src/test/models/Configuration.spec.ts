@@ -14,7 +14,7 @@ describe("constructor", () => {
     const name = "Name";
     const resolutionScale = 1;
     const coordinatesScale = 1;
-    const coordinatesCenter = new Complex(0, 0);
+    const coordinatesCentre = new Complex(0, 0);
     const nbIterations = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
@@ -34,7 +34,7 @@ describe("constructor", () => {
       name,
       resolutionScale,
       coordinatesScale,
-      coordinatesCenter,
+      coordinatesCentre,
       nbIterations,
       epsilon,
       juliaBound,
@@ -49,7 +49,7 @@ describe("constructor", () => {
     expect(configuration.name).toBe(name);
     expect(configuration.resolutionScale).toBe(resolutionScale);
     expect(configuration.coordinatesScale).toBe(coordinatesScale);
-    expect(configuration.coordinatesCenter).toBe(coordinatesCenter);
+    expect(configuration.coordinatesCentre).toBe(coordinatesCentre);
     expect(configuration.nbIterations).toBe(nbIterations);
     expect(configuration.epsilon).toBe(epsilon);
     expect(configuration.juliaBound).toBe(juliaBound);
@@ -67,7 +67,7 @@ describe("fromJSON", () => {
     const name = "Name";
     const resolutionScale = 1;
     const coordinatesScale = 1;
-    const coordinatesCenter = new Complex(0, 0);
+    const coordinatesCentre = new Complex(0, 0);
     const nbIterations = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
@@ -88,7 +88,7 @@ describe("fromJSON", () => {
       name: name,
       resolutionScale: resolutionScale,
       coordinatesScale: coordinatesScale,
-      coordinatesCenter: coordinatesCenter.toJSON(),
+      coordinatesCentre: coordinatesCentre.toJSON(),
       nbIterations: nbIterations,
       epsilon: epsilon,
       juliaBound: juliaBound,
@@ -105,7 +105,7 @@ describe("fromJSON", () => {
         name,
         resolutionScale,
         coordinatesScale,
-        coordinatesCenter,
+        coordinatesCentre,
         nbIterations,
         epsilon,
         juliaBound,
@@ -125,7 +125,7 @@ describe("toJSON", () => {
     const name = "Name";
     const resolutionScale = 1;
     const coordinatesScale = 1;
-    const coordinatesCenter = new Complex(0, 0);
+    const coordinatesCentre = new Complex(0, 0);
     const nbIterations = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
@@ -146,7 +146,7 @@ describe("toJSON", () => {
       name,
       resolutionScale,
       coordinatesScale,
-      coordinatesCenter,
+      coordinatesCentre,
       nbIterations,
       epsilon,
       juliaBound,
@@ -162,7 +162,7 @@ describe("toJSON", () => {
       name: name,
       resolutionScale: resolutionScale,
       coordinatesScale: coordinatesScale,
-      coordinatesCenter: coordinatesCenter.toJSON(),
+      coordinatesCentre: coordinatesCentre.toJSON(),
       nbIterations: nbIterations,
       epsilon: epsilon,
       juliaBound: juliaBound,
@@ -238,7 +238,7 @@ describe("fillWith", () => {
     const name1 = "Name1";
     const resolutionScale1 = 1;
     const coordinatesScale1 = 1;
-    const coordinatesCenter1 = new Complex(1, 0);
+    const coordinatesCentre1 = new Complex(1, 0);
     const nbIterations1 = 10;
     const epsilon1 = 0.1;
     const juliaBound1 = 1;
@@ -259,7 +259,7 @@ describe("fillWith", () => {
       name1,
       resolutionScale1,
       coordinatesScale1,
-      coordinatesCenter1,
+      coordinatesCentre1,
       nbIterations1,
       epsilon1,
       juliaBound1,
@@ -274,7 +274,7 @@ describe("fillWith", () => {
     const name2 = "Name2";
     const resolutionScale2 = 2;
     const coordinatesScale2 = 2;
-    const coordinatesCenter2 = new Complex(2, 0);
+    const coordinatesCentre2 = new Complex(2, 0);
     const nbIterations2 = 20;
     const epsilon2 = 0.2;
     const juliaBound2 = 2;
@@ -295,7 +295,7 @@ describe("fillWith", () => {
       name2,
       resolutionScale2,
       coordinatesScale2,
-      coordinatesCenter2,
+      coordinatesCentre2,
       nbIterations2,
       epsilon2,
       juliaBound2,
@@ -316,7 +316,7 @@ describe("fillWith", () => {
     const name1 = "Name1";
     const resolutionScale1 = 1;
     const coordinatesScale1 = 1;
-    const coordinatesCenter1 = new Complex(1, 0);
+    const coordinatesCentre1 = new Complex(1, 0);
     const nbIterations1 = 10;
     const epsilon1 = 0.1;
     const juliaBound1 = 1;
@@ -337,7 +337,7 @@ describe("fillWith", () => {
       name1,
       resolutionScale1,
       coordinatesScale1,
-      coordinatesCenter1,
+      coordinatesCentre1,
       nbIterations1,
       epsilon1,
       juliaBound1,
@@ -352,7 +352,7 @@ describe("fillWith", () => {
     const name2 = "Name2";
     const resolutionScale2 = 2;
     const coordinatesScale2 = 2;
-    const coordinatesCenter2 = new Complex(2, 0);
+    const coordinatesCentre2 = new Complex(2, 0);
     const nbIterations2 = 20;
     const epsilon2 = 0.2;
     const juliaBound2 = 2;
@@ -373,7 +373,7 @@ describe("fillWith", () => {
       name2,
       resolutionScale2,
       coordinatesScale2,
-      coordinatesCenter2,
+      coordinatesCentre2,
       nbIterations2,
       epsilon2,
       juliaBound2,
@@ -392,7 +392,7 @@ describe("fillWith", () => {
         name1,
         resolutionScale2,
         coordinatesScale2,
-        coordinatesCenter2,
+        coordinatesCentre2,
         nbIterations2,
         epsilon2,
         juliaBound2,
@@ -412,7 +412,7 @@ describe("randomize", () => {
     const name = "Name";
     const resolutionScale = 1;
     const coordinatesScale = 1;
-    const coordinatesCenter = new Complex(1, 0);
+    const coordinatesCentre = new Complex(1, 0);
     const nbIterations = 10;
     const epsilon = 0.1;
     const juliaBound = 1;
@@ -432,7 +432,7 @@ describe("randomize", () => {
       name,
       resolutionScale,
       coordinatesScale,
-      coordinatesCenter,
+      coordinatesCentre,
       nbIterations,
       epsilon,
       juliaBound,
@@ -461,12 +461,12 @@ describe("randomize", () => {
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CONSTANT]);
     const nbCoefficientsMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
-    const circleCenterModulusMinMax = { min: 2, max: 3 };
+    const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
     const circleDurationMinMax = { min: 4, max: 5 };
     const startEndModulusMinMax = { min: 5, max: 6 };
     const lineDurationMinMax = { min: 6, max: 7 };
-    const ellipseCenterModulusMinMax = { min: 7, max: 8 };
+    const ellipseCentreModulusMinMax = { min: 7, max: 8 };
     const halfWidthMinMax = { min: 8, max: 9 };
     const halfHeightMinMax = { min: 9, max: 10 };
     const rotationAngleMinMax = { min: 10, max: 11 };
@@ -480,7 +480,7 @@ describe("randomize", () => {
     const attractorsValueStrengthMinMax = { min: 18, max: 19 };
     const attractorsValueOffsetMinMax = { min: 19, max: 20 };
     const viewportScaleMinMax = { min: 20, max: 21 };
-    const viewportCenterModulusMinMax = { min: 21, max: 22 };
+    const viewportCentreModulusMinMax = { min: 21, max: 22 };
     const nbIterationsMinMax = { min: 22, max: 23 };
     const epsilonMinMax = { min: 23, max: 24 };
     const juliaBoundMinMax = { min: 24, max: 25 };
@@ -490,12 +490,12 @@ describe("randomize", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -509,7 +509,7 @@ describe("randomize", () => {
       attractorsValueStrengthMinMax,
       attractorsValueOffsetMinMax,
       viewportScaleMinMax,
-      viewportCenterModulusMinMax,
+      viewportCentreModulusMinMax,
       nbIterationsMinMax,
       epsilonMinMax,
       juliaBoundMinMax
@@ -520,12 +520,12 @@ describe("randomize", () => {
       coefficientTypes,
       nbCoefficientsMinMax,
       complexModulusMinMax,
-      circleCenterModulusMinMax,
+      circleCentreModulusMinMax,
       radiusMinMax,
       circleDurationMinMax,
       startEndModulusMinMax,
       lineDurationMinMax,
-      ellipseCenterModulusMinMax,
+      ellipseCentreModulusMinMax,
       halfWidthMinMax,
       halfHeightMinMax,
       rotationAngleMinMax,
@@ -548,7 +548,7 @@ describe("randomize", () => {
       juliaValueMinMax.min,
       juliaValueMinMax.max
     );
-    expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCenterModulusMinMax);
+    expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCentreModulusMinMax);
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
       nbIterationsMinMax.min,
       nbIterationsMinMax.max

@@ -93,13 +93,13 @@ describe("Render for type CIRCLE", () => {
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CIRCLE);
   });
 
-  it("has a complex input for the center of the circle", () => {
+  it("has a complex input for the centre of the circle", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const secondHeading = coefficientInput.findAll("h" + props.level)[1];
-    expect(secondHeading.text()).toBe("Center");
+    expect(secondHeading.text()).toBe("Centre");
     const complexInput = coefficientInput.findComponent(ComplexInput);
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.center);
-    expect(complexInput.vm.$props.label).toBe("Circle center");
+    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.centre);
+    expect(complexInput.vm.$props.label).toBe("Circle centre");
   });
 
   it("has a number input for the radius of the circle", () => {
@@ -212,13 +212,13 @@ describe("Render for type ELLIPSE", () => {
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.ELLIPSE);
   });
 
-  it("has a complex input for the center of the ellipse", () => {
+  it("has a complex input for the centre of the ellipse", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const secondHeading = coefficientInput.findAll("h" + props.level)[1];
-    expect(secondHeading.text()).toBe("Center");
+    expect(secondHeading.text()).toBe("Centre");
     const complexInput = coefficientInput.findComponent(ComplexInput);
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.center);
-    expect(complexInput.vm.$props.label).toBe("Ellipse center");
+    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.centre);
+    expect(complexInput.vm.$props.label).toBe("Ellipse centre");
   });
 
   it("has a number input for the half-width of the ellipse", () => {
@@ -358,14 +358,14 @@ describe("Interactions for type CIRCLE", () => {
     };
   });
 
-  it("correctly changes the center of the CIRCLE", async () => {
+  it("correctly changes the centre of the CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const complexInput = coefficientInput.findComponent(ComplexInput);
-    const newCenter = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newCenter);
+    const newCentre = new Complex(4, 2);
+    complexInput.vm.$emit("update:complex", newCentre);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(newCenter, props.coefficient.radius, props.coefficient.duration)],
+      [new ComplexCircle(newCentre, props.coefficient.radius, props.coefficient.duration)],
     ]);
   });
 
@@ -376,7 +376,7 @@ describe("Interactions for type CIRCLE", () => {
     numberInput.vm.$emit("update:value", newRadius);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(props.coefficient.center, newRadius, props.coefficient.duration)],
+      [new ComplexCircle(props.coefficient.centre, newRadius, props.coefficient.duration)],
     ]);
   });
 
@@ -387,7 +387,7 @@ describe("Interactions for type CIRCLE", () => {
     numberInput.vm.$emit("update:value", newDuration);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(props.coefficient.center, props.coefficient.radius, newDuration * 1000)],
+      [new ComplexCircle(props.coefficient.centre, props.coefficient.radius, newDuration * 1000)],
     ]);
   });
 });
@@ -446,16 +446,16 @@ describe("Interactions for type ELLIPSE", () => {
     };
   });
 
-  it("correctly changes the center of the ELLIPSE", async () => {
+  it("correctly changes the centre of the ELLIPSE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const complexInput = coefficientInput.findComponent(ComplexInput);
-    const newCenter = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newCenter);
+    const newCentre = new Complex(4, 2);
+    complexInput.vm.$emit("update:complex", newCentre);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [
         new ComplexEllipse(
-          newCenter,
+          newCentre,
           props.coefficient.halfWidth,
           props.coefficient.halfHeight,
           props.coefficient.rotationAngle,
@@ -474,7 +474,7 @@ describe("Interactions for type ELLIPSE", () => {
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [
         new ComplexEllipse(
-          props.coefficient.center,
+          props.coefficient.centre,
           newHalfWidth,
           props.coefficient.halfHeight,
           props.coefficient.rotationAngle,
@@ -493,7 +493,7 @@ describe("Interactions for type ELLIPSE", () => {
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [
         new ComplexEllipse(
-          props.coefficient.center,
+          props.coefficient.centre,
           props.coefficient.halfWidth,
           newHalfHeight,
           props.coefficient.rotationAngle,
@@ -512,7 +512,7 @@ describe("Interactions for type ELLIPSE", () => {
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [
         new ComplexEllipse(
-          props.coefficient.center,
+          props.coefficient.centre,
           props.coefficient.halfWidth,
           props.coefficient.halfHeight,
           newRotationAngle,
@@ -531,7 +531,7 @@ describe("Interactions for type ELLIPSE", () => {
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
       [
         new ComplexEllipse(
-          props.coefficient.center,
+          props.coefficient.centre,
           props.coefficient.halfWidth,
           props.coefficient.halfHeight,
           props.coefficient.rotationAngle,
