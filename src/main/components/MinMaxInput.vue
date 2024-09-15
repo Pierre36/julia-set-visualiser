@@ -1,28 +1,37 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, type ComputedRef } from "vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-export default defineComponent({
-  name: "MinMaxInput",
-  components: { NumberInput },
-  emits: ["update:minValue", "update:maxValue"],
-  props: {
-    minValue: { type: Number, default: 0 },
-    maxValue: { type: Number, default: 0 },
-    min: { type: Number, default: undefined },
-    max: { type: Number, default: undefined },
-    step: { type: Number, default: 1 },
-    integerOnly: { type: Boolean, default: false },
-    minLabel: { type: String, default: "" },
-    maxLabel: { type: String, default: "" },
-    level: { type: Number, default: 5 },
-  },
-  computed: {
-    heading() {
-      return `h${this.level}`;
-    },
-  },
-});
+export interface Props {
+  minValue?: number;
+  maxValue?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  isIntegerOnly?: boolean;
+  minLabel?: string;
+  maxLabel?: string;
+  level?: number;
+}
+
+const {
+  minValue = 0,
+  maxValue = 0,
+  min = undefined,
+  max = undefined,
+  step = 1,
+  isIntegerOnly = false,
+  minLabel = "",
+  maxLabel = "",
+  level = 5,
+} = defineProps<Props>();
+
+defineEmits<{
+  (e: "update:minValue", value: number): void;
+  (e: "update:maxValue", value: number): void;
+}>();
+
+const heading: ComputedRef<string> = computed(() => `h${level}`);
 </script>
 
 <template>
@@ -33,7 +42,7 @@ export default defineComponent({
       :min="min"
       :max="maxValue"
       :step="step"
-      :isIntegerOnly="integerOnly"
+      :isIntegerOnly="isIntegerOnly"
       :label="minLabel"
       @update:value="(newMinValue) => $emit('update:minValue', newMinValue)"
     />
@@ -43,7 +52,7 @@ export default defineComponent({
       :min="minValue"
       :max="max"
       :step="step"
-      :isIntegerOnly="integerOnly"
+      :isIntegerOnly="isIntegerOnly"
       :label="maxLabel"
       @update:value="(newMaxValue) => $emit('update:maxValue', newMaxValue)"
     />

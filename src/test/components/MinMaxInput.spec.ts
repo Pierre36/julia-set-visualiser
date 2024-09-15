@@ -1,32 +1,32 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import MinMaxInput from "@/components/MinMaxInput.vue";
+import MinMaxInput, { type Props } from "@/components/MinMaxInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-describe("Render", () => {
-  let props: {
-    minValue?: number;
-    maxValue?: number;
-    min?: number;
-    max?: number;
-    step?: number;
-    integerOnly?: boolean;
-    minLabel?: string;
-    maxLabel?: string;
-    level?: number;
-  };
+let props: Props;
 
+const minValue = 36;
+const maxValue = 42;
+const min = 10;
+const max = 60;
+const step = 1;
+const isIntegerOnly = true;
+const minLabel = "Min label";
+const maxLabel = "Max label";
+const level = 3;
+
+describe("Render", () => {
   beforeEach(() => {
     props = {
-      minValue: 36,
-      maxValue: 42,
-      min: 10,
-      max: 60,
-      step: 1,
-      integerOnly: true,
-      minLabel: "Min label",
-      maxLabel: "Max label",
-      level: 3,
+      minValue: minValue,
+      maxValue: maxValue,
+      min: min,
+      max: max,
+      step: step,
+      isIntegerOnly: isIntegerOnly,
+      minLabel: minLabel,
+      maxLabel: maxLabel,
+      level: level,
     };
   });
 
@@ -35,7 +35,7 @@ describe("Render", () => {
     const minMaxInput = mount(MinMaxInput, { props: props });
 
     // Find the titles
-    const titles = minMaxInput.findAll("h" + props.level);
+    const titles = minMaxInput.findAll("h" + level);
 
     // Check the titles are correct
     expect(titles[0].text()).toBe("Min:");
@@ -50,12 +50,12 @@ describe("Render", () => {
     const minNumberInput = minMaxInput.findAllComponents(NumberInput)[0];
 
     // Check its props are correct
-    expect(minNumberInput.vm.$props.value).toBe(props.minValue);
-    expect(minNumberInput.vm.$props.min).toBe(props.min);
-    expect(minNumberInput.vm.$props.max).toBe(props.maxValue);
-    expect(minNumberInput.vm.$props.step).toBe(props.step);
-    expect(minNumberInput.vm.$props.isIntegerOnly).toBe(props.integerOnly);
-    expect(minNumberInput.vm.$props.label).toBe(props.minLabel);
+    expect(minNumberInput.vm.$props.value).toBe(minValue);
+    expect(minNumberInput.vm.$props.min).toBe(min);
+    expect(minNumberInput.vm.$props.max).toBe(maxValue);
+    expect(minNumberInput.vm.$props.step).toBe(step);
+    expect(minNumberInput.vm.$props.isIntegerOnly).toBe(isIntegerOnly);
+    expect(minNumberInput.vm.$props.label).toBe(minLabel);
   });
 
   it("renders the max NumberInput correctly", () => {
@@ -66,39 +66,27 @@ describe("Render", () => {
     const maxNumberInput = minMaxInput.findAllComponents(NumberInput)[1];
 
     // Check its props are correct
-    expect(maxNumberInput.vm.$props.value).toBe(props.maxValue);
-    expect(maxNumberInput.vm.$props.min).toBe(props.minValue);
-    expect(maxNumberInput.vm.$props.max).toBe(props.max);
-    expect(maxNumberInput.vm.$props.step).toBe(props.step);
-    expect(maxNumberInput.vm.$props.isIntegerOnly).toBe(props.integerOnly);
-    expect(maxNumberInput.vm.$props.label).toBe(props.maxLabel);
+    expect(maxNumberInput.vm.$props.value).toBe(maxValue);
+    expect(maxNumberInput.vm.$props.min).toBe(minValue);
+    expect(maxNumberInput.vm.$props.max).toBe(max);
+    expect(maxNumberInput.vm.$props.step).toBe(step);
+    expect(maxNumberInput.vm.$props.isIntegerOnly).toBe(isIntegerOnly);
+    expect(maxNumberInput.vm.$props.label).toBe(maxLabel);
   });
 });
 
 describe("Interactions", () => {
-  let props: {
-    minValue?: number;
-    maxValue?: number;
-    min?: number;
-    max?: number;
-    step?: number;
-    integerOnly?: boolean;
-    minLabel?: string;
-    maxLabel?: string;
-    level?: number;
-  };
-
   beforeEach(() => {
     props = {
-      minValue: 36,
-      maxValue: 42,
-      min: 10,
-      max: 60,
-      step: 1,
-      integerOnly: true,
-      minLabel: "Min label",
-      maxLabel: "Max label",
-      level: 3,
+      minValue: minValue,
+      maxValue: maxValue,
+      min: min,
+      max: max,
+      step: step,
+      isIntegerOnly: isIntegerOnly,
+      minLabel: minLabel,
+      maxLabel: maxLabel,
+      level: level,
     };
   });
 

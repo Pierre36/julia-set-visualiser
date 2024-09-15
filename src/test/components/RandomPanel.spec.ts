@@ -170,7 +170,7 @@ describe("Render", () => {
     expect(coefficientsCountMinMinMaxInput.vm.$props.min).toBe(coefficientsCountMinMinMin);
     expect(coefficientsCountMinMinMaxInput.vm.$props.max).toBe(coefficientsCountMinMaxMax);
     expect(coefficientsCountMinMinMaxInput.vm.$props.step).toBe(1);
-    expect(coefficientsCountMinMinMaxInput.vm.$props.integerOnly).toBe(true);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.isIntegerOnly).toBe(true);
     expect(coefficientsCountMinMinMaxInput.vm.$props.minLabel).toBe(
       "Minimum number of coefficients"
     );
@@ -194,7 +194,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
       "Minimum modulus of constant complex coefficients"
     );
@@ -218,7 +218,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
       "Minimum modulus of circle coefficients centres"
     );
@@ -232,7 +232,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum radius of circle coefficients");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum radius of circle coefficients");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -242,7 +242,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.min).toBe(durationMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(durationMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(1);
-    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum duration of circle coefficients");
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum duration of circle coefficients");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
@@ -262,7 +262,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
       "Minimum modulus of line coefficients start/end"
     );
@@ -276,7 +276,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(durationMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(durationMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(1);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -296,7 +296,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe(
       "Minimum modulus of ellipse coefficients centres"
     );
@@ -310,7 +310,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum half-width of ellipse coefficients");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum half-width of ellipse coefficients");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -320,7 +320,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum half-height of ellipse coefficients");
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum half-height of ellipse coefficients");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
@@ -330,7 +330,7 @@ describe("Render", () => {
     expect(minMaxInputs[3].vm.$props.min).toBe(rotationAngleMinMin);
     expect(minMaxInputs[3].vm.$props.max).toBe(rotationAngleMaxMax);
     expect(minMaxInputs[3].vm.$props.step).toBe(1);
-    expect(minMaxInputs[3].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[3].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[3].vm.$props.minLabel).toBe(
       "Minimum rotation angle of ellipse coefficients"
     );
@@ -344,7 +344,7 @@ describe("Render", () => {
     expect(minMaxInputs[4].vm.$props.min).toBe(durationMinMin);
     expect(minMaxInputs[4].vm.$props.max).toBe(durationMaxMax);
     expect(minMaxInputs[4].vm.$props.step).toBe(1);
-    expect(minMaxInputs[4].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[4].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum duration of ellipse coefficients");
     expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum duration of ellipse coefficients");
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
@@ -386,7 +386,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(hueMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(hueMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of Julia colour");
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of Julia colour");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
@@ -396,7 +396,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(juliaSaturationMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(juliaSaturationMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.01);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum saturation of Julia colour");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum saturation of Julia colour");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -406,7 +406,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.min).toBe(juliaValueMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(juliaValueMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.01);
-    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum value of Julia colour");
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum value of Julia colour");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
@@ -426,7 +426,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(hueMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(hueMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of attractors colour");
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of attractors colour");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
@@ -436,7 +436,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe(
       "Minimum saturation strength of attractors colour"
     );
@@ -450,7 +450,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe(
       "Minimum saturation offset of attractors colour"
     );
@@ -464,7 +464,7 @@ describe("Render", () => {
     expect(minMaxInputs[3].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[3].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[3].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[3].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[3].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum value strength of attractors colour");
     expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum value strength of attractors colour");
     expect(minMaxInputs[3].vm.$props.level).toBe(6);
@@ -474,7 +474,7 @@ describe("Render", () => {
     expect(minMaxInputs[4].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[4].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[4].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[4].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[4].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum value offset of attractors colour");
     expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum value offset of attractors colour");
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
@@ -516,7 +516,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(scaleMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(scaleMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum scale of viewport");
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum scale of viewport");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
@@ -526,7 +526,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(complexModulusMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(complexModulusMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum modulus of viewport centre");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum modulus of viewport centre");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -546,7 +546,7 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.min).toBe(iterationsCountMinMin);
     expect(minMaxInputs[0].vm.$props.max).toBe(iterationsCountMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
-    expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
+    expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(true);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum number of iterations");
     expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum number of iterations");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
@@ -556,7 +556,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.min).toBe(epsilonMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(epsilonMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.000001);
-    expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum value of epsilon");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum value of epsilon");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
@@ -566,7 +566,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.min).toBe(juliaBoundMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(juliaBoundMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
-    expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum value of the Julia bound");
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum value of the Julia bound");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
