@@ -32,7 +32,7 @@ export default defineComponent({
       :min="min"
       :max="max"
       :step="step"
-      :integerOnly="integerOnly"
+      :isIntegerOnly="integerOnly"
       :label="label"
       @update:value="(newValue) => $emit('update:value', newValue)"
     />

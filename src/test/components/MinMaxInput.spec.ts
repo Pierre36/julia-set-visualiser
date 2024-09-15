@@ -54,7 +54,7 @@ describe("Render", () => {
     expect(minNumberInput.vm.$props.min).toBe(props.min);
     expect(minNumberInput.vm.$props.max).toBe(props.maxValue);
     expect(minNumberInput.vm.$props.step).toBe(props.step);
-    expect(minNumberInput.vm.$props.integerOnly).toBe(props.integerOnly);
+    expect(minNumberInput.vm.$props.isIntegerOnly).toBe(props.integerOnly);
     expect(minNumberInput.vm.$props.label).toBe(props.minLabel);
   });
 
@@ -70,7 +70,7 @@ describe("Render", () => {
     expect(maxNumberInput.vm.$props.min).toBe(props.minValue);
     expect(maxNumberInput.vm.$props.max).toBe(props.max);
     expect(maxNumberInput.vm.$props.step).toBe(props.step);
-    expect(maxNumberInput.vm.$props.integerOnly).toBe(props.integerOnly);
+    expect(maxNumberInput.vm.$props.isIntegerOnly).toBe(props.integerOnly);
     expect(maxNumberInput.vm.$props.label).toBe(props.maxLabel);
   });
 });

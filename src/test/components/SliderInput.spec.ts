@@ -38,7 +38,7 @@ describe("Render", () => {
     expect(numberInput.vm.$props.min).toBe(props.min);
     expect(numberInput.vm.$props.max).toBe(props.max);
     expect(numberInput.vm.$props.step).toBe(props.step);
-    expect(numberInput.vm.$props.integerOnly).toBe(props.integerOnly);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(props.integerOnly);
     expect(numberInput.vm.$props.label).toBe(props.label);
   });
 

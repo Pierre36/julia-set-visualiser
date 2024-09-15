@@ -1,64 +1,74 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, ref, useTemplateRef, type ComputedRef } from "vue";
 
-export default defineComponent({
-  name: "NumberInput",
-  emits: ["update:value"],
-  props: {
-    value: { type: Number, default: 0 },
-    min: { type: Number, default: undefined },
-    max: { type: Number, default: undefined },
-    step: { type: Number, default: 1 },
-    integerOnly: { type: Boolean, default: false },
-    wrongInputMessage: { type: String, default: "Please enter a valid number" },
-    label: { type: String, default: "" },
-  },
-  data() {
-    return {
-      wrong: false,
-    };
-  },
-  computed: {
-    inputValue() {
-      if (this.wrong) {
-        return (this.$refs.input as HTMLInputElement).value;
-      } else {
-        return String(this.value);
-      }
-    },
-  },
-  methods: {
-    stepDown() {
-      (this.$refs.input as HTMLInputElement).stepDown();
-      (this.$refs.input as HTMLInputElement).dispatchEvent(new Event("change"));
-    },
-    goToMin() {
-      if (this.min != undefined) {
-        this.$emit("update:value", this.min);
-      }
-    },
-    goToMax() {
-      if (this.max != undefined) {
-        this.$emit("update:value", this.max);
-      }
-    },
-    stepUp() {
-      (this.$refs.input as HTMLInputElement).stepUp();
-      (this.$refs.input as HTMLInputElement).dispatchEvent(new Event("change"));
-    },
-    checkAndUpdate(stringValue: string) {
-      let newValue = parseFloat(stringValue);
-      this.wrong =
-        isNaN(newValue) ||
-        (this.integerOnly && newValue % 1 != 0) ||
-        (this.min != undefined && newValue < this.min) ||
-        (this.max != undefined && newValue > this.max);
-      if (!this.wrong) {
-        this.$emit("update:value", newValue);
-      }
-    },
-  },
+export interface Props {
+  value?: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  isIntegerOnly?: boolean;
+  wrongInputMessage?: string;
+  label?: string;
+}
+
+const {
+  value = 0,
+  min = undefined,
+  max = undefined,
+  step = 1,
+  isIntegerOnly = false,
+  wrongInputMessage = "Please enter a valid number",
+  label = "",
+} = defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: "update:value", value: number): void;
+}>();
+
+const isWrong = ref(false);
+
+const input = useTemplateRef<HTMLInputElement>("input");
+
+const inputValue: ComputedRef<string> = computed(() => {
+  if (isWrong.value) {
+    return input.value?.value || value.toString();
+  } else {
+    return value.toString();
+  }
 });
+
+function stepDown(): void {
+  input.value?.stepDown();
+  input.value?.dispatchEvent(new Event("change"));
+}
+
+function stepUp(): void {
+  input.value?.stepUp();
+  input.value?.dispatchEvent(new Event("change"));
+}
+
+function goToMin(): void {
+  if (min != undefined) emit("update:value", min);
+}
+
+function goToMax(): void {
+  if (max != undefined) emit("update:value", max);
+}
+
+function isIncorrectValue(newValue: number): boolean {
+  return (
+    isNaN(newValue) ||
+    (isIntegerOnly && newValue % 1 != 0) ||
+    (min != undefined && newValue < min) ||
+    (max != undefined && newValue > max)
+  );
+}
+
+function checkAndUpdate(stringValue: string): void {
+  const newValue = parseFloat(stringValue);
+  isWrong.value = isIncorrectValue(newValue);
+  if (!isWrong.value) emit("update:value", newValue);
+}
 </script>
 
 <template>
@@ -74,7 +84,7 @@ export default defineComponent({
       :aria-valuemax="max"
       :step="step"
       :aria-label="label"
-      :aria-invalid="wrong"
+      :aria-invalid="isWrong"
       role="spinbutton"
       @keydown.down.prevent="stepDown"
       @keydown.up.prevent="stepUp"
@@ -82,7 +92,7 @@ export default defineComponent({
       @keydown.end.prevent="goToMax"
       @change="($event) => checkAndUpdate(($event.target as HTMLInputElement).value)"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
+    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="isWrong">
       <title>{{ wrongInputMessage }}</title>
       <path
         fill="currentColor"

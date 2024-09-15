@@ -125,7 +125,7 @@ export default defineComponent({
             :value="configuration.iterationsCount"
             :min="1"
             :step="1"
-            :integerOnly="true"
+            :isIntegerOnly="true"
             wrongInputMessage="Please enter a valid number of iterations"
             label="Number of iterations"
             @update:value="updateIterationsCount"

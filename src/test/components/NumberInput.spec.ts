@@ -1,44 +1,44 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import NumberInput from "@/components/NumberInput.vue";
+import NumberInput, { type Props } from "@/components/NumberInput.vue";
+
+let props: Props;
+
+const value = 36;
+const min = 0;
+const max = 100;
+const step = 1;
+const wrongInputMessage = "Wrong input message";
+const isIntegerOnly = true;
+const label = "label";
 
 describe("Render", () => {
-  let props: {
-    value: number;
-    min: number;
-    max: number;
-    step: number;
-    integerOnly: boolean;
-    wrongInputMessage: string;
-    label: string;
-  };
-
   beforeEach(() => {
     props = {
-      value: 36,
-      min: 0,
-      max: 100,
-      step: 1,
-      integerOnly: true,
-      wrongInputMessage: "Wrong input message",
-      label: "label",
+      value: value,
+      min: min,
+      max: max,
+      step: step,
+      isIntegerOnly: isIntegerOnly,
+      wrongInputMessage: wrongInputMessage,
+      label: label,
     };
   });
 
   it("contains the value", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
-    expect(input.element.value).toBe(props.value.toString());
+    expect(input.element.value).toBe(`${value}`);
   });
 
   it("has the correct min, max and step", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
-    expect(input.element.min).toBe(props.min.toString());
-    expect(input.attributes()["aria-valuemin"]).toBe(props.min.toString());
-    expect(input.element.max).toBe(props.max.toString());
-    expect(input.attributes()["aria-valuemax"]).toBe(props.max.toString());
-    expect(input.element.step).toBe(props.step.toString());
+    expect(input.element.min).toBe(`${min}`);
+    expect(input.attributes()["aria-valuemin"]).toBe(`${min}`);
+    expect(input.element.max).toBe(`${max}`);
+    expect(input.attributes()["aria-valuemax"]).toBe(`${max}`);
+    expect(input.element.step).toBe(`${step}`);
   });
 
   it("has the correct role", () => {
@@ -50,29 +50,19 @@ describe("Render", () => {
   it("has the correct label", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
-    expect(input.attributes()["aria-label"]).toBe(props.label);
+    expect(input.attributes()["aria-label"]).toBe(label);
   });
 });
 
 describe("Interactions", () => {
-  let props: {
-    value: number;
-    min?: number;
-    max?: number;
-    step: number;
-    integerOnly: boolean;
-    wrongInputMessage: string;
-    label?: string;
-  };
-
   beforeEach(() => {
     props = {
-      value: 36,
-      min: 0,
-      max: 100,
-      step: 1,
-      integerOnly: true,
-      wrongInputMessage: "Wrong input message",
+      value: value,
+      min: min,
+      max: max,
+      step: step,
+      isIntegerOnly: true,
+      wrongInputMessage: wrongInputMessage,
     };
   });
 
@@ -89,35 +79,35 @@ describe("Interactions", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
     await input.trigger("keydown.down");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.value - props.step]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[value - step]]);
   });
 
   it("decrements when pressing 'down' button", async () => {
     const numberInput = mount(NumberInput, { props: props });
     const downButton = numberInput.find(".down");
     await downButton.trigger("click");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.value - props.step]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[value - step]]);
   });
 
   it("increments when pressing 'up' key", async () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
     await input.trigger("keydown.up");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.value + props.step]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[value + step]]);
   });
 
   it("increments when pressing 'up' button", async () => {
     const numberInput = mount(NumberInput, { props: props });
     const upButton = numberInput.find(".up");
     await upButton.trigger("click");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.value + props.step]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[value + step]]);
   });
 
   it("goes to min when pressing 'home' key if min defined", async () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
     await input.trigger("keydown.home");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.min]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[min]]);
   });
 
   it("does nothing when pressing 'home' key if min undefined", async () => {
@@ -132,7 +122,7 @@ describe("Interactions", () => {
     const numberInput = mount(NumberInput, { props: props });
     const input = numberInput.find("input");
     await input.trigger("keydown.end");
-    expect(numberInput.emitted()["update:value"]).toEqual([[props.max]]);
+    expect(numberInput.emitted()["update:value"]).toEqual([[max]]);
   });
 
   it("does nothing when pressing 'end' key if max undefined", async () => {
@@ -145,25 +135,17 @@ describe("Interactions", () => {
 });
 
 describe("Wrong input handling", () => {
-  let props: {
-    value: number;
-    min: number;
-    max: number;
-    step: number;
-    integerOnly: boolean;
-    wrongInputMessage: string;
-    label: string;
-  };
+  let props: Props;
 
   beforeEach(() => {
     props = {
-      value: 36,
-      min: 0,
-      max: 100,
-      step: 1,
-      integerOnly: true,
-      wrongInputMessage: "Wrong input message",
-      label: "label",
+      value: value,
+      min: min,
+      max: max,
+      step: step,
+      isIntegerOnly: true,
+      wrongInputMessage: wrongInputMessage,
+      label: label,
     };
   });
 
@@ -175,7 +157,7 @@ describe("Wrong input handling", () => {
     expect(input.attributes()["aria-invalid"]).toBe("true");
     const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
-    expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
+    expect(wrongSVG.find("title").text()).toBe(wrongInputMessage);
   });
 
   it("handles too high number", async () => {
@@ -186,7 +168,7 @@ describe("Wrong input handling", () => {
     expect(input.attributes()["aria-invalid"]).toBe("true");
     const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
-    expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
+    expect(wrongSVG.find("title").text()).toBe(wrongInputMessage);
   });
 
   it("handles too low number", async () => {
@@ -197,11 +179,11 @@ describe("Wrong input handling", () => {
     expect(input.attributes()["aria-invalid"]).toBe("true");
     const wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
-    expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
+    expect(wrongSVG.find("title").text()).toBe(wrongInputMessage);
   });
 
   it("handles invalid int number", async () => {
-    props.integerOnly = true;
+    props.isIntegerOnly = true;
     let numberInput = mount(NumberInput, { props: props });
     let input = numberInput.find("input");
     input.element.value = "1.1";
@@ -209,9 +191,9 @@ describe("Wrong input handling", () => {
     expect(input.attributes()["aria-invalid"]).toBe("true");
     let wrongSVG = numberInput.find(".wrong-input-svg");
     expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
-    expect(wrongSVG.find("title").text()).toBe(props.wrongInputMessage);
+    expect(wrongSVG.find("title").text()).toBe(wrongInputMessage);
 
-    props.integerOnly = false;
+    props.isIntegerOnly = false;
     numberInput = mount(NumberInput, { props: props });
     input = numberInput.find("input");
     input.element.value = "1.1";

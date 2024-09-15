@@ -33,7 +33,7 @@ export default defineComponent({
       :min="min"
       :max="maxValue"
       :step="step"
-      :integerOnly="integerOnly"
+      :isIntegerOnly="integerOnly"
       :label="minLabel"
       @update:value="(newMinValue) => $emit('update:minValue', newMinValue)"
     />
@@ -43,7 +43,7 @@ export default defineComponent({
       :min="minValue"
       :max="max"
       :step="step"
-      :integerOnly="integerOnly"
+      :isIntegerOnly="integerOnly"
       :label="maxLabel"
       @update:value="(newMaxValue) => $emit('update:maxValue', newMaxValue)"
     />

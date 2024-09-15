@@ -111,7 +111,7 @@ describe("Render for type CIRCLE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Circle radius");
   });
@@ -125,7 +125,7 @@ describe("Render for type CIRCLE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });
@@ -182,7 +182,7 @@ describe("Render for type LINE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });
@@ -230,7 +230,7 @@ describe("Render for type ELLIPSE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Ellipse half-width");
   });
@@ -244,7 +244,7 @@ describe("Render for type ELLIPSE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Ellipse half-height");
   });
@@ -258,7 +258,7 @@ describe("Render for type ELLIPSE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Ellipse rotation angle");
   });
@@ -272,7 +272,7 @@ describe("Render for type ELLIPSE", () => {
     expect(numberInput.vm.$props.min).toBe(0);
     expect(numberInput.vm.$props.max).toBeUndefined();
     expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.integerOnly).toBe(false);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });

@@ -54,7 +54,7 @@ describe("Render", () => {
     expect(numberInputs[0].vm.$props.min).toBe(0);
     expect(numberInputs[0].vm.$props.max).toBeUndefined();
     expect(numberInputs[0].vm.$props.step).toBe(0.1);
-    expect(numberInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[0].vm.$props.label).toBe("Resolution");
 
     // Check the coordinates scale part renders correctly
@@ -63,7 +63,7 @@ describe("Render", () => {
     expect(numberInputs[1].vm.$props.min).toBe(0);
     expect(numberInputs[1].vm.$props.max).toBeUndefined();
     expect(numberInputs[1].vm.$props.step).toBe(0.1);
-    expect(numberInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[1].vm.$props.label).toBe("Coordinates scale");
 
     // Check the coordinates centre part renders correctly
@@ -95,7 +95,7 @@ describe("Render", () => {
     expect(numberInputs[0].vm.$props.min).toBe(1);
     expect(numberInputs[0].vm.$props.max).toBeUndefined();
     expect(numberInputs[0].vm.$props.step).toBe(1);
-    expect(numberInputs[0].vm.$props.integerOnly).toBe(true);
+    expect(numberInputs[0].vm.$props.isIntegerOnly).toBe(true);
     expect(numberInputs[0].vm.$props.wrongInputMessage).toBe(
       "Please enter a valid number of iterations"
     );
@@ -107,7 +107,7 @@ describe("Render", () => {
     expect(numberInputs[1].vm.$props.min).toBe(0);
     expect(numberInputs[1].vm.$props.max).toBeUndefined();
     expect(numberInputs[1].vm.$props.step).toBe(0.000001);
-    expect(numberInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[1].vm.$props.label).toBe("Epsilon");
 
     // Check the Julia bound part renders correctly
@@ -116,7 +116,7 @@ describe("Render", () => {
     expect(numberInputs[2].vm.$props.min).toBeUndefined();
     expect(numberInputs[2].vm.$props.max).toBeUndefined();
     expect(numberInputs[2].vm.$props.step).toBe(0.1);
-    expect(numberInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[2].vm.$props.label).toBe("Julia bound");
   });
 });

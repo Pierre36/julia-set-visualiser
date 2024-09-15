@@ -42,25 +42,25 @@ describe("Render", () => {
     expect(numberInputs[0].vm.$props.min).toBe(0);
     expect(numberInputs[0].vm.$props.max).toBeUndefined();
     expect(numberInputs[0].vm.$props.step).toBe(0.1);
-    expect(numberInputs[0].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[0].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[0].vm.$props.label).toBe("Saturation strength");
     expect(numberInputs[1].vm.$props.value).toBe(props.attractor.saturationOffset);
     expect(numberInputs[1].vm.$props.min).toBe(0);
     expect(numberInputs[1].vm.$props.max).toBeUndefined();
     expect(numberInputs[1].vm.$props.step).toBe(0.1);
-    expect(numberInputs[1].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[1].vm.$props.label).toBe("Saturation offset");
     expect(numberInputs[2].vm.$props.value).toBe(props.attractor.valueStrength);
     expect(numberInputs[2].vm.$props.min).toBe(0);
     expect(numberInputs[2].vm.$props.max).toBeUndefined();
     expect(numberInputs[2].vm.$props.step).toBe(0.1);
-    expect(numberInputs[2].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[2].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[2].vm.$props.label).toBe("Value strength");
     expect(numberInputs[3].vm.$props.value).toBe(props.attractor.valueOffset);
     expect(numberInputs[3].vm.$props.min).toBe(0);
     expect(numberInputs[3].vm.$props.max).toBeUndefined();
     expect(numberInputs[3].vm.$props.step).toBe(0.1);
-    expect(numberInputs[3].vm.$props.integerOnly).toBe(false);
+    expect(numberInputs[3].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[3].vm.$props.label).toBe("Value offset");
 
     // Check the headings are rendered correctly
