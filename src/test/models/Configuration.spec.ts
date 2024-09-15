@@ -15,7 +15,7 @@ describe("constructor", () => {
     const resolutionScale = 1;
     const coordinatesScale = 1;
     const coordinatesCentre = new Complex(0, 0);
-    const nbIterations = 10;
+    const iterationsCount = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
     const fractalFunction = new FractalFunction(
@@ -35,7 +35,7 @@ describe("constructor", () => {
       resolutionScale,
       coordinatesScale,
       coordinatesCentre,
-      nbIterations,
+      iterationsCount,
       epsilon,
       juliaBound,
       fractalFunction,
@@ -50,7 +50,7 @@ describe("constructor", () => {
     expect(configuration.resolutionScale).toBe(resolutionScale);
     expect(configuration.coordinatesScale).toBe(coordinatesScale);
     expect(configuration.coordinatesCentre).toBe(coordinatesCentre);
-    expect(configuration.nbIterations).toBe(nbIterations);
+    expect(configuration.iterationsCount).toBe(iterationsCount);
     expect(configuration.epsilon).toBe(epsilon);
     expect(configuration.juliaBound).toBe(juliaBound);
     expect(configuration.fractalFunction).toBe(fractalFunction);
@@ -68,7 +68,7 @@ describe("fromJSON", () => {
     const resolutionScale = 1;
     const coordinatesScale = 1;
     const coordinatesCentre = new Complex(0, 0);
-    const nbIterations = 10;
+    const iterationsCount = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
     const fractalFunction = new FractalFunction(
@@ -89,7 +89,7 @@ describe("fromJSON", () => {
       resolutionScale: resolutionScale,
       coordinatesScale: coordinatesScale,
       coordinatesCentre: coordinatesCentre.toJSON(),
-      nbIterations: nbIterations,
+      iterationsCount: iterationsCount,
       epsilon: epsilon,
       juliaBound: juliaBound,
       fractalFunction: fractalFunction.toJSON(),
@@ -106,7 +106,7 @@ describe("fromJSON", () => {
         resolutionScale,
         coordinatesScale,
         coordinatesCentre,
-        nbIterations,
+        iterationsCount,
         epsilon,
         juliaBound,
         fractalFunction,
@@ -126,7 +126,7 @@ describe("toJSON", () => {
     const resolutionScale = 1;
     const coordinatesScale = 1;
     const coordinatesCentre = new Complex(0, 0);
-    const nbIterations = 10;
+    const iterationsCount = 10;
     const epsilon = 0.1;
     const juliaBound = -4;
     const fractalFunction = new FractalFunction(
@@ -147,7 +147,7 @@ describe("toJSON", () => {
       resolutionScale,
       coordinatesScale,
       coordinatesCentre,
-      nbIterations,
+      iterationsCount,
       epsilon,
       juliaBound,
       fractalFunction,
@@ -163,7 +163,7 @@ describe("toJSON", () => {
       resolutionScale: resolutionScale,
       coordinatesScale: coordinatesScale,
       coordinatesCentre: coordinatesCentre.toJSON(),
-      nbIterations: nbIterations,
+      iterationsCount: iterationsCount,
       epsilon: epsilon,
       juliaBound: juliaBound,
       fractalFunction: fractalFunction.toJSON(),
@@ -239,7 +239,7 @@ describe("fillWith", () => {
     const resolutionScale1 = 1;
     const coordinatesScale1 = 1;
     const coordinatesCentre1 = new Complex(1, 0);
-    const nbIterations1 = 10;
+    const iterationsCount1 = 10;
     const epsilon1 = 0.1;
     const juliaBound1 = 1;
     const fractalFunction1 = new FractalFunction(
@@ -260,7 +260,7 @@ describe("fillWith", () => {
       resolutionScale1,
       coordinatesScale1,
       coordinatesCentre1,
-      nbIterations1,
+      iterationsCount1,
       epsilon1,
       juliaBound1,
       fractalFunction1,
@@ -275,7 +275,7 @@ describe("fillWith", () => {
     const resolutionScale2 = 2;
     const coordinatesScale2 = 2;
     const coordinatesCentre2 = new Complex(2, 0);
-    const nbIterations2 = 20;
+    const iterationsCount2 = 20;
     const epsilon2 = 0.2;
     const juliaBound2 = 2;
     const fractalFunction2 = new FractalFunction(
@@ -296,7 +296,7 @@ describe("fillWith", () => {
       resolutionScale2,
       coordinatesScale2,
       coordinatesCentre2,
-      nbIterations2,
+      iterationsCount2,
       epsilon2,
       juliaBound2,
       fractalFunction2,
@@ -317,7 +317,7 @@ describe("fillWith", () => {
     const resolutionScale1 = 1;
     const coordinatesScale1 = 1;
     const coordinatesCentre1 = new Complex(1, 0);
-    const nbIterations1 = 10;
+    const iterationsCount1 = 10;
     const epsilon1 = 0.1;
     const juliaBound1 = 1;
     const fractalFunction1 = new FractalFunction(
@@ -338,7 +338,7 @@ describe("fillWith", () => {
       resolutionScale1,
       coordinatesScale1,
       coordinatesCentre1,
-      nbIterations1,
+      iterationsCount1,
       epsilon1,
       juliaBound1,
       fractalFunction1,
@@ -353,7 +353,7 @@ describe("fillWith", () => {
     const resolutionScale2 = 2;
     const coordinatesScale2 = 2;
     const coordinatesCentre2 = new Complex(2, 0);
-    const nbIterations2 = 20;
+    const iterationsCount2 = 20;
     const epsilon2 = 0.2;
     const juliaBound2 = 2;
     const fractalFunction2 = new FractalFunction(
@@ -374,7 +374,7 @@ describe("fillWith", () => {
       resolutionScale2,
       coordinatesScale2,
       coordinatesCentre2,
-      nbIterations2,
+      iterationsCount2,
       epsilon2,
       juliaBound2,
       fractalFunction2,
@@ -393,7 +393,7 @@ describe("fillWith", () => {
         resolutionScale2,
         coordinatesScale2,
         coordinatesCentre2,
-        nbIterations2,
+        iterationsCount2,
         epsilon2,
         juliaBound2,
         fractalFunction2,
@@ -413,7 +413,7 @@ describe("randomize", () => {
     const resolutionScale = 1;
     const coordinatesScale = 1;
     const coordinatesCentre = new Complex(1, 0);
-    const nbIterations = 10;
+    const iterationsCount = 10;
     const epsilon = 0.1;
     const juliaBound = 1;
     const fractalFunction = new FractalFunction(
@@ -433,7 +433,7 @@ describe("randomize", () => {
       resolutionScale,
       coordinatesScale,
       coordinatesCentre,
-      nbIterations,
+      iterationsCount,
       epsilon,
       juliaBound,
       fractalFunction,
@@ -459,7 +459,7 @@ describe("randomize", () => {
 
     const functionTypes = new Set([FunctionTypes.DEFAULT, FunctionTypes.FRACTION]);
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CONSTANT]);
-    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const coefficientsCountMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
     const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
@@ -481,14 +481,14 @@ describe("randomize", () => {
     const attractorsValueOffsetMinMax = { min: 19, max: 20 };
     const viewportScaleMinMax = { min: 20, max: 21 };
     const viewportCentreModulusMinMax = { min: 21, max: 22 };
-    const nbIterationsMinMax = { min: 22, max: 23 };
+    const iterationsCountMinMax = { min: 22, max: 23 };
     const epsilonMinMax = { min: 23, max: 24 };
     const juliaBoundMinMax = { min: 24, max: 25 };
 
     configuration.randomize(
       functionTypes,
       coefficientTypes,
-      nbCoefficientsMinMax,
+      coefficientsCountMinMax,
       complexModulusMinMax,
       circleCentreModulusMinMax,
       radiusMinMax,
@@ -510,7 +510,7 @@ describe("randomize", () => {
       attractorsValueOffsetMinMax,
       viewportScaleMinMax,
       viewportCentreModulusMinMax,
-      nbIterationsMinMax,
+      iterationsCountMinMax,
       epsilonMinMax,
       juliaBoundMinMax
     );
@@ -518,7 +518,7 @@ describe("randomize", () => {
     expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(
       functionTypes,
       coefficientTypes,
-      nbCoefficientsMinMax,
+      coefficientsCountMinMax,
       complexModulusMinMax,
       circleCentreModulusMinMax,
       radiusMinMax,
@@ -550,8 +550,8 @@ describe("randomize", () => {
     );
     expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCentreModulusMinMax);
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
-      nbIterationsMinMax.min,
-      nbIterationsMinMax.max
+      iterationsCountMinMax.min,
+      iterationsCountMinMax.max
     );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(juliaHueMinMax.min, juliaHueMinMax.max);
     expect(Attractor.getRandomAttractor).toHaveBeenCalledWith(
@@ -570,7 +570,7 @@ describe("randomize", () => {
         resolutionScale,
         (viewportScaleMinMax.min + viewportScaleMinMax.max) / 2,
         randomComplex,
-        (nbIterationsMinMax.min + nbIterationsMinMax.max) / 2,
+        (iterationsCountMinMax.min + iterationsCountMinMax.max) / 2,
         (epsilonMinMax.min + epsilonMinMax.max) / 2,
         (juliaBoundMinMax.min + juliaBoundMinMax.max) / 2,
         randomFractalFunction,

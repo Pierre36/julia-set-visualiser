@@ -597,7 +597,7 @@ describe("getRandomFractalFunction", () => {
 
     const functionTypes = new Set([FunctionTypes.DEFAULT, FunctionTypes.FRACTION]);
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
-    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const coefficientsCountMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
     const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
@@ -613,7 +613,7 @@ describe("getRandomFractalFunction", () => {
     const randomFractalFunction = FractalFunction.getRandomFractalFunction(
       functionTypes,
       coefficientTypes,
-      nbCoefficientsMinMax,
+      coefficientsCountMinMax,
       complexModulusMinMax,
       circleCentreModulusMinMax,
       radiusMinMax,
@@ -643,11 +643,11 @@ describe("getRandomFractalFunction", () => {
       ellipseDurationMinMax
     );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
-      nbCoefficientsMinMax.max
+      coefficientsCountMinMax.min,
+      coefficientsCountMinMax.max
     );
     expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
+      coefficientsCountMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -682,7 +682,7 @@ describe("getRandomFractalFunction", () => {
 
     const functionTypes = new Set([FunctionTypes.DEFAULT, FunctionTypes.FRACTION]);
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
-    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const coefficientsCountMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
     const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
@@ -698,7 +698,7 @@ describe("getRandomFractalFunction", () => {
     const randomFractalFunction = FractalFunction.getRandomFractalFunction(
       functionTypes,
       coefficientTypes,
-      nbCoefficientsMinMax,
+      coefficientsCountMinMax,
       complexModulusMinMax,
       circleCentreModulusMinMax,
       radiusMinMax,
@@ -728,11 +728,11 @@ describe("getRandomFractalFunction", () => {
       ellipseDurationMinMax
     );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
-      nbCoefficientsMinMax.max
+      coefficientsCountMinMax.min,
+      coefficientsCountMinMax.max
     );
     expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
+      coefficientsCountMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -767,7 +767,7 @@ describe("getRandomFractalFunction", () => {
 
     const functionTypes = new Set([FunctionTypes.DEFAULT, FunctionTypes.FRACTION]);
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CIRCLE]);
-    const nbCoefficientsMinMax = { min: 0, max: 1 };
+    const coefficientsCountMinMax = { min: 0, max: 1 };
     const complexModulusMinMax = { min: 1, max: 2 };
     const circleCentreModulusMinMax = { min: 2, max: 3 };
     const radiusMinMax = { min: 3, max: 4 };
@@ -783,7 +783,7 @@ describe("getRandomFractalFunction", () => {
     const randomFractalFunction = FractalFunction.getRandomFractalFunction(
       functionTypes,
       coefficientTypes,
-      nbCoefficientsMinMax,
+      coefficientsCountMinMax,
       complexModulusMinMax,
       circleCentreModulusMinMax,
       radiusMinMax,
@@ -813,12 +813,12 @@ describe("getRandomFractalFunction", () => {
       ellipseDurationMinMax
     );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
-      nbCoefficientsMinMax.max
+      coefficientsCountMinMax.min,
+      coefficientsCountMinMax.max
     );
-    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(1, nbCoefficientsMinMax.min);
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(1, coefficientsCountMinMax.min);
     expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith(
-      nbCoefficientsMinMax.min,
+      coefficientsCountMinMax.min,
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,

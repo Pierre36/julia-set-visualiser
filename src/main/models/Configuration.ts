@@ -18,7 +18,7 @@ export default class Configuration {
    * @param resolutionScale scale of the resolution (if 1, use the resolution of the viewport)
    * @param coordinatesScale scale of the coordinates
    * @param coordinatesCentre centre of the coordinates
-   * @param nbIterations number of iterations
+   * @param iterationsCount number of iterations
    * @param epsilon epsilon added to the complex number before computing the divergence
    * @param juliaBound highest value of log-divergence in the Fatou Set
    * @param fractalFunction function used for the fractal
@@ -33,7 +33,7 @@ export default class Configuration {
     public resolutionScale: number,
     public coordinatesScale: number,
     public coordinatesCentre: Complex,
-    public nbIterations: number,
+    public iterationsCount: number,
     public epsilon: number,
     public juliaBound: number,
     public fractalFunction: FractalFunction,
@@ -56,7 +56,7 @@ export default class Configuration {
       json.resolutionScale,
       json.coordinatesScale,
       Complex.fromJSON(json.coordinatesCentre),
-      json.nbIterations,
+      json.iterationsCount,
       json.epsilon,
       json.juliaBound,
       FractalFunction.fromJSON(json.fractalFunction),
@@ -79,7 +79,7 @@ export default class Configuration {
       resolutionScale: this.resolutionScale,
       coordinatesScale: this.coordinatesScale,
       coordinatesCentre: this.coordinatesCentre.toJSON(),
-      nbIterations: this.nbIterations,
+      iterationsCount: this.iterationsCount,
       epsilon: this.epsilon,
       juliaBound: this.juliaBound,
       fractalFunction: this.fractalFunction.toJSON(),
@@ -158,7 +158,7 @@ export default class Configuration {
     this.resolutionScale = configuration.resolutionScale;
     this.coordinatesScale = configuration.coordinatesScale;
     this.coordinatesCentre = configuration.coordinatesCentre.copy();
-    this.nbIterations = configuration.nbIterations;
+    this.iterationsCount = configuration.iterationsCount;
     this.epsilon = configuration.epsilon;
     this.juliaBound = configuration.juliaBound;
     this.fractalFunction = configuration.fractalFunction.copy();
@@ -180,7 +180,7 @@ export default class Configuration {
    *
    * @param functionTypes set of the function types.
    * @param coefficientTypes set the available coefficient types
-   * @param nbCoefficients min and max number of coefficients
+   * @param coefficientsCount min and max number of coefficients
    * @param complexModulus min and max modulus for constant coefficients
    * @param circleCentreModulus min and max centre modulus for circle coefficients
    * @param radius min and max radius for circle coefficients
@@ -202,14 +202,14 @@ export default class Configuration {
    * @param attractorsValueOffset min and max attractors value offset
    * @param viewportScale min and max value viewport scale
    * @param viewportCentreModulus min and max viewport centre modulus
-   * @param nbIterations min and max number of iterations
+   * @param iterationsCount min and max number of iterations
    * @param epsilon min and max epsilon
    * @param juliaBound min and max Julia bound
    */
   public randomize(
     functionTypes: Set<FunctionTypes>,
     coefficientTypes: Set<CoefficientTypes>,
-    nbCoefficients: { min: number; max: number },
+    coefficientsCount: { min: number; max: number },
     complexModulus: { min: number; max: number },
     circleCentreModulus: { min: number; max: number },
     radius: { min: number; max: number },
@@ -231,19 +231,19 @@ export default class Configuration {
     attractorsValueOffset: { min: number; max: number },
     viewportScale: { min: number; max: number },
     viewportCentreModulus: { min: number; max: number },
-    nbIterations: { min: number; max: number },
+    iterationsCount: { min: number; max: number },
     epsilon: { min: number; max: number },
     juliaBound: { min: number; max: number }
   ) {
     this.coordinatesScale = RandomUtils.floatBetween(viewportScale.min, viewportScale.max);
     this.coordinatesCentre = Complex.getRandomComplex(viewportCentreModulus);
-    this.nbIterations = RandomUtils.integerBetween(nbIterations.min, nbIterations.max);
+    this.iterationsCount = RandomUtils.integerBetween(iterationsCount.min, iterationsCount.max);
     this.epsilon = RandomUtils.floatBetween(epsilon.min, epsilon.max);
     this.juliaBound = RandomUtils.floatBetween(juliaBound.min, juliaBound.max);
     this.fractalFunction = FractalFunction.getRandomFractalFunction(
       functionTypes,
       coefficientTypes,
-      nbCoefficients,
+      coefficientsCount,
       complexModulus,
       circleCentreModulus,
       radius,
@@ -284,7 +284,7 @@ export default class Configuration {
   public toString(): string {
     return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
       this.coordinatesScale
-    }, ${this.coordinatesCentre}, ${this.nbIterations}, ${this.epsilon}, ${this.juliaBound}, ${
+    }, ${this.coordinatesCentre}, ${this.iterationsCount}, ${this.epsilon}, ${this.juliaBound}, ${
       this.fractalFunction
     }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
       this.infinityAttractor

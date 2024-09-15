@@ -274,7 +274,7 @@ export default class Polynomial {
   /**
    * Return a random polynomial with the provided settings
    *
-   * @param nbCoefficients number of coefficients of the new polynomial
+   * @param coefficientsCount number of coefficients of the new polynomial
    * @param coefficientTypes set the available coefficient types
    * @param complexModulusMinMax min and max modulus for constant coefficients
    * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
@@ -290,7 +290,7 @@ export default class Polynomial {
    * @returns the new random polynomial
    */
   public static getRandomPolynomial(
-    nbCoefficients: number,
+    coefficientsCount: number,
     coefficientTypes: Set<CoefficientTypes>,
     complexModulusMinMax: { min: number; max: number },
     circleCentreModulusMinMax: { min: number; max: number },
@@ -307,7 +307,7 @@ export default class Polynomial {
     const powers = RandomUtils.distinctIntegersBetween(
       0,
       MAX_DEGREE,
-      Math.min(nbCoefficients, MAX_DEGREE + 1)
+      Math.min(coefficientsCount, MAX_DEGREE + 1)
     );
     const newCoefficients: Record<number, Complex | ComplexCircle | ComplexEllipse | ComplexLine> =
       {};

@@ -39,7 +39,7 @@ export default defineComponent({
         CoefficientTypes.LINE,
         CoefficientTypes.ELLIPSE,
       ]),
-      nbCoefficients: { min: 2, max: 5 },
+      coefficientsCount: { min: 2, max: 5 },
       complexModulus: { min: 0.1, max: 10 },
       circleCentreModulus: { min: 0.1, max: 10 },
       radius: { min: 0.1, max: 10 },
@@ -61,7 +61,7 @@ export default defineComponent({
       attractorsValueOffset: { min: 0, max: 3 },
       viewportScale: { min: 1, max: 3 },
       viewportCentreModulus: { min: 0, max: 0 },
-      nbIterations: { min: 10, max: 40 },
+      iterationsCount: { min: 10, max: 40 },
       epsilon: { min: 0.000005, max: 0.000015 },
       juliaBound: { min: -5, max: -3 },
       disclosureSvgPath:
@@ -73,7 +73,7 @@ export default defineComponent({
       this.configuration.randomize(
         this.selectedFunctionTypes,
         this.selectedCoefficientTypes,
-        this.nbCoefficients,
+        this.coefficientsCount,
         this.complexModulus,
         this.circleCentreModulus,
         this.radius,
@@ -95,7 +95,7 @@ export default defineComponent({
         this.attractorsValueOffset,
         this.viewportScale,
         this.viewportCentreModulus,
-        this.nbIterations,
+        this.iterationsCount,
         this.epsilon,
         this.juliaBound
       );
@@ -150,16 +150,16 @@ export default defineComponent({
           />
           <h4>Number of coefficients</h4>
           <MinMaxInput
-            :minValue="nbCoefficients.min"
-            :maxValue="nbCoefficients.max"
+            :minValue="coefficientsCount.min"
+            :maxValue="coefficientsCount.max"
             :min="1"
             :max="32"
             :step="1"
             :integerOnly="true"
             minLabel="Minimum number of coefficients"
             maxLabel="Maximum number of coefficients"
-            @update:minValue="(newMin) => (nbCoefficients.min = newMin)"
-            @update:maxValue="(newMax) => (nbCoefficients.max = newMax)"
+            @update:minValue="(newMin) => (coefficientsCount.min = newMin)"
+            @update:maxValue="(newMax) => (coefficientsCount.max = newMax)"
           />
           <Disclosure
             headingText="Constant coefficients"
@@ -566,16 +566,16 @@ export default defineComponent({
             <h5>Number of iterations</h5>
             <MinMaxInput
               class="parameter-input"
-              :minValue="nbIterations.min"
-              :maxValue="nbIterations.max"
+              :minValue="iterationsCount.min"
+              :maxValue="iterationsCount.max"
               :min="0"
               :max="100"
               :step="1"
               :integerOnly="true"
               minLabel="Minimum number of iterations"
               maxLabel="Maximum number of iterations"
-              @update:minValue="(newMin) => (nbIterations.min = newMin)"
-              @update:maxValue="(newMax) => (nbIterations.max = newMax)"
+              @update:minValue="(newMin) => (iterationsCount.min = newMin)"
+              @update:maxValue="(newMax) => (iterationsCount.max = newMax)"
               :level="6"
             />
             <h5>Epsilon</h5>

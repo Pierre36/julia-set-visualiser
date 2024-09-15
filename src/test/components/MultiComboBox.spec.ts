@@ -454,7 +454,7 @@ describe("MultiComboBox interactions with popup open", () => {
 });
 
 describe("MultiComboBox popup scroll behavior", () => {
-  const nbOptions = 20;
+  const optionsCount = 20;
   const popupHeight = 100;
   const optionHeight = 10;
   let scrollTop = 0;
@@ -469,7 +469,7 @@ describe("MultiComboBox popup scroll behavior", () => {
 
   beforeEach(() => {
     props = { id: "id", options: [], selected: new Set() };
-    for (let i = 0; i < nbOptions; i++) {
+    for (let i = 0; i < optionsCount; i++) {
       props.options.push({ id: i.toString(), text: `option${i}` });
     }
     HTMLElement.prototype.scrollTo = (_, scrollY?) => (scrollTop = scrollY as number);

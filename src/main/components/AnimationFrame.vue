@@ -38,7 +38,7 @@ export default defineComponent({
         newCoordinatesCentre.im,
       ]);
     },
-    "configuration.nbIterations"(newIterationsCount: number) {
+    "configuration.iterationsCount"(newIterationsCount: number) {
       this.fractalGenerator?.updateParameter(
         FractalGeneratorParameters.ITERATIONS_COUNT,
         newIterationsCount

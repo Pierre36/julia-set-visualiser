@@ -13,7 +13,7 @@ export default defineComponent({
   emits: ["update:sidePanelCollapsed", "update:currentPanel"],
   data() {
     return {
-      nbDisplayedPanels: 0,
+      displayedPanelsCount: 0,
       focusedIndex: 0,
       popupShown: false,
       hasFocus: false,
@@ -21,10 +21,10 @@ export default defineComponent({
   },
   computed: {
     displayedPanels() {
-      return this.panels.filter((_, index) => index < this.nbDisplayedPanels);
+      return this.panels.filter((_, index) => index < this.displayedPanelsCount);
     },
     hiddenPanels() {
-      return this.panels.filter((_, index) => index >= this.nbDisplayedPanels);
+      return this.panels.filter((_, index) => index >= this.displayedPanelsCount);
     },
     focusedPanel() {
       return this.panels[this.focusedIndex].id;
@@ -34,19 +34,19 @@ export default defineComponent({
     },
   },
   created() {
-    window.addEventListener("resize", this.updateNbDisplayedPanels);
+    window.addEventListener("resize", this.updateDisplayedPanelsCount);
   },
   mounted() {
     document.addEventListener("click", this.closePopup);
-    this.updateNbDisplayedPanels();
+    this.updateDisplayedPanelsCount();
   },
   beforeUnmount() {
     document.removeEventListener("click", this.closePopup);
-    window.removeEventListener("resize", this.updateNbDisplayedPanels);
+    window.removeEventListener("resize", this.updateDisplayedPanelsCount);
   },
   methods: {
-    updateNbDisplayedPanels() {
-      this.nbDisplayedPanels = Math.max(
+    updateDisplayedPanelsCount() {
+      this.displayedPanelsCount = Math.max(
         Math.floor(
           (this.$refs.tablist as HTMLElement).clientHeight /
             (this.$refs.moreListItem as HTMLElement).clientHeight
@@ -70,7 +70,7 @@ export default defineComponent({
     },
     changeFocus(newFocusedIndex: number) {
       this.focusedIndex = newFocusedIndex;
-      this.popupShown = newFocusedIndex >= this.nbDisplayedPanels;
+      this.popupShown = newFocusedIndex >= this.displayedPanelsCount;
     },
     moveFocusDown() {
       this.changeFocus((this.focusedIndex + 1) % this.panels.length);

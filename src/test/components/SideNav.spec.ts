@@ -158,8 +158,8 @@ describe("Render", () => {
 
   it("displays correctly when only some tabs can be shown", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 1;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 1;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -173,8 +173,8 @@ describe("Render", () => {
     expect(moreListItem.classes()).not.toContain("hidden");
 
     // Check the number of tabs in the nav and in the popup are correct
-    expect(navTabs.length).toBe(nbVisibleTabs);
-    expect(popupTabs.length).toBe(props.panels.length - nbVisibleTabs);
+    expect(navTabs.length).toBe(visibleTabsCount);
+    expect(popupTabs.length).toBe(props.panels.length - visibleTabsCount);
   });
 });
 
@@ -216,8 +216,8 @@ describe("Interactions", () => {
     await sidenav.vm.$nextTick();
 
     // Simulate a window resize
-    const newNbVisibleTabs = 2;
-    navHeight = (newNbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     window.dispatchEvent(new Event("resize"));
     await sidenav.vm.$nextTick();
 
@@ -231,8 +231,8 @@ describe("Interactions", () => {
     expect(moreListItem.classes()).not.toContain("hidden");
 
     // Check the number of tabs in the nav and in the popup are correct
-    expect(navTabs.length).toBe(newNbVisibleTabs);
-    expect(popupTabs.length).toBe(props.panels.length - newNbVisibleTabs);
+    expect(navTabs.length).toBe(visibleTabsCount);
+    expect(popupTabs.length).toBe(props.panels.length - visibleTabsCount);
   });
 
   it("displays the popup when clicking the moreButton", async () => {
@@ -253,8 +253,8 @@ describe("Interactions", () => {
 
   it("emits an event when clicking on a tab", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -272,7 +272,7 @@ describe("Interactions", () => {
     // Click one of the popup tabs and check the event is emitted
     const clickedPopupTab = 0;
     await popupTabs[clickedPopupTab].trigger("click");
-    expectedEvent.push([props.panels[nbVisibleTabs + clickedPopupTab].id]);
+    expectedEvent.push([props.panels[visibleTabsCount + clickedPopupTab].id]);
     expect(sidenav.emitted()["update:currentPanel"]).toEqual(expectedEvent);
   });
 
@@ -305,8 +305,8 @@ describe("Interactions", () => {
 
   it("focuses the selected element when focused in", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -331,8 +331,8 @@ describe("Interactions", () => {
 
   it("does not focus the selected element when focused in if already in focus", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -361,8 +361,8 @@ describe("Interactions", () => {
 
   it("does not focus on the selected element when focused in without focus-visible", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -387,8 +387,8 @@ describe("Interactions", () => {
 
   it("moves the focus up when pressing 'up'", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -421,8 +421,8 @@ describe("Interactions", () => {
 
   it("moves the focus down when pressing 'down'", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -455,8 +455,8 @@ describe("Interactions", () => {
 
   it("moves focus to first tab when pressing 'home'", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -484,8 +484,8 @@ describe("Interactions", () => {
 
   it("moves focus to last tab when pressing 'end'", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -533,8 +533,8 @@ describe("Interactions", () => {
 
   it("closes the popup when leaving the sidenav", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -565,8 +565,8 @@ describe("Interactions", () => {
 
   it("does not close the popup when focusing out the sidenav while still having focus within it", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -597,8 +597,8 @@ describe("Interactions", () => {
 
   it("emits an event when pressing 'enter' on a tab", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 
@@ -626,8 +626,8 @@ describe("Interactions", () => {
 
   it("emits an event when pressing 'space' on a tab", async () => {
     // Mount SideNav
-    const nbVisibleTabs = 2;
-    navHeight = (nbVisibleTabs + 1) * navItemHeight;
+    const visibleTabsCount = 2;
+    navHeight = (visibleTabsCount + 1) * navItemHeight;
     const sidenav = mount(SideNav, { props: props });
     await sidenav.vm.$nextTick();
 

@@ -10,10 +10,10 @@ import IconTextButton from "@/components/IconTextButton.vue";
 import MinMaxInput from "@/components/MinMaxInput.vue";
 import MultiComboBox from "@/components/MultiComboBox.vue";
 
-const nbCoefficientsMinDefault = 2;
-const nbCoefficientsMinMin = 1;
-const nbCoefficientsMaxDefault = 5;
-const nbCoefficientsMaxMax = 2 * (Polynomial.MAX_DEGREE + 1);
+const coefficientsCountMinDefault = 2;
+const coefficientsCountMinMinMin = 1;
+const coefficientsCountMinMaxDefault = 5;
+const coefficientsCountMinMaxMax = 2 * (Polynomial.MAX_DEGREE + 1);
 
 const complexModulusMinDefault = 0.1;
 const complexModulusMinMin = 0;
@@ -65,10 +65,10 @@ const scaleMinMin = 0;
 const scaleMaxDefault = 3;
 const scaleMaxMax = 100;
 
-const nbIterationsMinDefault = 10;
-const nbIterationsMinMin = 0;
-const nbIterationsMaxDefault = 40;
-const nbIterationsMaxMax = 100;
+const iterationsCountMinDefault = 10;
+const iterationsCountMinMin = 0;
+const iterationsCountMaxDefault = 40;
+const iterationsCountMaxMax = 100;
 
 const epsilonMinDefault = 0.000005;
 const epsilonMinMin = 0.0000001;
@@ -116,7 +116,7 @@ describe("Render", () => {
     const sectionContent = functionSection.find(".content");
     const headings4 = sectionContent.findAll("h4");
     const multiComboBoxes = sectionContent.findAllComponents(MultiComboBox);
-    const nbCoefficientsMinMaxInput = sectionContent.findComponent(MinMaxInput);
+    const coefficientsCountMinMinMaxInput = sectionContent.findComponent(MinMaxInput);
     const disclosures = sectionContent.findAllComponents(Disclosure);
 
     // Open all disclosures
@@ -165,15 +165,19 @@ describe("Render", () => {
 
     // Check the number of coefficients part renders correctly
     expect(headings4[2].text()).toBe("Number of coefficients");
-    expect(nbCoefficientsMinMaxInput.vm.$props.minValue).toBe(nbCoefficientsMinDefault);
-    expect(nbCoefficientsMinMaxInput.vm.$props.maxValue).toBe(nbCoefficientsMaxDefault);
-    expect(nbCoefficientsMinMaxInput.vm.$props.min).toBe(nbCoefficientsMinMin);
-    expect(nbCoefficientsMinMaxInput.vm.$props.max).toBe(nbCoefficientsMaxMax);
-    expect(nbCoefficientsMinMaxInput.vm.$props.step).toBe(1);
-    expect(nbCoefficientsMinMaxInput.vm.$props.integerOnly).toBe(true);
-    expect(nbCoefficientsMinMaxInput.vm.$props.minLabel).toBe("Minimum number of coefficients");
-    expect(nbCoefficientsMinMaxInput.vm.$props.maxLabel).toBe("Maximum number of coefficients");
-    expect(nbCoefficientsMinMaxInput.vm.$props.level).toBe(5);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.minValue).toBe(coefficientsCountMinDefault);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.maxValue).toBe(coefficientsCountMinMaxDefault);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.min).toBe(coefficientsCountMinMinMin);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.max).toBe(coefficientsCountMinMaxMax);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.step).toBe(1);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.integerOnly).toBe(true);
+    expect(coefficientsCountMinMinMaxInput.vm.$props.minLabel).toBe(
+      "Minimum number of coefficients"
+    );
+    expect(coefficientsCountMinMinMaxInput.vm.$props.maxLabel).toBe(
+      "Maximum number of coefficients"
+    );
+    expect(coefficientsCountMinMinMaxInput.vm.$props.level).toBe(5);
 
     // Check the constant coefficients part renders correctly
     let disclosure = disclosures[0];
@@ -537,10 +541,10 @@ describe("Render", () => {
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
     expect(disclosure.vm.$props.buttonTitle).toBe("Show");
     expect(headings5[0].text()).toBe("Number of iterations");
-    expect(minMaxInputs[0].vm.$props.minValue).toBe(nbIterationsMinDefault);
-    expect(minMaxInputs[0].vm.$props.maxValue).toBe(nbIterationsMaxDefault);
-    expect(minMaxInputs[0].vm.$props.min).toBe(nbIterationsMinMin);
-    expect(minMaxInputs[0].vm.$props.max).toBe(nbIterationsMaxMax);
+    expect(minMaxInputs[0].vm.$props.minValue).toBe(iterationsCountMinDefault);
+    expect(minMaxInputs[0].vm.$props.maxValue).toBe(iterationsCountMaxDefault);
+    expect(minMaxInputs[0].vm.$props.min).toBe(iterationsCountMinMin);
+    expect(minMaxInputs[0].vm.$props.max).toBe(iterationsCountMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
     expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
     expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum number of iterations");

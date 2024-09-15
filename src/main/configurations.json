@@ -5,7 +5,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -49,7 +49,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -93,7 +93,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -130,7 +130,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -172,7 +172,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 12,
+    "iterationsCount": 12,
     "epsilon": 0.00001,
     "juliaBound": -3.6,
     "fractalFunction": {
@@ -216,7 +216,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -260,7 +260,7 @@
     "resolutionScale": 0.75,
     "coordinatesScale": 10,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -2.6,
     "fractalFunction": {
@@ -316,7 +316,7 @@
     "resolutionScale": 0.7,
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 40,
+    "iterationsCount": 40,
     "epsilon": 0.000005,
     "juliaBound": -3,
     "fractalFunction": {
@@ -358,7 +358,7 @@
     "resolutionScale": 0.7,
     "coordinatesScale": 3.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 30,
+    "iterationsCount": 30,
     "epsilon": 0.00001,
     "juliaBound": -2,
     "fractalFunction": {
@@ -413,7 +413,7 @@
     "resolutionScale": 0.7,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 15,
+    "iterationsCount": 15,
     "epsilon": 0.000005,
     "juliaBound": -4,
     "fractalFunction": {
@@ -468,7 +468,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 20,
+    "iterationsCount": 20,
     "epsilon": 0.00001,
     "juliaBound": -4,
     "fractalFunction": {
@@ -510,7 +510,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2.3,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 19,
+    "iterationsCount": 19,
     "epsilon": 0.000005,
     "juliaBound": -3.5,
     "fractalFunction": {
@@ -567,7 +567,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 13,
+    "iterationsCount": 13,
     "epsilon": 0.00001,
     "juliaBound": -4.6,
     "fractalFunction": {
@@ -621,7 +621,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2.7,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 25,
+    "iterationsCount": 25,
     "epsilon": 0.0000081,
     "juliaBound": -4.4,
     "fractalFunction": {
@@ -663,7 +663,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 3,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 11,
+    "iterationsCount": 11,
     "epsilon": 0.0000064,
     "juliaBound": -3.7,
     "fractalFunction": {
@@ -724,7 +724,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 36,
+    "iterationsCount": 36,
     "epsilon": 0.00005,
     "juliaBound": -3.3,
     "fractalFunction": {
@@ -772,7 +772,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 13,
+    "iterationsCount": 13,
     "epsilon": 0.0000063,
     "juliaBound": -3.7,
     "fractalFunction": {
@@ -839,7 +839,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 19,
+    "iterationsCount": 19,
     "epsilon": 0.0000085,
     "juliaBound": -3.5,
     "fractalFunction": {
@@ -893,7 +893,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 18,
+    "iterationsCount": 18,
     "epsilon": 0.00001,
     "juliaBound": -3.4,
     "fractalFunction": {
@@ -960,7 +960,7 @@
     "resolutionScale": 1,
     "coordinatesScale": 1.5,
     "coordinatesCentre": { "re": 0, "im": 0 },
-    "nbIterations": 11,
+    "iterationsCount": 11,
     "epsilon": 0.0000067,
     "juliaBound": -4,
     "fractalFunction": {

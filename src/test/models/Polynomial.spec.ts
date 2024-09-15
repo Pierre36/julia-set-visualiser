@@ -274,7 +274,7 @@ describe("getRandomPolynomial", () => {
     Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.distinctIntegersBetween = vi.fn(() => [0, 1]);
 
-    const nbCoefficients = 2;
+    const coefficientsCount = 2;
     const coefficientTypes = new Set([CoefficientTypes.CIRCLE, CoefficientTypes.CONSTANT]);
     const complexModulusMinMax = { min: 1, max: 2 };
     const circleCentreModulusMinMax = { min: 2, max: 3 };
@@ -289,7 +289,7 @@ describe("getRandomPolynomial", () => {
     const ellipseDurationMinMax = { min: 16, max: 17 };
 
     const randomPolynomial = Polynomial.getRandomPolynomial(
-      nbCoefficients,
+      coefficientsCount,
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -307,7 +307,7 @@ describe("getRandomPolynomial", () => {
     expect(RandomUtils.distinctIntegersBetween).toHaveBeenCalledWith(
       0,
       Polynomial.MAX_DEGREE,
-      nbCoefficients
+      coefficientsCount
     );
     expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,

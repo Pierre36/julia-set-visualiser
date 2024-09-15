@@ -241,14 +241,14 @@ describe("Interactions", () => {
     await flushPromises();
 
     // Change the number of iterations
-    const newNbIterations = 36;
-    animationFrame.vm.$props.configuration.nbIterations = newNbIterations;
+    const newIterationsCount = 36;
+    animationFrame.vm.$props.configuration.iterationsCount = newIterationsCount;
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ITERATIONS_COUNT,
-      newNbIterations
+      newIterationsCount
     );
   });
 

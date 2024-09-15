@@ -566,7 +566,10 @@ export default class WebGpuFractalGenerator {
       configuration.fractalFunction.denominator.getCoefficientsParameters()
     );
 
-    this.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, configuration.nbIterations);
+    this.updateParameter(
+      FractalGeneratorParameters.ITERATIONS_COUNT,
+      configuration.iterationsCount
+    );
     this.updateParameter(FractalGeneratorParameters.EPSILON, configuration.epsilon);
     this.updateParameter(FractalGeneratorParameters.JULIA_BOUND, configuration.juliaBound);
     this.updateParameter(FractalGeneratorParameters.JULIA_HSV, configuration.juliaHSV);
@@ -683,9 +686,9 @@ export default class WebGpuFractalGenerator {
    *
    * @param time animation time in milliseconds
    * @param timeIncrement increment of the animation time
-   * @param nbFrames number of frames since the beginning of the animation
+   * @param framesCount number of frames since the beginning of the animation
    */
-  private render(time: number, timeIncrement: number, nbFrames: number) {
+  private render(time: number, timeIncrement: number, framesCount: number) {
     if (!this.paused) {
       this.animationTime += timeIncrement;
       this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime, false);
@@ -694,8 +697,8 @@ export default class WebGpuFractalGenerator {
 
     requestAnimationFrame((newTime) => {
       const frameDuration = newTime - time;
-      this.updateFPS(frameDuration, nbFrames);
-      this.render(newTime, this.paused ? 0 : frameDuration, nbFrames + 1);
+      this.updateFPS(frameDuration, framesCount);
+      this.render(newTime, this.paused ? 0 : frameDuration, framesCount + 1);
     });
   }
 
@@ -734,15 +737,15 @@ export default class WebGpuFractalGenerator {
    * Update the fps
    *
    * @param frameDuration duration of the frame in milliseconds
-   * @param nbFrames number of frames since the beginning of the animation
+   * @param framesCount number of frames since the beginning of the animation
    */
-  private updateFPS(frameDuration: number, nbFrames: number) {
+  private updateFPS(frameDuration: number, framesCount: number) {
     let frameFPS = 1000 / (10 * frameDuration);
     if (frameFPS == Infinity) {
       frameFPS = 0;
     }
-    this.fps = this.fps - this.last10FPS[nbFrames % 10] + frameFPS;
-    this.last10FPS[nbFrames % 10] = frameFPS;
+    this.fps = this.fps - this.last10FPS[framesCount % 10] + frameFPS;
+    this.last10FPS[framesCount % 10] = frameFPS;
   }
 
   /**

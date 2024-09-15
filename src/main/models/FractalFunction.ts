@@ -259,7 +259,7 @@ export default class FractalFunction {
    *
    * @param functionTypes set of the function types
    * @param coefficientTypes set the available coefficient types
-   * @param nbCoefficientsMinMax min and max number of coefficients
+   * @param coefficientsCountMinMax min and max number of coefficients
    * @param complexModulusMinMax min and max modulus for constant coefficients
    * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
    * @param radiusMinMax min and max radius for circle coefficients
@@ -276,7 +276,7 @@ export default class FractalFunction {
   public static getRandomFractalFunction(
     functionTypes: Set<FunctionTypes>,
     coefficientTypes: Set<CoefficientTypes>,
-    nbCoefficientsMinMax: { min: number; max: number },
+    coefficientsCountMinMax: { min: number; max: number },
     complexModulusMinMax: { min: number; max: number },
     circleCentreModulusMinMax: { min: number; max: number },
     radiusMinMax: { min: number; max: number },
@@ -304,18 +304,18 @@ export default class FractalFunction {
       rotationAngleMinMax,
       ellipseDurationMinMax
     );
-    const nbCoefficients = RandomUtils.integerBetween(
-      nbCoefficientsMinMax.min,
-      nbCoefficientsMinMax.max
+    const coefficientsCount = RandomUtils.integerBetween(
+      coefficientsCountMinMax.min,
+      coefficientsCountMinMax.max
     );
-    let nbNumeratorCoefficients;
+    let numeratorCoefficientsCount;
     if (newFunctionType == FunctionTypes.FRACTION) {
-      nbNumeratorCoefficients = RandomUtils.integerBetween(1, nbCoefficients);
+      numeratorCoefficientsCount = RandomUtils.integerBetween(1, coefficientsCount);
     } else {
-      nbNumeratorCoefficients = nbCoefficients;
+      numeratorCoefficientsCount = coefficientsCount;
     }
     const newNumerator = Polynomial.getRandomPolynomial(
-      nbCoefficients,
+      coefficientsCount,
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -336,7 +336,7 @@ export default class FractalFunction {
       newDenominator = newNumerator.getDerivative();
     } else {
       newDenominator = Polynomial.getRandomPolynomial(
-        Math.max(1, nbCoefficients - nbNumeratorCoefficients),
+        Math.max(1, coefficientsCount - numeratorCoefficientsCount),
         coefficientTypes,
         complexModulusMinMax,
         circleCentreModulusMinMax,

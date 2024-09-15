@@ -24,8 +24,8 @@ export default defineComponent({
       this.configuration.coordinatesCentre = newCoordinatesCentre;
       this.$emit("change");
     },
-    updateNbIterations(newNbIterations: number) {
-      this.configuration.nbIterations = newNbIterations;
+    updateIterationsCount(newIterationsCount: number) {
+      this.configuration.iterationsCount = newIterationsCount;
       this.$emit("change");
     },
     updateEpsilon(newEpsilon: number) {
@@ -122,13 +122,13 @@ export default defineComponent({
         <div class="content">
           <h4>Iterations</h4>
           <NumberInput
-            :value="configuration.nbIterations"
+            :value="configuration.iterationsCount"
             :min="1"
             :step="1"
             :integerOnly="true"
             wrongInputMessage="Please enter a valid number of iterations"
             label="Number of iterations"
-            @update:value="updateNbIterations"
+            @update:value="updateIterationsCount"
           />
           <h4>Epsilon</h4>
           <NumberInput

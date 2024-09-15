@@ -27,12 +27,12 @@ export default defineComponent({
       return this.options.filter((option) => this.selected.has(option.id));
     },
     inputText() {
-      const nbSelected = this.selectedOptions.length;
-      if (this.allOptionsSelectedText != null && nbSelected == this.options.length) {
+      const selectedCount = this.selectedOptions.length;
+      if (this.allOptionsSelectedText != null && selectedCount == this.options.length) {
         return this.allOptionsSelectedText;
-      } else if (this.noOptionsSelectedText != null && nbSelected == 0) {
+      } else if (this.noOptionsSelectedText != null && selectedCount == 0) {
         return this.noOptionsSelectedText;
-      } else if (nbSelected == 1) {
+      } else if (selectedCount == 1) {
         return this.selectedOptions[0].text;
       } else {
         return `${this.selectedOptions.length} selected options`;

@@ -91,7 +91,7 @@ describe("Render", () => {
 
     // Check the iteration part renders correctly
     expect(subHeadings[0].text()).toBe("Iterations");
-    expect(numberInputs[0].vm.$props.value).toBe(props.configuration.nbIterations);
+    expect(numberInputs[0].vm.$props.value).toBe(props.configuration.iterationsCount);
     expect(numberInputs[0].vm.$props.min).toBe(1);
     expect(numberInputs[0].vm.$props.max).toBeUndefined();
     expect(numberInputs[0].vm.$props.step).toBe(1);
@@ -192,9 +192,9 @@ describe("Interactions", () => {
     const iterationInput = sectionContent.findAllComponents(NumberInput)[0];
 
     // Update the number of iterations input and check the number of iterations changes
-    const newNbIterations = 36;
-    iterationInput.vm.$emit("update:value", newNbIterations);
-    expect(props.configuration.nbIterations).toBe(newNbIterations);
+    const newIterationsCount = 36;
+    iterationInput.vm.$emit("update:value", newIterationsCount);
+    expect(props.configuration.iterationsCount).toBe(newIterationsCount);
     expect(advancedPanel.emitted().change).toBeDefined();
   });
 
