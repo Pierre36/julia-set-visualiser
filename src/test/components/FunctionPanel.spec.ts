@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { DOMWrapper, mount, VueWrapper } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import FractalFunction from "@/models/FractalFunction";
 import Polynomial from "@/models/Polynomial";
 import ComplexCircle from "@/models/ComplexCircle";

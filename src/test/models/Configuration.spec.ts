@@ -589,27 +589,6 @@ describe("randomize", () => {
 
 describe("toString", () => {
   it("properly returns a string representation of the configuration", () => {
-    const configuration = new Configuration(
-      "ID",
-      "Name",
-      1,
-      1,
-      new Complex(1, 0),
-      10,
-      0.1,
-      1,
-      new FractalFunction(
-        new Polynomial({}),
-        new Polynomial({}),
-        FunctionTypes.DEFAULT,
-        new Complex(1, 0)
-      ),
-      [1, 1, 1],
-      new Attractor(undefined, 1, 1, 1, 0.5, 1.5),
-      new Attractor(undefined, 1, 1, 1, 0.5, 1.5),
-      []
-    );
-
     expect(
       new Configuration(
         "ID",

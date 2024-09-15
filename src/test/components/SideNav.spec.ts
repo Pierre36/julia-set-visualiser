@@ -109,7 +109,6 @@ describe("Render", () => {
     await sidenav.vm.$nextTick();
 
     // Find DOM elements
-    const nav = sidenav.find("nav");
     const moreButton = sidenav.find({ ref: "moreButton" });
 
     // Check the moreButton is displayed
