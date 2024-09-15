@@ -59,7 +59,7 @@ export default defineComponent({
       this.selectedConfigurationId = "CUSTOM";
     },
     async getJSONConfigurations() {
-      const { default: json } = await import("./configurations.json");
+      const { default: json } = await import("@/configurations.json");
       json.forEach((jsonConfiguration) => {
         this.configurations[jsonConfiguration.id] = Configuration.fromJSON(jsonConfiguration);
       });

@@ -5,9 +5,9 @@ import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexLine from "@/models/ComplexLine";
 import ComplexEllipse from "@/models/ComplexEllipse";
-import ComboBox from "./ComboBox.vue";
-import ComplexInput from "./ComplexInput.vue";
-import NumberInput from "./NumberInput.vue";
+import ComboBox from "@/components/ComboBox.vue";
+import ComplexInput from "@/components/ComplexInput.vue";
+import NumberInput from "@/components/NumberInput.vue";
 
 export default defineComponent({
   name: "CoefficientInput",

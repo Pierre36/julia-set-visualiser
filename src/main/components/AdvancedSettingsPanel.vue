@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import Disclosure from "./Disclosure.vue";
-import ComplexInput from "./ComplexInput.vue";
-import NumberInput from "./NumberInput.vue";
+import Disclosure from "@/components/Disclosure.vue";
+import ComplexInput from "@/components/ComplexInput.vue";
+import NumberInput from "@/components/NumberInput.vue";
 
 export default defineComponent({
   name: "AdvancedSettingsPanel",

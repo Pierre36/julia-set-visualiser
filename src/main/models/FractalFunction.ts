@@ -5,7 +5,7 @@ import Complex from "@/models/Complex";
 import Coefficient from "@/models/Coefficient";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
-import type ComplexEllipse from "./ComplexEllipse";
+import type ComplexEllipse from "@/models/ComplexEllipse";
 import type CoefficientTypes from "@/constants/CoefficientTypes";
 
 /**

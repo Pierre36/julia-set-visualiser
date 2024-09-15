@@ -2,9 +2,9 @@
 import { defineComponent } from "vue";
 import Complex from "@/models/Complex";
 import Attractor from "@/models/Attractor";
-import SliderInput from "./SliderInput.vue";
-import ComplexInput from "./ComplexInput.vue";
-import NumberInput from "./NumberInput.vue";
+import SliderInput from "@/components/SliderInput.vue";
+import ComplexInput from "@/components/ComplexInput.vue";
+import NumberInput from "@/components/NumberInput.vue";
 
 export default defineComponent({
   name: "AttractorItem",
