@@ -49,44 +49,6 @@ describe("toJSON", () => {
   });
 });
 
-describe("getAtTime", () => {
-  it("properly returns the point on first half", () => {
-    const start = new Complex(3, 6);
-    const end = new Complex(4, 2);
-    const duration = 2000;
-
-    const line = new ComplexLine(start, end, duration);
-    const point = line.getAtTime(500);
-
-    expect(point.re).toBeCloseTo(3.5, 10);
-    expect(point.im).toBeCloseTo(4, 10);
-  });
-
-  it("properly returns the point at the end of first half", () => {
-    const start = new Complex(3, 6);
-    const end = new Complex(4, 2);
-    const duration = 2000;
-
-    const line = new ComplexLine(start, end, duration);
-    const point = line.getAtTime(1000);
-
-    expect(point.re).toBeCloseTo(4, 10);
-    expect(point.im).toBeCloseTo(2, 10);
-  });
-
-  it("properly returns the point on second half", () => {
-    const start = new Complex(3, 6);
-    const end = new Complex(4, 2);
-    const duration = 2000;
-
-    const line = new ComplexLine(start, end, duration);
-    const point = line.getAtTime(1500);
-
-    expect(point.re).toBeCloseTo(3.5, 10);
-    expect(point.im).toBeCloseTo(4, 10);
-  });
-});
-
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () => {
     const start = new Complex(0, 0);
@@ -174,26 +136,6 @@ describe("multipliedBy", () => {
   });
 });
 
-describe("plus", () => {
-  it("properly adds 0", () => {
-    const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    expect(line.plus(0)).toEqual(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000));
-  });
-
-  it("properly adds positive", () => {
-    const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    expect(line.plus(36)).toEqual(new ComplexLine(new Complex(39, 6), new Complex(40, 2), 2000));
-  });
-
-  it("properly adds negative", () => {
-    const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    expect(line.plus(-42)).toEqual(new ComplexLine(new Complex(-39, 6), new Complex(-38, 2), 2000));
-  });
-});
-
 describe("getRandomComplexLine", () => {
   it("properly returns a random complex line", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
@@ -216,5 +158,27 @@ describe("toString", () => {
     expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 1).toString()).toBe(
       "ComplexLine(3 + 6i, 4 + 2i, 1)"
     );
+  });
+});
+
+describe("getEllipsisParameters", () => {
+  const duration = 1000;
+
+  it("properly returns the ellipsis parameters of a line", () => {
+    const line = new ComplexLine(new Complex(0, 0), new Complex(0, 0), duration);
+
+    expect(line.getEllipsisParameters()).toEqual([duration, 0, 0, 0, 0, 0]);
+  });
+
+  it("properly returns the ellipsis parameters of a line", () => {
+    const line = new ComplexLine(new Complex(-1, 0), new Complex(1, 0), duration);
+
+    expect(line.getEllipsisParameters()).toEqual([duration, 0, 1, 0, 0, 0]);
+  });
+
+  it("properly returns the ellipsis parameters of a line", () => {
+    const line = new ComplexLine(new Complex(0, -1), new Complex(0, 1), duration);
+
+    expect(line.getEllipsisParameters()).toEqual([duration, Math.PI / 2, 1, 0, 0, 0]);
   });
 });

@@ -89,7 +89,6 @@ describe("Interactions", () => {
     // Mock the WebGpuFractalGenerator methods
     mockedFractalGenerator = vi.mocked(WebGpuFractalGenerator.prototype, true);
     mockedFractalGenerator.startAnimation = vi.fn();
-    mockedFractalGenerator.setFractalFunction = vi.fn();
     mockedFractalGenerator.updateCanvasResolution = vi.fn();
     mockedFractalGenerator.updateViewportDimensionRatio = vi.fn();
     mockedFractalGenerator.pause = vi.fn();
@@ -111,10 +110,7 @@ describe("Interactions", () => {
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
 
     // Check initialisation is called correctly
-    expect(initialise).toBeCalledWith(
-      animationFrame.find("canvas").element,
-      props.configuration.fractalFunction
-    );
+    expect(initialise).toBeCalledWith(animationFrame.find("canvas").element);
   });
 
   it("recreates the viewport when the window size changes", async () => {
@@ -300,8 +296,21 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.setFractalFunction).toBeCalledWith(
-      props.configuration.fractalFunction
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.IS_NEWTON,
+      1
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      props.configuration.fractalFunction.newtonCoefficient.getEllipsisParameters()
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.NUMERATOR,
+      props.configuration.fractalFunction.numerator.getCoefficientsParameters()
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.DENOMINATOR,
+      props.configuration.fractalFunction.denominator.getCoefficientsParameters()
     );
   });
 

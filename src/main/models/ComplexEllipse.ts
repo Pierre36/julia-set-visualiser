@@ -54,25 +54,6 @@ export default class ComplexEllipse {
   }
 
   /**
-   * Get the value of the point on the ellipse at the given time
-   *
-   * @param time time in milliseconds
-   * @returns the value of the point on the ellipse at the given time
-   */
-  public getAtTime(time: number): Complex {
-    const animTime = ((time % this.duration) / this.duration) * 2 * Math.PI;
-    const rotationAngleRadians = (this.rotationAngle * Math.PI) / 180;
-    const rotationComplex = new Complex(
-      Math.cos(rotationAngleRadians),
-      Math.sin(rotationAngleRadians)
-    );
-    return new Complex(
-      this.center.re + this.halfWidth * Math.cos(animTime),
-      this.center.im + this.halfHeight * Math.sin(animTime)
-    ).multipliedByComplex(rotationComplex);
-  }
-
-  /**
    * Compute a MathML representation of the complex ellipse
    *
    * @param power power associated with the coefficient
@@ -132,22 +113,6 @@ export default class ComplexEllipse {
   }
 
   /**
-   * Compute and return the addition of the complex ellipse and a number
-   *
-   * @param term number to add
-   * @returns the result of the addition
-   */
-  public plus(term: number): ComplexEllipse {
-    return new ComplexEllipse(
-      this.center.plus(term),
-      this.halfWidth,
-      this.halfHeight,
-      this.rotationAngle,
-      this.duration
-    );
-  }
-
-  /**
    * Return a random complex ellipse with the provided settings
    *
    * @param centerModulusMinMax object containing the min and max value of the center modulus
@@ -180,5 +145,23 @@ export default class ComplexEllipse {
    */
   public toString(): string {
     return `ComplexEllipse(${this.center}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
+  }
+
+  // TODO Add test
+  /**
+   * Get the ellipsis parameters corresponding to the complex ellipsis (duration, angle, half-width,
+   * half-height, offset modulus and offset argument)
+   *
+   * @returns the ellipsis parameters
+   */
+  public getEllipsisParameters(): number[] {
+    return [
+      this.duration,
+      this.rotationAngle,
+      this.halfWidth,
+      this.halfHeight,
+      this.center.mod(),
+      this.center.arg(),
+    ];
   }
 }

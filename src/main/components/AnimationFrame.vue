@@ -7,6 +7,7 @@ import AnimationOverlay from "@/components/AnimationOverlay.vue";
 import Complex from "@/models/Complex";
 import FractalFunction from "@/models/FractalFunction";
 import Attractor from "@/models/Attractor";
+import FunctionTypes from "@/constants/FunctionTypes";
 
 export default defineComponent({
   name: "AnimationFrame",
@@ -50,8 +51,23 @@ export default defineComponent({
       this.fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, newJuliaBound);
     },
     "configuration.fractalFunction": {
-      handler(_: FractalFunction) {
-        this.fractalGenerator?.setFractalFunction(this.configuration.fractalFunction.copy());
+      handler(newFractalFunction: FractalFunction) {
+        this.fractalGenerator?.updateParameter(
+          FractalGeneratorParameters.IS_NEWTON,
+          newFractalFunction.functionType == FunctionTypes.NEWTON ? 1 : 0
+        );
+        this.fractalGenerator?.updateParameter(
+          FractalGeneratorParameters.NEWTON_COEFFICIENT,
+          newFractalFunction.newtonCoefficient.getEllipsisParameters()
+        );
+        this.fractalGenerator?.updateParameter(
+          FractalGeneratorParameters.NUMERATOR,
+          newFractalFunction.numerator.getCoefficientsParameters()
+        );
+        this.fractalGenerator?.updateParameter(
+          FractalGeneratorParameters.DENOMINATOR,
+          newFractalFunction.denominator.getCoefficientsParameters()
+        );
       },
       deep: true,
     },
@@ -112,8 +128,7 @@ export default defineComponent({
     const configuration = Configuration.emptyConfiguration("", "");
     configuration.fillWith(this.configuration);
     const fractalGeneratorInit = await WebGpuFractalGenerator.initialise(
-      this.$refs.animationCanvas as HTMLCanvasElement,
-      configuration.fractalFunction
+      this.$refs.animationCanvas as HTMLCanvasElement
     );
     if (fractalGeneratorInit instanceof Error) {
       this.error = fractalGeneratorInit;

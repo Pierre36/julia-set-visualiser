@@ -4,7 +4,6 @@ import ComplexCircle from "@/models/ComplexCircle";
 import Complex from "@/models/Complex";
 import Coefficient from "@/models/Coefficient";
 import ComplexLine from "@/models/ComplexLine";
-import ComplexMultiplication from "@/models/ComplexMultiplication";
 import RandomUtils from "@/utils/RandomUtils";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
@@ -21,11 +20,6 @@ describe("constructor", () => {
     expect(polynomial.degree).toBe(2);
     expect(polynomial.getCoefficient(0)).toEqual(coefficients[0]);
     expect(polynomial.getCoefficient(2)).toEqual(coefficients[2]);
-    expect(polynomial.getCoefficientsCount()).toEqual(2);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]);
   });
 });
 
@@ -104,11 +98,6 @@ describe("setCoefficient", () => {
       new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2 })
     );
     expect(polynomial.degree).toBe(2);
-    expect(polynomial.getCoefficientsCount()).toBe(3);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]);
 
     const newCoefficient5 = new Complex(0, 0);
     polynomial.setCoefficient(5, newCoefficient5);
@@ -117,11 +106,6 @@ describe("setCoefficient", () => {
       new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2, 5: newCoefficient5 })
     );
     expect(polynomial.degree).toBe(5);
-    expect(polynomial.getCoefficientsCount()).toBe(4);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]);
   });
 
   it("properly throws error when power too high", () => {
@@ -143,21 +127,11 @@ describe("removeCoefficient", () => {
 
     expect(polynomial).toEqual(new Polynomial({ 1: coefficient1, 2: coefficient2 }));
     expect(polynomial.degree).toBe(2);
-    expect(polynomial.getCoefficientsCount()).toBe(2);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]);
 
     polynomial.removeCoefficient(2);
 
     expect(polynomial).toEqual(new Polynomial({ 1: coefficient1 }));
     expect(polynomial.degree).toBe(1);
-    expect(polynomial.getCoefficientsCount()).toBe(1);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ]);
   });
 
   it("properly removes coefficient on full polynomial", () => {
@@ -204,11 +178,6 @@ describe("removeCoefficient", () => {
       })
     );
     expect(polynomial.degree).toBe(14);
-    expect(polynomial.getCoefficientsCount()).toBe(15);
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0,
-      0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 0,
-    ]);
   });
 
   it("properly throws error when power too high", () => {
@@ -248,73 +217,6 @@ describe("toMathML", () => {
   });
 });
 
-describe("updateWithTime", () => {
-  it("properly updates", () => {
-    const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
-    const time = 1000;
-    polynomial.updateWithTime(time);
-
-    const coefficient0AtTime = coefficient0.getAtTime(time);
-    const coefficient1AtTime = coefficient1.getAtTime(time);
-    const coefficient2AtTime = coefficient2.getAtTime(time);
-
-    expect(polynomial.getArrayRepresentation()).toEqual([
-      coefficient0AtTime.mod(),
-      coefficient0AtTime.arg(),
-      0,
-      coefficient1AtTime.mod(),
-      coefficient1AtTime.arg(),
-      1,
-      coefficient2AtTime.mod(),
-      coefficient2AtTime.arg(),
-      2,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ]);
-  });
-});
-
 describe("getDerivative", () => {
   it("properly computes derivative", () => {
     const coefficient0 = new Complex(3, 6);
@@ -325,25 +227,6 @@ describe("getDerivative", () => {
 
     expect(polynomial.getDerivative()).toEqual(
       new Polynomial({ 0: coefficient1, 1: coefficient2.multipliedBy(2) })
-    );
-  });
-});
-
-describe("getNewtonNumerator", () => {
-  it("properly computes derivative", () => {
-    const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-    const newtonCoefficient = new Complex(2, 0);
-
-    const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
-
-    expect(polynomial.getNewtonNumerator(newtonCoefficient)).toEqual(
-      new Polynomial({
-        0: ComplexMultiplication.of(coefficient0, newtonCoefficient.multipliedBy(-1)),
-        1: ComplexMultiplication.of(coefficient1, newtonCoefficient.multipliedBy(-1).plus(1)),
-        2: ComplexMultiplication.of(coefficient2, newtonCoefficient.multipliedBy(-1).plus(2)),
-      })
     );
   });
 });
@@ -382,30 +265,6 @@ describe("copy", () => {
 
     expect(polynomial.copy()).toEqual(polynomial);
     expect(polynomial.copy()).not.toBe(polynomial);
-  });
-});
-
-describe("getArrayRepresentation", () => {
-  it("properly gets array representation", () => {
-    const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
-
-    expect(polynomial.getArrayRepresentation()).toEqual(polynomial.getArrayRepresentation());
-  });
-});
-
-describe("getNbCoefficients", () => {
-  it("properly gets the number of coefficients", () => {
-    const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
-
-    const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
-
-    expect(polynomial.getCoefficientsCount()).toEqual(polynomial.getCoefficientsCount());
   });
 });
 

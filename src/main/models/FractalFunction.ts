@@ -3,7 +3,6 @@ import ComplexCircle from "@/models/ComplexCircle";
 import ComplexLine from "@/models/ComplexLine";
 import Complex from "@/models/Complex";
 import Coefficient from "@/models/Coefficient";
-import ComplexMultiplication from "@/models/ComplexMultiplication";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import type ComplexEllipse from "./ComplexEllipse";
@@ -13,16 +12,13 @@ import type CoefficientTypes from "@/constants/CoefficientTypes";
  * Representation of a function.
  */
 export default class FractalFunction {
-  /** Numerator of the Newton fraction if the function is of type Newton */
-  public newtonNumerator: Polynomial;
-
   /**
    * Fractal function constructor
    *
    * @param numerator numerator of the function
    * @param denominator denominator of the function
    * @param functionType type of the function
-   * @param newtonCoefficient newton
+   * @param newtonCoefficient newton coefficient
    * coefficient of the function when it is a function of type Newton
    */
   public constructor(
@@ -30,13 +26,7 @@ export default class FractalFunction {
     public denominator: Polynomial,
     public functionType: FunctionTypes,
     public newtonCoefficient: ComplexCircle | ComplexLine | Complex | ComplexEllipse
-  ) {
-    if (this.functionType == FunctionTypes.NEWTON) {
-      this.newtonNumerator = this.numerator.getNewtonNumerator(this.newtonCoefficient);
-    } else {
-      this.newtonNumerator = new Polynomial({});
-    }
-  }
+  ) {}
 
   /**
    * Create a function from a JSON
@@ -113,17 +103,8 @@ export default class FractalFunction {
   ) {
     if (inNumerator) {
       this.numerator.setCoefficient(power, coefficient);
-      if (this.functionType == FunctionTypes.NEWTON) {
-        this.newtonNumerator.setCoefficient(
-          power,
-          ComplexMultiplication.of(
-            coefficient,
-            this.newtonCoefficient.multipliedBy(-1).plus(Number(power))
-          )
-        );
-        if (power >= 1) {
-          this.denominator.setCoefficient(power - 1, coefficient.multipliedBy(power));
-        }
+      if (this.functionType == FunctionTypes.NEWTON && power >= 1) {
+        this.denominator.setCoefficient(power - 1, coefficient.multipliedBy(power));
       }
     } else {
       if (this.functionType == FunctionTypes.FRACTION) {
@@ -140,18 +121,15 @@ export default class FractalFunction {
    * Remove the coefficient at a given power in the numerator or the denominator
    *
    * @param power power associated to the wanted coefficient.
-   * @param inNumerator`true` if the coefficient is in the numerator, `false` otherwise
+   * @param inNumerator `true` if the coefficient is in the numerator, `false` otherwise
    * @throws an error if the power is superior to MAX_DEGREE
    * @throws an error if the coefficient should be removed from the numerator when the function type is NEWTON or DEFAULT
    */
   public removeCoefficient(power: number, inNumerator: boolean) {
     if (inNumerator) {
       this.numerator.removeCoefficient(power);
-      if (this.functionType == FunctionTypes.NEWTON) {
-        if (power >= 1) {
-          this.denominator.removeCoefficient(power - 1);
-        }
-        this.newtonNumerator.removeCoefficient(power);
+      if (this.functionType == FunctionTypes.NEWTON && power >= 1) {
+        this.denominator.removeCoefficient(power - 1);
       }
     } else {
       if (this.functionType == FunctionTypes.FRACTION) {
@@ -165,59 +143,6 @@ export default class FractalFunction {
   }
 
   /**
-   * Evaluate the function at the given time
-   *
-   * @param time time at which the function is evaluated
-   */
-  public updateWithTime(time: number) {
-    this.numerator.updateWithTime(time);
-    this.denominator.updateWithTime(time);
-    if (this.functionType == FunctionTypes.NEWTON) {
-      this.newtonNumerator.updateWithTime(time);
-    }
-  }
-
-  /**
-   * Get the number of coefficients in the numerator
-   *
-   * @returns the number of coefficients in the numerator
-   */
-  public getNumeratorCoefficientsCount(): number {
-    return this.numerator.getCoefficientsCount();
-  }
-
-  /**
-   * Get the number of coefficients in the denominator
-   *
-   * @returns the number of coefficients in the denominator
-   */
-  public getDenominatorCoefficientsCount(): number {
-    return this.denominator.getCoefficientsCount();
-  }
-
-  /**
-   * Get the array representation of the numerator
-   *
-   * @returns the array representation of the numerator
-   */
-  public getNumeratorArray(): number[] {
-    if (this.functionType == FunctionTypes.NEWTON) {
-      return this.newtonNumerator.getArrayRepresentation();
-    } else {
-      return this.numerator.getArrayRepresentation();
-    }
-  }
-
-  /**
-   * Get the array representation of the denominator
-   *
-   * @returns the array representation of the denominator
-   */
-  public getDenominatorArray(): number[] {
-    return this.denominator.getArrayRepresentation();
-  }
-
-  /**
    * Set the function type
    *
    * @param newFunctionType new function type
@@ -228,14 +153,12 @@ export default class FractalFunction {
     if (newFunctionType == FunctionTypes.NEWTON) {
       this.newtonCoefficient = new Complex(1, 0);
       this.denominator = this.numerator.getDerivative();
-      this.newtonNumerator = this.numerator.getNewtonNumerator(this.newtonCoefficient);
     } else if (
       newFunctionType == FunctionTypes.DEFAULT ||
       newFunctionType == FunctionTypes.FRACTION
     ) {
       this.denominator = new Polynomial({ 0: new Complex(1, 0) });
       this.newtonCoefficient = new Complex(0, 0);
-      this.newtonNumerator = new Polynomial({});
     } else {
       throw Error(
         `The function type must be "${FunctionTypes.DEFAULT}",  "${FunctionTypes.NEWTON}" or "${FunctionTypes.FRACTION}", got ${newFunctionType}`
@@ -252,9 +175,6 @@ export default class FractalFunction {
     newNewtonCoefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse
   ) {
     this.newtonCoefficient = newNewtonCoefficient;
-    if (this.functionType == FunctionTypes.NEWTON) {
-      this.newtonNumerator = this.numerator.getNewtonNumerator(newNewtonCoefficient);
-    }
   }
 
   /**

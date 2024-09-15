@@ -17,15 +17,13 @@ const INFINITY: f32 = 10000000000;
 // const DEFAULT_VAL_OFFSET: f32 = 1.4;
 // const JULIA_BOUND: f32 = 3;
 
-struct FunctionParameters {
-  numerator_coefs_count: u32,
-  denominator_coefs_count: u32,
-};
-
-struct Coefficient {
-  r: f32,
-  theta: f32,
-  power: f32,
+struct EllipsisParameters {
+  duration: f32,
+  angle: f32,
+  half_width: f32,
+  half_height: f32,
+  offset_mod: f32,
+  offset_arg: f32,
 };
 
 struct ColourParameters {
@@ -51,27 +49,28 @@ struct Attractor {
   @align(16) colour: ColourParameters,
 };
 
-@group(0) @binding(1) var<uniform> function_params: FunctionParameters;
-@group(0) @binding(2) var<storage> fraction: array<Coefficient>;
-@group(0) @binding(3) var<uniform> fractal_params: FractalParameters;
-@group(0) @binding(4) var<storage> attractors: array<Attractor>;
+@group(0) @binding(4) var<storage, read_write> fraction: array<vec2f>;
+@group(0) @binding(5) var<uniform> fractal_params: FractalParameters;
+@group(0) @binding(6) var<storage> attractors: array<Attractor>;
 
 fn polar(re: f32, im: f32) -> vec2f {
   return vec2f(sqrt(re * re + im * im), atan2(im, re));
 }
 
-fn evaluatePolynomial(z: vec2f, coefs_count: u32, offset: u32) -> vec2f {
+fn evaluatePolynomial(z: vec2f, offset: u32) -> vec2f {
   var re: f32 = 0;
   var im: f32 = 0;
 
   var r: f32 = 0;
   var theta: f32 = 0;
-  for (var k = offset; k < coefs_count + offset; k++) {
-    let coef = fraction[k];
-    r = select(coef.r * pow(z.x, coef.power), coef.r, coef.power == 0);
-    theta = coef.power * z.y + coef.theta;
-    re += r * cos(theta);
-    im += r * sin(theta);
+  for (var k: f32 = 0; k < 16; k = k + 1) {
+    let coef = fraction[u32(k) + offset];
+    if (coef.x > 0) {
+      r = select(coef.x * pow(z.x, k), coef.x, k == 0);
+      theta = k * z.y + coef.y;
+      re += r * cos(theta);
+      im += r * sin(theta);
+    }
   }
 
   return polar(re, im);
@@ -85,8 +84,8 @@ fn applyFunction(z: vec2f) -> vec2f {
   // TODO /!\ Returning infinity may not always be OK (for exemple for fractions)
   return select(
     divide(
-      evaluatePolynomial(z, function_params.numerator_coefs_count, 0), 
-      evaluatePolynomial(z, function_params.denominator_coefs_count, 16)
+      evaluatePolynomial(z, 0), 
+      evaluatePolynomial(z, 16)
     ), 
     vec2f(INFINITY, z.y), 
     z.x >= INFINITY

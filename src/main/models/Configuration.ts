@@ -5,7 +5,6 @@ import FractalFunction from "@/models/FractalFunction";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import type CoefficientTypes from "@/constants/CoefficientTypes";
-import Coefficient from "./Coefficient";
 
 /**
  * Configuration class for the Julia Set Visualizer configuration.

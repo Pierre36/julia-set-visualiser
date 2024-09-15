@@ -4,7 +4,6 @@ import Polynomial from "@/models/Polynomial";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import Coefficient from "@/models/Coefficient";
-import ComplexMultiplication from "@/models/ComplexMultiplication";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import CoefficientTypes from "@/constants/CoefficientTypes";
@@ -27,7 +26,6 @@ describe("constructor", () => {
     expect(fractalFunction.denominator).toBe(denominator);
     expect(fractalFunction.functionType).toBe(functionType);
     expect(fractalFunction.newtonCoefficient).toBe(newtonCoefficient);
-    expect(fractalFunction.newtonNumerator).toEqual(new Polynomial({}));
   });
 
   it("properly constructs newton functions", () => {
@@ -49,12 +47,6 @@ describe("constructor", () => {
     expect(fractalFunction.denominator).toBe(denominator);
     expect(fractalFunction.functionType).toBe(functionType);
     expect(fractalFunction.newtonCoefficient).toBe(newtonCoefficient);
-    expect(fractalFunction.newtonNumerator).toEqual(
-      new Polynomial({
-        0: ComplexMultiplication.of(coefficient0, newtonCoefficient.multipliedBy(-1)),
-        2: ComplexMultiplication.of(coefficient2, newtonCoefficient.multipliedBy(-1).plus(2)),
-      })
-    );
   });
 });
 
@@ -344,152 +336,6 @@ describe("removeCoefficient", () => {
     expect(fractalFunction).toEqual(
       new FractalFunction(numerator, new Polynomial({}), functionType, newtonCoefficient)
     );
-  });
-});
-
-describe("updateWithTime", () => {
-  it("properly updates default function", () => {
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({});
-    const functionType = FunctionTypes.DEFAULT;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator.copy(),
-      denominator.copy(),
-      functionType,
-      newtonCoefficient
-    );
-
-    const time = 1000;
-    fractalFunction.updateWithTime(time);
-    numerator.updateWithTime(time);
-    denominator.updateWithTime(time);
-
-    expect(fractalFunction.numerator).toEqual(numerator);
-    expect(fractalFunction.denominator).toEqual(denominator);
-  });
-
-  it("properly updates Newton function", () => {
-    const coefficient2 = new Complex(3, 6);
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = FunctionTypes.NEWTON;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator.copy(),
-      denominator.copy(),
-      functionType,
-      newtonCoefficient
-    );
-
-    const time = 1000;
-    fractalFunction.updateWithTime(time);
-    numerator.updateWithTime(time);
-    denominator.updateWithTime(time);
-    const newtonNumerator = new Polynomial({
-      2: ComplexMultiplication.of(coefficient2, newtonCoefficient.multipliedBy(-1).plus(2)),
-    });
-    newtonNumerator.updateWithTime(time);
-
-    expect(fractalFunction.numerator).toEqual(numerator);
-    expect(fractalFunction.denominator).toEqual(denominator);
-    expect(fractalFunction.newtonNumerator).toEqual(newtonNumerator);
-  });
-});
-
-describe("getNumeratorNbCoefficients", () => {
-  it("properly gets the number of coefficients of the numerator", () => {
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({});
-    const functionType = FunctionTypes.DEFAULT;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator,
-      denominator,
-      functionType,
-      newtonCoefficient
-    );
-
-    expect(fractalFunction.getNumeratorCoefficientsCount()).toEqual(
-      numerator.getCoefficientsCount()
-    );
-  });
-});
-
-describe("getDenominatorNbCoefficients", () => {
-  it("properly gets the number of coefficients of the denominator", () => {
-    const numerator = new Polynomial({});
-    const denominator = new Polynomial({ 2: new Complex(3, 6) });
-    const functionType = FunctionTypes.DEFAULT;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator,
-      denominator,
-      functionType,
-      newtonCoefficient
-    );
-
-    expect(fractalFunction.getDenominatorCoefficientsCount()).toEqual(
-      denominator.getCoefficientsCount()
-    );
-  });
-});
-
-describe("getNumeratorArray", () => {
-  it("properly gets an array representing the numerator in default function", () => {
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({});
-    const functionType = FunctionTypes.DEFAULT;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator,
-      denominator,
-      functionType,
-      newtonCoefficient
-    );
-
-    expect(fractalFunction.getNumeratorArray()).toEqual(numerator.getArrayRepresentation());
-  });
-
-  it("properly gets an array representing the numerator in Newton function", () => {
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({ 1: new Complex(6, 12) });
-    const functionType = FunctionTypes.NEWTON;
-    const newtonCoefficient = new Complex(1, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator,
-      denominator,
-      functionType,
-      newtonCoefficient
-    );
-
-    expect(fractalFunction.getNumeratorArray()).toEqual(
-      fractalFunction.newtonNumerator.getArrayRepresentation()
-    );
-  });
-});
-
-describe("getDenominatorArray", () => {
-  it("properly gets an array representing the denominator", () => {
-    const numerator = new Polynomial({ 2: new Complex(3, 6) });
-    const denominator = new Polynomial({});
-    const functionType = FunctionTypes.DEFAULT;
-    const newtonCoefficient = new Complex(0, 0);
-
-    const fractalFunction = new FractalFunction(
-      numerator,
-      denominator,
-      functionType,
-      newtonCoefficient
-    );
-
-    expect(fractalFunction.getDenominatorArray()).toEqual(denominator.getArrayRepresentation());
   });
 });
 

@@ -69,38 +69,6 @@ describe("toJSON", () => {
   });
 });
 
-describe("getAtTime", () => {
-  it("properly returns the point on the ellipsis at the given time", () => {
-    const center = new Complex(0, 0);
-    const halfWidth = 2;
-    const halfHeight = 1;
-    const rotationAngle = 45;
-    const duration = 2000;
-
-    const ellipse = new ComplexEllipse(center, halfWidth, halfHeight, rotationAngle, duration);
-
-    let point = ellipse.getAtTime(0);
-    expect(point.re).toBeCloseTo(Math.sqrt(2), 10);
-    expect(point.im).toBeCloseTo(Math.sqrt(2), 10);
-
-    point = ellipse.getAtTime(500);
-    expect(point.re).toBeCloseTo(-Math.sqrt(2) / 2, 10);
-    expect(point.im).toBeCloseTo(Math.sqrt(2) / 2, 10);
-
-    point = ellipse.getAtTime(1000);
-    expect(point.re).toBeCloseTo(-Math.sqrt(2), 10);
-    expect(point.im).toBeCloseTo(-Math.sqrt(2), 10);
-
-    point = ellipse.getAtTime(1500);
-    expect(point.re).toBeCloseTo(Math.sqrt(2) / 2, 10);
-    expect(point.im).toBeCloseTo(-Math.sqrt(2) / 2, 10);
-
-    point = ellipse.getAtTime(2000);
-    expect(point.re).toBeCloseTo(Math.sqrt(2), 10);
-    expect(point.im).toBeCloseTo(Math.sqrt(2), 10);
-  });
-});
-
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () => {
     const ellipse = new ComplexEllipse(new Complex(0, 0), 36, 42, 16, 0);
@@ -163,26 +131,6 @@ describe("multipliedBy", () => {
     expect(ellipse.multipliedBy(-5)).toEqual(
       new ComplexEllipse(new Complex(-15, -30), -15, -20, 16, 2000)
     );
-  });
-});
-
-describe("plus", () => {
-  it("properly adds 0", () => {
-    const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
-
-    expect(ellipse.plus(0)).toEqual(new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000));
-  });
-
-  it("properly adds positive", () => {
-    const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
-
-    expect(ellipse.plus(36)).toEqual(new ComplexEllipse(new Complex(39, 6), 36, 42, 16, 2000));
-  });
-
-  it("properly adds negative", () => {
-    const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
-
-    expect(ellipse.plus(-42)).toEqual(new ComplexEllipse(new Complex(-39, 6), 36, 42, 16, 2000));
   });
 });
 

@@ -442,60 +442,6 @@ describe("multipliedBy", () => {
   });
 });
 
-describe("multipliedByComplex", () => {
-  it("properly multiplies by 0", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedByComplex(new Complex(0, 0))).toEqual(new Complex(0, 0));
-  });
-
-  it("properly multiplies by real", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedByComplex(new Complex(-10, 0))).toEqual(new Complex(-30, -60));
-  });
-
-  it("properly multiplies by imaginary", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedByComplex(new Complex(0, 2))).toEqual(new Complex(-12, 6));
-  });
-
-  it("properly multiplies by any complex", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedByComplex(new Complex(4, 2))).toEqual(new Complex(0, 30));
-  });
-});
-
-describe("plus", () => {
-  it("properly adds 0", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.plus(0)).toEqual(new Complex(3, 6));
-  });
-
-  it("properly adds positive", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.plus(36)).toEqual(new Complex(39, 6));
-  });
-
-  it("properly adds negative", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.plus(-42)).toEqual(new Complex(-39, 6));
-  });
-});
-
-describe("getAtTime", () => {
-  it("properly returns itself", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.getAtTime(0)).toEqual(new Complex(3, 6));
-  });
-});
-
 describe("getRandomComplex", () => {
   it("properly returns a random complex number", () => {
     RandomUtils.floatBetween = vi.fn(() => 1);

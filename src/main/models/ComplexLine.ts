@@ -42,27 +42,6 @@ export default class ComplexLine {
   }
 
   /**
-   * Get the value of the point on the line at the given time
-   *
-   * @param time time in milliseconds
-   * @returns the value of the point on the line at the given time
-   */
-  public getAtTime(time: number): Complex {
-    const animTime = (time % this.duration) / this.duration;
-    if (animTime < 0.5) {
-      return new Complex(
-        this.start.re + 2 * animTime * (this.end.re - this.start.re),
-        this.start.im + 2 * animTime * (this.end.im - this.start.im)
-      );
-    } else {
-      return new Complex(
-        this.end.re - (2 * animTime - 1) * (this.end.re - this.start.re),
-        this.end.im - (2 * animTime - 1) * (this.end.im - this.start.im)
-      );
-    }
-  }
-
-  /**
    * Compute a MathML representation of the complex line
    *
    * @param power power associated with the coefficient
@@ -114,16 +93,6 @@ export default class ComplexLine {
   }
 
   /**
-   * Compute and return the addition of the complex line and a number
-   *
-   * @param term number to add
-   * @returns the result of the addition
-   */
-  public plus(term: number): ComplexLine {
-    return new ComplexLine(this.start.plus(term), this.end.plus(term), this.duration);
-  }
-
-  /**
    * Return a random complex line with the provided settings
    *
    * @param startEndModulusMinMax object containing the min and max value of the radius
@@ -148,5 +117,34 @@ export default class ComplexLine {
    */
   public toString(): string {
     return `ComplexLine(${this.start}, ${this.end}, ${this.duration})`;
+  }
+
+  // TODO Add test
+  /**
+   * Get the ellipsis parameters corresponding to the complex line (duration, angle, half-width,
+   * half-height, offset modulus and offset argument)
+   *
+   * @returns the ellipsis parameters
+   */
+  public getEllipsisParameters(): number[] {
+    const center = this.getCenter();
+    const centredLineEnd = new Complex(this.end.re - center.re, this.end.im - center.im);
+    return [
+      this.duration,
+      centredLineEnd.arg(),
+      centredLineEnd.mod(),
+      0,
+      center.mod(),
+      center.arg(),
+    ];
+  }
+
+  /**
+   * Get the center of the line
+   *
+   * @returns the center of the line
+   */
+  private getCenter(): Complex {
+    return new Complex((this.start.re + this.end.re) / 2, (this.start.im + this.end.im) / 2);
   }
 }

@@ -49,32 +49,6 @@ describe("toJSON", () => {
   });
 });
 
-describe("getAtTime", () => {
-  it("properly works for center 0", () => {
-    const center = new Complex(0, 0);
-    const radius = 2;
-    const duration = 2000;
-
-    const circle = new ComplexCircle(center, radius, duration);
-    const point = circle.getAtTime(1000);
-
-    expect(point.re).toBeCloseTo(-2, 10);
-    expect(point.im).toBeCloseTo(0, 10);
-  });
-
-  it("properly works for any center", () => {
-    const center = new Complex(3, 6);
-    const radius = 2;
-    const duration = 2000;
-
-    const circle = new ComplexCircle(center, radius, duration);
-    const point = circle.getAtTime(1000);
-
-    expect(point.re).toBeCloseTo(1, 10);
-    expect(point.im).toBeCloseTo(6, 10);
-  });
-});
-
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () => {
     const center = new Complex(0, 0);
@@ -153,26 +127,6 @@ describe("multipliedBy", () => {
     const circle = new ComplexCircle(new Complex(3, 6), 3, 2000);
 
     expect(circle.multipliedBy(-5)).toEqual(new ComplexCircle(new Complex(-15, -30), -15, 2000));
-  });
-});
-
-describe("plus", () => {
-  it("properly adds 0", () => {
-    const circle = new ComplexCircle(new Complex(3, 6), 3, 2000);
-
-    expect(circle.plus(0)).toEqual(new ComplexCircle(new Complex(3, 6), 3, 2000));
-  });
-
-  it("properly adds positive", () => {
-    const circle = new ComplexCircle(new Complex(3, 6), 3, 2000);
-
-    expect(circle.plus(36)).toEqual(new ComplexCircle(new Complex(39, 6), 3, 2000));
-  });
-
-  it("properly adds negative", () => {
-    const circle = new ComplexCircle(new Complex(3, 6), 3, 2000);
-
-    expect(circle.plus(-42)).toEqual(new ComplexCircle(new Complex(-39, 6), 3, 2000));
   });
 });
 

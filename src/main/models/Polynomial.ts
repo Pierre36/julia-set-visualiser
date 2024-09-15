@@ -3,7 +3,6 @@ import ComplexLine from "@/models/ComplexLine";
 import Complex from "@/models/Complex";
 import ComplexEllipse from "@/models/ComplexEllipse";
 import Coefficient from "@/models/Coefficient";
-import ComplexMultiplication from "@/models/ComplexMultiplication";
 import RandomUtils from "@/utils/RandomUtils";
 import type CoefficientTypes from "@/constants/CoefficientTypes";
 
@@ -24,17 +23,11 @@ export default class Polynomial {
   /** Degree of the polynomial */
   public degree: number;
 
-  /** Array representation of the polynomial */
-  private arrayRepresentation: number[];
-
   /** Coefficients of the polynomial */
   private coefficients: Record<
     number,
     ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined
   >;
-
-  /** Number of coefficients in the polynomial */
-  private coefficientsCount: number;
 
   /**
    * Polynomial constructor
@@ -45,11 +38,6 @@ export default class Polynomial {
     coefficients: Record<number, ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined>
   ) {
     this.degree = 0;
-    this.arrayRepresentation = [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ];
-    this.coefficientsCount = 0;
     this.coefficients = {};
     for (let power = 0; power <= MAX_DEGREE; power++) {
       const coefficient = coefficients[power];
@@ -126,11 +114,6 @@ export default class Polynomial {
       throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
     }
 
-    if (!this.coefficients[power]) {
-      this.arrayRepresentation[3 * this.coefficientsCount + 2] = Number(power);
-      this.coefficientsCount += 1;
-    }
-
     this.coefficients[power] = coefficient;
     this.degree = Math.max(this.degree, power);
   }
@@ -145,7 +128,7 @@ export default class Polynomial {
     console.debug("[>>] Trying to remove coefficient at power %d from %s...", power, this);
     if (0 > power || power > MAX_DEGREE) {
       console.debug(
-        "[KO] Tried to remove a coefficient at power %d but max power must be in [%d, %d]",
+        "[KO] Tried to remove a coefficient at power %d but power must be in [%d, %d]",
         power,
         0,
         MAX_DEGREE
@@ -161,26 +144,6 @@ export default class Polynomial {
       this.recalculateDegree();
     }
 
-    // Update the array representation
-    let rank = 0;
-    for (let n = 0; n < this.coefficientsCount; n++) {
-      if (this.arrayRepresentation[3 * n + 2] == power) {
-        rank = n;
-        break;
-      }
-    }
-    for (let n = rank; n < this.coefficientsCount; n++) {
-      if (n == MAX_DEGREE) {
-        this.arrayRepresentation[3 * n] = 0;
-        this.arrayRepresentation[3 * n + 1] = 0;
-        this.arrayRepresentation[3 * n + 2] = 0;
-      } else {
-        this.arrayRepresentation[3 * n] = this.arrayRepresentation[3 * (n + 1)];
-        this.arrayRepresentation[3 * n + 1] = this.arrayRepresentation[3 * (n + 1) + 1];
-        this.arrayRepresentation[3 * n + 2] = this.arrayRepresentation[3 * (n + 1) + 2];
-      }
-    }
-    this.coefficientsCount -= 1;
     console.debug("[OK] Successfully removed coefficient. The polynomial is now %s.", this);
   }
 
@@ -253,20 +216,6 @@ export default class Polynomial {
   }
 
   /**
-   * Evaluate the polynomial at the given time
-   *
-   * @param time time at which the polynomial is evaluated
-   */
-  public updateWithTime(time: number): void {
-    for (let n = 0; n < this.coefficientsCount; n++) {
-      const power = this.arrayRepresentation[3 * n + 2];
-      const coefficient = this.getCoefficient(power).getAtTime(time);
-      this.arrayRepresentation[3 * n] = coefficient.mod();
-      this.arrayRepresentation[3 * n + 1] = coefficient.arg();
-    }
-  }
-
-  /**
    * Compute and return the derivative of the polynomial
    *
    * @returns {Polynomial} The derivative of the polynomial
@@ -279,29 +228,6 @@ export default class Polynomial {
       }
     });
     return derivative;
-  }
-
-  /**
-   * Compute and return the Newton numerator for this polynomial
-   *
-   * @param newtonCoefficient the Newton coefficient
-   * @returns the newton numerator for the polynomial
-   */
-  public getNewtonNumerator(
-    newtonCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine
-  ): Polynomial {
-    const newtonNumerator = new Polynomial({});
-    const minusNewtonCoefficient = newtonCoefficient.multipliedBy(-1);
-    this.getCoefficientPowers().forEach((power) => {
-      newtonNumerator.setCoefficient(
-        power,
-        ComplexMultiplication.of(
-          this.getCoefficient(power),
-          minusNewtonCoefficient.plus(Number(power))
-        )
-      );
-    });
-    return newtonNumerator;
   }
 
   /**
@@ -343,24 +269,6 @@ export default class Polynomial {
       }
     }
     return newPolynomial;
-  }
-
-  /**
-   * Get the array representation of the polynomial
-   *
-   * @returns the array representation of the polynomial
-   */
-  public getArrayRepresentation(): number[] {
-    return this.arrayRepresentation;
-  }
-
-  /**
-   * Get the number of coefficients of the polynomial
-   *
-   * @returns the number of coefficients of the polynomial
-   */
-  public getCoefficientsCount(): number {
-    return this.coefficientsCount;
   }
 
   /**
@@ -449,5 +357,17 @@ export default class Polynomial {
       string = "0";
     }
     return `Polynomial(${string})`;
+  }
+
+  /**
+   * Get the polynomial coefficients parameters
+   *
+   * @returns the ellipsis equation parameters of the polynomial coefficients
+   */
+  public getCoefficientsParameters(): number[] {
+    return Object.keys(this.coefficients)
+      .map(Number)
+      .sort((a, b) => a - b)
+      .flatMap((power) => this.coefficients[power]?.getEllipsisParameters() || [0, 0, 0, 0, 0, 0]);
   }
 }

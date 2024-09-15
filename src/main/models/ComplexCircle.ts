@@ -42,20 +42,6 @@ export default class ComplexCircle {
   }
 
   /**
-   * Get the value of the point on the circle at the given time
-   *
-   * @param time time in milliseconds.
-   * @returns the value of the point on the circle at the given time
-   */
-  public getAtTime(time: number): Complex {
-    const animTime = ((time % this.duration) / this.duration) * 2 * Math.PI;
-    return new Complex(
-      this.center.re + this.radius * Math.cos(animTime),
-      this.center.im + this.radius * Math.sin(animTime)
-    );
-  }
-
-  /**
    * Compute a MathML representation of the complex circle
    *
    * @param power power associated with the coefficient
@@ -103,16 +89,6 @@ export default class ComplexCircle {
   }
 
   /**
-   * Compute and return the addition of the complex circle and a number
-   *
-   * @param term The number to add
-   * @returns the result of the addition
-   */
-  public plus(term: number): ComplexCircle {
-    return new ComplexCircle(this.center.plus(term), this.radius, this.duration);
-  }
-
-  /**
    * Return a random complex circle with the provided settings
    *
    * @param centerModulusMinMax object containing the min and max value of the center modulus
@@ -139,5 +115,16 @@ export default class ComplexCircle {
    */
   public toString(): string {
     return `ComplexCircle(${this.center}, ${this.radius}, ${this.duration})`;
+  }
+
+  // TODO Add test
+  /**
+   * Get the ellipsis parameters corresponding to the complex circle (duration, angle, half-width,
+   * half-height, offset modulus and offset argument)
+   *
+   * @returns the ellipsis parameters
+   */
+  public getEllipsisParameters(): number[] {
+    return [this.duration, 0, this.radius, this.radius, this.center.mod(), this.center.arg()];
   }
 }

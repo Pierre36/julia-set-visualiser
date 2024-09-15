@@ -221,39 +221,6 @@ export default class Complex {
   }
 
   /**
-   * Compute and return the multiplication of the complex number by a complex factor
-   *
-   * @param factor The factor to multiply by
-   * @returns the complex number multiplied by the complex factor
-   */
-  public multipliedByComplex(factor: Complex): Complex {
-    return new Complex(
-      this.re * factor.re - this.im * factor.im,
-      this.im * factor.re + this.re * factor.im
-    );
-  }
-
-  /**
-   * Compute and return the addition of the complex number and a number
-   *
-   * @param term The number to add
-   * @returns the result of the addition
-   */
-  public plus(term: number): Complex {
-    return new Complex(this.re + term, this.im);
-  }
-
-  /**
-   * Get the value of the complex number
-   *
-   * @param time time in milliseconds
-   * @returns the value of the complex number
-   */
-  public getAtTime(time: number): Complex {
-    return this;
-  }
-
-  /**
    * Return a random complex number with a modulus in the given range
    *
    * @param modulusMinMax an object containing the min and max value of the modulus.
@@ -266,5 +233,16 @@ export default class Complex {
       NumberUtils.toPrecision(modulus * Math.cos(angle), 2),
       NumberUtils.toPrecision(modulus * Math.sin(angle), 2)
     );
+  }
+
+  // TODO Add test
+  /**
+   * Get the ellipsis parameters corresponding to the complex number (duration, angle, half-width,
+   * half-height, offset modulus and offset argument)
+   *
+   * @returns the ellipsis parameters
+   */
+  public getEllipsisParameters(): number[] {
+    return [0, 0, 0, 0, this.mod(), this.arg()];
   }
 }
