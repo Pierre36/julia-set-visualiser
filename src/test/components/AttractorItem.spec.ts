@@ -33,7 +33,7 @@ describe("Render", () => {
     expect(sliderInput.vm.$props.min).toBe(0);
     expect(sliderInput.vm.$props.max).toBe(360);
     expect(sliderInput.vm.$props.step).toBe(1);
-    expect(sliderInput.vm.$props.integerOnly).toBe(true);
+    expect(sliderInput.vm.$props.isIntegerOnly).toBe(true);
     expect(sliderInput.vm.$props.label).toBe("Hue");
     expect(sliderInput.vm.$props.level).toBe(4);
 

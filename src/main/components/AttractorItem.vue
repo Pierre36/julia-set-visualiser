@@ -76,7 +76,7 @@ export default defineComponent({
       :max="360"
       :step="1"
       :level="4"
-      :integerOnly="true"
+      :isIntegerOnly="true"
       label="Hue"
       @update:value="updateHue"
     />

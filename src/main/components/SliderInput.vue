@@ -1,27 +1,32 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, type ComputedRef } from "vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-export default defineComponent({
-  name: "SliderInput",
-  components: { NumberInput },
-  props: {
-    value: { type: Number, required: true },
-    min: { type: Number, required: true },
-    max: { type: Number, required: true },
-    step: { type: Number, required: true },
-    integerOnly: { type: Boolean, default: false },
-    label: { type: String, default: "" },
-    level: { type: Number, default: 4 },
-  },
-  emits: ["update:value"],
-  computed: {
-    heading() {
-      return `h${this.level}`;
-    },
-  },
-  methods: {},
-});
+export interface Props {
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  isIntegerOnly?: boolean;
+  label?: string;
+  level?: number;
+}
+
+const {
+  value,
+  min,
+  max,
+  step,
+  isIntegerOnly = false,
+  label = "",
+  level = 5,
+} = defineProps<Props>();
+
+defineEmits<{
+  (e: "update:value", value: number): void;
+}>();
+
+const heading: ComputedRef<string> = computed(() => `h${level}`);
 </script>
 
 <template>
@@ -32,7 +37,7 @@ export default defineComponent({
       :min="min"
       :max="max"
       :step="step"
-      :isIntegerOnly="integerOnly"
+      :isIntegerOnly="isIntegerOnly"
       :label="label"
       @update:value="(newValue) => $emit('update:value', newValue)"
     />
