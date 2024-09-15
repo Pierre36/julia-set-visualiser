@@ -2,7 +2,7 @@ import RandomUtils from "@/utils/RandomUtils";
 import Complex from "@/models/Complex";
 
 /**
- * Representation of an attractor with a value and color parameters.
+ * Representation of an attractor with a value and colour parameters.
  */
 export default class Attractor {
   /**

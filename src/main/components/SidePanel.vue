@@ -1,14 +1,14 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import FunctionPanel from "@/components/FunctionPanel.vue";
-import ColorsPanel from "@/components/ColorsPanel.vue";
+import ColoursPanel from "@/components/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
 import RandomPanel from "@/components/RandomPanel.vue";
 import Configuration from "@/models/Configuration";
 
 export default defineComponent({
   name: "SidePanel",
-  components: { FunctionPanel, ColorsPanel, AdvancedSettingsPanel, RandomPanel },
+  components: { FunctionPanel, ColoursPanel, AdvancedSettingsPanel, RandomPanel },
   props: {
     currentPanel: { type: String, required: true },
     configuration: { type: Configuration, required: true },
@@ -26,8 +26,8 @@ export default defineComponent({
         :fractalFunction="configuration.fractalFunction"
         @change="$emit('change')"
       />
-      <ColorsPanel
-        v-show="currentPanel == 'COLORS'"
+      <ColoursPanel
+        v-show="currentPanel == 'COLOURS'"
         :juliaHSV="configuration.juliaHSV"
         :defaultAttractor="configuration.defaultAttractor"
         :infinityAttractor="configuration.infinityAttractor"

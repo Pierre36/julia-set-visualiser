@@ -8,7 +8,7 @@ import SliderInput from "@/components/SliderInput.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 
 export default defineComponent({
-  name: "ColorsPanel",
+  name: "ColoursPanel",
   components: {
     Disclosure,
     SliderInput,
@@ -23,7 +23,7 @@ export default defineComponent({
   },
   emits: ["change"],
   computed: {
-    visualizerColor() {
+    visualizerColour() {
       const l = this.juliaHSV[2] * (1 - this.juliaHSV[1] / 2);
       let s = 0;
       if (l != 0 && l != 1) {
@@ -60,8 +60,8 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Colors">
-        <p>This panel allows to change the colors used to draw the Julia and Fatou sets.</p>
+      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Colours">
+        <p>This panel allows to change the colours used to draw the Julia and Fatou sets.</p>
       </Disclosure>
     </header>
 
@@ -69,15 +69,15 @@ export default defineComponent({
       <section>
         <Disclosure class="section-header" :headingLevel="3" headingText="Julia">
           <p>
-            In this section, you can change the color of the Julia Set. The color use the HSV color
-            system (see the
+            In this section, you can change the colour of the Julia Set. The colour use the HSV
+            colour system (see the
             <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
             for more details)
           </p>
         </Disclosure>
         <div class="content">
-          <h4>Color</h4>
-          <div class="color-visualizer" :style="'background-color:' + visualizerColor"></div>
+          <h4>Colour</h4>
+          <div class="colour-visualizer" :style="'background-color:' + visualizerColour"></div>
           <SliderInput
             class="span-2 julia-slider-input"
             :value="juliaHSV[0]"
@@ -113,10 +113,10 @@ export default defineComponent({
       </section>
       <section>
         <Disclosure class="section-header" :headingLevel="3" headingText="Fatou">
-          <p>In this section, you can change the color of the Fatou Sets.</p>
+          <p>In this section, you can change the colour of the Fatou Sets.</p>
           <p>
-            You can choose the color parameters for the each attractor (including infinity). When
-            computing the color, if no attractor is close enough, the default attractor is used.
+            You can choose the colour parameters for the each attractor (including infinity). When
+            computing the colour, if no attractor is close enough, the default attractor is used.
           </p>
         </Disclosure>
         <div>
@@ -158,7 +158,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.color-visualizer {
+.colour-visualizer {
   width: 2.5rem;
   height: 1.4rem;
   border: 2px solid var(--gray-100);

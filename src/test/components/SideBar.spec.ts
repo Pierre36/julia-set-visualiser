@@ -45,7 +45,7 @@ describe("Render", () => {
     expect(sideNav.vm.$props.currentPanel).toBe("FUNCTION");
     expect(sideNav.vm.$props.panels.map((panel) => ({ id: panel.id, name: panel.name }))).toEqual([
       { id: "FUNCTION", name: "Function" },
-      { id: "COLORS", name: "Colors" },
+      { id: "COLOURS", name: "Colours" },
       { id: "ADVANCED", name: "Advanced settings" },
       { id: "RANDOM", name: "Randomize" },
     ]);
@@ -170,7 +170,7 @@ describe("Interactions", () => {
     const sidePanel = sidebar.findComponent(SidePanel);
 
     // Make sideNav emit event and check the sidePanel is updated
-    const newPanel = "COLORS";
+    const newPanel = "COLOURS";
     sideNav.vm.$emit("update:currentPanel", newPanel);
     await sidebar.vm.$nextTick();
     expect(sidePanel.vm.$props.currentPanel).toBe(newPanel);

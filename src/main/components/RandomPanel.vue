@@ -362,12 +362,14 @@ export default defineComponent({
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Colors">
-          <p>In this section, you can change the range of values the colors parameters can take.</p>
+        <Disclosure class="section-header" :headingLevel="3" headingText="Colours">
+          <p>
+            In this section, you can change the range of values the colours parameters can take.
+          </p>
         </Disclosure>
         <div class="content one-column">
           <Disclosure
-            headingText="Julia color"
+            headingText="Julia colour"
             :headingLevel="4"
             :rotateWhenExpand="true"
             buttonTitle="Show"
@@ -382,8 +384,8 @@ export default defineComponent({
               :max="360"
               :step="1"
               :integerOnly="true"
-              minLabel="Minimum hue of Julia color"
-              maxLabel="Maximum hue of Julia color"
+              minLabel="Minimum hue of Julia colour"
+              maxLabel="Maximum hue of Julia colour"
               @update:minValue="(newMin) => (juliaHue.min = newMin)"
               @update:maxValue="(newMax) => (juliaHue.max = newMax)"
               :level="6"
@@ -397,8 +399,8 @@ export default defineComponent({
               :max="1"
               :step="0.01"
               :integerOnly="false"
-              minLabel="Minimum saturation of Julia color"
-              maxLabel="Maximum saturation of Julia color"
+              minLabel="Minimum saturation of Julia colour"
+              maxLabel="Maximum saturation of Julia colour"
               @update:minValue="(newMin) => (juliaSaturation.min = newMin)"
               @update:maxValue="(newMax) => (juliaSaturation.max = newMax)"
               :level="6"
@@ -412,8 +414,8 @@ export default defineComponent({
               :max="1"
               :step="0.01"
               :integerOnly="false"
-              minLabel="Minimum value of Julia color"
-              maxLabel="Maximum value of Julia color"
+              minLabel="Minimum value of Julia colour"
+              maxLabel="Maximum value of Julia colour"
               @update:minValue="(newMin) => (juliaValue.min = newMin)"
               @update:maxValue="(newMax) => (juliaValue.max = newMax)"
               :level="6"
@@ -435,8 +437,8 @@ export default defineComponent({
               :max="360"
               :step="1"
               :integerOnly="true"
-              minLabel="Minimum hue of attractors color"
-              maxLabel="Maximum hue of attractors color"
+              minLabel="Minimum hue of attractors colour"
+              maxLabel="Maximum hue of attractors colour"
               @update:minValue="(newMin) => (attractorsHue.min = newMin)"
               @update:maxValue="(newMax) => (attractorsHue.max = newMax)"
               :level="6"
@@ -450,8 +452,8 @@ export default defineComponent({
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum saturation strength of attractors color"
-              maxLabel="Maximum saturation strength of attractors color"
+              minLabel="Minimum saturation strength of attractors colour"
+              maxLabel="Maximum saturation strength of attractors colour"
               @update:minValue="(newMin) => (attractorsSaturationStrength.min = newMin)"
               @update:maxValue="(newMax) => (attractorsSaturationStrength.max = newMax)"
               :level="6"
@@ -465,8 +467,8 @@ export default defineComponent({
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum saturation offset of attractors color"
-              maxLabel="Maximum saturation offset of attractors color"
+              minLabel="Minimum saturation offset of attractors colour"
+              maxLabel="Maximum saturation offset of attractors colour"
               @update:minValue="(newMin) => (attractorsSaturationOffset.min = newMin)"
               @update:maxValue="(newMax) => (attractorsSaturationOffset.max = newMax)"
               :level="6"
@@ -480,8 +482,8 @@ export default defineComponent({
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum value strength of attractors color"
-              maxLabel="Maximum value strength of attractors color"
+              minLabel="Minimum value strength of attractors colour"
+              maxLabel="Maximum value strength of attractors colour"
               @update:minValue="(newMin) => (attractorsValueStrength.min = newMin)"
               @update:maxValue="(newMax) => (attractorsValueStrength.max = newMax)"
               :level="6"
@@ -495,8 +497,8 @@ export default defineComponent({
               :max="100"
               :step="0.1"
               :integerOnly="false"
-              minLabel="Minimum value offset of attractors color"
-              maxLabel="Maximum value offset of attractors color"
+              minLabel="Minimum value offset of attractors colour"
+              maxLabel="Maximum value offset of attractors colour"
               @update:minValue="(newMin) => (attractorsValueOffset.min = newMin)"
               @update:maxValue="(newMax) => (attractorsValueOffset.max = newMax)"
               :level="6"

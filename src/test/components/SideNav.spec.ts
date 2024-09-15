@@ -16,10 +16,10 @@ describe("Render", () => {
   beforeEach(() => {
     // Prepare props
     props = {
-      currentPanel: PANELS_IDS.COLORS,
+      currentPanel: PANELS_IDS.COLOURS,
       panels: [
         { id: PANELS_IDS.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PANELS_IDS.COLORS, name: "Panel 1", icon: "icon1" },
+        { id: PANELS_IDS.COLOURS, name: "Panel 1", icon: "icon1" },
         { id: PANELS_IDS.ADVANCED, name: "Panel 2", icon: "icon2" },
       ],
       sidePanelCollapsed: false,
@@ -191,10 +191,10 @@ describe("Interactions", () => {
   beforeEach(() => {
     // Prepare props
     props = {
-      currentPanel: PANELS_IDS.COLORS,
+      currentPanel: PANELS_IDS.COLOURS,
       panels: [
         { id: PANELS_IDS.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PANELS_IDS.COLORS, name: "Panel 1", icon: "icon1" },
+        { id: PANELS_IDS.COLOURS, name: "Panel 1", icon: "icon1" },
         { id: PANELS_IDS.ADVANCED, name: "Panel 2", icon: "icon2" },
       ],
       sidePanelCollapsed: false,

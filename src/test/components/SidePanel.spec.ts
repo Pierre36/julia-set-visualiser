@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import SidePanel from "@/components/SidePanel.vue";
 import FunctionPanel from "@/components/FunctionPanel.vue";
-import ColorsPanel from "@/components/ColorsPanel.vue";
+import ColoursPanel from "@/components/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
 import RandomPanel from "@/components/RandomPanel.vue";
 import { PANELS_IDS } from "@/components/SideBar.vue";
@@ -17,7 +17,7 @@ describe("Render", () => {
 
   beforeEach(() => {
     props = {
-      currentPanel: PANELS_IDS.COLORS,
+      currentPanel: PANELS_IDS.COLOURS,
       configuration: Configuration.defaultConfiguration(),
       collapsed: false,
     };
@@ -53,13 +53,13 @@ describe("Render", () => {
     // Get the panels
     const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
-    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const coloursPanel = panelContainer.findComponent(ColoursPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the FUNCTION panel is displayed
     expect(functionPanel.isVisible()).toBe(true);
-    expect(colorsPanel.isVisible()).toBe(false);
+    expect(coloursPanel.isVisible()).toBe(false);
     expect(advancedPanel.isVisible()).toBe(false);
     expect(randomPanel.isVisible()).toBe(false);
 
@@ -67,29 +67,29 @@ describe("Render", () => {
     expect(functionPanel.vm.$props.fractalFunction).toEqual(props.configuration.fractalFunction);
   });
 
-  it("renders properly the COLORS panel", () => {
+  it("renders properly the COLOURS panel", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.COLORS;
+    props.currentPanel = PANELS_IDS.COLOURS;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
     const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
-    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const coloursPanel = panelContainer.findComponent(ColoursPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
-    // Check only the COLORS panel is displayed
+    // Check only the COLOURS panel is displayed
     expect(functionPanel.isVisible()).toBe(false);
-    expect(colorsPanel.isVisible()).toBe(true);
+    expect(coloursPanel.isVisible()).toBe(true);
     expect(advancedPanel.isVisible()).toBe(false);
     expect(randomPanel.isVisible()).toBe(false);
 
-    // Check the COLORS panel is rendered properly
-    expect(colorsPanel.vm.$props.juliaHSV).toEqual(props.configuration.juliaHSV);
-    expect(colorsPanel.vm.$props.defaultAttractor).toEqual(props.configuration.defaultAttractor);
-    expect(colorsPanel.vm.$props.infinityAttractor).toEqual(props.configuration.infinityAttractor);
-    expect(colorsPanel.vm.$props.attractors).toEqual(props.configuration.attractors);
+    // Check the COLOURS panel is rendered properly
+    expect(coloursPanel.vm.$props.juliaHSV).toEqual(props.configuration.juliaHSV);
+    expect(coloursPanel.vm.$props.defaultAttractor).toEqual(props.configuration.defaultAttractor);
+    expect(coloursPanel.vm.$props.infinityAttractor).toEqual(props.configuration.infinityAttractor);
+    expect(coloursPanel.vm.$props.attractors).toEqual(props.configuration.attractors);
   });
 
   it("renders properly the ADVANCED panel", () => {
@@ -100,13 +100,13 @@ describe("Render", () => {
     // Get the panels
     const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
-    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const coloursPanel = panelContainer.findComponent(ColoursPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the ADVANCED panel is displayed
     expect(functionPanel.isVisible()).toBe(false);
-    expect(colorsPanel.isVisible()).toBe(false);
+    expect(coloursPanel.isVisible()).toBe(false);
     expect(advancedPanel.isVisible()).toBe(true);
     expect(randomPanel.isVisible()).toBe(false);
 
@@ -122,13 +122,13 @@ describe("Render", () => {
     // Get the panels
     const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
-    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const coloursPanel = panelContainer.findComponent(ColoursPanel);
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
     // Check only the ADVANCED panel is displayed
     expect(functionPanel.isVisible()).toBe(false);
-    expect(colorsPanel.isVisible()).toBe(false);
+    expect(coloursPanel.isVisible()).toBe(false);
     expect(advancedPanel.isVisible()).toBe(false);
     expect(randomPanel.isVisible()).toBe(true);
 
@@ -146,7 +146,7 @@ describe("Interactions", () => {
 
   beforeEach(() => {
     props = {
-      currentPanel: PANELS_IDS.COLORS,
+      currentPanel: PANELS_IDS.COLOURS,
       configuration: Configuration.defaultConfiguration(),
       collapsed: false,
     };
@@ -166,17 +166,17 @@ describe("Interactions", () => {
     expect(sidePanel.emitted().change).toBeDefined();
   });
 
-  it("emits change the COLORS panel emits change", () => {
+  it("emits change the COLOURS panel emits change", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.COLORS;
+    props.currentPanel = PANELS_IDS.COLOURS;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
-    // Get the COLORS panel
+    // Get the COLOURS panel
     const panelContainer = sidePanel.find("#side-panel");
-    const colorsPanel = panelContainer.findComponent(ColorsPanel);
+    const coloursPanel = panelContainer.findComponent(ColoursPanel);
 
-    // Make COLORS panel emit change and check the SidePanel emits change
-    colorsPanel.vm.$emit("change");
+    // Make COLOURS panel emit change and check the SidePanel emits change
+    coloursPanel.vm.$emit("change");
     expect(sidePanel.emitted().change).toBeDefined();
   });
 

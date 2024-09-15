@@ -99,32 +99,32 @@ fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
   );
 }
 
-fn colorAccordingToAttractor(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
-  // If it converges to infinity, color using infinity colouring
+fn colourAccordingToAttractor(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
+  // If it converges to infinity, colour using infinity colouring
   if (fkz.x >= INFINITY) {
-    return getColor(adjusted_divergence, fractal_params.infinity_colour); 
+    return getColour(adjusted_divergence, fractal_params.infinity_colour); 
   }
 
   // Search for an attractor
   for (var a = 0u; a < fractal_params.attractors_count; a++) {
     if (chordalDistance(attractors[a].complex, fkz) < 0.001) {
-      return getColor(adjusted_divergence, attractors[a].colour);
+      return getColour(adjusted_divergence, attractors[a].colour);
     }
   }
 
-  // If no attractor matches the point, color using default colouring
-  return getColor(adjusted_divergence, fractal_params.default_colour);
+  // If no attractor matches the point, colour using default colouring
+  return getColour(adjusted_divergence, fractal_params.default_colour);
 }
 
-fn colorAccordingToSet(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
+fn colourAccordingToSet(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
   return select(
-    fractal_params.julia_hsv, // If it belongs to the Julia Set, return the Julia color
-    colorAccordingToAttractor(adjusted_divergence, fkz), // If it belongs to the Fatou Set, coulour based on the attractor
+    fractal_params.julia_hsv, // If it belongs to the Julia Set, return the Julia colour
+    colourAccordingToAttractor(adjusted_divergence, fkz), // If it belongs to the Fatou Set, coulour based on the attractor
     adjusted_divergence <= 0
   );
 }
 
-fn getColor(adjusted_divergence: f32, colour_params: ColourParameters) -> vec3f {
+fn getColour(adjusted_divergence: f32, colour_params: ColourParameters) -> vec3f {
   let saturation = colour_params.sat_strength * -adjusted_divergence + colour_params.sat_offset;
   let raw_value = colour_params.val_strength * adjusted_divergence + colour_params.val_offset;
   let value = 0.5 * (raw_value / sqrt(1.0 + raw_value * raw_value) + 1.0);
@@ -153,5 +153,5 @@ fn fragmentMain(@location(0) coords: vec2f) -> @location(0) vec4f {
     iteration++;
   }
 
-  return hsvToRgba(colorAccordingToSet(log(divergence) - fractal_params.julia_bound, fkz));
+  return hsvToRgba(colourAccordingToSet(log(divergence) - fractal_params.julia_bound, fkz));
 }

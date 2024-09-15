@@ -346,15 +346,15 @@ describe("Render", () => {
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
   });
 
-  it("renders the colors section correctly", async () => {
+  it("renders the colours section correctly", async () => {
     // Mount the RandomPanel
     const randomPanel = mount(RandomPanel, { props: props, shallow: false });
 
     // Get the DOM elements
     const content = randomPanel.find(".panel-content");
-    const colorsSection = content.find("section:nth-of-type(2)");
-    const headerDisclosure = colorsSection.findComponent(Disclosure);
-    const sectionContent = colorsSection.find(".content");
+    const coloursSection = content.find("section:nth-of-type(2)");
+    const headerDisclosure = coloursSection.findComponent(Disclosure);
+    const sectionContent = coloursSection.find(".content");
     const disclosures = sectionContent.findAllComponents(Disclosure);
 
     // Open all disclosures
@@ -365,13 +365,13 @@ describe("Render", () => {
     // Check the section header renders correctly
     expect(headerDisclosure.vm.$props.headingCentred).toBe(false);
     expect(headerDisclosure.vm.$props.headingLevel).toBe(3);
-    expect(headerDisclosure.vm.$props.headingText).toBe("Colors");
+    expect(headerDisclosure.vm.$props.headingText).toBe("Colours");
 
-    // Check the Julia color part renders correctly
+    // Check the Julia colour part renders correctly
     let disclosure = disclosures[0];
     let headings5 = disclosure.findAll("h5");
     let minMaxInputs = disclosure.findAllComponents(MinMaxInput);
-    expect(disclosure.vm.$props.headingText).toBe("Julia color");
+    expect(disclosure.vm.$props.headingText).toBe("Julia colour");
     expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
@@ -383,8 +383,8 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.max).toBe(hueMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
     expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
-    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of Julia color");
-    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of Julia color");
+    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of Julia colour");
+    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of Julia colour");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
     expect(headings5[1].text()).toBe("Saturation");
     expect(minMaxInputs[1].vm.$props.minValue).toBe(juliaSaturationMinDefault);
@@ -393,8 +393,8 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.max).toBe(juliaSaturationMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.01);
     expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
-    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum saturation of Julia color");
-    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum saturation of Julia color");
+    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum saturation of Julia colour");
+    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum saturation of Julia colour");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
     expect(headings5[2].text()).toBe("Value");
     expect(minMaxInputs[2].vm.$props.minValue).toBe(juliaValueMinDefault);
@@ -403,8 +403,8 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.max).toBe(juliaValueMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.01);
     expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
-    expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum value of Julia color");
-    expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum value of Julia color");
+    expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum value of Julia colour");
+    expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum value of Julia colour");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
 
     // Check the attractors part renders correctly
@@ -423,8 +423,8 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.max).toBe(hueMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
     expect(minMaxInputs[0].vm.$props.integerOnly).toBe(true);
-    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of attractors color");
-    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of attractors color");
+    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of attractors colour");
+    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of attractors colour");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
     expect(headings5[1].text()).toBe("Saturation strength");
     expect(minMaxInputs[1].vm.$props.minValue).toBe(attractorSaturationStrengthMinDefault);
@@ -434,10 +434,10 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[1].vm.$props.integerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe(
-      "Minimum saturation strength of attractors color"
+      "Minimum saturation strength of attractors colour"
     );
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe(
-      "Maximum saturation strength of attractors color"
+      "Maximum saturation strength of attractors colour"
     );
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
     expect(headings5[2].text()).toBe("Saturation offset");
@@ -448,10 +448,10 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[2].vm.$props.integerOnly).toBe(false);
     expect(minMaxInputs[2].vm.$props.minLabel).toBe(
-      "Minimum saturation offset of attractors color"
+      "Minimum saturation offset of attractors colour"
     );
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe(
-      "Maximum saturation offset of attractors color"
+      "Maximum saturation offset of attractors colour"
     );
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
     expect(headings5[3].text()).toBe("Value strength");
@@ -461,8 +461,8 @@ describe("Render", () => {
     expect(minMaxInputs[3].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[3].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[3].vm.$props.integerOnly).toBe(false);
-    expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum value strength of attractors color");
-    expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum value strength of attractors color");
+    expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum value strength of attractors colour");
+    expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum value strength of attractors colour");
     expect(minMaxInputs[3].vm.$props.level).toBe(6);
     expect(headings5[4].text()).toBe("Value offset");
     expect(minMaxInputs[4].vm.$props.minValue).toBe(attractorValueOffsetMinDefault);
@@ -471,8 +471,8 @@ describe("Render", () => {
     expect(minMaxInputs[4].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[4].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[4].vm.$props.integerOnly).toBe(false);
-    expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum value offset of attractors color");
-    expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum value offset of attractors color");
+    expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum value offset of attractors colour");
+    expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum value offset of attractors colour");
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
   });
 
