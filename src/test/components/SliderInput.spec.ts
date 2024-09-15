@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { DOMWrapper, mount } from "@vue/test-utils";
 import SliderInput, { type Props } from "@/components/SliderInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
@@ -104,84 +104,32 @@ describe("Interactions", () => {
     const sliderInput = mount(SliderInput, { props: props, shallow: true });
 
     // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
+    const slider: DOMWrapper<HTMLInputElement> = sliderInput.find("input[type='range']");
 
     // Change value of slider and check an event is emitted
     const newValue = 42;
-    (slider.element as HTMLInputElement).value = newValue.toString();
+    slider.element.value = newValue.toString();
     slider.trigger("input");
     expect(sliderInput.emitted()["update:value"]).toEqual([[newValue]]);
   });
 
-  it("decrements when pressing 'down' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
+  const testCases = [
+    { action: "decrements", key: "down", expectedValue: value - step },
+    { action: "decrements", key: "left", expectedValue: value - step },
+    { action: "increments", key: "up", expectedValue: value + step },
+    { action: "increments", key: "right", expectedValue: value + step },
+    { action: "goes to min", key: "home", expectedValue: min },
+    { action: "goes to max", key: "end", expectedValue: max },
+  ];
 
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
+  testCases.forEach(({ action, key, expectedValue }) => {
+    it(`${action} when pressing '${key}' key on slider`, () => {
+      const sliderInput = mount(SliderInput, { props: props, shallow: true });
 
-    // Press 'down' and check the SliderInput emits the right event
-    slider.trigger("keydown.down");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[value - step]]);
-  });
+      const slider = sliderInput.find("input[type='range']");
 
-  it("decrements when pressing 'left' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
-
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
-
-    // Press 'left' and check the SliderInput emits the right event
-    slider.trigger("keydown.left");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[value - step]]);
-  });
-
-  it("increments when pressing 'up' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
-
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
-
-    //  Press 'up' and check the SliderInput emits the right event
-    slider.trigger("keydown.up");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[value + step]]);
-  });
-
-  it("increments when pressing 'right' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
-
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
-
-    //  Press 'right' and check the SliderInput emits the right event
-    slider.trigger("keydown.right");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[value + step]]);
-  });
-
-  it("goes to min when pressing 'home' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
-
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
-
-    //  Press 'home' and check the SliderInput emits the right event
-    slider.trigger("keydown.home");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[min]]);
-  });
-
-  it("goes to max when pressing 'end' key on slider", () => {
-    // Mount the SliderInput
-    const sliderInput = mount(SliderInput, { props: props, shallow: true });
-
-    // Get the NumberInput
-    const slider = sliderInput.find("input[type='range']");
-
-    //  Press 'end' and check the SliderInput emits the right event
-    slider.trigger("keydown.end");
-    expect(sliderInput.emitted()["update:value"]).toEqual([[max]]);
+      slider.trigger(`keydown.${key}`);
+      expect(sliderInput.emitted()["update:value"]).toEqual([[expectedValue]]);
+    });
   });
 });
