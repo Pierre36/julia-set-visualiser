@@ -661,7 +661,7 @@ export default class WebGpuFractalGenerator {
     }
 
     if (debug) {
-      console.debug("[OK] Updated %s with value %s", parameter, value);
+      console.debug("[OK] Updated %s with value [%s]", parameter, value);
     }
   }
 
