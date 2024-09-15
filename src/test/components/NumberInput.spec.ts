@@ -135,8 +135,6 @@ describe("Interactions", () => {
 });
 
 describe("Wrong input handling", () => {
-  let props: Props;
-
   beforeEach(() => {
     props = {
       value: value,
