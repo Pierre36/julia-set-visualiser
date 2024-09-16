@@ -1,20 +1,20 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import Toast from "@/components/Toast.vue";
+import Toast, { type Props } from "@/components/Toast.vue";
+
+let props: Props;
+
+const text = "Toast text";
+const animationDuration = 200;
+const displayDuration = 1000;
 
 describe("Render", () => {
-  let props: {
-    text: string;
-    animationDuration: number;
-    displayDuration: number;
-  };
-
   beforeEach(() => {
     // Prepare the props
     props = {
-      text: "Toast text",
-      animationDuration: 200,
-      displayDuration: 1000,
+      text: text,
+      animationDuration: animationDuration,
+      displayDuration: displayDuration,
     };
 
     // Use fake timers
@@ -32,24 +32,18 @@ describe("Render", () => {
     // Check the toast is rendered correctly
     const toast = wrapper.find("div");
     expect(toast.attributes().role).toBe("alert");
-    expect(toast.text()).toBe(props.text);
-    expect(toast.attributes().style).toBe("--duration: " + props.animationDuration + "ms;");
+    expect(toast.text()).toBe(text);
+    expect(toast.attributes().style).toBe("--duration: " + animationDuration + "ms;");
   });
 });
 
 describe("Interactions", () => {
-  let props: {
-    text: string;
-    animationDuration: number;
-    displayDuration: number;
-  };
-
   beforeEach(() => {
     // Prepare the props
     props = {
-      text: "Toast text",
-      animationDuration: 200,
-      displayDuration: 1000,
+      text: text,
+      animationDuration: animationDuration,
+      displayDuration: displayDuration,
     };
 
     // Use fake timers
@@ -76,7 +70,7 @@ describe("Interactions", () => {
     // Show the toast
     wrapper.vm.show();
     await wrapper.vm.$nextTick();
-    vi.advanceTimersByTime(props.animationDuration + props.displayDuration);
+    vi.advanceTimersByTime(animationDuration + displayDuration);
 
     // Check the toast is not shown anymore
     const toast = wrapper.find("div");

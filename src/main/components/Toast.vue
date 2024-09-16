@@ -1,25 +1,22 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-export default defineComponent({
-  name: "Toast",
-  props: {
-    text: { type: String, default: "" },
-    animationDuration: { type: Number, default: 500 },
-    displayDuration: { type: Number, default: 1500 },
-  },
-  data() {
-    return {
-      shown: false,
-    };
-  },
-  methods: {
-    show() {
-      this.shown = true;
-      setTimeout(() => (this.shown = false), this.displayDuration + this.animationDuration);
-    },
-  },
-});
+export interface Props {
+  text?: string;
+  animationDuration?: number;
+  displayDuration?: number;
+}
+
+const { text = "", animationDuration = 500, displayDuration = 1500 } = defineProps<Props>();
+
+const shown = ref(false);
+
+function show() {
+  shown.value = true;
+  setTimeout(() => (shown.value = false), displayDuration + animationDuration);
+}
+
+defineExpose({ show });
 </script>
 
 <template>
