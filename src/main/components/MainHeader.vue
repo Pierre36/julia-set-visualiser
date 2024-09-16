@@ -2,11 +2,11 @@
 import { defineComponent } from "vue";
 import Configuration from "@/models/Configuration";
 import ComboBox from "@/components/ComboBox.vue";
-import Toast from "@/components/Toast.vue";
+import NotificationToast from "@/components/NotificationToast.vue";
 
 export default defineComponent({
   name: "MainHeader",
-  components: { ComboBox, Toast },
+  components: { ComboBox, NotificationToast },
   props: {
     configurations: { type: Object, required: true },
     selectedConfigurationId: { type: String, required: true },
@@ -85,8 +85,8 @@ export default defineComponent({
         />
       </svg>
     </button>
-    <Toast ref="saveToast" text="Custom configuration saved!" />
-    <Toast ref="downloadToast" text="Custom configuration downloaded!" />
+    <NotificationToast ref="saveToast" text="Custom configuration saved!" />
+    <NotificationToast ref="downloadToast" text="Custom configuration downloaded!" />
   </header>
 </template>
 

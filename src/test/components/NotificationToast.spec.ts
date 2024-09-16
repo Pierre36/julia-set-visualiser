@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import Toast, { type Props } from "@/components/Toast.vue";
+import NotificationToast, { type Props } from "@/components/NotificationToast.vue";
 
 let props: Props;
 
@@ -22,8 +22,8 @@ describe("Render", () => {
   });
 
   it("renders correctly", async () => {
-    // Mount the Toast
-    const wrapper = mount(Toast, { props: props, shallow: true });
+    // Mount the NotificationToast
+    const wrapper = mount(NotificationToast, { props: props, shallow: true });
 
     // Show the toast
     wrapper.vm.show();
@@ -51,8 +51,8 @@ describe("Interactions", () => {
   });
 
   it("shows the toast when using show method", async () => {
-    // Mount the Toast
-    const wrapper = mount(Toast, { props: props, shallow: true });
+    // Mount the NotificationToast
+    const wrapper = mount(NotificationToast, { props: props, shallow: true });
 
     // Show the toast
     wrapper.vm.show();
@@ -64,8 +64,8 @@ describe("Interactions", () => {
   });
 
   it("hides the toast after the display duration", async () => {
-    // Mount the Toast
-    const wrapper = mount(Toast, { props: props, shallow: true });
+    // Mount the NotificationToast
+    const wrapper = mount(NotificationToast, { props: props, shallow: true });
 
     // Show the toast
     wrapper.vm.show();

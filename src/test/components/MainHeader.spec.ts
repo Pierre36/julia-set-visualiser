@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import MainHeader from "@/components/MainHeader.vue";
 import ComboBox from "@/components/ComboBox.vue";
-import Toast from "@/components/Toast.vue";
+import NotificationToast from "@/components/NotificationToast.vue";
 
 describe("Render", () => {
   let props: {
@@ -39,7 +39,7 @@ describe("Render", () => {
     const buttons = mainHeader.findAll("button");
     const saveButton = buttons[0];
     const downloadButton = buttons[1];
-    const toasts = mainHeader.findAllComponents(Toast);
+    const toasts = mainHeader.findAllComponents(NotificationToast);
     const saveToast = toasts[0];
     const downloadToast = toasts[1];
 
@@ -62,7 +62,7 @@ describe("Render", () => {
     expect(saveButton.text()).toBe("Save");
     expect(saveButton.attributes().disabled).toBeDefined();
 
-    // Check the save Toast is rendered correctly
+    // Check the save NotificationToast is rendered correctly
     expect(saveToast.vm.$props.text).toBe("Custom configuration saved!");
     expect(saveToast.vm.$props.animationDuration).toBe(500);
     expect(saveToast.vm.$props.displayDuration).toBe(1500);
@@ -71,7 +71,7 @@ describe("Render", () => {
     expect(downloadButton.text()).toBe("Download");
     expect(downloadButton.attributes().disabled).toBeDefined();
 
-    // Check the download Toast is rendered correctly
+    // Check the download NotificationToast is rendered correctly
     expect(downloadToast.vm.$props.text).toBe("Custom configuration downloaded!");
     expect(downloadToast.vm.$props.animationDuration).toBe(500);
     expect(downloadToast.vm.$props.displayDuration).toBe(1500);
@@ -119,7 +119,7 @@ describe("Interactions", () => {
 
     // Get DOM elements
     const saveButton = mainHeader.findAll("button")[0];
-    const saveToast = mainHeader.findAllComponents(Toast)[0];
+    const saveToast = mainHeader.findAllComponents(NotificationToast)[0];
 
     // Change the configuration
     props.configuration.juliaHSV = [36, 42, 16];
@@ -147,7 +147,7 @@ describe("Interactions", () => {
 
     // Get DOM elements
     const downloadButton = mainHeader.findAll("button")[1];
-    const downloadToast = mainHeader.findAllComponents(Toast)[1];
+    const downloadToast = mainHeader.findAllComponents(NotificationToast)[1];
 
     // Mock jsdom missing functions
     window.URL.createObjectURL = vi.fn(() => "url");
