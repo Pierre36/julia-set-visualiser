@@ -1,5 +1,5 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
@@ -7,81 +7,51 @@ import ComplexLine from "@/models/ComplexLine";
 import ComplexEllipse from "@/models/ComplexEllipse";
 import ComboBox from "@/components/ComboBox.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
+import ComplexCircleInput from "@/components/ComplexCircleInput.vue";
+import ComplexLineInput from "@/components/ComplexLineInput.vue";
+import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
 
-export default defineComponent({
-  name: "CoefficientInput",
-  components: { ComboBox, ComplexInput, NumberInput },
-  props: {
-    coefficient: {
-      type: [Complex, ComplexCircle, ComplexLine, ComplexEllipse],
-      default: new Complex(0, 0),
-    },
-    level: { type: Number, default: 4 },
-  },
-  emits: ["update:coefficient"],
-  data() {
-    return {
-      typeOptions: [
-        { id: CoefficientTypes.CONSTANT, text: "Constant" },
-        { id: CoefficientTypes.CIRCLE, text: "Circle" },
-        { id: CoefficientTypes.LINE, text: "Line" },
-        { id: CoefficientTypes.ELLIPSE, text: "Ellipse" },
-      ],
-      defaultValues: {
-        CONSTANT: new Complex(0, 0),
-        CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000),
-        LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
-        ELLIPSE: new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000),
-      },
-    };
-  },
-  computed: {
-    type() {
-      if (this.coefficient instanceof ComplexCircle) {
-        return CoefficientTypes.CIRCLE;
-      } else if (this.coefficient instanceof ComplexLine) {
-        return CoefficientTypes.LINE;
-      } else if (this.coefficient instanceof ComplexEllipse) {
-        return CoefficientTypes.ELLIPSE;
-      } else {
-        return CoefficientTypes.CONSTANT;
-      }
-    },
-    isCircle() {
-      return this.type == CoefficientTypes.CIRCLE;
-    },
-    isLine() {
-      return this.type == CoefficientTypes.LINE;
-    },
-    isEllipse() {
-      return this.type == CoefficientTypes.ELLIPSE;
-    },
-    isConstant() {
-      return this.type == CoefficientTypes.CONSTANT;
-    },
-    durationSecond() {
-      if (this.coefficient instanceof Complex) {
-        return 0;
-      }
-      return this.coefficient.duration / 1000;
-    },
-    heading() {
-      return `h${this.level}`;
-    },
-  },
-  methods: {
-    changeType(newType: CoefficientTypes) {
-      this.$emit("update:coefficient", this.defaultValues[newType].copy());
-    },
-    update(property: string, newValue: any) {
-      const newCoefficient = this.coefficient.copy();
-      // FIXME when switching to Composition API
-      (newCoefficient as any)[property] = newValue;
-      this.$emit("update:coefficient", newCoefficient);
-    },
-  },
+export interface Props {
+  coefficient?: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+  level?: number;
+}
+
+const { coefficient = new Complex(0, 0), level = 4 } = defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: "update:coefficient", value: Complex | ComplexCircle | ComplexLine | ComplexEllipse): void;
+}>();
+
+const typeOptions = [
+  { id: CoefficientTypes.CONSTANT, text: "Constant" },
+  { id: CoefficientTypes.CIRCLE, text: "Circle" },
+  { id: CoefficientTypes.LINE, text: "Line" },
+  { id: CoefficientTypes.ELLIPSE, text: "Ellipse" },
+];
+const defaultValues = {
+  CONSTANT: new Complex(0, 0),
+  CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000),
+  LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
+  ELLIPSE: new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000),
+};
+
+const currentType = computed(() => {
+  if (coefficient instanceof ComplexCircle) {
+    return CoefficientTypes.CIRCLE;
+  } else if (coefficient instanceof ComplexLine) {
+    return CoefficientTypes.LINE;
+  } else if (coefficient instanceof ComplexEllipse) {
+    return CoefficientTypes.ELLIPSE;
+  } else {
+    return CoefficientTypes.CONSTANT;
+  }
 });
+
+const heading = computed(() => `h${level}`);
+
+function changeType(newType: CoefficientTypes): void {
+  emit("update:coefficient", defaultValues[newType].copy());
+}
 </script>
 
 <template>
@@ -91,101 +61,36 @@ export default defineComponent({
       id="coefficient-type-combobox"
       :options="typeOptions"
       label="Coefficient type"
-      :selected="type"
+      :selected="currentType"
       @update:selected="changeType"
     />
-    <template v-if="isConstant">
+    <template v-if="coefficient instanceof Complex">
       <component :is="heading">Value</component>
       <ComplexInput
-        :complex="coefficient as Complex"
+        :complex="coefficient"
         label="Coefficient value"
-        @update:complex="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
+        @update:complex="(complex) => emit('update:coefficient', complex)"
       />
     </template>
-    <template v-else-if="isCircle">
-      <component :is="heading">Centre</component>
-      <ComplexInput
-        :complex="(coefficient as ComplexCircle).centre"
-        label="Circle centre"
-        @update:complex="(newCentre) => update('centre', newCentre)"
-      />
-      <component :is="heading">Radius</component>
-      <NumberInput
-        :value="(coefficient as ComplexCircle).radius"
-        :min="0"
-        :step="0.1"
-        label="Circle radius"
-        @update:value="(newRadius) => update('radius', newRadius)"
-      />
-      <component :is="heading">Duration</component>
-      <NumberInput
-        :value="durationSecond"
-        :min="0"
-        :step="1"
-        @update:value="(newDuration) => update('duration', newDuration * 1000)"
-        label="Duration"
+    <template v-else-if="coefficient instanceof ComplexCircle">
+      <ComplexCircleInput
+        :circle="coefficient"
+        :level="level"
+        @update:circle="(circle) => emit('update:coefficient', circle)"
       />
     </template>
-    <template v-else-if="isLine">
-      <component :is="heading">Start</component>
-      <ComplexInput
-        :complex="(coefficient as ComplexLine).start"
-        label="Line start"
-        @update:complex="(newStart) => update('start', newStart)"
-      />
-      <component :is="heading">End</component>
-      <ComplexInput
-        :complex="(coefficient as ComplexLine).end"
-        label="Line end"
-        @update:complex="(newEnd) => update('end', newEnd)"
-      />
-      <component :is="heading">Duration</component>
-      <NumberInput
-        :value="durationSecond"
-        :min="0"
-        :step="1"
-        @update:value="(newDuration) => update('duration', newDuration * 1000)"
-        label="Duration"
+    <template v-else-if="coefficient instanceof ComplexLine">
+      <ComplexLineInput
+        :line="coefficient"
+        :level="level"
+        @update:line="(line) => emit('update:coefficient', line)"
       />
     </template>
-    <template v-else-if="isEllipse">
-      <component :is="heading">Centre</component>
-      <ComplexInput
-        :complex="(coefficient as ComplexEllipse).centre"
-        label="Ellipse centre"
-        @update:complex="(newCentre) => update('centre', newCentre)"
-      />
-      <component :is="heading">Half-width</component>
-      <NumberInput
-        :value="(coefficient as ComplexEllipse).halfWidth"
-        :min="0"
-        :step="0.1"
-        label="Ellipse half-width"
-        @update:value="(newHalfWidth) => update('halfWidth', newHalfWidth)"
-      />
-      <component :is="heading">Half-height</component>
-      <NumberInput
-        :value="(coefficient as ComplexEllipse).halfHeight"
-        :min="0"
-        :step="0.1"
-        label="Ellipse half-height"
-        @update:value="(newHalfHeight) => update('halfHeight', newHalfHeight)"
-      />
-      <component :is="heading">Rotation angle</component>
-      <NumberInput
-        :value="(coefficient as ComplexEllipse).rotationAngle"
-        :min="0"
-        :step="1"
-        label="Ellipse rotation angle"
-        @update:value="(newRotationAngle) => update('rotationAngle', newRotationAngle)"
-      />
-      <component :is="heading">Duration</component>
-      <NumberInput
-        :value="durationSecond"
-        :min="0"
-        :step="1"
-        @update:value="(newDuration) => update('duration', newDuration * 1000)"
-        label="Duration"
+    <template v-else>
+      <ComplexEllipseInput
+        :ellipse="coefficient"
+        :level="level"
+        @update:ellipse="(ellipse) => emit('update:coefficient', ellipse)"
       />
     </template>
   </div>

@@ -3,26 +3,32 @@ import { mount } from "@vue/test-utils";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexEllipse from "@/models/ComplexEllipse";
-import ComplexLine from "@/models/ComplexLine";
 import CoefficientTypes from "@/constants/CoefficientTypes";
-import CoefficientInput from "@/components/CoefficientInput.vue";
+import CoefficientInput, { type Props } from "@/components/CoefficientInput.vue";
 import ComboBox from "@/components/ComboBox.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
+import ComplexCircleInput from "@/components/ComplexCircleInput.vue";
+import ComplexLineInput from "@/components/ComplexLineInput.vue";
+import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
+import ComplexLine from "@/models/ComplexLine";
+
+let props: Props;
+
+const level = 1;
 
 describe("Render", () => {
-  let props: { coefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine; level: number };
+  const coefficient = new Complex(3, 6);
 
   beforeEach(() => {
     props = {
-      coefficient: new Complex(3, 6),
-      level: 1,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
   it("displays a combobox to choose the type of coefficient", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const firstHeading = coefficientInput.findAll("h" + props.level)[0];
+    const firstHeading = coefficientInput.findAll("h" + level)[0];
     expect(firstHeading.text()).toBe("Type");
     const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.options).toEqual([
@@ -36,21 +42,21 @@ describe("Render", () => {
 });
 
 describe("Render for type CONSTANT", () => {
-  let props: { coefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine; level: number };
+  const coefficient = new Complex(3, 6);
 
   beforeEach(() => {
     props = {
-      coefficient: new Complex(3, 6),
-      level: 2,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
   it("is has the correct level of headings", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    for (let i = 1; i < 6 && i != props.level; i++) {
+    for (let i = 1; i < 6 && i != level; i++) {
       expect(coefficientInput.findAll("h" + i).length).toBe(0);
     }
-    expect(coefficientInput.findAll("h" + props.level).length).toBe(2);
+    expect(coefficientInput.findAll("h" + level).length).toBe(2);
   });
 
   it("has a type combobox with the correct type", () => {
@@ -61,7 +67,7 @@ describe("Render for type CONSTANT", () => {
 
   it("has a complex input for the value of the constant", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const secondHeading = coefficientInput.findAll("h" + props.level)[1];
+    const secondHeading = coefficientInput.findAll("h" + level)[1];
     expect(secondHeading.text()).toBe("Value");
     const complexInput = coefficientInput.findComponent(ComplexInput);
     expect(complexInput.vm.$props.complex).toEqual(props.coefficient);
@@ -69,22 +75,16 @@ describe("Render for type CONSTANT", () => {
   });
 });
 
+// TODO Update tests below
+
 describe("Render for type CIRCLE", () => {
-  let props: { coefficient: ComplexCircle; level: number };
+  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexCircle(new Complex(3, 6), 42, 2000),
-      level: 3,
+      coefficient: coefficient,
+      level: level,
     };
-  });
-
-  it("is has the correct level of headings", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    for (let i = 1; i < 6 && i != props.level; i++) {
-      expect(coefficientInput.findAll("h" + i).length).toBe(0);
-    }
-    expect(coefficientInput.findAll("h" + props.level).length).toBe(4);
   });
 
   it("has a type combobox with the correct type", () => {
@@ -93,60 +93,22 @@ describe("Render for type CIRCLE", () => {
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CIRCLE);
   });
 
-  it("has a complex input for the centre of the circle", () => {
+  it("has a complex circle input for the value of the circle", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const secondHeading = coefficientInput.findAll("h" + props.level)[1];
-    expect(secondHeading.text()).toBe("Centre");
-    const complexInput = coefficientInput.findComponent(ComplexInput);
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.centre);
-    expect(complexInput.vm.$props.label).toBe("Circle centre");
-  });
-
-  it("has a number input for the radius of the circle", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const thirdHeading = coefficientInput.findAll("h" + props.level)[2];
-    expect(thirdHeading.text()).toBe("Radius");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[0];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.radius);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Circle radius");
-  });
-
-  it("has a number input for the duration of the animation", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const fourthHeading = coefficientInput.findAll("h" + props.level)[3];
-    expect(fourthHeading.text()).toBe("Duration");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[1];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.duration / 1000);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Duration");
+    const circleInput = coefficientInput.findComponent(ComplexCircleInput);
+    expect(circleInput.vm.$props.circle).toEqual(coefficient);
+    expect(circleInput.vm.$props.level).toBe(level);
   });
 });
 
 describe("Render for type LINE", () => {
-  let props: { coefficient: ComplexLine; level: number };
+  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
-      level: 3,
+      coefficient: coefficient,
+      level: level,
     };
-  });
-
-  it("is has the correct level of headings", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    for (let i = 1; i < 6 && i != props.level; i++) {
-      expect(coefficientInput.findAll("h" + i).length).toBe(0);
-    }
-    expect(coefficientInput.findAll("h" + props.level).length).toBe(4);
   });
 
   it("has a type combobox with the correct type", () => {
@@ -155,55 +117,22 @@ describe("Render for type LINE", () => {
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.LINE);
   });
 
-  it("has a complex input for the start of the line", () => {
+  it("has a complex line input for the value of the line", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const secondHeading = coefficientInput.findAll("h" + props.level)[1];
-    expect(secondHeading.text()).toBe("Start");
-    const complexInput = coefficientInput.findAllComponents(ComplexInput)[0];
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.start);
-    expect(complexInput.vm.$props.label).toBe("Line start");
-  });
-
-  it("has a complex input for the end of the line", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const secondHeading = coefficientInput.findAll("h" + props.level)[2];
-    expect(secondHeading.text()).toBe("End");
-    const complexInput = coefficientInput.findAllComponents(ComplexInput)[1];
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.end);
-    expect(complexInput.vm.$props.label).toBe("Line end");
-  });
-
-  it("has a number input for the duration of the animation", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const fourthHeading = coefficientInput.findAll("h" + props.level)[3];
-    expect(fourthHeading.text()).toBe("Duration");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[0];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.duration / 1000);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Duration");
+    const lineInput = coefficientInput.findComponent(ComplexLineInput);
+    expect(lineInput.vm.$props.line).toEqual(coefficient);
+    expect(lineInput.vm.$props.level).toBe(level);
   });
 });
 
 describe("Render for type ELLIPSE", () => {
-  let props: { coefficient: ComplexEllipse; level: number };
+  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000),
-      level: 3,
+      coefficient: coefficient,
+      level: level,
     };
-  });
-
-  it("is has the correct level of headings", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    for (let i = 1; i < 6 && i != props.level; i++) {
-      expect(coefficientInput.findAll("h" + i).length).toBe(0);
-    }
-    expect(coefficientInput.findAll("h" + props.level).length).toBe(6);
   });
 
   it("has a type combobox with the correct type", () => {
@@ -212,79 +141,21 @@ describe("Render for type ELLIPSE", () => {
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.ELLIPSE);
   });
 
-  it("has a complex input for the centre of the ellipse", () => {
+  it("has a complex ellipse input for the value of the ellipse", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const secondHeading = coefficientInput.findAll("h" + props.level)[1];
-    expect(secondHeading.text()).toBe("Centre");
-    const complexInput = coefficientInput.findComponent(ComplexInput);
-    expect(complexInput.vm.$props.complex).toEqual(props.coefficient.centre);
-    expect(complexInput.vm.$props.label).toBe("Ellipse centre");
-  });
-
-  it("has a number input for the half-width of the ellipse", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const thirdHeading = coefficientInput.findAll("h" + props.level)[2];
-    expect(thirdHeading.text()).toBe("Half-width");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[0];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.halfWidth);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Ellipse half-width");
-  });
-
-  it("has a number input for the half-height of the ellipse", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const thirdHeading = coefficientInput.findAll("h" + props.level)[3];
-    expect(thirdHeading.text()).toBe("Half-height");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[1];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.halfHeight);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(0.1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Ellipse half-height");
-  });
-
-  it("has a number input for the rotation angle of the ellipse", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const thirdHeading = coefficientInput.findAll("h" + props.level)[4];
-    expect(thirdHeading.text()).toBe("Rotation angle");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[2];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.rotationAngle);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Ellipse rotation angle");
-  });
-
-  it("has a number input for the duration of the animation", () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const fourthHeading = coefficientInput.findAll("h" + props.level)[5];
-    expect(fourthHeading.text()).toBe("Duration");
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[3];
-    expect(numberInput.vm.$props.value).toEqual(props.coefficient.duration / 1000);
-    expect(numberInput.vm.$props.min).toBe(0);
-    expect(numberInput.vm.$props.max).toBeUndefined();
-    expect(numberInput.vm.$props.step).toBe(1);
-    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
-    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
-    expect(numberInput.vm.$props.label).toBe("Duration");
+    const ellipseInput = coefficientInput.findComponent(ComplexEllipseInput);
+    expect(ellipseInput.vm.$props.ellipse).toEqual(coefficient);
+    expect(ellipseInput.vm.$props.level).toBe(level);
   });
 });
 
 describe("Interactions", () => {
-  let props: { coefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine; level: number };
+  const coefficient = new Complex(3, 6);
 
   beforeEach(() => {
     props = {
-      coefficient: new Complex(3, 6),
-      level: 4,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
@@ -329,215 +200,81 @@ describe("Interactions", () => {
 });
 
 describe("Interactions for type CONSTANT", () => {
-  let props: { coefficient: Complex; level: number };
+  const coefficient = new Complex(3, 6);
 
   beforeEach(() => {
     props = {
-      coefficient: new Complex(3, 6),
-      level: 5,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
   it("correctly changes the value of the CONSTANT", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const complexInput = coefficientInput.findComponent(ComplexInput);
-    const newValue = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newValue);
+    const newComplex = new Complex(4, 2);
+    complexInput.vm.$emit("update:complex", newComplex);
     await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newValue]]);
+    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newComplex]]);
   });
 });
 
 describe("Interactions for type CIRCLE", () => {
-  let props: { coefficient: ComplexCircle; level: number };
+  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexCircle(new Complex(3, 6), 42, 2000),
-      level: 1,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
-  it("correctly changes the centre of the CIRCLE", async () => {
+  it("correctly changes the value of the CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const complexInput = coefficientInput.findComponent(ComplexInput);
-    const newCentre = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newCentre);
+    const circleInput = coefficientInput.findComponent(ComplexCircleInput);
+    const newCircle = new ComplexCircle(new Complex(4, 2), 36, 5000);
+    circleInput.vm.$emit("update:circle", newCircle);
     await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(newCentre, props.coefficient.radius, props.coefficient.duration)],
-    ]);
-  });
-
-  it("correctly changes the radius of the CIRCLE", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[0];
-    const newRadius = 36;
-    numberInput.vm.$emit("update:value", newRadius);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(props.coefficient.centre, newRadius, props.coefficient.duration)],
-    ]);
-  });
-
-  it("correctly changes the duration of the animation", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[1];
-    const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(props.coefficient.centre, props.coefficient.radius, newDuration * 1000)],
-    ]);
+    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newCircle]]);
   });
 });
 
 describe("Interactions for type LINE", () => {
-  let props: { coefficient: ComplexLine; level: number };
+  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
-      level: 1,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
-  it("correctly changes the start of the LINE", async () => {
+  it("correctly changes the value of the LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const complexInput = coefficientInput.findAllComponents(ComplexInput)[0];
-    const newStart = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newStart);
+    const lineInput = coefficientInput.findComponent(ComplexLineInput);
+    const newLine = new ComplexLine(new Complex(4, 2), new Complex(3, 6), 5000);
+    lineInput.vm.$emit("update:line", newLine);
     await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexLine(newStart, props.coefficient.end, props.coefficient.duration)],
-    ]);
-  });
-
-  it("correctly changes the radius of the CIRCLE", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const complexInput = coefficientInput.findAllComponents(ComplexInput)[1];
-    const newEnd = new Complex(3, 6);
-    complexInput.vm.$emit("update:complex", newEnd);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexLine(props.coefficient.start, newEnd, props.coefficient.duration)],
-    ]);
-  });
-
-  it("correctly changes the duration of the animation", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findComponent(NumberInput);
-    const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexLine(props.coefficient.start, props.coefficient.end, newDuration * 1000)],
-    ]);
+    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newLine]]);
   });
 });
 
 describe("Interactions for type ELLIPSE", () => {
-  let props: { coefficient: ComplexEllipse; level: number };
+  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
 
   beforeEach(() => {
     props = {
-      coefficient: new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000),
-      level: 1,
+      coefficient: coefficient,
+      level: level,
     };
   });
 
-  it("correctly changes the centre of the ELLIPSE", async () => {
+  it("correctly changes the value of the LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const complexInput = coefficientInput.findComponent(ComplexInput);
-    const newCentre = new Complex(4, 2);
-    complexInput.vm.$emit("update:complex", newCentre);
+    const ellipseInput = coefficientInput.findComponent(ComplexEllipseInput);
+    const newEllipse = new ComplexEllipse(new Complex(4, 2), 42, 36, 20, 5000);
+    ellipseInput.vm.$emit("update:ellipse", newEllipse);
     await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [
-        new ComplexEllipse(
-          newCentre,
-          props.coefficient.halfWidth,
-          props.coefficient.halfHeight,
-          props.coefficient.rotationAngle,
-          props.coefficient.duration
-        ),
-      ],
-    ]);
-  });
-
-  it("correctly changes the half-width of the ELLIPSE", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[0];
-    const newHalfWidth = 20;
-    numberInput.vm.$emit("update:value", newHalfWidth);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [
-        new ComplexEllipse(
-          props.coefficient.centre,
-          newHalfWidth,
-          props.coefficient.halfHeight,
-          props.coefficient.rotationAngle,
-          props.coefficient.duration
-        ),
-      ],
-    ]);
-  });
-
-  it("correctly changes the half-height of the ELLIPSE", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[1];
-    const newHalfHeight = 20;
-    numberInput.vm.$emit("update:value", newHalfHeight);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [
-        new ComplexEllipse(
-          props.coefficient.centre,
-          props.coefficient.halfWidth,
-          newHalfHeight,
-          props.coefficient.rotationAngle,
-          props.coefficient.duration
-        ),
-      ],
-    ]);
-  });
-
-  it("correctly changes the rotation angle of the ELLIPSE", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[2];
-    const newRotationAngle = 20;
-    numberInput.vm.$emit("update:value", newRotationAngle);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [
-        new ComplexEllipse(
-          props.coefficient.centre,
-          props.coefficient.halfWidth,
-          props.coefficient.halfHeight,
-          newRotationAngle,
-          props.coefficient.duration
-        ),
-      ],
-    ]);
-  });
-
-  it("correctly changes the duration of the animation", async () => {
-    const coefficientInput = mount(CoefficientInput, { props: props });
-    const numberInput = coefficientInput.findAllComponents(NumberInput)[3];
-    const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
-    await coefficientInput.vm.$nextTick();
-    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [
-        new ComplexEllipse(
-          props.coefficient.centre,
-          props.coefficient.halfWidth,
-          props.coefficient.halfHeight,
-          props.coefficient.rotationAngle,
-          newDuration * 1000
-        ),
-      ],
-    ]);
+    expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newEllipse]]);
   });
 });
