@@ -1,39 +1,31 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import Complex from "@/models/Complex";
+import { computed, ref, useTemplateRef, type ComputedRef } from "vue";
 
-export default defineComponent({
-  name: "ComplexInput",
-  props: {
-    complex: { type: Complex, default: new Complex(0, 0) },
-    label: { type: String, default: "" },
-  },
-  emits: ["update:complex"],
-  data() {
-    return {
-      wrong: false,
-    };
-  },
-  computed: {
-    value() {
-      if (this.wrong) {
-        return (this.$refs.input as HTMLInputElement).value;
-      } else {
-        return this.complex.toString();
-      }
-    },
-  },
-  methods: {
-    checkAndUpdate(complexString: string) {
-      try {
-        this.$emit("update:complex", Complex.fromString(complexString));
-        this.wrong = false;
-      } catch (_) {
-        this.wrong = true;
-      }
-    },
-  },
-});
+export interface Props {
+  complex?: Complex;
+  label?: string;
+}
+
+const { complex = new Complex(0, 0), label = "" } = defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: "update:complex", value: Complex): void;
+}>();
+
+const isWrong = ref(false);
+
+const input = useTemplateRef<HTMLInputElement>("input");
+
+const inputValue: ComputedRef<string | undefined> = computed(() =>
+  isWrong.value ? input.value?.value : complex.toString()
+);
+
+function checkAndUpdate(): void {
+  const newValue = Complex.fromString(input.value?.value?.trim() || "");
+  isWrong.value = newValue == undefined;
+  if (newValue != undefined) emit("update:complex", newValue);
+}
 </script>
 
 <template>
@@ -42,13 +34,13 @@ export default defineComponent({
       ref="input"
       class="input"
       type="text"
-      :value="value"
+      :value="inputValue"
       :aria-label="label"
-      :aria-invalid="wrong"
+      :aria-invalid="isWrong"
       role="textbox"
-      @change="($event) => checkAndUpdate(($event.target as HTMLInputElement).value)"
+      @change="checkAndUpdate"
     />
-    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="wrong">
+    <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="isWrong">
       <title>Please enter a valid complex number</title>
       <path
         fill="currentColor"

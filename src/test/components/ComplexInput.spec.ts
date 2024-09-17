@@ -1,22 +1,25 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import Complex from "@/models/Complex";
-import ComplexInput from "@/components/ComplexInput.vue";
+import ComplexInput, { type Props } from "@/components/ComplexInput.vue";
+
+let props: Props;
+
+const complex = new Complex(3, 6);
+const label = "label";
 
 describe("Render", () => {
-  let props: { complex: Complex; label: string };
-
   beforeEach(() => {
     props = {
-      complex: new Complex(3, 6),
-      label: "label",
+      complex: complex,
+      label: label,
     };
   });
 
   it("contains the value", () => {
     const complexInput = mount(ComplexInput, { props: props });
     const input = complexInput.find("input");
-    expect(input.element.value).toBe(props.complex.toString());
+    expect(input.element.value).toBe(complex.toString());
   });
 
   it("has the correct role", () => {
@@ -28,17 +31,15 @@ describe("Render", () => {
   it("has the correct label", () => {
     const complexInput = mount(ComplexInput, { props: props });
     const input = complexInput.find("input");
-    expect(input.attributes()["aria-label"]).toBe(props.label);
+    expect(input.attributes()["aria-label"]).toBe(label);
   });
 });
 
 describe("Interactions", () => {
-  let props: { complex: Complex; label: string };
-
   beforeEach(() => {
     props = {
-      complex: new Complex(3, 6),
-      label: "label",
+      complex: complex,
+      label: label,
     };
   });
 
@@ -53,12 +54,10 @@ describe("Interactions", () => {
 });
 
 describe("Wrong input handling", () => {
-  let props: { complex: Complex; label: string };
-
   beforeEach(() => {
     props = {
-      complex: new Complex(3, 6),
-      label: "label",
+      complex: complex,
+      label: label,
     };
   });
 
@@ -66,6 +65,16 @@ describe("Wrong input handling", () => {
     const complexInput = mount(ComplexInput, { props: props });
     const input = complexInput.find("input");
     input.element.value = "wrong value";
+    await input.trigger("change");
+    expect(input.attributes()["aria-invalid"]).toBe("true");
+    const wrongSVG = complexInput.find(".wrong-input-svg");
+    expect(wrongSVG.exists() && wrongSVG.isVisible()).toBe(true);
+  });
+
+  it("handles empty string", async () => {
+    const complexInput = mount(ComplexInput, { props: props });
+    const input = complexInput.find("input");
+    input.element.value = "";
     await input.trigger("change");
     expect(input.attributes()["aria-invalid"]).toBe("true");
     const wrongSVG = complexInput.find(".wrong-input-svg");
