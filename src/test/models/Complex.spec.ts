@@ -38,108 +38,33 @@ describe("toJSON", () => {
 });
 
 describe("fromString", () => {
-  it("throws an error when constructed from invalid String", () => {
-    expect(() => Complex.fromString("a + 3i")).toThrowError();
-  });
+  const testCases = [
+    { input: "a + 3i", expectedOutput: undefined },
+    { input: "", expectedOutput: undefined },
+    { input: "1", expectedOutput: new Complex(1, 0) },
+    { input: "1i", expectedOutput: new Complex(0, 1) },
+    { input: "1 + i", expectedOutput: new Complex(1, 1) },
+    { input: "1 + 2i", expectedOutput: new Complex(1, 2) },
+    { input: "1 - i", expectedOutput: new Complex(1, -1) },
+    { input: "1 - 2i", expectedOutput: new Complex(1, -2) },
+    { input: "1.5", expectedOutput: new Complex(1.5, 0) },
+    { input: "0.2i", expectedOutput: new Complex(0, 0.2) },
+    { input: "0.2 + 2.5676i", expectedOutput: new Complex(0.2, 2.5676) },
+    { input: "i", expectedOutput: new Complex(0, 1) },
+    { input: "-i", expectedOutput: new Complex(0, -1) },
+    { input: "-1", expectedOutput: new Complex(-1, 0) },
+    { input: "-3i", expectedOutput: new Complex(0, -3) },
+    { input: "-0.5i", expectedOutput: new Complex(0, -0.5) },
+    { input: "-2 + 2i", expectedOutput: new Complex(-2, 2) },
+    { input: "2 - 4i", expectedOutput: new Complex(2, -4) },
+  ];
 
-  it("throws an error when constructed from empty String", () => {
-    expect(() => Complex.fromString("")).toThrowError();
-  });
+  testCases.forEach(({ input, expectedOutput }) => {
+    it(`returns ${expectedOutput} for '${input}'`, () => {
+      const complex = Complex.fromString(input);
 
-  it("works with 1", () => {
-    const complex = Complex.fromString("1");
-
-    expect(complex).toEqual(new Complex(1, 0));
-  });
-
-  it("works with 1i", () => {
-    const complex = Complex.fromString("1i");
-
-    expect(complex).toEqual(new Complex(0, 1));
-  });
-
-  it("works with 1 + i", () => {
-    const complex = Complex.fromString("1 + i");
-
-    expect(complex).toEqual(new Complex(1, 1));
-  });
-
-  it("works with 1 + 2i", () => {
-    const complex = Complex.fromString("1 + 2i");
-
-    expect(complex).toEqual(new Complex(1, 2));
-  });
-
-  it("works with 1 - i", () => {
-    const complex = Complex.fromString("1 - i");
-
-    expect(complex).toEqual(new Complex(1, -1));
-  });
-
-  it("works with 1 - 2i", () => {
-    const complex = Complex.fromString("1 - 2i");
-
-    expect(complex).toEqual(new Complex(1, -2));
-  });
-
-  it("works with 1.5", () => {
-    const complex = Complex.fromString("1.5");
-
-    expect(complex).toEqual(new Complex(1.5, 0));
-  });
-
-  it("works with 0.2i", () => {
-    const complex = Complex.fromString("0.2i");
-
-    expect(complex).toEqual(new Complex(0, 0.2));
-  });
-
-  it("works with 0.2 + 2.5676i", () => {
-    const complex = Complex.fromString("0.2 + 2.5676i");
-
-    expect(complex).toEqual(new Complex(0.2, 2.5676));
-  });
-
-  it("works with i", () => {
-    const complex = Complex.fromString("i");
-
-    expect(complex).toEqual(new Complex(0, 1));
-  });
-
-  it("works with -i", () => {
-    const complex = Complex.fromString("-i");
-
-    expect(complex).toEqual(new Complex(0, -1));
-  });
-
-  it("works with -1", () => {
-    const complex = Complex.fromString("-1");
-
-    expect(complex).toEqual(new Complex(-1, 0));
-  });
-
-  it("works with -3i", () => {
-    const complex = Complex.fromString("-3i");
-
-    expect(complex).toEqual(new Complex(0, -3));
-  });
-
-  it("works with -0.5i", () => {
-    const complex = Complex.fromString("-0.5i");
-
-    expect(complex).toEqual(new Complex(0, -0.5));
-  });
-
-  it("works with -2 + 2i", () => {
-    const complex = Complex.fromString("-3i");
-
-    expect(complex).toEqual(new Complex(0, -3));
-  });
-
-  it("works with 2 - 4i", () => {
-    const complex = Complex.fromString("-3i");
-
-    expect(complex).toEqual(new Complex(0, -3));
+      expect(complex).toEqual(expectedOutput);
+    });
   });
 });
 

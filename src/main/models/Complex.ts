@@ -2,7 +2,7 @@ import RandomUtils from "@/utils/RandomUtils";
 import NumberUtils from "@/utils/NumberUtils";
 
 const COMPLEX_REGEX =
-  /^\s*(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)\s*([+-])\s*(\d*|\d+\.\d+)i)\s*$/;
+  /^(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)([+-])(\d*|\d+\.\d+)i)$/;
 
 /**
  * Representation of a complex number
@@ -39,21 +39,17 @@ export default class Complex {
   }
 
   /**
-   * Try to convert a string to a complex number
+   * Convert a string representation of a complex number to a complex number
    *
    * @param complexString a string representing a complex number
-   * @returns the complex number corresponding to the string
-   * @throws an error if the provided string does not match the complex REGEX
+   * @returns the complex number corresponding to the string or undefined if the provided string
+   * does not match the complex REGEX
    */
-  public static fromString(complexString: string): Complex {
-    // Prepare the error in case the conversion fails
-    const error = Error("The provided string could not be parsed into a complex number.");
-
+  public static fromString(complexString: string): Complex | undefined {
     // Try to match the complex string with the regex of a complex number
-    const match = complexString.match(COMPLEX_REGEX);
-
+    const match = complexString.trim().replaceAll(" ", "").match(COMPLEX_REGEX);
     if (match == null) {
-      throw error;
+      return undefined;
     }
 
     // If only the real part is provided
