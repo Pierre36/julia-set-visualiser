@@ -1,5 +1,5 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexEllipse from "@/models/ComplexEllipse";
@@ -7,26 +7,24 @@ import ComplexLine from "@/models/ComplexLine";
 import ComboBox from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 
-export default defineComponent({
-  name: "CoefficientItem",
-  components: { ComboBox, CoefficientInput },
-  props: {
-    degree: { type: Number, required: true },
-    coefficient: {
-      type: [Complex, ComplexCircle, ComplexLine, ComplexEllipse],
-      required: true,
-    },
-    availablePowers: { type: Array<number>, required: true },
-  },
-  emits: ["update:degree", "update:coefficient", "delete:coefficient"],
-  computed: {
-    degreeOptions(): { id: string; text: string }[] {
-      return this.availablePowers
-        .map((power) => ({ id: power.toString(), text: power.toString() }))
-        .concat({ id: this.degree.toString(), text: this.degree.toString() });
-    },
-  },
-});
+export interface Props {
+  degree: number;
+  coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+  availablePowers: number[];
+}
+
+const { degree, coefficient, availablePowers } = defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: "update:degree", value: number): void;
+  (e: "update:coefficient", value: Complex | ComplexCircle | ComplexLine | ComplexEllipse): void;
+  (e: "delete:coefficient"): void;
+}>();
+
+const degreeOptions = computed(() => [
+  ...availablePowers.map((power) => ({ id: power.toString(), text: power.toString() })),
+  { id: degree.toString(), text: degree.toString() },
+]);
 </script>
 
 <template>
@@ -38,9 +36,9 @@ export default defineComponent({
         :options="degreeOptions"
         :selected="degree.toString()"
         label="Coefficient degree"
-        @update:selected="(newDegree) => $emit('update:degree', newDegree)"
+        @update:selected="(newDegree) => emit('update:degree', newDegree)"
       />
-      <button ref="removeButton" class="icon-button" @click="$emit('delete:coefficient')">
+      <button ref="removeButton" class="icon-button" @click="emit('delete:coefficient')">
         <svg class="icon" viewBox="100 -860 760 760" role="img">
           <title>Remove coefficient</title>
           <path
@@ -53,7 +51,7 @@ export default defineComponent({
     </div>
     <CoefficientInput
       :coefficient="coefficient"
-      @update:coefficient="(newCoefficient) => $emit('update:coefficient', newCoefficient)"
+      @update:coefficient="(newCoefficient) => emit('update:coefficient', newCoefficient)"
     />
   </div>
 </template>

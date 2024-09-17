@@ -2,18 +2,18 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import Complex from "@/models/Complex";
 import CoefficientInput from "@/components/CoefficientInput.vue";
-import CoefficientItem from "@/components/CoefficientItem.vue";
+import CoefficientItem, { type Props } from "@/components/CoefficientItem.vue";
 import ComboBox from "@/components/ComboBox.vue";
 
-describe("Render", () => {
-  let props: { degree: number; coefficient: Complex; availablePowers: number[] };
+let props: Props;
 
+const degree = 6;
+const coefficient = new Complex(3, 6);
+const availablePowers = [1, 2, 3];
+
+describe("Render", () => {
   beforeEach(() => {
-    props = {
-      degree: 6,
-      coefficient: new Complex(3, 6),
-      availablePowers: [1, 2, 3],
-    };
+    props = { degree: degree, coefficient: coefficient, availablePowers: availablePowers };
   });
 
   it("displays a combobox to change the degree", () => {
@@ -35,7 +35,7 @@ describe("Render", () => {
       { id: "3", text: "3" },
       { id: "6", text: "6" },
     ]);
-    expect(degreeComboBox.vm.$props.selected).toBe(props.degree.toString());
+    expect(degreeComboBox.vm.$props.selected).toBe(degree.toString());
     expect(degreeComboBox.vm.$props.label).toBe("Coefficient degree");
   });
 
@@ -59,20 +59,14 @@ describe("Render", () => {
     const coefficientInput = coefficientItem.findComponent(CoefficientInput);
 
     // Check the CoefficientInput is rendered correctly
-    expect(coefficientInput.vm.$props.coefficient).toEqual(props.coefficient);
+    expect(coefficientInput.vm.$props.coefficient).toEqual(coefficient);
     expect(coefficientInput.vm.$props.level).toEqual(4);
   });
 });
 
 describe("Interactions", () => {
-  let props: { degree: number; coefficient: Complex; availablePowers: number[] };
-
   beforeEach(() => {
-    props = {
-      degree: 6,
-      coefficient: new Complex(3, 6),
-      availablePowers: [1, 2, 3],
-    };
+    props = { degree: degree, coefficient: coefficient, availablePowers: availablePowers };
   });
 
   it("emits an event when changing the degree", () => {
