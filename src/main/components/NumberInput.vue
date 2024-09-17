@@ -29,13 +29,9 @@ const isWrong = ref(false);
 
 const input = useTemplateRef<HTMLInputElement>("input");
 
-const inputValue: ComputedRef<string> = computed(() => {
-  if (isWrong.value) {
-    return input.value?.value || value.toString();
-  } else {
-    return value.toString();
-  }
-});
+const inputValue: ComputedRef<string | undefined> = computed(() =>
+  isWrong.value ? input.value?.value : value.toString()
+);
 
 function stepDown(): void {
   input.value?.stepDown();
@@ -64,8 +60,8 @@ function isIncorrectValue(newValue: number): boolean {
   );
 }
 
-function checkAndUpdate(stringValue: string): void {
-  const newValue = parseFloat(stringValue);
+function checkAndUpdate(): void {
+  const newValue = parseFloat(input.value?.value || "");
   isWrong.value = isIncorrectValue(newValue);
   if (!isWrong.value) emit("update:value", newValue);
 }
@@ -90,7 +86,7 @@ function checkAndUpdate(stringValue: string): void {
       @keydown.up.prevent="stepUp"
       @keydown.home.prevent="goToMin"
       @keydown.end.prevent="goToMax"
-      @change="($event) => checkAndUpdate(($event.target as HTMLInputElement).value)"
+      @change="checkAndUpdate"
     />
     <svg viewBox="0 -960 960 960" role="img" class="wrong-input-svg" v-if="isWrong">
       <title>{{ wrongInputMessage }}</title>
