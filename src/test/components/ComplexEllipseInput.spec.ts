@@ -7,7 +7,11 @@ import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  ellipse: ComplexEllipse;
+}
+
+let props: TestProps;
 
 const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
 const level = 1;
@@ -108,17 +112,7 @@ describe("Interactions", () => {
     const newCentre = new Complex(4, 2);
     complexInput.vm.$emit("update:complex", newCentre);
     await ellipseInput.vm.$nextTick();
-    expect(ellipseInput.emitted()["update:ellipse"]).toEqual([
-      [
-        new ComplexEllipse(
-          newCentre,
-          ellipse.halfWidth,
-          ellipse.halfHeight,
-          ellipse.rotationAngle,
-          ellipse.duration
-        ),
-      ],
-    ]);
+    expect(ellipse.centre).toEqual(newCentre);
   });
 
   it("correctly changes the half-width of the ellipse", async () => {
@@ -127,17 +121,7 @@ describe("Interactions", () => {
     const newHalfWidth = 20;
     numberInput.vm.$emit("update:value", newHalfWidth);
     await ellipseInput.vm.$nextTick();
-    expect(ellipseInput.emitted()["update:ellipse"]).toEqual([
-      [
-        new ComplexEllipse(
-          ellipse.centre,
-          newHalfWidth,
-          ellipse.halfHeight,
-          ellipse.rotationAngle,
-          ellipse.duration
-        ),
-      ],
-    ]);
+    expect(ellipse.halfWidth).toEqual(newHalfWidth);
   });
 
   it("correctly changes the half-height of the ellipse", async () => {
@@ -146,17 +130,7 @@ describe("Interactions", () => {
     const newHalfHeight = 20;
     numberInput.vm.$emit("update:value", newHalfHeight);
     await ellipseInput.vm.$nextTick();
-    expect(ellipseInput.emitted()["update:ellipse"]).toEqual([
-      [
-        new ComplexEllipse(
-          ellipse.centre,
-          ellipse.halfWidth,
-          newHalfHeight,
-          ellipse.rotationAngle,
-          ellipse.duration
-        ),
-      ],
-    ]);
+    expect(ellipse.halfHeight).toEqual(newHalfHeight);
   });
 
   it("correctly changes the rotation angle of the ellipse", async () => {
@@ -165,35 +139,15 @@ describe("Interactions", () => {
     const newRotationAngle = 20;
     numberInput.vm.$emit("update:value", newRotationAngle);
     await ellipseInput.vm.$nextTick();
-    expect(ellipseInput.emitted()["update:ellipse"]).toEqual([
-      [
-        new ComplexEllipse(
-          ellipse.centre,
-          ellipse.halfWidth,
-          ellipse.halfHeight,
-          newRotationAngle,
-          ellipse.duration
-        ),
-      ],
-    ]);
+    expect(ellipse.rotationAngle).toEqual(newRotationAngle);
   });
 
   it("correctly changes the duration of the animation", async () => {
     const ellipseInput = mount(ComplexEllipseInput, { props: props });
     const numberInput = ellipseInput.findAllComponents(NumberInput)[3];
     const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
+    numberInput.vm.$emit("update:value", newDuration / 1000);
     await ellipseInput.vm.$nextTick();
-    expect(ellipseInput.emitted()["update:ellipse"]).toEqual([
-      [
-        new ComplexEllipse(
-          ellipse.centre,
-          ellipse.halfWidth,
-          ellipse.halfHeight,
-          ellipse.rotationAngle,
-          newDuration * 1000
-        ),
-      ],
-    ]);
+    expect(ellipse.duration).toEqual(newDuration);
   });
 });

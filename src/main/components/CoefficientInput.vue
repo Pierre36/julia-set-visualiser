@@ -12,15 +12,15 @@ import ComplexLineInput from "@/components/ComplexLineInput.vue";
 import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
 
 export interface Props {
-  coefficient?: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
   level?: number;
 }
 
-const { coefficient = new Complex(0, 0), level = 4 } = defineProps<Props>();
+const { level = 4 } = defineProps<Props>();
 
-const emit = defineEmits<{
-  (e: "update:coefficient", value: Complex | ComplexCircle | ComplexLine | ComplexEllipse): void;
-}>();
+const coefficient = defineModel<Complex | ComplexCircle | ComplexLine | ComplexEllipse>(
+  "coefficient",
+  { default: new Complex(0, 0) }
+);
 
 const typeOptions = [
   { id: CoefficientTypes.CONSTANT, text: "Constant" },
@@ -36,11 +36,11 @@ const defaultValues = {
 };
 
 const currentType = computed(() => {
-  if (coefficient instanceof ComplexCircle) {
+  if (coefficient.value instanceof ComplexCircle) {
     return CoefficientTypes.CIRCLE;
-  } else if (coefficient instanceof ComplexLine) {
+  } else if (coefficient.value instanceof ComplexLine) {
     return CoefficientTypes.LINE;
-  } else if (coefficient instanceof ComplexEllipse) {
+  } else if (coefficient.value instanceof ComplexEllipse) {
     return CoefficientTypes.ELLIPSE;
   } else {
     return CoefficientTypes.CONSTANT;
@@ -50,7 +50,7 @@ const currentType = computed(() => {
 const heading = computed(() => `h${level}`);
 
 function changeType(newType: CoefficientTypes): void {
-  emit("update:coefficient", defaultValues[newType].copy());
+  coefficient.value = defaultValues[newType].copy();
 }
 </script>
 
@@ -66,32 +66,16 @@ function changeType(newType: CoefficientTypes): void {
     />
     <template v-if="coefficient instanceof Complex">
       <component :is="heading">Value</component>
-      <ComplexInput
-        :complex="coefficient"
-        label="Coefficient value"
-        @update:complex="(complex) => emit('update:coefficient', complex)"
-      />
+      <ComplexInput v-model:complex="coefficient" label="Coefficient value" />
     </template>
     <template v-else-if="coefficient instanceof ComplexCircle">
-      <ComplexCircleInput
-        :circle="coefficient"
-        :level="level"
-        @update:circle="(circle) => emit('update:coefficient', circle)"
-      />
+      <ComplexCircleInput v-model:circle="coefficient" :level="level" />
     </template>
     <template v-else-if="coefficient instanceof ComplexLine">
-      <ComplexLineInput
-        :line="coefficient"
-        :level="level"
-        @update:line="(line) => emit('update:coefficient', line)"
-      />
+      <ComplexLineInput v-model:line="coefficient" :level="level" />
     </template>
     <template v-else>
-      <ComplexEllipseInput
-        :ellipse="coefficient"
-        :level="level"
-        @update:ellipse="(ellipse) => emit('update:coefficient', ellipse)"
-      />
+      <ComplexEllipseInput v-model:ellipse="coefficient" :level="level" />
     </template>
   </div>
 </template>

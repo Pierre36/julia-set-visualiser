@@ -3,7 +3,11 @@ import { mount } from "@vue/test-utils";
 import Complex from "@/models/Complex";
 import ComplexInput, { type Props } from "@/components/ComplexInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  complex: Complex;
+}
+
+let props: TestProps;
 
 const complex = new Complex(3, 6);
 const label = "label";

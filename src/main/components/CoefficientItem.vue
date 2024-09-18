@@ -9,15 +9,18 @@ import CoefficientInput from "@/components/CoefficientInput.vue";
 
 export interface Props {
   degree: number;
-  coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
   availablePowers: number[];
 }
 
-const { degree, coefficient, availablePowers } = defineProps<Props>();
+const { degree, availablePowers } = defineProps<Props>();
+
+const coefficient = defineModel<Complex | ComplexCircle | ComplexLine | ComplexEllipse>(
+  "coefficient",
+  { required: true }
+);
 
 const emit = defineEmits<{
   (e: "update:degree", value: number): void;
-  (e: "update:coefficient", value: Complex | ComplexCircle | ComplexLine | ComplexEllipse): void;
   (e: "delete:coefficient"): void;
 }>();
 
@@ -31,6 +34,7 @@ const degreeOptions = computed(() => [
   <div class="frame">
     <div class="degree-picker">
       <span>Degree</span>
+      <!-- TODO Use v-model for degree after combobox switch to Composition API -->
       <ComboBox
         id="degree-combobox"
         :options="degreeOptions"
@@ -49,10 +53,7 @@ const degreeOptions = computed(() => [
         </svg>
       </button>
     </div>
-    <CoefficientInput
-      :coefficient="coefficient"
-      @update:coefficient="(newCoefficient) => emit('update:coefficient', newCoefficient)"
-    />
+    <CoefficientInput v-model:coefficient="coefficient" />
   </div>
 </template>
 

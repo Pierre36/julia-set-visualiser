@@ -7,7 +7,11 @@ import NumberInput from "@/components/NumberInput.vue";
 import type { Props } from "@/components/ComplexLineInput.vue";
 import ComplexLineInput from "@/components/ComplexLineInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  line: ComplexLine;
+}
+
+let props: TestProps;
 
 const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
 const level = 1;
@@ -75,9 +79,7 @@ describe("Interactions", () => {
     const newStart = new Complex(4, 2);
     complexInput.vm.$emit("update:complex", newStart);
     await lineInput.vm.$nextTick();
-    expect(lineInput.emitted()["update:line"]).toEqual([
-      [new ComplexLine(newStart, line.end, line.duration)],
-    ]);
+    expect(line.start).toEqual(newStart);
   });
 
   it("correctly changes the radius of the line", async () => {
@@ -86,19 +88,15 @@ describe("Interactions", () => {
     const newEnd = new Complex(3, 6);
     complexInput.vm.$emit("update:complex", newEnd);
     await lineInput.vm.$nextTick();
-    expect(lineInput.emitted()["update:line"]).toEqual([
-      [new ComplexLine(line.start, newEnd, line.duration)],
-    ]);
+    expect(line.end).toEqual(newEnd);
   });
 
   it("correctly changes the duration of the animation", async () => {
     const lineInput = mount(ComplexLineInput, { props: props });
     const numberInput = lineInput.findComponent(NumberInput);
     const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
+    numberInput.vm.$emit("update:value", newDuration / 1000);
     await lineInput.vm.$nextTick();
-    expect(lineInput.emitted()["update:line"]).toEqual([
-      [new ComplexLine(line.start, line.end, newDuration * 1000)],
-    ]);
+    expect(line.duration).toEqual(newDuration);
   });
 });

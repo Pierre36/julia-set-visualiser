@@ -12,7 +12,11 @@ import ComplexLineInput from "@/components/ComplexLineInput.vue";
 import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
 import ComplexLine from "@/models/ComplexLine";
 
-let props: Props;
+interface TestProps extends Props {
+  coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+}
+
+let props: TestProps;
 
 const level = 1;
 

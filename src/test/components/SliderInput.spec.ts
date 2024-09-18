@@ -3,7 +3,11 @@ import { DOMWrapper, mount } from "@vue/test-utils";
 import SliderInput, { type Props } from "@/components/SliderInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  value: number;
+}
+
+let props: TestProps;
 
 const value = 36;
 const min = 0;

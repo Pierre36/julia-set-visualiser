@@ -6,46 +6,30 @@ import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
 export interface Props {
-  line?: ComplexLine;
   level?: number;
 }
 
-const { line = new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000), level = 4 } =
-  defineProps<Props>();
+const { level = 4 } = defineProps<Props>();
 
-const emit = defineEmits<{ (e: "update:line", value: ComplexLine): void }>();
+const line = defineModel<ComplexLine>("line", {
+  default: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
+});
 
 const heading = computed(() => `h${level}`);
-const durationSecond = computed(() => line.duration / 1000);
 
-function update(property: keyof ComplexLine, newValue: any) {
-  const newLine = line.copy();
-  newLine[property] = newValue;
-  emit("update:line", newLine);
-}
+const durationSecond = computed({
+  get: () => line.value.duration / 1000,
+  set: (duration) => (line.value.duration = duration * 1000),
+});
 </script>
 
 <template>
   <component :is="heading">Start</component>
-  <ComplexInput
-    :complex="line.start"
-    label="Line start"
-    @update:complex="(newStart) => update('start', newStart)"
-  />
+  <ComplexInput v-model:complex="line.start" label="Line start" />
   <component :is="heading">End</component>
-  <ComplexInput
-    :complex="line.end"
-    label="Line end"
-    @update:complex="(newEnd) => update('end', newEnd)"
-  />
+  <ComplexInput v-model:complex="line.end" label="Line end" />
   <component :is="heading">Duration</component>
-  <NumberInput
-    :value="durationSecond"
-    :min="0"
-    :step="1"
-    @update:value="(newDuration) => update('duration', newDuration * 1000)"
-    label="Duration"
-  />
+  <NumberInput v-model:value="durationSecond" :min="0" :step="1" label="Duration" />
 </template>
 
 <style scoped>

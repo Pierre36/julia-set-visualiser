@@ -2,7 +2,6 @@
 import { computed, ref, useTemplateRef, type ComputedRef } from "vue";
 
 export interface Props {
-  value?: number;
   min?: number;
   max?: number;
   step?: number;
@@ -12,7 +11,6 @@ export interface Props {
 }
 
 const {
-  value = 0,
   min = undefined,
   max = undefined,
   step = 1,
@@ -21,16 +19,14 @@ const {
   label = "",
 } = defineProps<Props>();
 
-const emit = defineEmits<{
-  (e: "update:value", value: number): void;
-}>();
+const value = defineModel<number>("value", { default: 0 });
 
 const isWrong = ref(false);
 
 const input = useTemplateRef<HTMLInputElement>("input");
 
 const inputValue: ComputedRef<string | undefined> = computed(() =>
-  isWrong.value ? input.value?.value : value.toString()
+  isWrong.value ? input.value?.value : value.value.toString()
 );
 
 function stepDown(): void {
@@ -44,11 +40,11 @@ function stepUp(): void {
 }
 
 function goToMin(): void {
-  if (min != undefined) emit("update:value", min);
+  if (min != undefined) value.value = min;
 }
 
 function goToMax(): void {
-  if (max != undefined) emit("update:value", max);
+  if (max != undefined) value.value = max;
 }
 
 function isIncorrectValue(newValue: number): boolean {
@@ -63,7 +59,7 @@ function isIncorrectValue(newValue: number): boolean {
 function checkAndUpdate(): void {
   const newValue = parseFloat(input.value?.value || "");
   isWrong.value = isIncorrectValue(newValue);
-  if (!isWrong.value) emit("update:value", newValue);
+  if (!isWrong.value) value.value = newValue;
 }
 </script>
 

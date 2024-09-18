@@ -2,7 +2,11 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import NumberInput, { type Props } from "@/components/NumberInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  value: number;
+}
+
+let props: TestProps;
 
 const value = 36;
 const min = 0;

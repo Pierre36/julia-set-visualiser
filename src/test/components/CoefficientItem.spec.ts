@@ -4,8 +4,15 @@ import Complex from "@/models/Complex";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 import CoefficientItem, { type Props } from "@/components/CoefficientItem.vue";
 import ComboBox from "@/components/ComboBox.vue";
+import type ComplexCircle from "@/models/ComplexCircle";
+import type ComplexLine from "@/models/ComplexLine";
+import type ComplexEllipse from "@/models/ComplexEllipse";
 
-let props: Props;
+interface TestProps extends Props {
+  coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+}
+
+let props: TestProps;
 
 const degree = 6;
 const coefficient = new Complex(3, 6);

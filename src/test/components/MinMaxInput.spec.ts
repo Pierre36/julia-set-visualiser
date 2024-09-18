@@ -3,7 +3,12 @@ import { mount } from "@vue/test-utils";
 import MinMaxInput, { type Props } from "@/components/MinMaxInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  minValue: number;
+  maxValue: number;
+}
+
+let props: TestProps;
 
 const minValue = 36;
 const maxValue = 42;

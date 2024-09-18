@@ -3,28 +3,25 @@ import Complex from "@/models/Complex";
 import { computed, ref, useTemplateRef, type ComputedRef } from "vue";
 
 export interface Props {
-  complex?: Complex;
   label?: string;
 }
 
-const { complex = new Complex(0, 0), label = "" } = defineProps<Props>();
+const { label = "" } = defineProps<Props>();
 
-const emit = defineEmits<{
-  (e: "update:complex", value: Complex): void;
-}>();
+const complex = defineModel<Complex>("complex", { default: new Complex(0, 0) });
 
 const isWrong = ref(false);
 
 const input = useTemplateRef<HTMLInputElement>("input");
 
 const inputValue: ComputedRef<string | undefined> = computed(() =>
-  isWrong.value ? input.value?.value : complex.toString()
+  isWrong.value ? input.value?.value : complex.value.toString()
 );
 
 function checkAndUpdate(): void {
   const newValue = Complex.fromString(input.value?.value?.trim() || "");
   isWrong.value = newValue == undefined;
-  if (newValue != undefined) emit("update:complex", newValue);
+  if (newValue != undefined) complex.value = newValue;
 }
 </script>
 

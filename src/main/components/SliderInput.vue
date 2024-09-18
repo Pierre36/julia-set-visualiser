@@ -3,7 +3,6 @@ import { computed, type ComputedRef } from "vue";
 import NumberInput from "@/components/NumberInput.vue";
 
 export interface Props {
-  value: number;
   min: number;
   max: number;
   step: number;
@@ -12,19 +11,9 @@ export interface Props {
   level?: number;
 }
 
-const {
-  value,
-  min,
-  max,
-  step,
-  isIntegerOnly = false,
-  label = "",
-  level = 5,
-} = defineProps<Props>();
+const { min, max, step, isIntegerOnly = false, label = "", level = 5 } = defineProps<Props>();
 
-defineEmits<{
-  (e: "update:value", value: number): void;
-}>();
+const value = defineModel<number>("value", { required: true });
 
 const heading: ComputedRef<string> = computed(() => `h${level}`);
 </script>
@@ -33,13 +22,12 @@ const heading: ComputedRef<string> = computed(() => `h${level}`);
   <div class="slider-input">
     <component :is="heading">{{ label }}</component>
     <NumberInput
-      :value="value"
+      v-model:value="value"
       :min="min"
       :max="max"
       :step="step"
       :isIntegerOnly="isIntegerOnly"
       :label="label"
-      @update:value="(newValue) => $emit('update:value', newValue)"
     />
     <input
       type="range"

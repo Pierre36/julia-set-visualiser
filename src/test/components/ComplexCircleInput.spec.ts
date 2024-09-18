@@ -7,7 +7,11 @@ import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import type { Props } from "@/components/ComplexCircleInput.vue";
 
-let props: Props;
+interface TestProps extends Props {
+  circle: ComplexCircle;
+}
+
+let props: TestProps;
 
 const circle = new ComplexCircle(new Complex(3, 6), 36, 2000);
 const level = 1;
@@ -80,9 +84,7 @@ describe("Interactions", () => {
     const newCentre = new Complex(4, 2);
     complexInput.vm.$emit("update:complex", newCentre);
     await circleInput.vm.$nextTick();
-    expect(circleInput.emitted()["update:circle"]).toEqual([
-      [new ComplexCircle(newCentre, circle.radius, circle.duration)],
-    ]);
+    expect(circle.centre).toEqual(newCentre);
   });
 
   it("correctly changes the radius of the circle", async () => {
@@ -91,19 +93,15 @@ describe("Interactions", () => {
     const newRadius = 36;
     numberInput.vm.$emit("update:value", newRadius);
     await circleInput.vm.$nextTick();
-    expect(circleInput.emitted()["update:circle"]).toEqual([
-      [new ComplexCircle(circle.centre, newRadius, circle.duration)],
-    ]);
+    expect(circle.radius).toEqual(newRadius);
   });
 
   it("correctly changes the duration of the animation", async () => {
     const circleInput = mount(ComplexCircleInput, { props: props });
     const numberInput = circleInput.findAllComponents(NumberInput)[1];
     const newDuration = 1000;
-    numberInput.vm.$emit("update:value", newDuration);
+    numberInput.vm.$emit("update:value", newDuration / 1000);
     await circleInput.vm.$nextTick();
-    expect(circleInput.emitted()["update:circle"]).toEqual([
-      [new ComplexCircle(circle.centre, circle.radius, newDuration * 1000)],
-    ]);
+    expect(circle.duration).toEqual(newDuration);
   });
 });

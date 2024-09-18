@@ -3,8 +3,6 @@ import { computed, type ComputedRef } from "vue";
 import NumberInput from "@/components/NumberInput.vue";
 
 export interface Props {
-  minValue?: number;
-  maxValue?: number;
   min?: number;
   max?: number;
   step?: number;
@@ -15,8 +13,6 @@ export interface Props {
 }
 
 const {
-  minValue = 0,
-  maxValue = 0,
   min = undefined,
   max = undefined,
   step = 1,
@@ -26,10 +22,8 @@ const {
   level = 5,
 } = defineProps<Props>();
 
-defineEmits<{
-  (e: "update:minValue", value: number): void;
-  (e: "update:maxValue", value: number): void;
-}>();
+const minValue = defineModel<number>("minValue", { default: 0 });
+const maxValue = defineModel<number>("maxValue", { default: 0 });
 
 const heading: ComputedRef<string> = computed(() => `h${level}`);
 </script>
@@ -38,23 +32,21 @@ const heading: ComputedRef<string> = computed(() => `h${level}`);
   <div class="min-max-input">
     <component :is="heading">Min:</component>
     <NumberInput
-      :value="minValue"
+      v-model:value="minValue"
       :min="min"
       :max="maxValue"
       :step="step"
       :isIntegerOnly="isIntegerOnly"
       :label="minLabel"
-      @update:value="(newMinValue) => $emit('update:minValue', newMinValue)"
     />
     <component :is="heading">Max:</component>
     <NumberInput
-      :value="maxValue"
+      v-model:value="maxValue"
       :min="minValue"
       :max="max"
       :step="step"
       :isIntegerOnly="isIntegerOnly"
       :label="maxLabel"
-      @update:value="(newMaxValue) => $emit('update:maxValue', newMaxValue)"
     />
   </div>
 </template>
