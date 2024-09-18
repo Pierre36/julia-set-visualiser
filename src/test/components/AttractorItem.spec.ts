@@ -2,20 +2,24 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
-import AttractorItem from "@/components/AttractorItem.vue";
+import AttractorItem, { type Props } from "@/components/AttractorItem.vue";
 import SliderInput from "@/components/SliderInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 
-describe("Render", () => {
-  let props: { isDefault: boolean; isInfinity: boolean; attractor: Attractor };
+interface TestProps extends Props {
+  attractor: Attractor;
+}
 
+let props: TestProps;
+
+const isDefault = false;
+const isInfinity = false;
+const attractor = new Attractor(new Complex(3, 6), 210, 0.1, 0.2, 0.3, 0.4);
+
+describe("Render", () => {
   beforeEach(() => {
-    props = {
-      isDefault: false,
-      isInfinity: false,
-      attractor: new Attractor(new Complex(3, 6), 210, 0.1, 0.2, 0.3, 0.4),
-    };
+    props = { isDefault: isDefault, isInfinity: isInfinity, attractor: attractor };
   });
 
   it("renders the AttractorItem correctly for common elements", () => {
@@ -117,15 +121,9 @@ describe("Render", () => {
   });
 });
 
-describe("Render", () => {
-  let props: { isDefault: boolean; isInfinity: boolean; attractor: Attractor };
-
+describe("Interactions", () => {
   beforeEach(() => {
-    props = {
-      isDefault: false,
-      isInfinity: false,
-      attractor: new Attractor(new Complex(3, 6), 210, 0.1, 0.2, 0.3, 0.4),
-    };
+    props = { isDefault: isDefault, isInfinity: isInfinity, attractor: attractor };
   });
 
   it("changes the attractor complex number correctly", () => {
@@ -139,7 +137,6 @@ describe("Render", () => {
     const newComplex = new Complex(4, 2);
     complexInput.vm.$emit("update:complex", newComplex);
     expect(props.attractor.complex).toEqual(newComplex);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 
   it("deletes the attractor when clicking the delete button", () => {
@@ -165,7 +162,6 @@ describe("Render", () => {
     const newHue = 36;
     sliderInput.vm.$emit("update:value", newHue);
     expect(props.attractor.hue).toBe(newHue);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 
   it("changes the saturation strength when updating the saturation strength number input", () => {
@@ -179,7 +175,6 @@ describe("Render", () => {
     const newSaturationStrength = 3.6;
     numberInput.vm.$emit("update:value", newSaturationStrength);
     expect(props.attractor.saturationStrength).toBe(newSaturationStrength);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 
   it("changes the saturation offset when updating the saturation offset number input", () => {
@@ -193,7 +188,6 @@ describe("Render", () => {
     const newSaturationOffset = 3.6;
     numberInput.vm.$emit("update:value", newSaturationOffset);
     expect(props.attractor.saturationOffset).toBe(newSaturationOffset);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 
   it("changes the value strength when updating the value strength number input", () => {
@@ -207,7 +201,6 @@ describe("Render", () => {
     const newValueStrength = 3.6;
     numberInput.vm.$emit("update:value", newValueStrength);
     expect(props.attractor.valueStrength).toBe(newValueStrength);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 
   it("changes the value offset when updating the value offset number input", () => {
@@ -221,6 +214,5 @@ describe("Render", () => {
     const newValueOffset = 3.6;
     numberInput.vm.$emit("update:value", newValueOffset);
     expect(props.attractor.valueOffset).toBe(newValueOffset);
-    expect(attractorItem.emitted().change).toBeDefined();
   });
 });

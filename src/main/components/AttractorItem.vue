@@ -1,50 +1,22 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import Complex from "@/models/Complex";
 import Attractor from "@/models/Attractor";
 import SliderInput from "@/components/SliderInput.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
-export default defineComponent({
-  name: "AttractorItem",
-  components: { ComplexInput, SliderInput, NumberInput },
-  props: {
-    isDefault: { type: Boolean, default: false },
-    isInfinity: { type: Boolean, default: false },
-    attractor: {
-      type: Attractor,
-      default: new Attractor(new Complex(0, 0), 0, 1, 1, 1, 1),
-    },
-  },
-  emits: ["delete:attractor", "change"],
-  methods: {
-    updateComplex(newComplex: Complex) {
-      this.attractor.complex = newComplex;
-      this.$emit("change");
-    },
-    updateHue(newHue: number) {
-      this.attractor.hue = newHue;
-      this.$emit("change");
-    },
-    updateSaturationStrength(newSaturationStrength: number) {
-      this.attractor.saturationStrength = newSaturationStrength;
-      this.$emit("change");
-    },
-    updateSaturationOffset(newSaturationOffset: number) {
-      this.attractor.saturationOffset = newSaturationOffset;
-      this.$emit("change");
-    },
-    updateValueStrength(newValueStrength: number) {
-      this.attractor.valueStrength = newValueStrength;
-      this.$emit("change");
-    },
-    updateValueOffset(newValueOffset: number) {
-      this.attractor.valueOffset = newValueOffset;
-      this.$emit("change");
-    },
-  },
+export interface Props {
+  isDefault?: boolean;
+  isInfinity?: boolean;
+}
+
+const { isDefault = false, isInfinity = false } = defineProps<Props>();
+
+const attractor = defineModel<Attractor>("attractor", {
+  default: new Attractor(new Complex(0, 0), 0, 1, 1, 1, 1),
 });
+
+const emit = defineEmits<{ (e: "delete:attractor"): void }>();
 </script>
 
 <template>
@@ -53,12 +25,8 @@ export default defineComponent({
     <h4 v-else-if="isInfinity" class="span-2 text-attractor">Divergence to Infinity</h4>
     <div v-else class="attractor span-2">
       <h4>Attractor</h4>
-      <ComplexInput
-        :complex="attractor.complex"
-        label="Attractor"
-        @update:complex="updateComplex"
-      />
-      <button class="icon-button" @click="$emit('delete:attractor')">
+      <ComplexInput v-model:complex="attractor.complex" label="Attractor" />
+      <button class="icon-button" @click="emit('delete:attractor')">
         <svg class="icon" viewBox="100 -860 760 760" role="img">
           <title>Remove attractor</title>
           <path
@@ -71,49 +39,39 @@ export default defineComponent({
     </div>
     <SliderInput
       class="span-2"
-      :value="attractor.hue"
+      v-model:value="attractor.hue"
       :min="0"
       :max="360"
       :step="1"
       :level="4"
       :isIntegerOnly="true"
       label="Hue"
-      @update:value="updateHue"
     />
     <h4 class="span-2 subtitle">Saturation</h4>
     <h5>Strength</h5>
     <NumberInput
-      :value="attractor.saturationStrength"
+      v-model:value="attractor.saturationStrength"
       :min="0"
       :step="0.1"
       label="Saturation strength"
-      @update:value="updateSaturationStrength"
     />
     <h5>Offset</h5>
     <NumberInput
-      :value="attractor.saturationOffset"
+      v-model:value="attractor.saturationOffset"
       :min="0"
       :step="0.1"
       label="Saturation offset"
-      @update:value="updateSaturationOffset"
     />
     <h4 class="span-2 subtitle">Value</h4>
     <h5>Strength</h5>
     <NumberInput
-      :value="attractor.valueStrength"
+      v-model:value="attractor.valueStrength"
       :min="0"
       :step="0.1"
       label="Value strength"
-      @update:value="updateValueStrength"
     />
     <h5>Offset</h5>
-    <NumberInput
-      :value="attractor.valueOffset"
-      :min="0"
-      :step="0.1"
-      label="Value offset"
-      @update:value="updateValueOffset"
-    />
+    <NumberInput v-model:value="attractor.valueOffset" :min="0" :step="0.1" label="Value offset" />
   </div>
 </template>
 
