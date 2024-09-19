@@ -1,32 +1,29 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, type ComputedRef } from "vue";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexEllipse from "@/models/ComplexEllipse";
 import ComplexLine from "@/models/ComplexLine";
-import ComboBox from "@/components/ComboBox.vue";
+import ComboBox, { type ComboBoxOption } from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 
 export interface Props {
-  degree: number;
   availablePowers: number[];
 }
 
-const { degree, availablePowers } = defineProps<Props>();
+const { availablePowers } = defineProps<Props>();
 
 const coefficient = defineModel<Complex | ComplexCircle | ComplexLine | ComplexEllipse>(
   "coefficient",
   { required: true }
 );
+const degree = defineModel<number>("degree", { required: true });
 
-const emit = defineEmits<{
-  (e: "update:degree", value: number): void;
-  (e: "delete:coefficient"): void;
-}>();
+const emit = defineEmits<{ (e: "delete:coefficient"): void }>();
 
-const degreeOptions = computed(() => [
-  ...availablePowers.map((power) => ({ id: power.toString(), text: power.toString() })),
-  { id: degree.toString(), text: degree.toString() },
+const degreeOptions: ComputedRef<ComboBoxOption<number>[]> = computed(() => [
+  ...availablePowers.map((power) => ({ id: power, text: power.toString() })),
+  { id: degree.value, text: degree.value.toString() },
 ]);
 </script>
 
@@ -34,13 +31,11 @@ const degreeOptions = computed(() => [
   <div class="frame">
     <div class="degree-picker">
       <span>Degree</span>
-      <!-- TODO Use v-model for degree after combobox switch to Composition API -->
       <ComboBox
         id="degree-combobox"
         :options="degreeOptions"
-        :selected="degree.toString()"
+        v-model:selected="degree"
         label="Coefficient degree"
-        @update:selected="(newDegree) => emit('update:degree', newDegree)"
       />
       <button ref="removeButton" class="icon-button" @click="emit('delete:coefficient')">
         <svg class="icon" viewBox="100 -860 760 760" role="img">

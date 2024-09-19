@@ -1,115 +1,117 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup generic="T" lang="ts">
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue";
 
-export default defineComponent({
-  name: "ComboBox",
-  props: {
-    id: { type: String, required: true },
-    options: {
-      type: Array<{ id: string; text: string }>,
-      default() {
-        return [];
-      },
-    },
-    selected: { type: String, default: null },
-    label: { type: String, default: "" },
-  },
-  emits: ["update:selected"],
-  data() {
-    return {
-      popupOpen: false,
-      focusedIndex: 0,
-    };
-  },
-  computed: {
-    selectedOption() {
-      return this.options.find((option) => option.id == this.selected);
-    },
-    inputText() {
-      if (this.selected == null || this.selectedOption == undefined) {
-        return "";
-      } else {
-        return this.selectedOption.text;
-      }
-    },
-    sortedOptions() {
-      const sortedOptions = this.options.slice();
-      return sortedOptions.sort(
-        (a, b) => -(a.id == this.selected ? 1 : 0) + (b.id == this.selected ? 1 : 0)
-      );
-    },
-    focusedOption() {
-      return this.sortedOptions[this.focusedIndex];
-    },
-  },
-  mounted() {
-    document.addEventListener("click", this.closePopupIfClickIsOutside);
-  },
-  methods: {
-    makeFocusedVisible() {
-      const optionItem = (this.$refs.optionItems as HTMLLIElement[]).find(
-        (o) => o.dataset.id == this.focusedOption.id
-      ) as HTMLLIElement;
-      const popup = this.$refs.popup as HTMLElement;
+export interface ComboBoxOption<IdType> {
+  id: IdType;
+  text: string;
+}
 
-      const top = optionItem.offsetTop - popup.scrollTop;
-      const bottom = top + optionItem.clientHeight;
+export interface Props<T> {
+  id: string;
+  options?: ComboBoxOption<T>[];
+  label?: string;
+}
 
-      if (top < 0) {
-        popup.scrollTo(0, optionItem.offsetTop);
-      } else if (bottom > popup.clientHeight) {
-        popup.scrollTo(0, optionItem.offsetTop - popup.clientHeight + optionItem.clientHeight);
-      }
-    },
-    closePopupIfClickIsOutside(e: any) {
-      this.popupOpen &&=
-        (this.$refs.popup as HTMLElement).contains(e.target) ||
-        (this.$refs.input as HTMLElement).contains(e.target);
-    },
-    openPopup() {
-      this.moveFocusToFirst();
-      this.popupOpen = true;
-    },
-    closePopup() {
-      this.popupOpen = false;
-      (this.$refs.input as HTMLElement).focus();
-    },
-    moveFocusDown() {
-      this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
-      this.makeFocusedVisible();
-    },
-    moveFocusUp() {
-      this.focusedIndex = (this.focusedIndex + this.options.length - 1) % this.options.length;
-      this.makeFocusedVisible();
-    },
-    moveFocusToFirst() {
-      this.focusedIndex = 0;
-      this.makeFocusedVisible();
-    },
-    moveFocusToLast() {
-      this.focusedIndex = this.options.length - 1;
-      this.makeFocusedVisible();
-    },
-    selectOption(optionId: string) {
-      this.$emit("update:selected", optionId);
-      this.closePopup();
-    },
-    onDownKeyPressed() {
-      if (!this.popupOpen) {
-        this.openPopup();
-      } else {
-        this.moveFocusDown();
-      }
-    },
-    onClick() {
-      if (!this.popupOpen) {
-        this.openPopup();
-      } else {
-        this.selectOption(this.focusedOption.id);
-      }
-    },
-  },
-});
+const { id, options = [], label = "" } = defineProps<Props<T>>();
+
+const selected = defineModel<T>("selected", { required: true });
+
+const popupOpen = ref(false);
+const focusedIndex = ref(0);
+
+const popup = useTemplateRef<HTMLElement>("popup");
+const input = useTemplateRef<HTMLInputElement>("input");
+const optionItems = useTemplateRef<HTMLLIElement[]>("optionItems");
+
+const selectedOption = computed(() => options.find((option) => option.id == selected.value));
+const inputText = computed(() =>
+  selectedOption.value != undefined ? selectedOption.value.text : ""
+);
+const sortedOptions = computed(() =>
+  options
+    .slice()
+    .sort((a, b) => (b.id == selected.value ? 1 : 0) - (a.id == selected.value ? 1 : 0))
+);
+const focusedOption = computed(() => sortedOptions.value[focusedIndex.value]);
+
+onMounted(() => document.addEventListener("click", closePopupIfClickIsOutside));
+onUnmounted(() => document.removeEventListener("click", closePopupIfClickIsOutside));
+
+function closePopupIfClickIsOutside(event: MouseEvent): void {
+  if (event.target instanceof HTMLElement) {
+    popupOpen.value &&=
+      popup.value?.contains(event.target) || input.value?.contains(event.target) || false;
+  }
+}
+
+function makeFocusedVisible(): void {
+  const optionItem = optionItems.value?.find((o) => o.dataset.id == focusedOption.value.id);
+
+  const focusedItemTop = optionItem?.offsetTop || 0;
+  const focusedItemHeight = optionItem?.clientHeight || 0;
+  const popupTop = popup.value?.scrollTop || 0;
+  const popupHeight = popup.value?.clientHeight || 0;
+
+  const top = focusedItemTop - popupTop;
+  const bottom = top + focusedItemHeight;
+
+  if (top < 0) {
+    popup.value?.scrollTo(0, focusedItemTop);
+  } else if (bottom > popupHeight) {
+    popup.value?.scrollTo(0, focusedItemTop - popupHeight + focusedItemHeight);
+  }
+}
+
+function openPopup(): void {
+  moveFocusToFirst();
+  popupOpen.value = true;
+}
+
+function closePopup(): void {
+  popupOpen.value = false;
+  input.value?.focus();
+}
+
+function moveFocusToFirst(): void {
+  focusedIndex.value = 0;
+  makeFocusedVisible();
+}
+
+function moveFocusDown(): void {
+  focusedIndex.value = (focusedIndex.value + 1) % options.length;
+  makeFocusedVisible();
+}
+
+function moveFocusUp(): void {
+  focusedIndex.value = (focusedIndex.value + options.length - 1) % options.length;
+  makeFocusedVisible();
+}
+
+function moveFocusToLast(): void {
+  focusedIndex.value = options.length - 1;
+  makeFocusedVisible();
+}
+
+function selectOption(optionId: T): void {
+  selected.value = optionId;
+  closePopup();
+}
+
+function onDownKeyPressed(): void {
+  if (!popupOpen.value) {
+    openPopup();
+  } else {
+    moveFocusDown();
+  }
+}
+
+function onClick(): void {
+  if (!popupOpen.value) {
+    openPopup();
+  } else {
+    selectOption(focusedOption.value.id);
+  }
+}
 </script>
 
 <template>
@@ -146,7 +148,7 @@ export default defineComponent({
       <li
         ref="optionItems"
         v-for="(option, index) in sortedOptions"
-        :key="option.id"
+        :key="String(option.id)"
         :data-id="option.id"
         :id="id + '_option_' + option.id"
         :class="{ focused: index == focusedIndex }"

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import Complex from "@/models/Complex";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 import CoefficientItem, { type Props } from "@/components/CoefficientItem.vue";
@@ -10,6 +10,7 @@ import type ComplexEllipse from "@/models/ComplexEllipse";
 
 interface TestProps extends Props {
   coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+  degree: number;
 }
 
 let props: TestProps;
@@ -30,19 +31,20 @@ describe("Render", () => {
     // Get the DOM element
     const degreeDiv = coefficientItem.find(".degree-picker");
     const degreeTitle = degreeDiv.find("span");
-    const degreeComboBox = degreeDiv.findComponent(ComboBox);
+    // @ts-ignore
+    const degreeComboBox: VueWrapper<ComboBox> = degreeDiv.findComponent(ComboBox);
 
     // Check the title is correct
     expect(degreeTitle.text()).toBe("Degree");
 
     // Check the ComboBox is rendered correctly
     expect(degreeComboBox.vm.$props.options).toEqual([
-      { id: "1", text: "1" },
-      { id: "2", text: "2" },
-      { id: "3", text: "3" },
-      { id: "6", text: "6" },
+      { id: 1, text: "1" },
+      { id: 2, text: "2" },
+      { id: 3, text: "3" },
+      { id: 6, text: "6" },
     ]);
-    expect(degreeComboBox.vm.$props.selected).toBe(degree.toString());
+    expect(degreeComboBox.vm.$props.selected).toBe(degree);
     expect(degreeComboBox.vm.$props.label).toBe("Coefficient degree");
   });
 
@@ -82,7 +84,8 @@ describe("Interactions", () => {
 
     // Get the DOM element
     const degreeDiv = coefficientItem.find(".degree-picker");
-    const degreeComboBox = degreeDiv.findComponent(ComboBox);
+    // @ts-ignore
+    const degreeComboBox: VueWrapper<ComboBox> = degreeDiv.findComponent(ComboBox);
 
     // Change the degree
     const newDegree = "2";

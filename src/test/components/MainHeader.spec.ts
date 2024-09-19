@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import MainHeader from "@/components/MainHeader.vue";
 import ComboBox from "@/components/ComboBox.vue";
@@ -35,7 +35,8 @@ describe("Render", () => {
     // Get DOM elements
     const logo = mainHeader.find(".logo");
     const heading = mainHeader.find("h1");
-    const combobox = mainHeader.findComponent(ComboBox);
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
     const buttons = mainHeader.findAll("button");
     const saveButton = buttons[0];
     const downloadButton = buttons[1];
@@ -168,7 +169,8 @@ describe("Interactions", () => {
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
 
     // Updates the combobox
-    const combobox = mainHeader.findComponent(ComboBox);
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
     const newConfigId = "SPECIAL";
     combobox.vm.$emit("update:selected", newConfigId);
 

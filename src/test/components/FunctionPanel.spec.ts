@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import FractalFunction from "@/models/FractalFunction";
 import Polynomial from "@/models/Polynomial";
 import ComplexCircle from "@/models/ComplexCircle";
@@ -70,7 +70,8 @@ describe("Render", () => {
     let disclosure = typeSection.findComponent(Disclosure);
     let sectionContent = typeSection.find(".content");
     let subHeadings = sectionContent.findAll("h4");
-    let comboBox = sectionContent.findComponent(ComboBox);
+    // @ts-ignore
+    const defaultComboBox: VueWrapper<ComboBox> = sectionContent.findComponent(ComboBox);
     let coefficientInput = sectionContent.findComponent(CoefficientInput);
 
     // Check the info header renders correctly
@@ -81,13 +82,13 @@ describe("Render", () => {
     // Check the section content renders correctly
     expect(subHeadings.length).toBe(1);
     expect(subHeadings[0].text()).toBe("Type");
-    expect(comboBox.vm.$props.options).toEqual([
+    expect(defaultComboBox.vm.$props.options).toEqual([
       { id: FunctionTypes.DEFAULT, text: "Default" },
       { id: FunctionTypes.NEWTON, text: "Newton" },
       { id: FunctionTypes.FRACTION, text: "Fraction" },
     ]);
-    expect(comboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
-    expect(comboBox.vm.$props.label).toBe("Function type");
+    expect(defaultComboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
+    expect(defaultComboBox.vm.$props.label).toBe("Function type");
     expect(coefficientInput.exists()).toBe(false);
 
     // Mount the FunctionPanel with a NEWTON function
@@ -100,12 +101,13 @@ describe("Render", () => {
     disclosure = typeSection.findComponent(Disclosure);
     sectionContent = typeSection.find(".content");
     subHeadings = sectionContent.findAll("h4");
-    comboBox = sectionContent.findComponent(ComboBox);
+    // @ts-ignore
+    const newtonComboBox: VueWrapper<ComboBox> = sectionContent.findComponent(ComboBox);
     coefficientInput = sectionContent.findComponent(CoefficientInput);
 
     // Check the section content renders correctly
     expect(subHeadings.length).toBe(2);
-    expect(comboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
+    expect(newtonComboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
     expect(subHeadings[1].text()).toBe("Newton coefficient");
     expect(coefficientInput.exists()).toBe(true);
     expect(coefficientInput.vm.$props.coefficient).toEqual(props.fractalFunction.newtonCoefficient);
@@ -318,7 +320,8 @@ describe("Interactions", () => {
     const content = functionPanel.find(".panel-content");
     const typeSection = content.find("section:nth-of-type(2)");
     const sectionContent = typeSection.find(".content");
-    const comboBox = sectionContent.findComponent(ComboBox);
+    // @ts-ignore
+    const comboBox: VueWrapper<ComboBox> = sectionContent.findComponent(ComboBox);
 
     // Make the combobox emits an update event
     const newFunctionType = FunctionTypes.FRACTION;

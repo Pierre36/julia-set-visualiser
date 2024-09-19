@@ -34,7 +34,8 @@ describe("Render", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const firstHeading = coefficientInput.findAll("h" + level)[0];
     expect(firstHeading.text()).toBe("Type");
-    const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.options).toEqual([
       { id: CoefficientTypes.CONSTANT, text: "Constant" },
       { id: CoefficientTypes.CIRCLE, text: "Circle" },
@@ -65,7 +66,8 @@ describe("Render for type CONSTANT", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CONSTANT);
   });
 
@@ -93,7 +95,8 @@ describe("Render for type CIRCLE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CIRCLE);
   });
 
@@ -117,7 +120,8 @@ describe("Render for type LINE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.LINE);
   });
 
@@ -141,7 +145,8 @@ describe("Render for type ELLIPSE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const firstComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.ELLIPSE);
   });
 
@@ -165,7 +170,8 @@ describe("Interactions", () => {
 
   it("correctly changes type to CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.CIRCLE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
@@ -175,7 +181,8 @@ describe("Interactions", () => {
 
   it("correctly changes type to LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.LINE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
@@ -185,7 +192,8 @@ describe("Interactions", () => {
 
   it("correctly changes type to ELLIPSE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.ELLIPSE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
@@ -196,7 +204,8 @@ describe("Interactions", () => {
   it("correctly changes type to CONSTANT", async () => {
     props.coefficient = new ComplexCircle(new Complex(0, 0), 1, 2000);
     const coefficientInput = mount(CoefficientInput, { props: props });
-    const typeComboBox = coefficientInput.findAllComponents(ComboBox)[0];
+    // @ts-ignore
+    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.CONSTANT);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[new Complex(0, 0)]]);
