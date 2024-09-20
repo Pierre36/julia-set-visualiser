@@ -145,6 +145,7 @@ export default class Configuration {
     );
   }
 
+  // TODO Remove?
   /**
    * Fill this configuration with a copy of the information of another configuration
    *
@@ -173,6 +174,24 @@ export default class Configuration {
     configuration.attractors.forEach((attractor) => {
       this.attractors.push(attractor.copy());
     });
+  }
+
+  public copy() {
+    return new Configuration(
+      this.id,
+      this.name,
+      this.resolutionScale,
+      this.coordinatesScale,
+      this.coordinatesCentre.copy(),
+      this.iterationsCount,
+      this.epsilon,
+      this.juliaBound,
+      this.fractalFunction.copy(),
+      this.juliaHSV.slice(),
+      this.defaultAttractor.copy(),
+      this.infinityAttractor.copy(),
+      this.attractors.map((a) => a.copy())
+    );
   }
 
   /**

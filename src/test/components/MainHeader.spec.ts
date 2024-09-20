@@ -1,36 +1,30 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import MainHeader from "@/components/MainHeader.vue";
 import ComboBox from "@/components/ComboBox.vue";
 import NotificationToast from "@/components/NotificationToast.vue";
 
+interface TestProps {
+  configuration: Configuration;
+}
+
+let props: TestProps;
+
+let jsonConfigurations: any[] = [];
+vi.mock("@/configurations.json", () => ({ default: jsonConfigurations }));
+
 describe("Render", () => {
-  let props: {
-    configurations: Record<string, Configuration>;
-    selectedConfigurationId: string;
-    configuration: Configuration;
-  };
-
   beforeEach(() => {
-    // Prepare the props
-    props = {
-      configurations: {
-        DEFAULT: Configuration.defaultConfiguration(),
-        CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
-        SPECIAL: Configuration.defaultConfiguration("SPECIAL", "Special"),
-      },
-      selectedConfigurationId: "DEFAULT",
-      configuration: Configuration.emptyConfiguration("", ""),
-    };
-
-    // Clear the local storage
+    props = { configuration: Configuration.defaultConfiguration() };
+    jsonConfigurations = [Configuration.defaultConfiguration("SPECIAL", "Special").toJSON()];
     localStorage.clear();
   });
 
-  it("renders correctly", () => {
+  it("renders correctly", async () => {
     // Mount the MainHeader
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
 
     // Get DOM elements
     const logo = mainHeader.find(".logo");
@@ -51,12 +45,6 @@ describe("Render", () => {
     expect(heading.text()).toBe("Julia Set Visualizer");
 
     // Check the combobox is rendered correctly
-    expect(combobox.vm.$props.options).toEqual([
-      { id: "DEFAULT", text: "Default" },
-      { id: "CUSTOM", text: "Custom" },
-      { id: "SPECIAL", text: "Special" },
-    ]);
-    expect(combobox.vm.$props.selected).toBe(props.selectedConfigurationId);
     expect(combobox.vm.$props.label).toBe("Configuration");
 
     // Check the save button is rendered correctly
@@ -78,10 +66,62 @@ describe("Render", () => {
     expect(downloadToast.vm.$props.displayDuration).toBe(1500);
   });
 
-  it("enables the save and download buttons when the selected configuration is CUSTOM", () => {
+  it("renders correctly when the locale storage is empty", async () => {
     // Mount the MainHeader
-    props.selectedConfigurationId = "CUSTOM";
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
+
+    // Get DOM elements
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
+
+    expect(combobox.vm.$props.options).toContainEqual({ id: "DEFAULT", text: "Default" });
+    expect(combobox.vm.$props.options).toContainEqual({ id: "SPECIAL", text: "Special" });
+    expect(combobox.vm.$props.selected).toBe("DEFAULT");
+  });
+
+  it("renders correctly when the locale storage has a configuration", async () => {
+    // Mount the MainHeader
+    localStorage.setItem(
+      "custom_configuration",
+      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON())
+    );
+    const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
+
+    // Get DOM elements
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
+
+    expect(combobox.vm.$props.options).toContainEqual({ id: "DEFAULT", text: "Default" });
+    expect(combobox.vm.$props.options).toContainEqual({ id: "SPECIAL", text: "Special" });
+    expect(combobox.vm.$props.options).toContainEqual({ id: "CUSTOM", text: "Custom" });
+    expect(combobox.vm.$props.selected).toBe("CUSTOM");
+  });
+
+  it("renders correctly when the locale storage has an invalid configuration", async () => {
+    // Mount the MainHeader
+    localStorage.setItem("custom_configuration", "incorrect configuration");
+    const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
+
+    // Get DOM elements
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
+
+    expect(combobox.vm.$props.options).toContainEqual({ id: "DEFAULT", text: "Default" });
+    expect(combobox.vm.$props.options).toContainEqual({ id: "SPECIAL", text: "Special" });
+    expect(combobox.vm.$props.selected).toBe("DEFAULT");
+  });
+
+  it("enables the save and download buttons when the selected configuration is CUSTOM", async () => {
+    // Mount the MainHeader
+    localStorage.setItem(
+      "custom_configuration",
+      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON())
+    );
+    const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
 
     // Check the save button is enable
     const buttons = mainHeader.findAll("button");
@@ -95,56 +135,45 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    configurations: Record<string, Configuration>;
-    selectedConfigurationId: string;
-    configuration: Configuration;
-  };
-
   beforeEach(() => {
-    props = {
-      configurations: {
-        DEFAULT: Configuration.defaultConfiguration(),
-        CUSTOM: Configuration.emptyConfiguration("CUSTOM", "Custom"),
-        SPECIAL: Configuration.defaultConfiguration("SPECIAL", "Special"),
-      },
-      selectedConfigurationId: "DEFAULT",
-      configuration: Configuration.emptyConfiguration("", ""),
-    };
+    props = { configuration: Configuration.emptyConfiguration("", "") };
+    jsonConfigurations = [Configuration.defaultConfiguration("SPECIAL", "Special").toJSON()];
+    localStorage.clear();
   });
 
-  it("saves the configuration when the save button is clicked", () => {
+  it("saves the configuration when the save button is clicked", async () => {
     // Mount the MainHeader
-    props.selectedConfigurationId = "CUSTOM";
+    const customConfiguration = Configuration.emptyConfiguration("", "");
+    localStorage.setItem("custom_configuration", JSON.stringify(customConfiguration.toJSON()));
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
 
     // Get DOM elements
     const saveButton = mainHeader.findAll("button")[0];
     const saveToast = mainHeader.findAllComponents(NotificationToast)[0];
 
-    // Change the configuration
-    props.configuration.juliaHSV = [36, 42, 16];
-
     // Mock the toast show
     saveToast.vm.show = vi.fn();
 
     // Click the saveButton
-    saveButton.trigger("click");
+    await saveButton.trigger("click");
 
     // Check the configuration is saved
-    expect(localStorage.getItem("customConfiguration")).toBe(
-      JSON.stringify(props.configuration.toJSON())
+    const savedConfiguration = customConfiguration.copy();
+    savedConfiguration.id = "CUSTOM";
+    savedConfiguration.name = "Custom";
+    expect(localStorage.getItem("custom_configuration")).toBe(
+      JSON.stringify(savedConfiguration.toJSON())
     );
     expect(saveToast.vm.show).toBeCalled();
-    const expectedConfiguration = Configuration.emptyConfiguration("CUSTOM", "Custom");
-    expectedConfiguration.fillWith(props.configuration);
-    expect(props.configurations["CUSTOM"]).toEqual(expectedConfiguration);
   });
 
-  it("downloads the configuration when the download button is clicked", () => {
+  it("downloads the configuration when the download button is clicked", async () => {
     // Mount the MainHeader
-    props.selectedConfigurationId = "CUSTOM";
+    const customConfiguration = Configuration.emptyConfiguration("", "");
+    localStorage.setItem("custom_configuration", JSON.stringify(customConfiguration.toJSON()));
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
 
     // Get DOM elements
     const downloadButton = mainHeader.findAll("button")[1];
@@ -158,23 +187,53 @@ describe("Interactions", () => {
     downloadToast.vm.show = vi.fn();
 
     // Click the saveButton
-    downloadButton.trigger("click");
+    await downloadButton.trigger("click");
 
     // Check the configuration is downloaded
     expect(downloadToast.vm.show).toBeCalled();
   });
 
-  it("emits selection change event when the combobox is updated", () => {
+  it("emits selection change event when the combobox is updated", async () => {
     // Mount the MainHeader
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
+
+    // Updates the combobox
+    // @ts-ignore
+    const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
+    const newConfigId = "SPECIAL";
+    await combobox.vm.$emit("update:selected", newConfigId);
+    await flushPromises();
+
+    // Check the right event is emitted
+    expect(mainHeader.emitted()["update:configuration"]).toEqual([
+      [Configuration.defaultConfiguration("SPECIAL", "Special")],
+    ]);
+    expect(combobox.vm.$props.selected).toBe("SPECIAL");
+  });
+
+  it("switches to custom whenever the configuration changes", async () => {
+    // Mount the MainHeader
+    const mainHeader = mount(MainHeader, { props: props, shallow: true });
+    await flushPromises();
 
     // Updates the combobox
     // @ts-ignore
     const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
     const newConfigId = "SPECIAL";
     combobox.vm.$emit("update:selected", newConfigId);
+    await mainHeader.vm.$nextTick();
 
-    // Check the right event is emitted
-    expect(mainHeader.emitted()["update:selectedConfigurationId"]).toEqual([[newConfigId]]);
+    // Update the configuration
+    const newConfiguration = Configuration.defaultConfiguration("SPECIAL", "Special");
+    newConfiguration.epsilon = 36;
+    mainHeader.setProps({ configuration: newConfiguration });
+    await mainHeader.vm.$nextTick();
+
+    // Check the selected config has changed
+    expect(combobox.vm.$props.selected).toBe("CUSTOM");
+
+    // Check the selected config is renamed "Custom"
+    expect(mainHeader.vm.$props.configuration.name).toBe("Custom");
   });
 });

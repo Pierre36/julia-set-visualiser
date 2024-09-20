@@ -1,49 +1,98 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { computed, onMounted, ref, useTemplateRef, watch, type ComputedRef, type Ref } from "vue";
 import Configuration from "@/models/Configuration";
-import ComboBox from "@/components/ComboBox.vue";
+import ComboBox, { type ComboBoxOption } from "@/components/ComboBox.vue";
 import NotificationToast from "@/components/NotificationToast.vue";
 
-export default defineComponent({
-  name: "MainHeader",
-  components: { ComboBox, NotificationToast },
-  props: {
-    configurations: { type: Object, required: true },
-    selectedConfigurationId: { type: String, required: true },
-    configuration: { type: Configuration, required: true },
-  },
-  emits: ["update:selectedConfigurationId"],
-  computed: {
-    configurationOptions() {
-      return Object.values(this.configurations).map((configuration) => ({
-        id: configuration.id,
-        text: configuration.name,
-      }));
-    },
-  },
-  methods: {
-    saveConfiguration() {
-      localStorage.setItem("customConfiguration", JSON.stringify(this.configuration.toJSON()));
-      this.configurations["CUSTOM"].fillWith(this.configuration);
-      // FIXME Fix this when switching to Composition API
-      (this.$refs.saveToast as any).show();
-    },
-    downloadConfiguration() {
-      console.debug("[>>] Downloading the current custom configuration...");
-      var fileContent = JSON.stringify(this.configuration.toJSON());
-      var blob = new Blob([fileContent], { type: "application/json" });
-      var url = window.URL.createObjectURL(blob);
-      var a = document.createElement("a");
-      a.href = url;
-      a.download = `custom_configuration.json`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      // FIXME Fix this when switching to Composition API
-      (this.$refs.downloadToast as any).show();
-      console.debug("[OK] Configuration downloaded");
-    },
-  },
+const LOCALE_STORAGE_KEY = "custom_configuration";
+
+const configuration = defineModel<Configuration>("configuration", { required: true });
+
+const configurations: Ref<Record<string, Configuration>> = ref({});
+configurations.value["DEFAULT"] = Configuration.defaultConfiguration();
+const selectedConfigurationId = ref("DEFAULT");
+const doNotTriggerWatch = ref(false);
+
+const saveToast = useTemplateRef<InstanceType<typeof NotificationToast>>("saveToast");
+const downloadToast = useTemplateRef<InstanceType<typeof NotificationToast>>("downloadToast");
+
+const configurationOptions: ComputedRef<ComboBoxOption<string>[]> = computed(() =>
+  Object.values(configurations.value).map((configuration) => ({
+    id: configuration.id,
+    text: configuration.name,
+  }))
+);
+
+watch(configuration, switchToCustomConfiguration, { deep: true });
+
+onMounted(async () => {
+  await importConfigurations();
+  await loadLocalStorageConfiguration();
 });
+
+async function importConfigurations() {
+  const { default: json } = await import("@/configurations.json");
+  json.forEach((jsonConfiguration) => {
+    configurations.value[jsonConfiguration.id] = Configuration.fromJSON(jsonConfiguration);
+  });
+}
+
+async function loadLocalStorageConfiguration() {
+  console.debug("[>>] Loading the local storage configuration...");
+  const localConfigurationString = localStorage.getItem(LOCALE_STORAGE_KEY);
+  if (localConfigurationString != null) {
+    try {
+      let localConfiguration = Configuration.fromJSON(JSON.parse(localConfigurationString));
+      localConfiguration.id = "CUSTOM";
+      localConfiguration.name = "Custom";
+      configurations.value["CUSTOM"] = localConfiguration;
+      selectConfiguration("CUSTOM");
+      console.debug("[OK] Local storage configuration loaded");
+    } catch (error) {
+      console.error("[KO] Could not load the local storage configuration: %s", error);
+    }
+  } else {
+    console.debug("[OK] No local storage found");
+  }
+}
+
+function selectConfiguration(id: string) {
+  selectedConfigurationId.value = id;
+  doNotTriggerWatch.value = true;
+  configuration.value = configurations.value[id].copy();
+}
+
+function switchToCustomConfiguration() {
+  if (!doNotTriggerWatch.value) {
+    configuration.value.id = "CUSTOM";
+    configuration.value.name = "Custom";
+    configurations.value["CUSTOM"] = configuration.value.copy();
+    selectedConfigurationId.value = "CUSTOM";
+  }
+  doNotTriggerWatch.value = false;
+}
+
+function saveConfiguration() {
+  localStorage.setItem(LOCALE_STORAGE_KEY, JSON.stringify(configuration.value.toJSON()));
+  configurations.value["CUSTOM"] = configuration.value.copy();
+  saveToast.value?.show();
+}
+
+function downloadConfiguration() {
+  console.debug("[>>] Downloading the current custom configuration...");
+
+  var fileContent = JSON.stringify(configuration.value.toJSON());
+  var blob = new Blob([fileContent], { type: "application/json" });
+  var url = window.URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "custom_configuration.json";
+  a.click();
+  window.URL.revokeObjectURL(url);
+  downloadToast.value?.show();
+
+  console.debug("[OK] Configuration downloaded");
+}
 </script>
 
 <template>
@@ -55,7 +104,7 @@ export default defineComponent({
       label="Configuration"
       :options="configurationOptions"
       :selected="selectedConfigurationId"
-      @update:selected="(newSelected) => $emit('update:selectedConfigurationId', newSelected)"
+      @update:selected="selectConfiguration"
     />
     <button
       class="icon-button"

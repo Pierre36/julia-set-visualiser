@@ -22,6 +22,7 @@ export default defineComponent({
       fps: 0 as number,
     };
   },
+  // TODO resetFractalEngineTime whenever the configuration changes
   watch: {
     "configuration.resolutionScale"(newResolutionScale: number) {
       this.fractalGenerator?.updateCanvasResolution(newResolutionScale);
@@ -124,9 +125,7 @@ export default defineComponent({
     },
   },
   async mounted() {
-    // Initialize fractal engine
-    const configuration = Configuration.emptyConfiguration("", "");
-    configuration.fillWith(this.configuration);
+    // Initialise fractal engine
     const fractalGeneratorInit = await WebGpuFractalGenerator.initialise(
       this.$refs.animationCanvas as HTMLCanvasElement
     );
@@ -138,7 +137,7 @@ export default defineComponent({
     this.fractalGenerator = fractalGeneratorInit;
 
     // Start the animation
-    this.fractalGenerator.startAnimation(configuration);
+    this.fractalGenerator.startAnimation(this.configuration);
 
     // Update dimension ratio when canvas changes size
     new ResizeObserver(() => {
