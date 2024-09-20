@@ -6,18 +6,18 @@ import FunctionPanel from "@/components/FunctionPanel.vue";
 import ColoursPanel from "@/components/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
 import RandomPanel from "@/components/RandomPanel.vue";
-import { PANELS_IDS } from "@/components/SideBar.vue";
+import PanelId from "@/components/PanelId";
 
 describe("Render", () => {
   let props: {
-    currentPanel: PANELS_IDS;
+    currentPanel: PanelId;
     configuration: Configuration;
     collapsed: boolean;
   };
 
   beforeEach(() => {
     props = {
-      currentPanel: PANELS_IDS.COLOURS,
+      currentPanel: PanelId.COLOURS,
       configuration: Configuration.defaultConfiguration(),
       collapsed: false,
     };
@@ -47,7 +47,7 @@ describe("Render", () => {
 
   it("renders properly the FUNCTION panel", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.FUNCTION;
+    props.currentPanel = PanelId.FUNCTION;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
@@ -69,7 +69,7 @@ describe("Render", () => {
 
   it("renders properly the COLOURS panel", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.COLOURS;
+    props.currentPanel = PanelId.COLOURS;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
@@ -94,7 +94,7 @@ describe("Render", () => {
 
   it("renders properly the ADVANCED panel", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.ADVANCED;
+    props.currentPanel = PanelId.ADVANCED;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
@@ -116,7 +116,7 @@ describe("Render", () => {
 
   it("renders properly the RANDOM panel", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.RANDOM;
+    props.currentPanel = PanelId.RANDOM;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the panels
@@ -139,14 +139,14 @@ describe("Render", () => {
 
 describe("Interactions", () => {
   let props: {
-    currentPanel: PANELS_IDS;
+    currentPanel: PanelId;
     configuration: Configuration;
     collapsed: boolean;
   };
 
   beforeEach(() => {
     props = {
-      currentPanel: PANELS_IDS.COLOURS,
+      currentPanel: PanelId.COLOURS,
       configuration: Configuration.defaultConfiguration(),
       collapsed: false,
     };
@@ -154,7 +154,7 @@ describe("Interactions", () => {
 
   it("emits change the FUNCTION panel emits change", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.FUNCTION;
+    props.currentPanel = PanelId.FUNCTION;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the FUNCTION panel
@@ -168,7 +168,7 @@ describe("Interactions", () => {
 
   it("emits change the COLOURS panel emits change", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.COLOURS;
+    props.currentPanel = PanelId.COLOURS;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the COLOURS panel
@@ -182,7 +182,7 @@ describe("Interactions", () => {
 
   it("emits change the ADVANCED panel emits change", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.ADVANCED;
+    props.currentPanel = PanelId.ADVANCED;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the ADVANCED panel
@@ -196,7 +196,7 @@ describe("Interactions", () => {
 
   it("emits change the RANDOM panel emits change", () => {
     // Mount the SidePanel
-    props.currentPanel = PANELS_IDS.RANDOM;
+    props.currentPanel = PanelId.RANDOM;
     const sidePanel = mount(SidePanel, { props: props, shallow: true });
 
     // Get the ADVANCED panel

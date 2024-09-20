@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import SideNav from "@/components/SideNav.vue";
-import { PANELS_IDS } from "@/components/SideBar.vue";
+import PanelId from "@/components/PanelId";
 
 describe("Render", () => {
   let props: {
-    currentPanel: PANELS_IDS;
-    panels: { id: PANELS_IDS; name: string; icon: string }[];
+    currentPanel: PanelId;
+    panels: { id: PanelId; name: string; icon: string }[];
     sidePanelCollapsed: boolean;
     label: string;
   };
@@ -16,11 +16,11 @@ describe("Render", () => {
   beforeEach(() => {
     // Prepare props
     props = {
-      currentPanel: PANELS_IDS.COLOURS,
+      currentPanel: PanelId.COLOURS,
       panels: [
-        { id: PANELS_IDS.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PANELS_IDS.COLOURS, name: "Panel 1", icon: "icon1" },
-        { id: PANELS_IDS.ADVANCED, name: "Panel 2", icon: "icon2" },
+        { id: PanelId.FUNCTION, name: "Panel 0", icon: "icon0" },
+        { id: PanelId.COLOURS, name: "Panel 1", icon: "icon1" },
+        { id: PanelId.ADVANCED, name: "Panel 2", icon: "icon2" },
       ],
       sidePanelCollapsed: false,
       label: "label",
@@ -179,8 +179,8 @@ describe("Render", () => {
 
 describe("Interactions", () => {
   let props: {
-    currentPanel: PANELS_IDS;
-    panels: { id: PANELS_IDS; name: string; icon: string }[];
+    currentPanel: PanelId;
+    panels: { id: PanelId; name: string; icon: string }[];
     sidePanelCollapsed: boolean;
     label: string;
   };
@@ -190,11 +190,11 @@ describe("Interactions", () => {
   beforeEach(() => {
     // Prepare props
     props = {
-      currentPanel: PANELS_IDS.COLOURS,
+      currentPanel: PanelId.COLOURS,
       panels: [
-        { id: PANELS_IDS.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PANELS_IDS.COLOURS, name: "Panel 1", icon: "icon1" },
-        { id: PANELS_IDS.ADVANCED, name: "Panel 2", icon: "icon2" },
+        { id: PanelId.FUNCTION, name: "Panel 0", icon: "icon0" },
+        { id: PanelId.COLOURS, name: "Panel 1", icon: "icon1" },
+        { id: PanelId.ADVANCED, name: "Panel 2", icon: "icon2" },
       ],
       sidePanelCollapsed: false,
       label: "label",

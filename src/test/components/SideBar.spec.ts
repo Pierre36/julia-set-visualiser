@@ -1,22 +1,19 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import SideBar from "@/components/SideBar.vue";
 import SidePanel from "@/components/SidePanel.vue";
 import SideNav from "@/components/SideNav.vue";
 
+interface TestProps {
+  configuration: Configuration;
+}
+
+let props: TestProps;
+
 describe("Render", () => {
-  let props: {
-    configuration: Configuration;
-  };
-
   beforeEach(() => {
-    // Prepare props
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
-
-    // Clear local storage
+    props = { configuration: Configuration.defaultConfiguration() };
     localStorage.clear();
   });
 
@@ -92,12 +89,13 @@ describe("Render", () => {
     expect(sidePanel.vm.$props.collapsed).toBe(true);
   });
 
-  it("renders correctly when the local storage contains sidePanelCollapsed false", () => {
+  it("renders correctly when the local storage contains side_panel_collapsed false", async () => {
     // Prepare local storage
-    localStorage.setItem("sidePanelCollapsed", "false");
+    localStorage.setItem("side_panel_collapsed", "false");
 
     // Mount SideBar
     const sidebar = mount(SideBar, { props: props, shallow: true });
+    await flushPromises();
 
     // Find DOM elements
     const nav = sidebar.find("#sidenav");
@@ -118,35 +116,28 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    configuration: Configuration;
-  };
-
   beforeEach(() => {
-    // Prepare props
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
-
-    // Clear local storage
+    props = { configuration: Configuration.defaultConfiguration() };
     localStorage.clear();
   });
 
-  it("emits change when SidePanel emits change", () => {
+  it("emits configuration update when SidePanel emits configuration update", () => {
     // Mount SideBar
     const sidebar = mount(SideBar, { props: props, shallow: true });
 
     // Make sidePanel emit change
     const sidePanel = sidebar.findComponent(SidePanel);
-    sidePanel.vm.$emit("change");
+    const newConfiguration = Configuration.emptyConfiguration("NEW", "New");
+    sidePanel.vm.$emit("update:configuration", newConfiguration);
 
     // Check SideBar emits change
-    expect(sidebar.emitted().change).toBeDefined();
+    expect(sidebar.emitted()["update:configuration"]).toEqual([[newConfiguration]]);
   });
 
   it("expands the sidePanel when SideNav emits collapse event", async () => {
     // Mount SideBar
     const sidebar = mount(SideBar, { props: props, shallow: true });
+    await flushPromises();
 
     // Find DOM elements
     const nav = sidebar.find("#sidenav");
@@ -157,7 +148,7 @@ describe("Interactions", () => {
     sideNav.vm.$emit("update:sidePanelCollapsed");
     await sidebar.vm.$nextTick();
     expect(sidePanel.vm.$props.collapsed).toBe(false);
-    expect(localStorage.getItem("sidePanelCollapsed")).toBe("false");
+    expect(localStorage.getItem("side_panel_collapsed")).toBe("false");
   });
 
   it("changes the current panel when SideNav emits corresponding event", async () => {
@@ -179,6 +170,7 @@ describe("Interactions", () => {
   it("expands the sidePanel when the expand button is clicked", async () => {
     // Mount SideBar
     const sidebar = mount(SideBar, { props: props, shallow: true });
+    await flushPromises();
 
     // Find DOM elements
     const nav = sidebar.find("#sidenav");
@@ -188,6 +180,6 @@ describe("Interactions", () => {
     // Click expand button and check the sidePanel and localStorage are updated
     await expandButton.trigger("click");
     expect(sidePanel.vm.$props.collapsed).toBe(false);
-    expect(localStorage.getItem("sidePanelCollapsed")).toBe("false");
+    expect(localStorage.getItem("side_panel_collapsed")).toBe("false");
   });
 });

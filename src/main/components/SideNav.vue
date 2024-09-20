@@ -1,12 +1,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import { PANELS_IDS } from "@/components/SideBar.vue";
+import type PanelId from "@/components/PanelId";
+import type { Panel } from "@/components/SideBar.vue";
 
 export default defineComponent({
   name: "SideNav",
   props: {
     currentPanel: { type: String, required: true },
-    panels: { type: Array<{ id: PANELS_IDS; name: string; icon: string }>, required: true },
+    panels: { type: Array<Panel>, required: true },
     sidePanelCollapsed: { type: Boolean, default: true },
     label: { type: String, default: "" },
   },
@@ -54,7 +55,7 @@ export default defineComponent({
         0
       );
     },
-    changePanel(newPanel: PANELS_IDS) {
+    changePanel(newPanel: PanelId) {
       this.$emit("update:currentPanel", newPanel);
       if (this.sidePanelCollapsed || newPanel == this.currentPanel) {
         this.$emit("update:sidePanelCollapsed");
