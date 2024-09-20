@@ -1,25 +1,25 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import Disclosure from "@/components/Disclosure.vue";
+import Disclosure, { type Props } from "@/components/Disclosure.vue";
+
+let props: Props;
+
+const headingCentred = true;
+const headingLevel = 2;
+const headingText = "heading text";
+const buttonTitle = "button title";
+const buttonSvgPath = "button svg path";
+const rotateWhenExpand = true;
 
 describe("Render", () => {
-  let props: {
-    headingCentred?: boolean;
-    headingLevel?: number;
-    headingText?: string;
-    buttonTitle?: string;
-    buttonSvgPath?: string;
-    rotateWhenExpand?: boolean;
-  };
-
   beforeEach(() => {
     props = {
-      headingCentred: true,
-      headingLevel: 2,
-      headingText: "heading text",
-      buttonTitle: "button title",
-      buttonSvgPath: "button svg path",
-      rotateWhenExpand: true,
+      headingCentred: headingCentred,
+      headingLevel: headingLevel,
+      headingText: headingText,
+      buttonTitle: buttonTitle,
+      buttonSvgPath: buttonSvgPath,
+      rotateWhenExpand: rotateWhenExpand,
     };
   });
 
@@ -72,22 +72,14 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    headingCentred?: boolean;
-    headingLevel?: number;
-    headingText?: string;
-    buttonTitle?: string;
-    buttonSvgPath?: string;
-    rotateWhenExpand?: boolean;
-  };
-
   beforeEach(() => {
     props = {
-      headingCentred: true,
-      headingLevel: 2,
-      headingText: "heading text",
-      buttonSvgPath: "button svg path",
-      rotateWhenExpand: true,
+      headingCentred: headingCentred,
+      headingLevel: headingLevel,
+      headingText: headingText,
+      buttonTitle: buttonTitle,
+      buttonSvgPath: buttonSvgPath,
+      rotateWhenExpand: rotateWhenExpand,
     };
   });
 
