@@ -2,12 +2,12 @@
 import { computed, ref } from "vue";
 
 export interface Props {
-  headingCentred: boolean;
-  headingLevel: number;
-  headingText: string;
-  buttonTitle: string;
-  buttonSvgPath: string;
-  rotateWhenExpand: boolean;
+  headingCentred?: boolean;
+  headingLevel?: number;
+  headingText?: string;
+  buttonTitle?: string;
+  buttonSvgPath?: string;
+  rotateWhenExpand?: boolean;
 }
 
 const {

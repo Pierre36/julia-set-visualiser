@@ -4,7 +4,7 @@ import ComboBox from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 import CoefficientItem from "@/components/CoefficientItem.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import Complex from "@/models/Complex";
 import FractalFunction from "@/models/FractalFunction";
 import FunctionTypes from "@/constants/FunctionTypes";
@@ -19,7 +19,7 @@ export default defineComponent({
     IconTextButton,
     CoefficientItem,
     CoefficientInput,
-    Disclosure,
+    ExpandableDisclosure,
   },
   props: {
     fractalFunction: { type: FractalFunction, required: true },
@@ -112,7 +112,7 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Function">
+      <ExpandableDisclosure :headingCentred="true" :headingLevel="2" headingText="Function">
         <p>This panel allows to choose the function used to draw the Julia and Fatou sets.</p>
         <p>
           By adding, editing and removing coefficients, you can edit a polynomial or fractional
@@ -122,7 +122,7 @@ export default defineComponent({
           By changing the function type, you can change the type of the final function (see Function
           type section info for more details).
         </p>
-      </Disclosure>
+      </ExpandableDisclosure>
     </header>
 
     <div class="panel-content">
@@ -131,7 +131,7 @@ export default defineComponent({
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Function type">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Function type">
           <p>In this section, you can change the function type. There is 3 function types:</p>
           <ul class="info-list">
             <li>
@@ -153,7 +153,7 @@ export default defineComponent({
               polynomials.
             </li>
           </ul>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content">
           <h4>Type</h4>
           <ComboBox
@@ -176,7 +176,11 @@ export default defineComponent({
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" :headingText="numeratorHeading">
+        <ExpandableDisclosure
+          class="section-header"
+          :headingLevel="3"
+          :headingText="numeratorHeading"
+        >
           <p>In this section, you can:</p>
           <ul class="info-list">
             <li>
@@ -219,7 +223,7 @@ export default defineComponent({
               the duration of the round trip.
             </li>
           </ul>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div>
           <CoefficientItem
             class="coefficient-item"
@@ -243,7 +247,11 @@ export default defineComponent({
       </section>
 
       <section v-if="fractalFunction.functionType == 'FRACTION'">
-        <Disclosure class="section-header" :headingLevel="3" headingText="Denominator coefficients">
+        <ExpandableDisclosure
+          class="section-header"
+          :headingLevel="3"
+          headingText="Denominator coefficients"
+        >
           <p>In this section, you can:</p>
           <ul class="info-list">
             <li>
@@ -286,7 +294,7 @@ export default defineComponent({
               the duration of the round trip.
             </li>
           </ul>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div>
           <CoefficientItem
             class="coefficient-item"

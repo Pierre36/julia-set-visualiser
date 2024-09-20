@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import ColoursPanel from "@/components/ColoursPanel.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import SliderInput from "@/components/SliderInput.vue";
 import AttractorItem from "@/components/AttractorItem.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
@@ -31,7 +31,7 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = coloursPanel.find("header");
-    const disclosure = header.findComponent(Disclosure);
+    const disclosure = header.findComponent(ExpandableDisclosure);
 
     // Check the header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(true);
@@ -46,7 +46,7 @@ describe("Render", () => {
     // Get the DOM elements
     const content = coloursPanel.find(".panel-content");
     const juliaSection = content.find("section:nth-of-type(1)");
-    const disclosure = juliaSection.findComponent(Disclosure);
+    const disclosure = juliaSection.findComponent(ExpandableDisclosure);
     const sectionContent = juliaSection.find(".content");
     const subHeading = sectionContent.find("h4");
     const colourVisualizer = sectionContent.find(".colour-visualizer");
@@ -94,7 +94,7 @@ describe("Render", () => {
     // Get the DOM elements
     let content = coloursPanel.find(".panel-content");
     let fatouSection = content.find("section:nth-of-type(2)");
-    const disclosure = fatouSection.findComponent(Disclosure);
+    const disclosure = fatouSection.findComponent(ExpandableDisclosure);
     const attractorItems = fatouSection.findAllComponents(AttractorItem);
     let addButton = fatouSection.findComponent(IconTextButton);
 

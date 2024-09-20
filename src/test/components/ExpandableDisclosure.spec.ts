@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import Disclosure, { type Props } from "@/components/Disclosure.vue";
+import ExpandableDisclosure, { type Props } from "@/components/ExpandableDisclosure.vue";
 
 let props: Props;
 
@@ -24,38 +24,38 @@ describe("Render", () => {
   });
 
   it("renders the header correctly", () => {
-    // Mount the Disclosure
-    const disclosure = mount(Disclosure, { props: props });
+    // Mount the ExpandableDisclosure
+    const disclosure = mount(ExpandableDisclosure, { props: props });
 
     // Get the header
     const header = disclosure.find(".title");
 
     // Check the header is rendered correctly
-    expect(header.element.matches("h" + props.headingLevel)).toBe(true);
+    expect(header.element.matches("h" + headingLevel)).toBe(true);
     expect(header.classes()).toContain("centred");
-    expect(header.text()).toBe(props.headingText);
+    expect(header.text()).toBe(headingText);
   });
 
   it("renders the expand button correctly", () => {
-    // Mount the Disclosure
-    const disclosure = mount(Disclosure, { props: props });
+    // Mount the ExpandableDisclosure
+    const disclosure = mount(ExpandableDisclosure, { props: props });
 
     // Get the button
     const expandButton = disclosure.find(".icon-button");
     const expandSVG = expandButton.find("svg");
 
     // Check the button is rendered correctly
-    expect(expandSVG.find("title").text()).toBe(props.buttonTitle);
-    expect(expandSVG.find("path").attributes().d).toBe(props.buttonSvgPath);
+    expect(expandSVG.find("title").text()).toBe(buttonTitle);
+    expect(expandSVG.find("path").attributes().d).toBe(buttonSvgPath);
     expect(expandButton.attributes().role).toBe("button");
     expect(expandButton.attributes()["aria-expanded"]).toBe("false");
     expect(expandButton.classes()).toContain("rotate");
   });
 
   it("renders the content correctly", async () => {
-    // Mount the Disclosure
+    // Mount the ExpandableDisclosure
     const contentText = "CONTENT TEXT";
-    const disclosure = mount(Disclosure, {
+    const disclosure = mount(ExpandableDisclosure, {
       props: props,
       slots: { default: "<div>" + contentText + "</div>" },
     });
@@ -84,8 +84,8 @@ describe("Interactions", () => {
   });
 
   it("displays the content when clicking on the expand button", async () => {
-    // Mount the Disclosure
-    const disclosure = mount(Disclosure, { props: props });
+    // Mount the ExpandableDisclosure
+    const disclosure = mount(ExpandableDisclosure, { props: props });
 
     // Get the DOM elements
     const expandButton = disclosure.find(".icon-button");

@@ -3,14 +3,14 @@ import { defineComponent } from "vue";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 import FunctionTypes from "@/constants/FunctionTypes";
 import Configuration from "@/models/Configuration";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 import MinMaxInput from "@/components/MinMaxInput.vue";
 import MultiComboBox from "@/components/MultiComboBox.vue";
 
 export default defineComponent({
   name: "RandomPanel",
-  components: { IconTextButton, Disclosure, MinMaxInput, MultiComboBox },
+  components: { IconTextButton, ExpandableDisclosure, MinMaxInput, MultiComboBox },
   props: {
     configuration: { type: Configuration, required: true },
   },
@@ -108,19 +108,19 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Randomize">
+      <ExpandableDisclosure :headingCentred="true" :headingLevel="2" headingText="Randomize">
         <p>This panel allows to randomize the parameters of the fractal.</p>
         <p>You can edit the range of values the parameters can take.</p>
         <p>
           Click the randomize button at the bottom to give random values to all parameters of the
           fractal.
         </p>
-      </Disclosure>
+      </ExpandableDisclosure>
     </header>
 
     <div class="panel-content">
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Function">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Function">
           <p>
             In this section, you can change the range of values the function parameters can take.
           </p>
@@ -128,7 +128,7 @@ export default defineComponent({
             For complex numbers, you can choose their min and max modulus. This means that the
             distance between the complex number and zero will be between the min and max you set.
           </p>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content one-column">
           <h4>Function types</h4>
           <MultiComboBox
@@ -161,7 +161,7 @@ export default defineComponent({
             @update:minValue="(newMin) => (coefficientsCount.min = newMin)"
             @update:maxValue="(newMax) => (coefficientsCount.max = newMax)"
           />
-          <Disclosure
+          <ExpandableDisclosure
             headingText="Constant coefficients"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -183,8 +183,8 @@ export default defineComponent({
               @update:maxValue="(newMax) => (complexModulus.max = newMax)"
               :level="6"
             />
-          </Disclosure>
-          <Disclosure
+          </ExpandableDisclosure>
+          <ExpandableDisclosure
             headingText="Circle coefficients"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -236,8 +236,8 @@ export default defineComponent({
               @update:maxValue="(newMax) => (circleDuration.max = newMax)"
               :level="6"
             />
-          </Disclosure>
-          <Disclosure
+          </ExpandableDisclosure>
+          <ExpandableDisclosure
             headingText="Line coefficients"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -274,8 +274,8 @@ export default defineComponent({
               @update:maxValue="(newMax) => (lineDuration.max = newMax)"
               :level="6"
             />
-          </Disclosure>
-          <Disclosure
+          </ExpandableDisclosure>
+          <ExpandableDisclosure
             headingText="Ellipse coefficients"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -357,18 +357,18 @@ export default defineComponent({
               @update:maxValue="(newMax) => (ellipseDuration.max = newMax)"
               :level="6"
             />
-          </Disclosure>
+          </ExpandableDisclosure>
         </div>
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Colours">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Colours">
           <p>
             In this section, you can change the range of values the colours parameters can take.
           </p>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content one-column">
-          <Disclosure
+          <ExpandableDisclosure
             headingText="Julia colour"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -420,8 +420,8 @@ export default defineComponent({
               @update:maxValue="(newMax) => (juliaValue.max = newMax)"
               :level="6"
             />
-          </Disclosure>
-          <Disclosure
+          </ExpandableDisclosure>
+          <ExpandableDisclosure
             headingText="Attractors"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -503,12 +503,16 @@ export default defineComponent({
               @update:maxValue="(newMax) => (attractorsValueOffset.max = newMax)"
               :level="6"
             />
-          </Disclosure>
+          </ExpandableDisclosure>
         </div>
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Advanced Settings">
+        <ExpandableDisclosure
+          class="section-header"
+          :headingLevel="3"
+          headingText="Advanced Settings"
+        >
           <p>
             In this section, you can change the range of values the advanced parameters can take.
           </p>
@@ -516,9 +520,9 @@ export default defineComponent({
             Note that the resolution cannot be randomized. Therefore, the resolution chosen in the
             advanced panel will stay the same.
           </p>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content one-column">
-          <Disclosure
+          <ExpandableDisclosure
             headingText="Viewport"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -555,8 +559,8 @@ export default defineComponent({
               @update:maxValue="(newMax) => (viewportCentreModulus.max = newMax)"
               :level="6"
             />
-          </Disclosure>
-          <Disclosure
+          </ExpandableDisclosure>
+          <ExpandableDisclosure
             headingText="Computation"
             :headingLevel="4"
             :rotateWhenExpand="true"
@@ -608,7 +612,7 @@ export default defineComponent({
               @update:maxValue="(newMax) => (juliaBound.max = newMax)"
               :level="6"
             />
-          </Disclosure>
+          </ExpandableDisclosure>
         </div>
       </section>
 

@@ -3,7 +3,7 @@ import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import Complex from "@/models/Complex";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 
@@ -22,7 +22,7 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = advancedPanel.find("header");
-    const disclosure = header.findComponent(Disclosure);
+    const disclosure = header.findComponent(ExpandableDisclosure);
 
     // Check the header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(true);
@@ -37,7 +37,7 @@ describe("Render", () => {
     // Get the DOM elements
     const content = advancedPanel.find(".panel-content");
     const viewportSection = content.find("section:nth-of-type(1)");
-    const disclosure = viewportSection.findComponent(Disclosure);
+    const disclosure = viewportSection.findComponent(ExpandableDisclosure);
     const sectionContent = viewportSection.find(".content");
     const subHeadings = sectionContent.findAll("h4");
     const numberInputs = sectionContent.findAllComponents(NumberInput);
@@ -79,7 +79,7 @@ describe("Render", () => {
     // Get the DOM elements
     const content = advancedPanel.find(".panel-content");
     const computationSection = content.find("section:nth-of-type(2)");
-    const disclosure = computationSection.findComponent(Disclosure);
+    const disclosure = computationSection.findComponent(ExpandableDisclosure);
     const sectionContent = computationSection.find(".content");
     const subHeadings = sectionContent.findAll("h4");
     const numberInputs = sectionContent.findAllComponents(NumberInput);

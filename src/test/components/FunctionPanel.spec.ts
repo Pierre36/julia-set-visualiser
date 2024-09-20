@@ -6,7 +6,7 @@ import ComplexCircle from "@/models/ComplexCircle";
 import Complex from "@/models/Complex";
 import FunctionTypes from "@/constants/FunctionTypes";
 import FunctionPanel from "@/components/FunctionPanel.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import ComboBox from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 import CoefficientItem from "@/components/CoefficientItem.vue";
@@ -35,7 +35,7 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = functionPanel.find("header");
-    const disclosure = header.findComponent(Disclosure);
+    const disclosure = header.findComponent(ExpandableDisclosure);
 
     // Check the header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(true);
@@ -67,7 +67,7 @@ describe("Render", () => {
     // Get the DOM elements
     let content = functionPanel.find(".panel-content");
     let typeSection = content.find("section:nth-of-type(2)");
-    let disclosure = typeSection.findComponent(Disclosure);
+    let disclosure = typeSection.findComponent(ExpandableDisclosure);
     let sectionContent = typeSection.find(".content");
     let subHeadings = sectionContent.findAll("h4");
     // @ts-ignore
@@ -98,7 +98,7 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     typeSection = content.find("section:nth-of-type(2)");
-    disclosure = typeSection.findComponent(Disclosure);
+    disclosure = typeSection.findComponent(ExpandableDisclosure);
     sectionContent = typeSection.find(".content");
     subHeadings = sectionContent.findAll("h4");
     // @ts-ignore
@@ -121,7 +121,7 @@ describe("Render", () => {
     // Get the DOM elements
     let content = functionPanel.find(".panel-content");
     let numeratorSection = content.find("section:nth-of-type(3)");
-    let disclosure = numeratorSection.findComponent(Disclosure);
+    let disclosure = numeratorSection.findComponent(ExpandableDisclosure);
     const coefficientItems = numeratorSection.findAllComponents(CoefficientItem);
     let addButton = numeratorSection.findComponent(IconTextButton);
 
@@ -161,7 +161,7 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     numeratorSection = content.find("section:nth-of-type(3)");
-    disclosure = numeratorSection.findComponent(Disclosure);
+    disclosure = numeratorSection.findComponent(ExpandableDisclosure);
 
     // Check the info header renders correctly
     expect(disclosure.vm.$props.headingText).toBe("Numerator coefficients");
@@ -230,7 +230,7 @@ describe("Render", () => {
     // Get the DOM elements
     content = functionPanel.find(".panel-content");
     denominatorSection = content.find("section:nth-of-type(4)");
-    const disclosure = denominatorSection.findComponent(Disclosure);
+    const disclosure = denominatorSection.findComponent(ExpandableDisclosure);
     const coefficientItems = denominatorSection.findAllComponents(CoefficientItem);
     let addButton = denominatorSection.findComponent(IconTextButton);
 

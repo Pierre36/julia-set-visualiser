@@ -1,12 +1,12 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 
 export default defineComponent({
   name: "AdvancedSettingsPanel",
-  components: { Disclosure, ComplexInput, NumberInput },
+  components: { ExpandableDisclosure, ComplexInput, NumberInput },
   props: {
     configuration: { type: Object, required: true },
   },
@@ -43,18 +43,22 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Advanced settings">
+      <ExpandableDisclosure
+        :headingCentred="true"
+        :headingLevel="2"
+        headingText="Advanced settings"
+      >
         <p>This panel allows to change advanced settings.</p>
         <p>
           Be careful when editing those, small changes can greatly affect the results and the
           performances.
         </p>
-      </Disclosure>
+      </ExpandableDisclosure>
     </header>
 
     <div class="panel-content">
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Viewport">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Viewport">
           <p>In this section, you can change the viewport parameters:</p>
           <ul class="info-list">
             <li>
@@ -73,7 +77,7 @@ export default defineComponent({
               centre of the viewport. By default, it is 0.
             </li>
           </ul>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content">
           <h4>Resolution</h4>
           <NumberInput
@@ -101,7 +105,7 @@ export default defineComponent({
       </section>
 
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Computation">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Computation">
           <p>In this section, you can change the computation parameters:</p>
           <ul class="info-list">
             <li>
@@ -118,7 +122,7 @@ export default defineComponent({
               in the Julia Set.
             </li>
           </ul>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content">
           <h4>Iterations</h4>
           <NumberInput

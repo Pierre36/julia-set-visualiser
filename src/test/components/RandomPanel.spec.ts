@@ -5,7 +5,7 @@ import Configuration from "@/models/Configuration";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 import Polynomial from "@/models/Polynomial";
 import RandomPanel from "@/components/RandomPanel.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 import MinMaxInput from "@/components/MinMaxInput.vue";
 import MultiComboBox from "@/components/MultiComboBox.vue";
@@ -97,7 +97,7 @@ describe("Render", () => {
 
     // Get the DOM elements
     const header = randomPanel.find("header");
-    const disclosure = header.findComponent(Disclosure);
+    const disclosure = header.findComponent(ExpandableDisclosure);
 
     // Check the header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(true);
@@ -112,12 +112,12 @@ describe("Render", () => {
     // Get the DOM elements
     const content = randomPanel.find(".panel-content");
     const functionSection = content.find("section:nth-of-type(1)");
-    const headerDisclosure = functionSection.findComponent(Disclosure);
+    const headerDisclosure = functionSection.findComponent(ExpandableDisclosure);
     const sectionContent = functionSection.find(".content");
     const headings4 = sectionContent.findAll("h4");
     const multiComboBoxes = sectionContent.findAllComponents(MultiComboBox);
     const coefficientsCountMinMinMaxInput = sectionContent.findComponent(MinMaxInput);
-    const disclosures = sectionContent.findAllComponents(Disclosure);
+    const disclosures = sectionContent.findAllComponents(ExpandableDisclosure);
 
     // Open all disclosures
     for (const disclosure of disclosures) {
@@ -357,9 +357,9 @@ describe("Render", () => {
     // Get the DOM elements
     const content = randomPanel.find(".panel-content");
     const coloursSection = content.find("section:nth-of-type(2)");
-    const headerDisclosure = coloursSection.findComponent(Disclosure);
+    const headerDisclosure = coloursSection.findComponent(ExpandableDisclosure);
     const sectionContent = coloursSection.find(".content");
-    const disclosures = sectionContent.findAllComponents(Disclosure);
+    const disclosures = sectionContent.findAllComponents(ExpandableDisclosure);
 
     // Open all disclosures
     for (const disclosure of disclosures) {
@@ -487,9 +487,9 @@ describe("Render", () => {
     // Get the DOM elements
     const content = randomPanel.find(".panel-content");
     const advancedSettingsSection = content.find("section:nth-of-type(3)");
-    const headerDisclosure = advancedSettingsSection.findComponent(Disclosure);
+    const headerDisclosure = advancedSettingsSection.findComponent(ExpandableDisclosure);
     const sectionContent = advancedSettingsSection.find(".content");
-    const disclosures = sectionContent.findAllComponents(Disclosure);
+    const disclosures = sectionContent.findAllComponents(ExpandableDisclosure);
 
     // Open all disclosures
     for (const disclosure of disclosures) {
@@ -605,7 +605,7 @@ describe("Interactions", () => {
     props.configuration.randomize = vi.fn();
 
     // Open all disclosures
-    const disclosures = randomPanel.findAllComponents(Disclosure);
+    const disclosures = randomPanel.findAllComponents(ExpandableDisclosure);
     for (const disclosure of disclosures) {
       const button = disclosure.find("button");
       if (button.exists()) {

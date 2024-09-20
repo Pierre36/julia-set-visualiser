@@ -3,14 +3,14 @@ import { defineComponent } from "vue";
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import AttractorItem from "@/components/AttractorItem.vue";
-import Disclosure from "@/components/Disclosure.vue";
+import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import SliderInput from "@/components/SliderInput.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 
 export default defineComponent({
   name: "ColoursPanel",
   components: {
-    Disclosure,
+    ExpandableDisclosure,
     SliderInput,
     AttractorItem,
     IconTextButton,
@@ -60,21 +60,21 @@ export default defineComponent({
 <template>
   <div class="panel-container">
     <header>
-      <Disclosure :headingCentred="true" :headingLevel="2" headingText="Colours">
+      <ExpandableDisclosure :headingCentred="true" :headingLevel="2" headingText="Colours">
         <p>This panel allows to change the colours used to draw the Julia and Fatou sets.</p>
-      </Disclosure>
+      </ExpandableDisclosure>
     </header>
 
     <div class="panel-content">
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Julia">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Julia">
           <p>
             In this section, you can change the colour of the Julia Set. The colour use the HSV
             colour system (see the
             <a href="https://en.wikipedia.org/wiki/HSL_and_HSV"> Wikipedia page </a>
             for more details)
           </p>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div class="content">
           <h4>Colour</h4>
           <div class="colour-visualizer" :style="'background-color:' + visualizerColour"></div>
@@ -112,13 +112,13 @@ export default defineComponent({
         </div>
       </section>
       <section>
-        <Disclosure class="section-header" :headingLevel="3" headingText="Fatou">
+        <ExpandableDisclosure class="section-header" :headingLevel="3" headingText="Fatou">
           <p>In this section, you can change the colour of the Fatou Sets.</p>
           <p>
             You can choose the colour parameters for the each attractor (including infinity). When
             computing the colour, if no attractor is close enough, the default attractor is used.
           </p>
-        </Disclosure>
+        </ExpandableDisclosure>
         <div>
           <AttractorItem
             class="attractor-item"
