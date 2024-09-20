@@ -1,13 +1,10 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+export interface Props {
+  svgPath: string;
+  text: string;
+}
 
-export default defineComponent({
-  name: "IconTextButton",
-  props: {
-    svgPath: { type: String, required: true },
-    text: { type: String, required: true },
-  },
-});
+const { svgPath, text } = defineProps<Props>();
 </script>
 
 <template>
