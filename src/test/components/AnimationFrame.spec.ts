@@ -450,8 +450,7 @@ describe("Interactions", () => {
 //     await flushPromises();
 
 //     // Use resetWebGpuFractalGeneratorTime
-//     // FIXME This would be nice to update after Composition API switch
-//     (animationFrame.vm as any).resetWebGpuFractalGeneratorTime();
+//     animationFrame.resetWebGpuFractalGeneratorTime();
 
 //     // Check resetAnimationTime is called
 //     expect(mockedFractalGenerator.resetAnimationTime).toBeCalled();
