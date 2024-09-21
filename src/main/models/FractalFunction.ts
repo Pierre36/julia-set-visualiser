@@ -2,7 +2,7 @@ import Polynomial from "@/models/Polynomial";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexLine from "@/models/ComplexLine";
 import Complex from "@/models/Complex";
-import Coefficient from "@/models/Coefficient";
+import CoefficientUtils from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import type ComplexEllipse from "@/models/ComplexEllipse";
@@ -49,7 +49,7 @@ export default class FractalFunction {
       Polynomial.fromJSON(numerator),
       Polynomial.fromJSON(denominator),
       functionType,
-      Coefficient.fromJSON(newtonCoefficient)
+      CoefficientUtils.fromJSON(newtonCoefficient)
     );
   }
 
@@ -63,7 +63,7 @@ export default class FractalFunction {
       numerator: this.numerator.toJSON(),
       denominator: this.denominator.toJSON(),
       functionType: this.functionType,
-      newtonCoefficient: Coefficient.toJSON(this.newtonCoefficient),
+      newtonCoefficient: CoefficientUtils.toJSON(this.newtonCoefficient),
     };
   }
 
@@ -290,7 +290,7 @@ export default class FractalFunction {
     ellipseDurationMinMax: { min: number; max: number }
   ): FractalFunction {
     const newFunctionType = RandomUtils.pickAmong(Array.from(functionTypes));
-    const newNewtonCoefficient = Coefficient.getRandomCoefficient(
+    const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,

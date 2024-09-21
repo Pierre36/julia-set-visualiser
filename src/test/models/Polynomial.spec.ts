@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import Polynomial from "@/models/Polynomial";
 import ComplexCircle from "@/models/ComplexCircle";
 import Complex from "@/models/Complex";
-import Coefficient from "@/models/Coefficient";
+import CoefficientUtils from "@/models/CoefficientUtils";
 import ComplexLine from "@/models/ComplexLine";
 import RandomUtils from "@/utils/RandomUtils";
 import CoefficientTypes from "@/constants/CoefficientTypes";
@@ -30,9 +30,9 @@ describe("fromJSON", () => {
     const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
 
     const polynomial = Polynomial.fromJSON({
-      0: Coefficient.toJSON(coefficient0),
-      3: Coefficient.toJSON(coefficient1),
-      6: Coefficient.toJSON(coefficient2),
+      0: CoefficientUtils.toJSON(coefficient0),
+      3: CoefficientUtils.toJSON(coefficient1),
+      6: CoefficientUtils.toJSON(coefficient2),
     });
 
     expect(polynomial).toEqual(
@@ -50,9 +50,9 @@ describe("toJSON", () => {
     const json = new Polynomial({ 0: coefficient0, 3: coefficient1, 6: coefficient2 }).toJSON();
 
     expect(json).toEqual({
-      0: Coefficient.toJSON(coefficient0),
-      3: Coefficient.toJSON(coefficient1),
-      6: Coefficient.toJSON(coefficient2),
+      0: CoefficientUtils.toJSON(coefficient0),
+      3: CoefficientUtils.toJSON(coefficient1),
+      6: CoefficientUtils.toJSON(coefficient2),
     });
   });
 });
@@ -271,7 +271,7 @@ describe("copy", () => {
 describe("getRandomPolynomial", () => {
   it("properly returns a random polynomial", () => {
     const randomCoefficient = new Complex(2, 4);
-    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.distinctIntegersBetween = vi.fn(() => [0, 1]);
 
     const coefficientsCount = 2;
@@ -309,7 +309,7 @@ describe("getRandomPolynomial", () => {
       Polynomial.MAX_DEGREE,
       coefficientsCount
     );
-    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -323,7 +323,7 @@ describe("getRandomPolynomial", () => {
       rotationAngleMinMax,
       ellipseDurationMinMax
     );
-    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledTimes(2);
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledTimes(2);
 
     expect(randomPolynomial).toEqual(
       new Polynomial({ 0: randomCoefficient, 1: randomCoefficient })

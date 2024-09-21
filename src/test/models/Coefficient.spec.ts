@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import Coefficient from "@/models/Coefficient";
+import CoefficientUtils from "@/models/CoefficientUtils";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexEllipse from "@/models/ComplexEllipse";
@@ -12,7 +12,7 @@ describe("fromJSON", () => {
     const re = 3;
     const im = 6;
 
-    const coefficient = Coefficient.fromJSON({
+    const coefficient = CoefficientUtils.fromJSON({
       re: re,
       im: im,
       type: CoefficientTypes.CONSTANT,
@@ -26,7 +26,7 @@ describe("fromJSON", () => {
     const radius = 42;
     const duration = 2000;
 
-    const coefficient = Coefficient.fromJSON({
+    const coefficient = CoefficientUtils.fromJSON({
       centre: centre,
       radius: radius,
       duration: duration,
@@ -41,7 +41,7 @@ describe("fromJSON", () => {
     const end = new Complex(4, 2);
     const duration = 2000;
 
-    const coefficient = Coefficient.fromJSON({
+    const coefficient = CoefficientUtils.fromJSON({
       start: start,
       end: end,
       duration: duration,
@@ -58,7 +58,7 @@ describe("fromJSON", () => {
     const rotationAngle = 16;
     const duration = 2000;
 
-    const coefficient = Coefficient.fromJSON({
+    const coefficient = CoefficientUtils.fromJSON({
       centre: centre,
       halfWidth: halfWidth,
       halfHeight: halfHeight,
@@ -73,7 +73,7 @@ describe("fromJSON", () => {
   });
 
   it("throws an error for incorrect JSON", () => {
-    expect(() => Coefficient.fromJSON({ type: "INCORRECT_TYPE" })).toThrowError();
+    expect(() => CoefficientUtils.fromJSON({ type: "INCORRECT_TYPE" })).toThrowError();
   });
 });
 
@@ -83,7 +83,7 @@ describe("toJSON", () => {
     const im = 6;
 
     const complex = new Complex(re, im);
-    const json = Coefficient.toJSON(complex);
+    const json = CoefficientUtils.toJSON(complex);
 
     expect(json).toEqual({
       re: re,
@@ -98,7 +98,7 @@ describe("toJSON", () => {
     const duration = 2000;
 
     const circle = new ComplexCircle(centre, radius, duration);
-    const json = Coefficient.toJSON(circle);
+    const json = CoefficientUtils.toJSON(circle);
 
     expect(json).toEqual({
       centre: centre,
@@ -114,7 +114,7 @@ describe("toJSON", () => {
     const duration = 2000;
 
     const line = new ComplexLine(start, end, duration);
-    const json = Coefficient.toJSON(line);
+    const json = CoefficientUtils.toJSON(line);
 
     expect(json).toEqual({
       start: start,
@@ -132,7 +132,7 @@ describe("toJSON", () => {
     const duration = 2000;
 
     const ellipse = new ComplexEllipse(centre, halfWidth, halfHeight, rotationAngle, duration);
-    const json = Coefficient.toJSON(ellipse);
+    const json = CoefficientUtils.toJSON(ellipse);
 
     expect(json).toEqual({
       centre: centre,
@@ -164,7 +164,7 @@ describe("getRandomCoefficient", () => {
     const rotationAngleMinMax = { min: 14, max: 15 };
     const ellipseDurationMinMax = { min: 16, max: 17 };
 
-    const randomCoefficient = Coefficient.getRandomCoefficient(
+    const randomCoefficient = CoefficientUtils.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -207,7 +207,7 @@ describe("getRandomCoefficient", () => {
     const rotationAngleMinMax = { min: 14, max: 15 };
     const ellipseDurationMinMax = { min: 16, max: 17 };
 
-    const randomCoefficient = Coefficient.getRandomCoefficient(
+    const randomCoefficient = CoefficientUtils.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -252,7 +252,7 @@ describe("getRandomCoefficient", () => {
     const rotationAngleMinMax = { min: 14, max: 15 };
     const ellipseDurationMinMax = { min: 16, max: 17 };
 
-    const randomCoefficient = Coefficient.getRandomCoefficient(
+    const randomCoefficient = CoefficientUtils.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -294,7 +294,7 @@ describe("getRandomCoefficient", () => {
     const rotationAngleMinMax = { min: 14, max: 15 };
     const ellipseDurationMinMax = { min: 16, max: 17 };
 
-    const randomCoefficient = Coefficient.getRandomCoefficient(
+    const randomCoefficient = CoefficientUtils.getRandomCoefficient(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,

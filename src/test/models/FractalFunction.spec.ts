@@ -3,7 +3,7 @@ import FractalFunction from "@/models/FractalFunction";
 import Polynomial from "@/models/Polynomial";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
-import Coefficient from "@/models/Coefficient";
+import CoefficientUtils from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import CoefficientTypes from "@/constants/CoefficientTypes";
@@ -61,7 +61,7 @@ describe("fromJSON", () => {
       numerator: numerator.toJSON(),
       denominator: denominator.toJSON(),
       functionType: functionType,
-      newtonCoefficient: Coefficient.toJSON(newtonCoefficient),
+      newtonCoefficient: CoefficientUtils.toJSON(newtonCoefficient),
     });
 
     expect(fractalFunction).toEqual(
@@ -88,7 +88,7 @@ describe("toJSON", () => {
       numerator: numerator.toJSON(),
       denominator: denominator.toJSON(),
       functionType: functionType,
-      newtonCoefficient: Coefficient.toJSON(newtonCoefficient),
+      newtonCoefficient: CoefficientUtils.toJSON(newtonCoefficient),
     });
   });
 });
@@ -590,7 +590,7 @@ describe("getRandomFractalFunction", () => {
   it("properly returns a random fractal function for default function type", () => {
     RandomUtils.pickAmong = vi.fn(() => FunctionTypes.DEFAULT as any);
     const randomCoefficient = new Complex(2, 4);
-    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
     const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
     Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
@@ -628,7 +628,7 @@ describe("getRandomFractalFunction", () => {
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
-    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -675,7 +675,7 @@ describe("getRandomFractalFunction", () => {
   it("properly returns a random fractal function for newton function type", () => {
     RandomUtils.pickAmong = vi.fn(() => FunctionTypes.NEWTON as any);
     const randomCoefficient = new Complex(2, 4);
-    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
     const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
     Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
@@ -713,7 +713,7 @@ describe("getRandomFractalFunction", () => {
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
-    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,
@@ -760,7 +760,7 @@ describe("getRandomFractalFunction", () => {
   it("properly returns a random fractal function for default function type", () => {
     RandomUtils.pickAmong = vi.fn(() => FunctionTypes.FRACTION as any);
     const randomCoefficient = new Complex(2, 4);
-    Coefficient.getRandomCoefficient = vi.fn(() => randomCoefficient);
+    CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.integerBetween = vi.fn((min, _) => min);
     const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
     Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
@@ -798,7 +798,7 @@ describe("getRandomFractalFunction", () => {
     );
 
     expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
-    expect(Coefficient.getRandomCoefficient).toHaveBeenCalledWith(
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(
       coefficientTypes,
       complexModulusMinMax,
       circleCentreModulusMinMax,

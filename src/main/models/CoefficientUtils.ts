@@ -8,7 +8,7 @@ import CoefficientTypes from "@/constants/CoefficientTypes";
 /**
  * Utility class to create coefficients
  */
-export default class Coefficient {
+export default class CoefficientUtils {
   // FIXME Returning undefined would be better than throwing an error
   /**
    * Create a coefficient from a JSON

@@ -2,7 +2,7 @@ import ComplexCircle from "@/models/ComplexCircle";
 import ComplexLine from "@/models/ComplexLine";
 import Complex from "@/models/Complex";
 import ComplexEllipse from "@/models/ComplexEllipse";
-import Coefficient from "@/models/Coefficient";
+import CoefficientUtils from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
 import type CoefficientTypes from "@/constants/CoefficientTypes";
 
@@ -62,7 +62,7 @@ export default class Polynomial {
       ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined
     > = {};
     Object.keys(coefficientsJSON).forEach(
-      (power) => (coefficients[Number(power)] = Coefficient.fromJSON(coefficientsJSON[power]))
+      (power) => (coefficients[Number(power)] = CoefficientUtils.fromJSON(coefficientsJSON[power]))
     );
     return new Polynomial(coefficients);
   }
@@ -75,7 +75,7 @@ export default class Polynomial {
   public toJSON(): any {
     const coefficientsJSON: any = {};
     this.descendingPowers().forEach((power) => {
-      coefficientsJSON[power] = Coefficient.toJSON(this.getCoefficient(power));
+      coefficientsJSON[power] = CoefficientUtils.toJSON(this.getCoefficient(power));
     });
     return coefficientsJSON;
   }
@@ -312,7 +312,7 @@ export default class Polynomial {
     const newCoefficients: Record<number, Complex | ComplexCircle | ComplexEllipse | ComplexLine> =
       {};
     for (const power of powers) {
-      newCoefficients[power] = Coefficient.getRandomCoefficient(
+      newCoefficients[power] = CoefficientUtils.getRandomCoefficient(
         coefficientTypes,
         complexModulusMinMax,
         circleCentreModulusMinMax,
