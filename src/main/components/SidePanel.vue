@@ -23,8 +23,7 @@ export default defineComponent({
     <div id="side-panel" v-show="!collapsed" role="tabpanel">
       <FunctionPanel
         v-show="currentPanel == 'FUNCTION'"
-        :fractalFunction="configuration.fractalFunction"
-        @change="$emit('change')"
+        v-model:fractalFunction="configuration.fractalFunction"
       />
       <ColoursPanel
         v-show="currentPanel == 'COLOURS'"

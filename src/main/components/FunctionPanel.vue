@@ -1,6 +1,5 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-import ComboBox from "@/components/ComboBox.vue";
+<script setup lang="ts">
+import ComboBox, { type ComboBoxOption } from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 import CoefficientItem from "@/components/CoefficientItem.vue";
@@ -11,102 +10,85 @@ import FunctionTypes from "@/constants/FunctionTypes";
 import type ComplexCircle from "@/models/ComplexCircle";
 import type ComplexEllipse from "@/models/ComplexEllipse";
 import type ComplexLine from "@/models/ComplexLine";
+import { computed, ref, type Ref } from "vue";
 
-export default defineComponent({
-  name: "FunctionPanel",
-  components: {
-    ComboBox,
-    IconTextButton,
-    CoefficientItem,
-    CoefficientInput,
-    ExpandableDisclosure,
-  },
-  props: {
-    fractalFunction: { type: FractalFunction, required: true },
-  },
-  emits: ["change"],
-  data() {
-    return {
-      functionTypeOptions: [
-        { id: FunctionTypes.DEFAULT, text: "Default" },
-        { id: FunctionTypes.NEWTON, text: "Newton" },
-        { id: FunctionTypes.FRACTION, text: "Fraction" },
-      ],
-    };
-  },
-  computed: {
-    numeratorCoefficientsList() {
-      return this.fractalFunction.numerator.getCoefficientPowers().map((degree) => ({
-        degree: degree,
-        coefficient: this.fractalFunction.getCoefficient(degree, true),
-      }));
-    },
-    denominatorCoefficientsList() {
-      return this.fractalFunction.denominator.getCoefficientPowers().map((degree) => ({
-        degree: degree,
-        coefficient: this.fractalFunction.getCoefficient(degree, false),
-      }));
-    },
-    numeratorAvailablePowers() {
-      return this.fractalFunction.numerator.getAvailablePowers();
-    },
-    denominatorAvailablePowers() {
-      return this.fractalFunction.denominator.getAvailablePowers();
-    },
-    canAddCoefficientToNumerator() {
-      return this.numeratorAvailablePowers.length != 0;
-    },
-    canAddCoefficientToDenominator() {
-      return this.denominatorAvailablePowers.length != 0;
-    },
-    numeratorHeading() {
-      if (this.fractalFunction.functionType == FunctionTypes.FRACTION) {
-        return "Numerator coefficients";
-      } else {
-        return "Coefficients";
-      }
-    },
-  },
-  methods: {
-    updateFunctionType(newFunctionType: FunctionTypes) {
-      this.fractalFunction.setFunctionType(newFunctionType);
-      this.$emit("change");
-    },
-    updateNewtonCoefficient(
-      newNewtonCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine
-    ) {
-      this.fractalFunction.setNewtonCoefficient(newNewtonCoefficient);
-      this.$emit("change");
-    },
-    updateDegree(previousDegree: number, newDegree: number, inNumerator: boolean) {
-      if (previousDegree != newDegree) {
-        this.fractalFunction.setCoefficient(
-          newDegree,
-          inNumerator,
-          this.fractalFunction.getCoefficient(previousDegree, inNumerator).copy()
-        );
-        this.fractalFunction.removeCoefficient(previousDegree, inNumerator);
-        this.$emit("change");
-      }
-    },
-    updateCoefficient(
-      power: number,
-      newCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine,
-      inNumerator: boolean
-    ) {
-      this.fractalFunction.setCoefficient(power, inNumerator, newCoefficient);
-      this.$emit("change");
-    },
-    deleteCoefficient(power: number, inNumerator: boolean) {
-      this.fractalFunction.removeCoefficient(power, inNumerator);
-      this.$emit("change");
-    },
-    addCoefficient(power: number, inNumerator: boolean) {
-      this.fractalFunction.setCoefficient(power, inNumerator, new Complex(0, 0));
-      this.$emit("change");
-    },
-  },
-});
+const fractalFunction = defineModel<FractalFunction>("fractalFunction", { required: true });
+
+const functionTypeOptions: Ref<ComboBoxOption<FunctionTypes>[]> = ref([
+  { id: FunctionTypes.DEFAULT, text: "Default" },
+  { id: FunctionTypes.NEWTON, text: "Newton" },
+  { id: FunctionTypes.FRACTION, text: "Fraction" },
+]);
+
+// TODO Update fractal function to compute this itself or something like that
+const numeratorCoefficientsList = computed(() =>
+  fractalFunction.value.numerator.getCoefficientPowers().map((degree) => ({
+    degree: degree,
+    coefficient: fractalFunction.value.getCoefficient(degree, true),
+  }))
+);
+// TODO Update fractal function to compute this itself or something like that
+const denominatorCoefficientsList = computed(() =>
+  fractalFunction.value.denominator.getCoefficientPowers().map((degree) => ({
+    degree: degree,
+    coefficient: fractalFunction.value.getCoefficient(degree, false),
+  }))
+);
+// TODO Update fractal function to compute this itself or something like that
+const numeratorAvailablePowers = computed(() =>
+  fractalFunction.value.numerator.getAvailablePowers()
+);
+// TODO Update fractal function to compute this itself or something like that
+const denominatorAvailablePowers = computed(() =>
+  fractalFunction.value.denominator.getAvailablePowers()
+);
+const canAddCoefficientToNumerator = computed(() => numeratorAvailablePowers.value.length != 0);
+const canAddCoefficientToDenominator = computed(() => denominatorAvailablePowers.value.length != 0);
+const numeratorHeading = computed(() =>
+  fractalFunction.value.functionType == FunctionTypes.FRACTION
+    ? "Numerator coefficients"
+    : "Coefficients"
+);
+
+// TODO If function type was a property depending on which the fields of the fractal function would be updated, we could use this in a v-model
+function updateFunctionType(newFunctionType: FunctionTypes) {
+  fractalFunction.value.setFunctionType(newFunctionType);
+}
+
+// TODO Same as above
+function updateNewtonCoefficient(
+  newNewtonCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine
+) {
+  fractalFunction.value.setNewtonCoefficient(newNewtonCoefficient);
+}
+
+function updateDegree(previousDegree: number, newDegree: number, inNumerator: boolean) {
+  if (previousDegree != newDegree) {
+    fractalFunction.value.setCoefficient(
+      newDegree,
+      inNumerator,
+      fractalFunction.value.getCoefficient(previousDegree, inNumerator).copy()
+    );
+    fractalFunction.value.removeCoefficient(previousDegree, inNumerator);
+  }
+}
+
+// TODO Same as above
+function updateCoefficient(
+  power: number,
+  newCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine,
+  inNumerator: boolean
+) {
+  fractalFunction.value.setCoefficient(power, inNumerator, newCoefficient);
+}
+
+function deleteCoefficient(power: number, inNumerator: boolean) {
+  fractalFunction.value.removeCoefficient(power, inNumerator);
+}
+
+function addCoefficient(power: number, inNumerator: boolean) {
+  fractalFunction.value.setCoefficient(power, inNumerator, new Complex(0, 0));
+}
 </script>
 
 <template>
