@@ -26,7 +26,6 @@
     },
     "juliaHSV": [210, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 210.0,
       "saturationStrength": 0.11,
       "saturationOffset": 0.0,
@@ -34,7 +33,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 210.0,
       "saturationStrength": 0.11,
       "saturationOffset": 0.0,
@@ -70,7 +68,6 @@
     },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 223,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -78,7 +75,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -107,7 +103,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -115,7 +110,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -149,7 +143,6 @@
     },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 223,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -157,7 +150,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -193,7 +185,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -201,7 +192,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -237,7 +227,6 @@
     },
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 223,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -245,7 +234,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -293,7 +281,6 @@
     },
     "juliaHSV": [253, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 115,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -301,7 +288,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 203,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -335,7 +321,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -343,7 +328,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -390,7 +374,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 40,
       "saturationStrength": 0.1,
       "saturationOffset": 3,
@@ -398,7 +381,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 0,
       "saturationStrength": 0,
       "saturationOffset": 0,
@@ -445,7 +427,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "CONSTANT": null,
       "hue": 175,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -453,7 +434,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "CONSTANT": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -487,7 +467,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -495,7 +474,6 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 210,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
@@ -544,7 +522,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 110,
       "saturationStrength": 0.08,
       "saturationOffset": 0.16,
@@ -552,7 +529,6 @@
       "valueOffset": 0.78
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 230,
       "saturationStrength": 0.02,
       "saturationOffset": 0.15,
@@ -598,7 +574,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 29,
       "saturationStrength": 0.12,
       "saturationOffset": 0.65,
@@ -606,7 +581,6 @@
       "valueOffset": 0.53
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 290,
       "saturationStrength": 0.11,
       "saturationOffset": 0.76,
@@ -640,7 +614,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 219,
       "saturationStrength": 0.085,
       "saturationOffset": 0.97,
@@ -648,7 +621,6 @@
       "valueOffset": 0.67
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 199,
       "saturationStrength": 0.084,
       "saturationOffset": 0.9,
@@ -701,7 +673,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 84,
       "saturationStrength": 0.2,
       "saturationOffset": 0.53,
@@ -709,7 +680,6 @@
       "valueOffset": 1.5
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 343,
       "saturationStrength": 0.19,
       "saturationOffset": 0.49,
@@ -749,7 +719,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 359,
       "saturationStrength": 0.16,
       "saturationOffset": 0.78,
@@ -757,7 +726,6 @@
       "valueOffset": 0.61
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 276,
       "saturationStrength": 0.12,
       "saturationOffset": 0.021,
@@ -816,7 +784,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 224,
       "saturationStrength": 0.051,
       "saturationOffset": 0.5,
@@ -824,7 +791,6 @@
       "valueOffset": 1.3
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 327,
       "saturationStrength": 0.1,
       "saturationOffset": 0.16,
@@ -870,7 +836,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 336,
       "saturationStrength": 0.048,
       "saturationOffset": 0.83,
@@ -878,7 +843,6 @@
       "valueOffset": 1.1
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 309,
       "saturationStrength": 0.2,
       "saturationOffset": 0.54,
@@ -937,7 +901,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 89,
       "saturationStrength": 0.087,
       "saturationOffset": 0.091,
@@ -945,7 +908,6 @@
       "valueOffset": 0.057
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 199,
       "saturationStrength": 0.14,
       "saturationOffset": 0.69,
@@ -1009,7 +971,6 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "complex": null,
       "hue": 340,
       "saturationStrength": 0.082,
       "saturationOffset": 0.039,
@@ -1017,7 +978,6 @@
       "valueOffset": 0.46
     },
     "infinityAttractor": {
-      "complex": null,
       "hue": 172,
       "saturationStrength": 0.19,
       "saturationOffset": 0.97,
