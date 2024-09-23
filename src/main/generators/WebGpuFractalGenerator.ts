@@ -559,11 +559,11 @@ export default class WebGpuFractalGenerator {
 
     this.updateParameter(
       FractalGeneratorParameters.NUMERATOR,
-      configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
+      configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
     );
     this.updateParameter(
       FractalGeneratorParameters.DENOMINATOR,
-      configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
+      configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
     );
 
     this.updateParameter(
