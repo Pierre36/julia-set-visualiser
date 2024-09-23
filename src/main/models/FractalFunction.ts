@@ -4,8 +4,7 @@ import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/Coe
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
 import type Coefficient from "./Coefficient";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisable, JsonSerialisableStatic } from "./JsonSerialisable";
+import type { JsonSerialisable } from "./JsonSerialisable";
 
 export interface RandomFractalFunctionParameters {
   functionTypes: Set<FunctionTypes>;
@@ -17,8 +16,7 @@ export interface RandomFractalFunctionParameters {
 const defaultDenominator = new Polynomial({ 0: new Complex(1, 0) });
 
 /** Representation of a fractal function */
-@staticImplements<JsonSerialisableStatic>()
-class FractalFunction implements JsonSerialisable {
+export default class FractalFunction implements JsonSerialisable {
   /**
    * Fractal function constructor
    *
@@ -172,6 +170,12 @@ class FractalFunction implements JsonSerialisable {
     }
   }
 
+  /**
+   * Create a fractal function from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the fractal function or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): FractalFunction | undefined {
     if (json === undefined) return undefined;
 
@@ -322,5 +326,3 @@ class FractalFunction implements JsonSerialisable {
     return new FractalFunction(newNumerator, newFunctionType, newDenominator, newNewtonCoefficient);
   }
 }
-
-export default FractalFunction;

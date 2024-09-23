@@ -1,8 +1,6 @@
 import RandomUtils from "@/utils/RandomUtils";
 import NumberUtils from "@/utils/NumberUtils";
 import type Coefficient from "@/models/Coefficient";
-import type { JsonSerialisableStatic } from "@/models/JsonSerialisable";
-import { staticImplements } from "@/typescript/decorators";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 const COMPLEX_REGEX =
@@ -14,8 +12,7 @@ export interface RandomComplexParameters {
 }
 
 /** Representation of a complex number */
-@staticImplements<JsonSerialisableStatic>()
-class Complex implements Coefficient {
+export default class Complex implements Coefficient {
   /**
    * Complex constructor
    *
@@ -58,6 +55,12 @@ class Complex implements Coefficient {
     return [0, 0, 0, 0, this.mod(), this.arg()];
   }
 
+  /**
+   * Create a complex from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the complex or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): Complex | undefined {
     if (json === undefined) return undefined;
     if (json.re === undefined || !Number.isFinite(json.re)) return undefined;
@@ -193,5 +196,3 @@ class Complex implements Coefficient {
     );
   }
 }
-
-export default Complex;

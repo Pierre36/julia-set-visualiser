@@ -1,7 +1,5 @@
 import RandomUtils from "@/utils/RandomUtils";
 import Complex from "@/models/Complex";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisableStatic } from "./JsonSerialisable";
 
 export interface RandomAttractorParameters {
   minHue: number;
@@ -17,8 +15,7 @@ export interface RandomAttractorParameters {
 }
 
 /** Representation of an attractor with a value and colour parameters */
-@staticImplements<JsonSerialisableStatic>()
-class Attractor {
+export default class Attractor {
   /**
    * Attractor constructor
    *
@@ -47,6 +44,12 @@ class Attractor {
     return `Attractor(${this.complex}, ${this.hue}, ${this.saturationStrength}, ${this.saturationOffset}, ${this.valueStrength}, ${this.valueOffset})`;
   }
 
+  /**
+   * Create an attractor from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the attractor or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): Attractor | undefined {
     if (json === undefined) return undefined;
 
@@ -126,5 +129,3 @@ class Attractor {
     );
   }
 }
-
-export default Attractor;

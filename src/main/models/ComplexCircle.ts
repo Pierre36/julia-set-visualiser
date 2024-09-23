@@ -1,8 +1,6 @@
 import RandomUtils from "@/utils/RandomUtils";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import type Coefficient from "@/models/Coefficient";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisableStatic } from "./JsonSerialisable";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomCircleParameters {
@@ -14,8 +12,7 @@ export interface RandomCircleParameters {
 }
 
 /** Representation of a circle in the complex plane */
-@staticImplements<JsonSerialisableStatic>()
-class ComplexCircle implements Coefficient {
+export default class ComplexCircle implements Coefficient {
   /**
    * Complex circle constructor
    *
@@ -41,6 +38,12 @@ class ComplexCircle implements Coefficient {
     return [this.duration, 0, this.radius, this.radius, this.centre.mod(), this.centre.arg()];
   }
 
+  /**
+   * Create a complex circle from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the complex circle or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): ComplexCircle | undefined {
     if (json === undefined) return undefined;
 
@@ -89,5 +92,3 @@ class ComplexCircle implements Coefficient {
     );
   }
 }
-
-export default ComplexCircle;

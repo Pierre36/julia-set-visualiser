@@ -4,8 +4,7 @@ import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisableStatic } from "@/models/JsonSerialisable";
+import type { JsonSerialisable } from "@/models/JsonSerialisable";
 
 export interface RandomConfigurationParameters {
   functionParameters: RandomFractalFunctionParameters;
@@ -28,8 +27,7 @@ export interface RandomConfigurationParameters {
 }
 
 /** Julia Set Visualizer configuration */
-@staticImplements<JsonSerialisableStatic>()
-class Configuration {
+export default class Configuration implements JsonSerialisable {
   /**
    * Configuration constructor
    *
@@ -124,6 +122,12 @@ class Configuration {
     }, [${this.attractors.join(", ")}])`;
   }
 
+  /**
+   * Create a configuration from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the configuration or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): Configuration | undefined {
     if (json === undefined) return undefined;
 
@@ -245,5 +249,3 @@ class Configuration {
     this.attractors = [];
   }
 }
-
-export default Configuration;

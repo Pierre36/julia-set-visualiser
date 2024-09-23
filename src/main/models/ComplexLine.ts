@@ -1,8 +1,6 @@
 import RandomUtils from "@/utils/RandomUtils";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import type Coefficient from "@/models/Coefficient";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisableStatic } from "./JsonSerialisable";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomLineParameters {
@@ -15,8 +13,7 @@ export interface RandomLineParameters {
 /**
  * Representation of a line in the complex plane.
  */
-@staticImplements<JsonSerialisableStatic>()
-class ComplexLine implements Coefficient {
+export default class ComplexLine implements Coefficient {
   /**
    * Complex line constructor
    *
@@ -58,6 +55,12 @@ class ComplexLine implements Coefficient {
     ];
   }
 
+  /**
+   * Create a complex line from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the complex line or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): ComplexLine | undefined {
     if (json === undefined) return undefined;
 
@@ -109,5 +112,3 @@ class ComplexLine implements Coefficient {
     );
   }
 }
-
-export default ComplexLine;

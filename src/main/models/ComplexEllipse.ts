@@ -1,8 +1,6 @@
 import RandomUtils from "@/utils/RandomUtils";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import type Coefficient from "@/models/Coefficient";
-import { staticImplements } from "@/typescript/decorators";
-import type { JsonSerialisableStatic } from "./JsonSerialisable";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomEllipseParameters {
@@ -20,8 +18,7 @@ export interface RandomEllipseParameters {
 /**
  * Representation of a ellipse in the complex plane.
  */
-@staticImplements<JsonSerialisableStatic>()
-class ComplexEllipse implements Coefficient {
+export default class ComplexEllipse implements Coefficient {
   /**
    * Complex ellipse constructor
    *
@@ -68,6 +65,12 @@ class ComplexEllipse implements Coefficient {
     ];
   }
 
+  /**
+   * Create a complex ellipse from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the complex ellipse or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): ComplexEllipse | undefined {
     if (json === undefined) return undefined;
 
@@ -136,5 +139,3 @@ class ComplexEllipse implements Coefficient {
     );
   }
 }
-
-export default ComplexEllipse;

@@ -1,8 +1,7 @@
 import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
 import type Coefficient from "@/models/Coefficient";
-import type { JsonSerialisable, JsonSerialisableStatic } from "./JsonSerialisable";
-import { staticImplements } from "@/typescript/decorators";
+import type { JsonSerialisable } from "./JsonSerialisable";
 
 export interface RandomPolynomialParameters {
   coefficientsCount: number;
@@ -10,8 +9,7 @@ export interface RandomPolynomialParameters {
 }
 
 /** Representation of a complex polynomial */
-@staticImplements<JsonSerialisableStatic>()
-class Polynomial implements JsonSerialisable {
+export default class Polynomial implements JsonSerialisable {
   /** Maximum degree of a polynomial */
   public static get MAX_DEGREE() {
     return 15;
@@ -116,6 +114,12 @@ class Polynomial implements JsonSerialisable {
     );
   }
 
+  /**
+   * Create a polynomial from its JSON representation
+   *
+   * @param json the JSON to deserialise
+   * @returns the polynomial or `undefined` if the JSON is invalid
+   */
   public static fromJSON(json: any): Polynomial | undefined {
     if (json === undefined) return undefined;
 
@@ -211,5 +215,3 @@ class Polynomial implements JsonSerialisable {
     return polynomial;
   }
 }
-
-export default Polynomial;
