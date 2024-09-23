@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
+import type Complex from "@/models/Complex";
 
 export default defineComponent({
   name: "AdvancedSettingsPanel",
@@ -20,7 +21,7 @@ export default defineComponent({
       this.configuration.coordinatesScale = newCoordinatesScale;
       this.$emit("change");
     },
-    updateCoordinatesCentre(newCoordinatesCentre: number) {
+    updateCoordinatesCentre(newCoordinatesCentre: Complex) {
       this.configuration.coordinatesCentre = newCoordinatesCentre;
       this.$emit("change");
     },

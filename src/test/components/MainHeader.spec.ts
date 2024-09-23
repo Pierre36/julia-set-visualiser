@@ -101,7 +101,7 @@ describe("Render", () => {
 
   it("renders correctly when the locale storage has an invalid configuration", async () => {
     // Mount the MainHeader
-    localStorage.setItem("custom_configuration", "incorrect configuration");
+    localStorage.setItem("custom_configuration", JSON.stringify({ invalid: "invalid" }));
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
     await flushPromises();
 

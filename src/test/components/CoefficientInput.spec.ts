@@ -11,9 +11,10 @@ import ComplexCircleInput from "@/components/ComplexCircleInput.vue";
 import ComplexLineInput from "@/components/ComplexLineInput.vue";
 import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
 import ComplexLine from "@/models/ComplexLine";
+import type Coefficient from "@/models/Coefficient";
 
 interface TestProps extends Props {
-  coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse;
+  coefficient: Coefficient;
 }
 
 let props: TestProps;
@@ -80,8 +81,6 @@ describe("Render for type CONSTANT", () => {
     expect(complexInput.vm.$props.label).toBe("Coefficient value");
   });
 });
-
-// TODO Update tests below
 
 describe("Render for type CIRCLE", () => {
   const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000);

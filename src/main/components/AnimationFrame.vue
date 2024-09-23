@@ -55,7 +55,7 @@ export default defineComponent({
       handler(newFractalFunction: FractalFunction) {
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.IS_NEWTON,
-          newFractalFunction.functionType == FunctionTypes.NEWTON ? 1 : 0
+          newFractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
         );
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.NEWTON_COEFFICIENT,
@@ -63,11 +63,11 @@ export default defineComponent({
         );
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.NUMERATOR,
-          newFractalFunction.numerator.getCoefficientsParameters()
+          newFractalFunction.getNumeratorCoefficientsEllipseParameters()
         );
         this.fractalGenerator?.updateParameter(
           FractalGeneratorParameters.DENOMINATOR,
-          newFractalFunction.denominator.getCoefficientsParameters()
+          newFractalFunction.getDenominatorCoefficientsEllipseParameters()
         );
       },
       deep: true,

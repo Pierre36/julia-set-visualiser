@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { computed, type ComputedRef } from "vue";
-import Complex from "@/models/Complex";
-import ComplexCircle from "@/models/ComplexCircle";
-import ComplexEllipse from "@/models/ComplexEllipse";
-import ComplexLine from "@/models/ComplexLine";
 import ComboBox, { type ComboBoxOption } from "@/components/ComboBox.vue";
 import CoefficientInput from "@/components/CoefficientInput.vue";
+import type Coefficient from "@/models/Coefficient";
 
 export interface Props {
   availablePowers: number[];
@@ -13,10 +10,7 @@ export interface Props {
 
 const { availablePowers } = defineProps<Props>();
 
-const coefficient = defineModel<Complex | ComplexCircle | ComplexLine | ComplexEllipse>(
-  "coefficient",
-  { required: true }
-);
+const coefficient = defineModel<Coefficient>("coefficient", { required: true });
 const degree = defineModel<number>("degree", { required: true });
 
 const emit = defineEmits<{ (e: "delete:coefficient"): void }>();

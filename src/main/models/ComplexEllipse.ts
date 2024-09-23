@@ -1,10 +1,27 @@
 import RandomUtils from "@/utils/RandomUtils";
-import Complex from "@/models/Complex";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import type Coefficient from "@/models/Coefficient";
+import { staticImplements } from "@/typescript/decorators";
+import type { JsonSerialisableStatic } from "./JsonSerialisable";
+import CoefficientTypes from "@/constants/CoefficientTypes";
+
+export interface RandomEllipseParameters {
+  centerParameters: RandomComplexParameters;
+  minHalfWidth: number;
+  maxHalfWidth: number;
+  minHalfHeight: number;
+  maxHalfHeight: number;
+  minRotationAngle: number;
+  maxRotationAngle: number;
+  minDuration: number;
+  maxDuration: number;
+}
 
 /**
  * Representation of a ellipse in the complex plane.
  */
-export default class ComplexEllipse {
+@staticImplements<JsonSerialisableStatic>()
+class ComplexEllipse implements Coefficient {
   /**
    * Complex ellipse constructor
    *
@@ -22,29 +39,61 @@ export default class ComplexEllipse {
     public duration: number
   ) {}
 
-  /**
-   * Create a complex ellipse from a JSON
-   *
-   * @param complexEllipseJSON object containing the JSON for a complex ellipse
-   * @returns the complex ellipse made from the JSON
-   */
-  public static fromJSON(complexEllipseJSON: any): ComplexEllipse {
+  public isZero() {
+    return this.centre.isZero() && this.halfWidth == 0 && this.halfHeight == 0;
+  }
+
+  public hasMinus() {
+    return false;
+  }
+
+  public multipliedBy(factor: number): ComplexEllipse {
     return new ComplexEllipse(
-      Complex.fromJSON(complexEllipseJSON["centre"]) || new Complex(0, 0),
-      complexEllipseJSON["halfWidth"],
-      complexEllipseJSON["halfHeight"],
-      complexEllipseJSON["rotationAngle"],
-      complexEllipseJSON["duration"]
+      this.centre.multipliedBy(factor),
+      this.halfWidth * factor,
+      this.halfHeight * factor,
+      this.rotationAngle,
+      this.duration
     );
   }
 
-  /**
-   * Convert a complex ellipse to a JSON object
-   *
-   * @returns the JSON object constructed from the complex ellipse
-   */
+  public getEllipseParameters() {
+    return [
+      this.duration,
+      this.rotationAngle,
+      this.halfWidth,
+      this.halfHeight,
+      this.centre.mod(),
+      this.centre.arg(),
+    ];
+  }
+
+  public static fromJSON(json: any): ComplexEllipse | undefined {
+    if (json === undefined) return undefined;
+
+    if (json.halfWidth === undefined || !Number.isFinite(json.halfWidth)) return undefined;
+    if (json.halfHeight === undefined || !Number.isFinite(json.halfHeight)) return undefined;
+    if (json.rotationAngle === undefined || !Number.isFinite(json.rotationAngle)) return undefined;
+    if (json.duration === undefined || !Number.isFinite(json.duration)) return undefined;
+
+    if (json.centre === undefined) return undefined;
+    const centre = Complex.fromJSON(json.centre);
+    if (centre == undefined) {
+      return undefined;
+    }
+
+    return new ComplexEllipse(
+      centre,
+      json.halfWidth,
+      json.halfHeight,
+      json.rotationAngle,
+      json.duration
+    );
+  }
+
   public toJSON(): any {
     return {
+      type: CoefficientTypes.ELLIPSE,
       centre: this.centre.toJSON(),
       halfWidth: this.halfWidth,
       halfHeight: this.halfHeight,
@@ -53,39 +102,14 @@ export default class ComplexEllipse {
     };
   }
 
-  /**
-   * Compute a MathML representation of the complex ellipse
-   *
-   * @param power power associated with the coefficient
-   * @returns a MathML representation of the complex ellipse
-   */
+  public toString(): string {
+    return `ComplexEllipse(${this.centre}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
+  }
+
   public toMathML(power: number | string): string {
     return `<msub><mi>e</mi><mn>${power}</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>`;
   }
 
-  /**
-   * Check if the complex ellipse is always 0 + 0i
-   *
-   * @returns `true` if the complex ellipse is always 0 + 0i, `false` otherwise
-   */
-  public isZero(): boolean {
-    return this.centre.isZero() && this.halfWidth == 0 && this.halfHeight == 0;
-  }
-
-  /**
-   * Check if the complex ellipse should be associated with a "-" in an equation
-   *
-   * @returns `false`
-   */
-  public showMinus(): boolean {
-    return false;
-  }
-
-  /**
-   * Return a copy of the complex ellipse
-   *
-   * @returns the copy of the complex ellipse
-   */
   public copy(): ComplexEllipse {
     return new ComplexEllipse(
       this.centre.copy(),
@@ -97,71 +121,20 @@ export default class ComplexEllipse {
   }
 
   /**
-   * Compute and return the multiplication of the complex ellipse by a factor
-   *
-   * @param factor factor to multiply by
-   * @returns the complex ellipse multiplied by the factor
-   */
-  public multipliedBy(factor: number): ComplexEllipse {
-    return new ComplexEllipse(
-      this.centre.multipliedBy(factor),
-      this.halfWidth * factor,
-      this.halfHeight * factor,
-      this.rotationAngle,
-      this.duration
-    );
-  }
-
-  /**
    * Return a random complex ellipse with the provided settings
    *
-   * @param centreModulusMinMax object containing the min and max value of the centre modulus
-   * @param halfWidthMinMax object containing the min and max value of the half-width
-   * @param halfHeightMinMax object containing the min and max value of the half-height
-   * @param rotationAngleMinMax object containing the min and max value of the rotation angle
-   * @param durationMinMax object containing the min and max value of the duration
+   * @param params parameters of the random complex ellipse
    * @returns the new complex ellipse
    */
-  public static getRandomComplexEllipse(
-    centreModulusMinMax: { min: number; max: number },
-    halfWidthMinMax: { min: number; max: number },
-    halfHeightMinMax: { min: number; max: number },
-    rotationAngleMinMax: { min: number; max: number },
-    durationMinMax: { min: number; max: number }
-  ): ComplexEllipse {
+  public static getRandomComplexEllipse(params: RandomEllipseParameters): ComplexEllipse {
     return new ComplexEllipse(
-      Complex.getRandomComplex(centreModulusMinMax),
-      RandomUtils.floatBetween(halfWidthMinMax.min, halfWidthMinMax.max),
-      RandomUtils.floatBetween(halfHeightMinMax.min, halfHeightMinMax.max),
-      RandomUtils.floatBetween(rotationAngleMinMax.min, rotationAngleMinMax.max),
-      RandomUtils.integerBetween(durationMinMax.min, durationMinMax.max) * 1000
+      Complex.getRandomComplex(params.centerParameters),
+      RandomUtils.floatBetween(params.minHalfWidth, params.maxHalfWidth),
+      RandomUtils.floatBetween(params.minHalfHeight, params.maxHalfHeight),
+      RandomUtils.floatBetween(params.minRotationAngle, params.maxRotationAngle),
+      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
     );
   }
-
-  /**
-   * Returns a string representation of the ellipse
-   *
-   * @returns the string representation
-   */
-  public toString(): string {
-    return `ComplexEllipse(${this.centre}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
-  }
-
-  // TODO Add test
-  /**
-   * Get the ellipse parameters corresponding to the complex ellipse (duration, angle, half-width,
-   * half-height, offset modulus and offset argument)
-   *
-   * @returns the ellipse parameters
-   */
-  public getEllipseParameters(): number[] {
-    return [
-      this.duration,
-      this.rotationAngle,
-      this.halfWidth,
-      this.halfHeight,
-      this.centre.mod(),
-      this.centre.arg(),
-    ];
-  }
 }
+
+export default ComplexEllipse;

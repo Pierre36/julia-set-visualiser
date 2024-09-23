@@ -1,15 +1,35 @@
 import Polynomial from "@/models/Polynomial";
-import Attractor from "@/models/Attractor";
-import Complex from "@/models/Complex";
-import FractalFunction from "@/models/FractalFunction";
+import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
-import type CoefficientTypes from "@/constants/CoefficientTypes";
+import { staticImplements } from "@/typescript/decorators";
+import type { JsonSerialisableStatic } from "@/models/JsonSerialisable";
 
-/**
- * Configuration class for the Julia Set Visualizer configuration.
- */
-export default class Configuration {
+export interface RandomConfigurationParameters {
+  functionParameters: RandomFractalFunctionParameters;
+  minJuliaHue: number;
+  maxJuliaHue: number;
+  minJuliaSaturation: number;
+  maxJuliaSaturation: number;
+  minJuliaValue: number;
+  maxJuliaValue: number;
+  attractorsParameters: RandomAttractorParameters;
+  minViewportScale: number;
+  maxViewportScale: number;
+  viewportCentreParameters: RandomComplexParameters;
+  minIterationsCount: number;
+  maxIterationsCount: number;
+  minEpsilon: number;
+  maxEpsilon: number;
+  minJuliaBound: number;
+  maxJuliaBound: number;
+}
+
+/** Julia Set Visualizer configuration */
+@staticImplements<JsonSerialisableStatic>()
+class Configuration {
   /**
    * Configuration constructor
    *
@@ -44,34 +64,117 @@ export default class Configuration {
   ) {}
 
   /**
-   * Create a configuration from a JSON
+   * Create a default configuration
    *
-   * @param json configuration JSON containing the configuration parameters
-   * @returns the configuration created from the JSON, or `undefined` if it could not be created
+   * @returns the default configuration
    */
-  public static fromJSON(json: any): Configuration {
+  public static defaultConfiguration(id = "DEFAULT", name = "Default"): Configuration {
+    return new Configuration(
+      id,
+      name,
+      1,
+      2,
+      new Complex(0, 0),
+      20,
+      0.00001,
+      -4,
+      new FractalFunction(new Polynomial({ 2: new Complex(1, 0) }), FunctionTypes.DEFAULT),
+      [0, 0, 1],
+      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
+      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
+      []
+    );
+  }
+
+  /**
+   * Create an empty configuration
+   *
+   * @returns an empty configuration
+   */
+  public static emptyConfiguration(id: string, name: string): Configuration {
+    return new Configuration(
+      id,
+      name,
+      1,
+      1,
+      new Complex(0, 0),
+      20,
+      0.00001,
+      -4,
+      new FractalFunction(new Polynomial({}), FunctionTypes.DEFAULT),
+      [0, 0, 0],
+      new Attractor(undefined, 0, 0, 0, 0, 0),
+      new Attractor(undefined, 0, 0, 0, 0, 0),
+      []
+    );
+  }
+
+  /**
+   * Return a string representation of the configuration
+   *
+   * @returns the String representation
+   */
+  public toString(): string {
+    return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
+      this.coordinatesScale
+    }, ${this.coordinatesCentre}, ${this.iterationsCount}, ${this.epsilon}, ${this.juliaBound}, ${
+      this.fractalFunction
+    }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
+      this.infinityAttractor
+    }, [${this.attractors.join(", ")}])`;
+  }
+
+  public static fromJSON(json: any): Configuration | undefined {
+    if (json === undefined) return undefined;
+
+    if (json.id === undefined) return undefined;
+    if (json.name === undefined) return undefined;
+    if (json.resolutionScale === undefined || !Number.isFinite(json.resolutionScale))
+      return undefined;
+    if (json.coordinatesScale === undefined || !Number.isFinite(json.coordinatesScale))
+      return undefined;
+
+    const coordinatesCentre = Complex.fromJSON(json.coordinatesCentre);
+    if (coordinatesCentre === undefined) return undefined;
+
+    if (json.iterationsCount === undefined || !Number.isFinite(json.iterationsCount))
+      return undefined;
+    if (json.epsilon === undefined || !Number.isFinite(json.epsilon)) return undefined;
+    if (json.juliaBound === undefined || !Number.isFinite(json.juliaBound)) return undefined;
+
+    const fractalFunction = FractalFunction.fromJSON(json.fractalFunction);
+    if (fractalFunction === undefined) return undefined;
+
+    if (json.juliaHSV === undefined || !Array.isArray(json.juliaHSV)) return undefined;
+    if (json.juliaHSV.length !== 3 || !json.juliaHSV.every(Number.isFinite)) return undefined;
+
+    const defaultAttractor = Attractor.fromJSON(json.defaultAttractor);
+    if (defaultAttractor === undefined) return undefined;
+
+    const infinityAttractor = Attractor.fromJSON(json.infinityAttractor);
+    if (infinityAttractor === undefined) return undefined;
+
+    if (json.attractors === undefined || !Array.isArray(json.attractors)) return undefined;
+    const attractors = json.attractors.map(Attractor.fromJSON);
+    if (attractors.some((a: Attractor | undefined) => a === undefined)) return undefined;
+
     return new Configuration(
       json.id,
       json.name,
       json.resolutionScale,
       json.coordinatesScale,
-      Complex.fromJSON(json.coordinatesCentre),
+      coordinatesCentre,
       json.iterationsCount,
       json.epsilon,
       json.juliaBound,
-      FractalFunction.fromJSON(json.fractalFunction),
+      fractalFunction,
       json.juliaHSV,
-      Attractor.fromJSON(json.defaultAttractor),
-      Attractor.fromJSON(json.infinityAttractor),
-      json.attractors.map(Attractor.fromJSON)
+      defaultAttractor,
+      infinityAttractor,
+      attractors
     );
   }
 
-  /**
-   * Convert a configuration to a JSON object
-   *
-   * @returns the JSON object constructed from the configuration
-   */
   public toJSON(): any {
     return {
       id: this.id,
@@ -91,91 +194,10 @@ export default class Configuration {
   }
 
   /**
-   * Create the default configuration
+   * Create a copy of the configuration
    *
-   * @returns the default configuration to use
+   * @returns a copy of the configuration
    */
-  public static defaultConfiguration(id = "DEFAULT", name = "Default"): Configuration {
-    return new Configuration(
-      id,
-      name,
-      1,
-      2,
-      new Complex(0, 0),
-      20,
-      0.00001,
-      -4,
-      new FractalFunction(
-        new Polynomial({ 2: new Complex(1, 0) }),
-        new Polynomial({ 0: new Complex(1, 0) }),
-        FunctionTypes.DEFAULT,
-        new Complex(1, 0)
-      ),
-      [0, 0, 1],
-      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
-      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
-      []
-    );
-  }
-
-  /**
-   * Creates an empty configuration.
-   * @returns An empty configuration.
-   */
-  public static emptyConfiguration(id: string, name: string): Configuration {
-    return new Configuration(
-      id,
-      name,
-      1,
-      1,
-      new Complex(0, 0),
-      20,
-      0.00001,
-      -4,
-      new FractalFunction(
-        new Polynomial({}),
-        new Polynomial({ 0: new Complex(1, 0) }),
-        FunctionTypes.DEFAULT,
-        new Complex(1, 0)
-      ),
-      [0, 0, 0],
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      []
-    );
-  }
-
-  // TODO Remove?
-  /**
-   * Fill this configuration with a copy of the information of another configuration
-   *
-   * @param configuration the configuration to fill with
-   */
-  public fillWith(configuration: Configuration, exceptIdAndName = true): void {
-    if (!exceptIdAndName) {
-      this.id = configuration.id;
-      this.name = configuration.name;
-    }
-    this.resolutionScale = configuration.resolutionScale;
-    this.coordinatesScale = configuration.coordinatesScale;
-    this.coordinatesCentre = configuration.coordinatesCentre.copy();
-    this.iterationsCount = configuration.iterationsCount;
-    this.epsilon = configuration.epsilon;
-    this.juliaBound = configuration.juliaBound;
-    this.fractalFunction = configuration.fractalFunction.copy();
-    this.juliaHSV = [
-      configuration.juliaHSV[0],
-      configuration.juliaHSV[1],
-      configuration.juliaHSV[2],
-    ];
-    this.defaultAttractor = configuration.defaultAttractor.copy();
-    this.infinityAttractor = configuration.infinityAttractor.copy();
-    this.attractors = [];
-    configuration.attractors.forEach((attractor) => {
-      this.attractors.push(attractor.copy());
-    });
-  }
-
   public copy() {
     return new Configuration(
       this.id,
@@ -195,118 +217,33 @@ export default class Configuration {
   }
 
   /**
-   * Randomize the configuration with the provided settings
+   * Randomise the configuration with the provided settings
    *
-   * @param functionTypes set of the function types.
-   * @param coefficientTypes set the available coefficient types
-   * @param coefficientsCount min and max number of coefficients
-   * @param complexModulus min and max modulus for constant coefficients
-   * @param circleCentreModulus min and max centre modulus for circle coefficients
-   * @param radius min and max radius for circle coefficients
-   * @param circleDuration min and max duration for circle coefficients
-   * @param startEndModulus min and max start and end modulus for line coefficients
-   * @param lineDuration min and max duration for line coefficients
-   * @param ellipseCentreModulus min and max centre modulus for ellipse coefficients
-   * @param halfWidth min and max half-width for ellipse coefficients
-   * @param halfHeight min and max half-height for ellipse coefficients
-   * @param rotationAngle min and max rotation angle for ellipse coefficients
-   * @param ellipseDuration min and max duration for ellipse coefficients
-   * @param juliaHue min and max Julia hue
-   * @param juliaSaturation min and max Julia saturation
-   * @param juliaValue min and max Julia value
-   * @param attractorsHue min and max attractors hue
-   * @param attractorsSaturationStrength min and max attractors saturation strength
-   * @param attractorsSaturationOffset min and max attractors saturation offset
-   * @param attractorsValueStrength min and max attractors value strength
-   * @param attractorsValueOffset min and max attractors value offset
-   * @param viewportScale min and max value viewport scale
-   * @param viewportCentreModulus min and max viewport centre modulus
-   * @param iterationsCount min and max number of iterations
-   * @param epsilon min and max epsilon
-   * @param juliaBound min and max Julia bound
+   * @param params parameters of the random configuration
    */
-  public randomize(
-    functionTypes: Set<FunctionTypes>,
-    coefficientTypes: Set<CoefficientTypes>,
-    coefficientsCount: { min: number; max: number },
-    complexModulus: { min: number; max: number },
-    circleCentreModulus: { min: number; max: number },
-    radius: { min: number; max: number },
-    circleDuration: { min: number; max: number },
-    startEndModulus: { min: number; max: number },
-    lineDuration: { min: number; max: number },
-    ellipseCentreModulus: { min: number; max: number },
-    halfWidth: { min: number; max: number },
-    halfHeight: { min: number; max: number },
-    rotationAngle: { min: number; max: number },
-    ellipseDuration: { min: number; max: number },
-    juliaHue: { min: number; max: number },
-    juliaSaturation: { min: number; max: number },
-    juliaValue: { min: number; max: number },
-    attractorsHue: { min: number; max: number },
-    attractorsSaturationStrength: { min: number; max: number },
-    attractorsSaturationOffset: { min: number; max: number },
-    attractorsValueStrength: { min: number; max: number },
-    attractorsValueOffset: { min: number; max: number },
-    viewportScale: { min: number; max: number },
-    viewportCentreModulus: { min: number; max: number },
-    iterationsCount: { min: number; max: number },
-    epsilon: { min: number; max: number },
-    juliaBound: { min: number; max: number }
-  ) {
-    this.coordinatesScale = RandomUtils.floatBetween(viewportScale.min, viewportScale.max);
-    this.coordinatesCentre = Complex.getRandomComplex(viewportCentreModulus);
-    this.iterationsCount = RandomUtils.integerBetween(iterationsCount.min, iterationsCount.max);
-    this.epsilon = RandomUtils.floatBetween(epsilon.min, epsilon.max);
-    this.juliaBound = RandomUtils.floatBetween(juliaBound.min, juliaBound.max);
-    this.fractalFunction = FractalFunction.getRandomFractalFunction(
-      functionTypes,
-      coefficientTypes,
-      coefficientsCount,
-      complexModulus,
-      circleCentreModulus,
-      radius,
-      circleDuration,
-      startEndModulus,
-      lineDuration,
-      ellipseCentreModulus,
-      halfWidth,
-      halfHeight,
-      rotationAngle,
-      ellipseDuration
+  public randomize(params: RandomConfigurationParameters) {
+    this.coordinatesScale = RandomUtils.floatBetween(
+      params.minViewportScale,
+      params.maxViewportScale
     );
-    this.juliaHSV[0] = RandomUtils.integerBetween(juliaHue.min, juliaHue.max);
-    this.juliaHSV[1] = RandomUtils.floatBetween(juliaSaturation.min, juliaSaturation.max);
-    this.juliaHSV[2] = RandomUtils.floatBetween(juliaValue.min, juliaValue.max);
-    this.defaultAttractor = Attractor.getRandomAttractor(
-      attractorsHue,
-      attractorsSaturationStrength,
-      attractorsSaturationOffset,
-      attractorsValueStrength,
-      attractorsValueOffset
+    this.coordinatesCentre = Complex.getRandomComplex(params.viewportCentreParameters);
+    this.iterationsCount = RandomUtils.integerBetween(
+      params.minIterationsCount,
+      params.maxIterationsCount
     );
-    this.infinityAttractor = Attractor.getRandomAttractor(
-      attractorsHue,
-      attractorsSaturationStrength,
-      attractorsSaturationOffset,
-      attractorsValueStrength,
-      attractorsValueOffset
+    this.epsilon = RandomUtils.floatBetween(params.minEpsilon, params.maxEpsilon);
+    this.juliaBound = RandomUtils.floatBetween(params.minJuliaBound, params.maxJuliaBound);
+    this.fractalFunction = FractalFunction.getRandomFractalFunction(params.functionParameters);
+    this.juliaHSV[0] = RandomUtils.integerBetween(params.minJuliaHue, params.maxJuliaHue);
+    this.juliaHSV[1] = RandomUtils.floatBetween(
+      params.minJuliaSaturation,
+      params.maxJuliaSaturation
     );
+    this.juliaHSV[2] = RandomUtils.floatBetween(params.minJuliaValue, params.maxJuliaValue);
+    this.defaultAttractor = Attractor.getRandomAttractor(params.attractorsParameters);
+    this.infinityAttractor = Attractor.getRandomAttractor(params.attractorsParameters);
     this.attractors = [];
   }
-
-  /**
-   * Return a string representation of the configuration
-   *
-   * @returns the String representation
-   */
-  public toString(): string {
-    return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
-      this.coordinatesScale
-    }, ${this.coordinatesCentre}, ${this.iterationsCount}, ${this.epsilon}, ${this.juliaBound}, ${
-      this.fractalFunction
-    }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
-      this.infinityAttractor
-    }, [${this.attractors.join(", ")}])`;
-  }
 }
+
+export default Configuration;

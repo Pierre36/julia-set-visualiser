@@ -1,13 +1,21 @@
 import RandomUtils from "@/utils/RandomUtils";
 import NumberUtils from "@/utils/NumberUtils";
+import type Coefficient from "@/models/Coefficient";
+import type { JsonSerialisableStatic } from "@/models/JsonSerialisable";
+import { staticImplements } from "@/typescript/decorators";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 
 const COMPLEX_REGEX =
   /^(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)([+-])(\d*|\d+\.\d+)i)$/;
 
-/**
- * Representation of a complex number
- */
-export default class Complex {
+export interface RandomComplexParameters {
+  minModulus: number;
+  maxModulus: number;
+}
+
+/** Representation of a complex number */
+@staticImplements<JsonSerialisableStatic>()
+class Complex implements Coefficient {
   /**
    * Complex constructor
    *
@@ -17,25 +25,48 @@ export default class Complex {
   public constructor(public re: number, public im: number) {}
 
   /**
-   * Create a complex number from a JSON
+   * Compute the modulus of this complex number
    *
-   * @param complexJSON an object containing the JSON for a complex number
-   * @returns the complex number made from the JSON
+   * @returns the modulus
    */
-  public static fromJSON(complexJSON: any): Complex {
-    return new Complex(complexJSON.re, complexJSON.im);
+  public mod(): number {
+    return Math.sqrt(this.re * this.re + this.im * this.im);
   }
 
   /**
-   * Convert a complex to a JSON object
+   * Compute the argument of this complex number
    *
-   * @returns the JSON object constructed from the complex
+   * @returns the argument
    */
+  public arg(): number {
+    return Math.atan2(this.im, this.re);
+  }
+
+  public isZero() {
+    return this.re === 0 && this.im === 0;
+  }
+
+  public hasMinus() {
+    return (this.re === 0 || this.im === 0) && this.re <= 0 && this.im <= 0;
+  }
+
+  public multipliedBy(factor: number): Complex {
+    return new Complex(factor * this.re, factor * this.im);
+  }
+
+  public getEllipseParameters(): number[] {
+    return [0, 0, 0, 0, this.mod(), this.arg()];
+  }
+
+  public static fromJSON(json: any): Complex | undefined {
+    if (json === undefined) return undefined;
+    if (json.re === undefined || !Number.isFinite(json.re)) return undefined;
+    if (json.im === undefined || !Number.isFinite(json.im)) return undefined;
+    return new Complex(json.re, json.im);
+  }
+
   public toJSON(): any {
-    return {
-      re: this.re,
-      im: this.im,
-    };
+    return { type: CoefficientTypes.CONSTANT, re: this.re, im: this.im };
   }
 
   /**
@@ -48,24 +79,16 @@ export default class Complex {
   public static fromString(complexString: string): Complex | undefined {
     // Try to match the complex string with the regex of a complex number
     const match = complexString.trim().replaceAll(" ", "").match(COMPLEX_REGEX);
-    if (match == null) {
-      return undefined;
-    }
+    if (match === null) return undefined;
 
     // If only the real part is provided
-    if (match[1] != undefined) {
-      return new Complex(Number(match[1]), 0);
-    }
+    if (match[1] != undefined) return new Complex(Number(match[1]), 0);
 
     // If only the imaginary part is provided
     if (match[2] != undefined) {
-      if (match[2] == "") {
-        return new Complex(0, 1);
-      } else if (match[2] == "-") {
-        return new Complex(0, -1);
-      } else {
-        return new Complex(0, Number(match[2]));
-      }
+      if (match[2] == "") return new Complex(0, 1);
+      if (match[2] == "-") return new Complex(0, -1);
+      return new Complex(0, Number(match[2]));
     }
 
     // If both the real and imaginary parts are provided
@@ -81,43 +104,43 @@ export default class Complex {
     return complex;
   }
 
-  /**
-   * Compute the modulus of this complex number
-   *
-   * @returns the modulus.
-   */
-  public mod(): number {
-    return Math.sqrt(this.re * this.re + this.im * this.im);
+  // TODO Try to simplify this
+  public toString(): string {
+    if (this.im != 0) {
+      if (this.re != 0) {
+        let string = this.re.toString();
+        if (this.im >= 0) {
+          string += " + ";
+          if (this.im != 1) {
+            string += this.im.toString();
+          }
+        } else {
+          string += " - ";
+          if (this.im != -1) {
+            string += (-this.im).toString();
+          }
+        }
+        string += "i";
+        return string;
+      } else {
+        if (this.im == 1) {
+          return "i";
+        } else if (this.im == -1) {
+          return "-i";
+        } else {
+          return `${this.im}i`;
+        }
+      }
+    } else {
+      return this.re.toString();
+    }
   }
 
-  /**
-   * Compute the argument of this complex number
-   *
-   * @returns the argument
-   */
-  public arg(): number {
-    return Math.atan2(this.im, this.re);
-  }
-
-  /**
-   * Return a copy of the complex number
-   *
-   * @returns the copy of the complex number.
-   */
-  public copy(): Complex {
-    return new Complex(this.re, this.im);
-  }
-
-  /**
-   * Compute a MathML representation of the complex number
-   *
-   * @param showOne `false` if the result should be an empty string for `1`, `true` otherwise
-   * @returns a MathML representation of the complex number
-   */
-  public toMathML(showOne = true): string {
+  // TODO Try to simplify this
+  public toMathML(_ = undefined, showOne = true): string {
     let displayedRe = this.re;
     let displayedIm = this.im;
-    if (this.showMinus()) {
+    if (this.hasMinus()) {
       displayedRe = -displayedRe;
       displayedIm = -displayedIm;
     }
@@ -151,94 +174,24 @@ export default class Complex {
     }
   }
 
-  /**
-   * Compute and return a string representing the complex number
-   *
-   * @returns a string representing this complex number
-   */
-  public toString(): string {
-    if (this.im != 0) {
-      if (this.re != 0) {
-        let string = this.re.toString();
-        if (this.im >= 0) {
-          string += " + ";
-          if (this.im != 1) {
-            string += this.im.toString();
-          }
-        } else {
-          string += " - ";
-          if (this.im != -1) {
-            string += (-this.im).toString();
-          }
-        }
-        string += "i";
-        return string;
-      } else {
-        if (this.im == 1) {
-          return "i";
-        } else if (this.im == -1) {
-          return "-i";
-        } else {
-          return `${this.im}i`;
-        }
-      }
-    } else {
-      return this.re.toString();
-    }
-  }
-
-  /**
-   * Check if the complex number is 0 + 0i
-   *
-   * @returns `true` if the complex number is 0 + 0i, `false` otherwise
-   */
-  public isZero(): boolean {
-    return this.re == 0 && this.im == 0;
-  }
-
-  /**
-   * Check if the complex number should be associated with a "-" in an equation.
-   *
-   * @returns `true` if the complex number should be associated with a "-" in an equation, `false`
-   * otherwise
-   */
-  public showMinus(): boolean {
-    return (this.re == 0 || this.im == 0) && this.re <= 0 && this.im <= 0;
-  }
-
-  /**
-   * Compute and return the multiplication of the complex number by a factor
-   *
-   * @param factor The factor to multiply by
-   * @returns the complex number multiplied by the factor
-   */
-  public multipliedBy(factor: number): Complex {
-    return new Complex(factor * this.re, factor * this.im);
+  public copy(): Complex {
+    return new Complex(this.re, this.im);
   }
 
   /**
    * Return a random complex number with a modulus in the given range
    *
-   * @param modulusMinMax an object containing the min and max value of the modulus.
+   * @param params min and max value of the modulus
    * @returns the new complex number
    */
-  public static getRandomComplex(modulusMinMax: { min: number; max: number }): Complex {
-    const modulus = RandomUtils.floatBetween(modulusMinMax.min, modulusMinMax.max);
+  public static getRandomComplex(params: RandomComplexParameters): Complex {
+    const modulus = RandomUtils.floatBetween(params.minModulus, params.maxModulus);
     const angle = RandomUtils.floatBetween(0, 2 * Math.PI);
     return new Complex(
       NumberUtils.toPrecision(modulus * Math.cos(angle), 2),
       NumberUtils.toPrecision(modulus * Math.sin(angle), 2)
     );
   }
-
-  // TODO Add test
-  /**
-   * Get the ellipse parameters corresponding to the complex number (duration, angle, half-width,
-   * half-height, offset modulus and offset argument)
-   *
-   * @returns the ellipse parameters
-   */
-  public getEllipseParameters(): number[] {
-    return [0, 0, 0, 0, this.mod(), this.arg()];
-  }
 }
+
+export default Complex;

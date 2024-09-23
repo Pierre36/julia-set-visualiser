@@ -1,110 +1,56 @@
-import ComplexCircle from "@/models/ComplexCircle";
-import ComplexEllipse from "@/models/ComplexEllipse";
-import ComplexLine from "@/models/ComplexLine";
-import Complex from "@/models/Complex";
+import ComplexCircle, { type RandomCircleParameters } from "@/models/ComplexCircle";
+import ComplexEllipse, { type RandomEllipseParameters } from "@/models/ComplexEllipse";
+import ComplexLine, { type RandomLineParameters } from "@/models/ComplexLine";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import RandomUtils from "@/utils/RandomUtils";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
 
-/**
- * Utility class to create coefficients
- */
+export interface RandomCoefficientParameters {
+  coefficientTypes: Set<CoefficientTypes>;
+  constantParameters: RandomComplexParameters;
+  circleParameters: RandomCircleParameters;
+  lineParameters: RandomLineParameters;
+  ellipseParameters: RandomEllipseParameters;
+}
+
+/** Utility class to create coefficients */
 export default class CoefficientUtils {
-  // FIXME Returning undefined would be better than throwing an error
   /**
    * Create a coefficient from a JSON
    *
-   * @param complexJSON object containing the JSON for a coefficient
-   * @returns the coefficient made from the JSON
-   * @throws an error if the coefficient type is incorrect
+   * @param json object containing the JSON for a coefficient
+   * @returns the coefficient made from the JSON if it is valid, undefined otherwise
    */
-  public static fromJSON(
-    coefficientJSON: any
-  ): ComplexCircle | ComplexLine | ComplexEllipse | Complex {
-    if (coefficientJSON.type == CoefficientTypes.CIRCLE) {
-      return ComplexCircle.fromJSON(coefficientJSON);
-    } else if (coefficientJSON.type == CoefficientTypes.LINE) {
-      return ComplexLine.fromJSON(coefficientJSON);
-    } else if (coefficientJSON.type == CoefficientTypes.ELLIPSE) {
-      return ComplexEllipse.fromJSON(coefficientJSON);
-    } else if (coefficientJSON.type == CoefficientTypes.CONSTANT) {
-      return Complex.fromJSON(coefficientJSON);
-    } else {
-      throw Error(
-        `The type of the coefficient is incorrect! The type must be "${CoefficientTypes.CIRCLE}", "${CoefficientTypes.LINE}", "${CoefficientTypes.ELLIPSE}" or "${CoefficientTypes.CONSTANT}", got ${coefficientJSON["type"]}`
-      );
-    }
-  }
+  public static fromJSON(json: any): Coefficient | undefined {
+    if (json === undefined) return undefined;
 
-  /**
-   * Convert a coefficient to a JSON object
-   *
-   * @param coefficient coefficient to convert to JSON
-   * @returns the JSON object constructed from the coefficient
-   */
-  public static toJSON(coefficient: ComplexCircle | ComplexLine | ComplexEllipse | Complex): any {
-    const coefficientJSON = coefficient.toJSON();
-    if (coefficient instanceof ComplexCircle) {
-      coefficientJSON["type"] = CoefficientTypes.CIRCLE;
-    } else if (coefficient instanceof ComplexLine) {
-      coefficientJSON["type"] = CoefficientTypes.LINE;
-    } else if (coefficient instanceof ComplexEllipse) {
-      coefficientJSON["type"] = CoefficientTypes.ELLIPSE;
-    } else if (coefficient instanceof Complex) {
-      coefficientJSON["type"] = CoefficientTypes.CONSTANT;
-    }
-    return coefficientJSON;
+    if (json.type === CoefficientTypes.CIRCLE) return ComplexCircle.fromJSON(json);
+    if (json.type == CoefficientTypes.LINE) return ComplexLine.fromJSON(json);
+    if (json.type == CoefficientTypes.ELLIPSE) return ComplexEllipse.fromJSON(json);
+    if (json.type == CoefficientTypes.CONSTANT) return Complex.fromJSON(json);
+
+    const types = Object.keys(CoefficientTypes);
+    console.error(`[KO] Invalid coefficient type: expected one of ${types}, got ${json.type}`);
+    return undefined;
   }
 
   /**
    * Return a random coefficient with the provided settings
    *
-   * @param coefficientTypes set of available coefficient types
-   * @param complexModulusMinMax min and max modulus for constant coefficients
-   * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
-   * @param radiusMinMax min and max radius for circle coefficients
-   * @param circleDurationMinMax min and max duration for circle coefficients
-   * @param startEndModulusMinMax min and max start and end modulus for line coefficients
-   * @param lineDurationMinMax min and max duration for line coefficients
-   * @param ellipseCentreModulusMinMax min and max centre modulus for ellipse coefficients
-   * @param halfWidthMinMax min and max half-width for ellipse coefficients
-   * @param halfHeightMinMax min and max half-height for ellipse coefficients
-   * @param rotationAngleMinMax min and max rotation angle for ellipse coefficients
-   * @param ellipseDurationMinMax min and max duration for ellipse coefficients
+   * @param params parameters of the random coefficient
    * @returns the new random coefficient
    */
-  public static getRandomCoefficient(
-    coefficientTypes: Set<CoefficientTypes>,
-    complexModulusMinMax: { min: number; max: number },
-    circleCentreModulusMinMax: { min: number; max: number },
-    radiusMinMax: { min: number; max: number },
-    circleDurationMinMax: { min: number; max: number },
-    startEndModulusMinMax: { min: number; max: number },
-    lineDurationMinMax: { min: number; max: number },
-    ellipseCentreModulusMinMax: { min: number; max: number },
-    halfWidthMinMax: { min: number; max: number },
-    halfHeightMinMax: { min: number; max: number },
-    rotationAngleMinMax: { min: number; max: number },
-    ellipseDurationMinMax: { min: number; max: number }
-  ) {
-    switch (RandomUtils.pickAmong(Array.from(coefficientTypes))) {
+  public static getRandomCoefficient(params: RandomCoefficientParameters) {
+    switch (RandomUtils.pickAmong(Array.from(params.coefficientTypes))) {
       case CoefficientTypes.CIRCLE:
-        return ComplexCircle.getRandomComplexCircle(
-          circleCentreModulusMinMax,
-          radiusMinMax,
-          circleDurationMinMax
-        );
+        return ComplexCircle.getRandomComplexCircle(params.circleParameters);
       case CoefficientTypes.LINE:
-        return ComplexLine.getRandomComplexLine(startEndModulusMinMax, lineDurationMinMax);
+        return ComplexLine.getRandomComplexLine(params.lineParameters);
       case CoefficientTypes.ELLIPSE:
-        return ComplexEllipse.getRandomComplexEllipse(
-          ellipseCentreModulusMinMax,
-          halfWidthMinMax,
-          halfHeightMinMax,
-          rotationAngleMinMax,
-          ellipseDurationMinMax
-        );
+        return ComplexEllipse.getRandomComplexEllipse(params.ellipseParameters);
       case CoefficientTypes.CONSTANT:
-        return Complex.getRandomComplex(complexModulusMinMax);
+        return Complex.getRandomComplex(params.constantParameters);
     }
   }
 }

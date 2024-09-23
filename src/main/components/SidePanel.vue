@@ -24,6 +24,7 @@ export default defineComponent({
       <FunctionPanel
         v-show="currentPanel == 'FUNCTION'"
         v-model:fractalFunction="configuration.fractalFunction"
+        @change="$emit('change')"
       />
       <ColoursPanel
         v-show="currentPanel == 'COLOURS'"

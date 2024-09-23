@@ -550,7 +550,7 @@ export default class WebGpuFractalGenerator {
 
     this.updateParameter(
       FractalGeneratorParameters.IS_NEWTON,
-      configuration.fractalFunction.functionType == FunctionTypes.NEWTON ? 1 : 0
+      configuration.fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
     );
     this.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
@@ -559,11 +559,11 @@ export default class WebGpuFractalGenerator {
 
     this.updateParameter(
       FractalGeneratorParameters.NUMERATOR,
-      configuration.fractalFunction.numerator.getCoefficientsParameters()
+      configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
     );
     this.updateParameter(
       FractalGeneratorParameters.DENOMINATOR,
-      configuration.fractalFunction.denominator.getCoefficientsParameters()
+      configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
     );
 
     this.updateParameter(

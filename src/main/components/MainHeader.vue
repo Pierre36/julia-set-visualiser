@@ -32,28 +32,33 @@ onMounted(async () => {
 
 async function importConfigurations() {
   const { default: json } = await import("@/configurations.json");
-  json.forEach((jsonConfiguration) => {
-    configurations.value[jsonConfiguration.id] = Configuration.fromJSON(jsonConfiguration);
-  });
+  json
+    .map(Configuration.fromJSON)
+    .filter((config) => config !== undefined)
+    .forEach((config) => (configurations.value[config.id] = config));
 }
 
 async function loadLocalStorageConfiguration() {
   console.debug("[>>] Loading the local storage configuration...");
   const localConfigurationString = localStorage.getItem(LOCALE_STORAGE_KEY);
-  if (localConfigurationString != null) {
-    try {
-      let localConfiguration = Configuration.fromJSON(JSON.parse(localConfigurationString));
-      localConfiguration.id = "CUSTOM";
-      localConfiguration.name = "Custom";
-      configurations.value["CUSTOM"] = localConfiguration;
-      selectConfiguration("CUSTOM");
-      console.debug("[OK] Local storage configuration loaded");
-    } catch (error) {
-      console.error("[KO] Could not load the local storage configuration: %s", error);
-    }
-  } else {
+  if (localConfigurationString == null) {
     console.debug("[OK] No local storage found");
+    return;
   }
+
+  let localConfiguration = Configuration.fromJSON(JSON.parse(localConfigurationString));
+  if (localConfiguration === undefined) {
+    console.error("[KO] Could not load the local storage configuration: invalid JSON");
+    return;
+  }
+
+  localConfiguration.id = "CUSTOM";
+  localConfiguration.name = "Custom";
+  configurations.value["CUSTOM"] = localConfiguration;
+
+  selectConfiguration("CUSTOM");
+
+  console.debug("[OK] Local storage configuration loaded");
 }
 
 function selectConfiguration(id: string) {

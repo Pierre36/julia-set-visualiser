@@ -1,102 +1,61 @@
-import ComplexCircle from "@/models/ComplexCircle";
-import ComplexLine from "@/models/ComplexLine";
-import Complex from "@/models/Complex";
-import ComplexEllipse from "@/models/ComplexEllipse";
-import CoefficientUtils from "@/models/CoefficientUtils";
+import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
-import type CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import type { JsonSerialisable, JsonSerialisableStatic } from "./JsonSerialisable";
+import { staticImplements } from "@/typescript/decorators";
 
-/** Max degree for polynomials */
-const MAX_DEGREE = 15;
+export interface RandomPolynomialParameters {
+  coefficientsCount: number;
+  coefficientsParameters: RandomCoefficientParameters;
+}
 
-/**
- * Representation of a complex polynomial.
- */
-export default class Polynomial {
-  /**
-   * Maximum degree of a polynomial.
-   */
+/** Representation of a complex polynomial */
+@staticImplements<JsonSerialisableStatic>()
+class Polynomial implements JsonSerialisable {
+  /** Maximum degree of a polynomial */
   public static get MAX_DEGREE() {
-    return MAX_DEGREE;
+    return 15;
   }
 
-  /** Degree of the polynomial */
-  public degree: number;
-
   /** Coefficients of the polynomial */
-  private coefficients: Record<
-    number,
-    ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined
-  >;
+  private coefficients: (Coefficient | undefined)[];
 
   /**
    * Polynomial constructor
    *
-   * @param coefficients coefficients of the polynomial
+   * @param coefficients coefficients of the polynomial by power
    */
-  public constructor(
-    coefficients: Record<number, ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined>
-  ) {
-    this.degree = 0;
-    this.coefficients = {};
-    for (let power = 0; power <= MAX_DEGREE; power++) {
-      const coefficient = coefficients[power];
-      if (coefficient != undefined) {
-        this.setCoefficient(power, coefficient);
-      } else {
-        this.coefficients[power] = undefined;
-      }
+  public constructor(coefficients: Record<number, Coefficient>) {
+    this.coefficients = [];
+    for (let power = 0; power <= Polynomial.MAX_DEGREE; power++) {
+      this.coefficients[power] = coefficients[power];
     }
   }
 
   /**
-   * Create a polynomial from a JSON
+   * Collect the defined coefficients of the polynomial
    *
-   * @param coefficientsJSON object containing the JSON for a polynomial
-   * @returns the polynomial made from the coefficients
-   * @throws an error if one of the coefficients type is incorrect
+   * @returns the coefficients of the polynomial
    */
-  public static fromJSON(coefficientsJSON: any): Polynomial {
-    const coefficients: Record<
-      number,
-      ComplexCircle | ComplexLine | ComplexEllipse | Complex | undefined
-    > = {};
-    Object.keys(coefficientsJSON).forEach(
-      (power) => (coefficients[Number(power)] = CoefficientUtils.fromJSON(coefficientsJSON[power]))
-    );
-    return new Polynomial(coefficients);
-  }
-
-  /**
-   * Convert a polynomial to a JSON object
-   *
-   * @returns the JSON object constructed from the polynomial.
-   */
-  public toJSON(): any {
-    const coefficientsJSON: any = {};
-    this.descendingPowers().forEach((power) => {
-      coefficientsJSON[power] = CoefficientUtils.toJSON(this.getCoefficient(power));
+  public getCoefficients(): { power: number; coefficient: Coefficient }[] {
+    const result: { power: number; coefficient: Coefficient }[] = [];
+    this.coefficients.forEach((coefficient, power) => {
+      if (coefficient !== undefined) result.push({ power, coefficient });
     });
-    return coefficientsJSON;
+    return result;
   }
 
   /**
    * Return the coefficient at a given power
    *
    * @param power power associated to the wanted coefficient
-   * @returns the coefficient
-   * @throws an error if the power is superior to MAX_DEGREE
-   * @throws an error if the coefficient is not defined for the power
+   * @returns the coefficient or `undefined` it there is no coefficients for the provided power
    */
-  public getCoefficient(power: number): Complex | ComplexCircle | ComplexLine | ComplexEllipse {
-    if (0 > power || power > MAX_DEGREE) {
-      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
+  public getCoefficient(power: number): Coefficient | undefined {
+    if (0 > power || power > Polynomial.MAX_DEGREE) {
+      return undefined;
     }
-    const coefficient = this.coefficients[power];
-    if (coefficient) {
-      return coefficient;
-    }
-    throw Error("No coefficient is defined for this power");
+    return this.coefficients[power];
   }
 
   /**
@@ -104,230 +63,83 @@ export default class Polynomial {
    *
    * @param power power associated to the wanted coefficient
    * @param coefficient new coefficient
-   * @throws an error if the power is superior to MAX_DEGREE
+   * @throws an error if the power is outside [0, MAX_DEGREE]
    */
-  public setCoefficient(
-    power: number,
-    coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse
-  ) {
-    if (0 > power || power > MAX_DEGREE) {
-      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
+  public setCoefficient(power: number, coefficient: Coefficient) {
+    if (0 > power || power > Polynomial.MAX_DEGREE) {
+      throw Error(`Expected power within [0, ${Polynomial.MAX_DEGREE}], received ${power}`);
     }
-
     this.coefficients[power] = coefficient;
-    this.degree = Math.max(this.degree, power);
   }
 
   /**
-   * Remove the coefficient at a given power by replacing it by `null`
+   * Remove the coefficient at a given power
    *
    * @param power power associated to the wanted coefficient
-   * @throws an error if the power is superior to MAX_DEGREE
    */
   public removeCoefficient(power: number): void {
-    console.debug("[>>] Trying to remove coefficient at power %d from %s...", power, this);
-    if (0 > power || power > MAX_DEGREE) {
-      console.debug(
-        "[KO] Tried to remove a coefficient at power %d but power must be in [%d, %d]",
-        power,
-        0,
-        MAX_DEGREE
-      );
-      throw Error(`The power must be between 0 and ${MAX_DEGREE} included`);
-    }
-
-    // Remove the coefficient
-    this.coefficients[power] = undefined;
-
-    // Update the degree
-    if (power == this.degree) {
-      this.recalculateDegree();
-    }
-
-    console.debug("[OK] Successfully removed coefficient. The polynomial is now %s.", this);
+    if (0 <= power && power <= Polynomial.MAX_DEGREE) this.coefficients[power] = undefined;
   }
 
   /**
-   * Recalculate the degree of the polynomial
-   */
-  private recalculateDegree() {
-    for (let power = MAX_DEGREE; power >= 1; power--) {
-      if (this.coefficients[power] != null) {
-        this.degree = power;
-        return;
-      }
-    }
-    this.degree = 0;
-  }
-
-  /**
-   * Get the power of the polynomial in descending order
+   * Compute the derivative of the polynomial
    *
-   * @returns the power of the polynomial in descending order
-   */
-  private descendingPowers(): number[] {
-    return Object.keys(this.coefficients)
-      .map(Number)
-      .filter((power) => this.coefficients[power])
-      .sort((a, b) => {
-        return Number(b) - Number(a);
-      });
-  }
-
-  /**
-   * Compute and return the MathML representation of the polynomial
-   *
-   * @returns the MathML representation of the polynomial
-   */
-  public toMathML(): string {
-    let mathML = "";
-    const descendingPowers = this.descendingPowers();
-    let firstNonZeroCoefficient = true;
-    for (let i = 0; i < descendingPowers.length; i++) {
-      const power = descendingPowers[i];
-      const coefficient = this.coefficients[power];
-
-      if (coefficient && !coefficient.isZero()) {
-        if (coefficient.showMinus()) {
-          mathML += "<mrow><mo>-</mo></mrow>";
-        } else if (!firstNonZeroCoefficient) {
-          mathML += "<mrow><mo>+</mo></mrow>";
-        }
-        firstNonZeroCoefficient = false;
-        mathML += "<mrow>";
-        if (coefficient instanceof Complex) {
-          mathML += coefficient.toMathML(power == 0);
-        } else {
-          mathML += coefficient.toMathML(power);
-        }
-
-        if (power == 1) {
-          mathML += "<mi>z</mi>";
-        } else if (power != 0) {
-          mathML += `<msup><mi>z</mi><mn>${power}</mn></msup>`;
-        }
-        mathML += "</mrow>";
-      }
-    }
-    if (mathML == "") {
-      mathML = "<mrow><mn>0</mn></mrow>";
-    }
-    return mathML;
-  }
-
-  /**
-   * Compute and return the derivative of the polynomial
-   *
-   * @returns {Polynomial} The derivative of the polynomial
+   * @returns {Polynomial} the derivative of the polynomial
    */
   public getDerivative(): Polynomial {
     const derivative = new Polynomial({});
-    this.getCoefficientPowers().forEach((power) => {
-      if (power > 0) {
-        derivative.setCoefficient(power - 1, this.getCoefficient(power).multipliedBy(power));
-      }
+    this.getCoefficients().forEach(({ power, coefficient }) => {
+      if (power > 0) derivative.setCoefficient(power - 1, coefficient.multipliedBy(power));
     });
     return derivative;
   }
 
   /**
-   * Compute and return the list of available powers (powers with null coefficients) in ascending order
+   * Get the list of available powers (powers without coefficients) in ascending order
    *
    * @returns the list of available powers
    */
   public getAvailablePowers(): number[] {
-    return Object.keys(this.coefficients)
-      .map(Number)
-      .filter((power) => this.coefficients[power] === undefined)
-      .sort((a, b) => {
-        return Number(a) - Number(b);
-      });
+    return this.coefficients
+      .map((coefficient, power) => (coefficient === undefined ? power : -1))
+      .filter((power) => power != -1);
   }
 
   /**
-   * Compute and return the list of powers with not `null` coefficients
+   * Get the polynomial coefficients parameters
    *
-   * @returns the list of powers with not null coefficients
+   * @returns the ellipse equation parameters of the polynomial coefficients
    */
-  public getCoefficientPowers(): number[] {
-    return Object.keys(this.coefficients)
-      .map(Number)
-      .filter((power) => this.coefficients[power]);
-  }
-
-  /**
-   * Get a copy of the polynomial
-   *
-   * @returns the copy of the polynomial
-   */
-  public copy(): Polynomial {
-    const newPolynomial = new Polynomial({});
-    for (let p = 0; p <= MAX_DEGREE; p++) {
-      const coefficient = this.coefficients[p];
-      if (coefficient != null) {
-        newPolynomial.setCoefficient(p, coefficient.copy());
-      }
-    }
-    return newPolynomial;
-  }
-
-  /**
-   * Return a random polynomial with the provided settings
-   *
-   * @param coefficientsCount number of coefficients of the new polynomial
-   * @param coefficientTypes set the available coefficient types
-   * @param complexModulusMinMax min and max modulus for constant coefficients
-   * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
-   * @param radiusMinMax min and max radius for circle coefficients
-   * @param circleDurationMinMax min and max duration for circle coefficients
-   * @param startEndModulusMinMax min and max start and end modulus for line coefficients
-   * @param lineDurationMinMax min and max duration for line coefficients
-   * @param ellipseCentreModulusMinMax min and max centre modulus for ellipse coefficients
-   * @param halfWidthMinMax min and max half-width for ellipse coefficients
-   * @param halfHeightMinMax min and max half-height for ellipse coefficients
-   * @param rotationAngleMinMax min and max rotation angle for ellipse coefficients
-   * @param ellipseDurationMinMax min and max duration for ellipse coefficients
-   * @returns the new random polynomial
-   */
-  public static getRandomPolynomial(
-    coefficientsCount: number,
-    coefficientTypes: Set<CoefficientTypes>,
-    complexModulusMinMax: { min: number; max: number },
-    circleCentreModulusMinMax: { min: number; max: number },
-    radiusMinMax: { min: number; max: number },
-    circleDurationMinMax: { min: number; max: number },
-    startEndModulusMinMax: { min: number; max: number },
-    lineDurationMinMax: { min: number; max: number },
-    ellipseCentreModulusMinMax: { min: number; max: number },
-    halfWidthMinMax: { min: number; max: number },
-    halfHeightMinMax: { min: number; max: number },
-    rotationAngleMinMax: { min: number; max: number },
-    ellipseDurationMinMax: { min: number; max: number }
-  ): Polynomial {
-    const powers = RandomUtils.distinctIntegersBetween(
-      0,
-      MAX_DEGREE,
-      Math.min(coefficientsCount, MAX_DEGREE + 1)
+  public getCoefficientsEllipseParameters(): number[] {
+    return this.coefficients.flatMap(
+      (coefficient) => coefficient?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]
     );
-    const newCoefficients: Record<number, Complex | ComplexCircle | ComplexEllipse | ComplexLine> =
-      {};
-    for (const power of powers) {
-      newCoefficients[power] = CoefficientUtils.getRandomCoefficient(
-        coefficientTypes,
-        complexModulusMinMax,
-        circleCentreModulusMinMax,
-        radiusMinMax,
-        circleDurationMinMax,
-        startEndModulusMinMax,
-        lineDurationMinMax,
-        ellipseCentreModulusMinMax,
-        halfWidthMinMax,
-        halfHeightMinMax,
-        rotationAngleMinMax,
-        ellipseDurationMinMax
-      );
+  }
+
+  public static fromJSON(json: any): Polynomial | undefined {
+    if (json === undefined) return undefined;
+
+    const polynomial = new Polynomial({});
+    for (const key of Object.keys(json)) {
+      const power = Number.parseInt(key);
+      if (!Number.isFinite(power)) return undefined;
+      if (0 > power || power > Polynomial.MAX_DEGREE) return undefined;
+
+      const coefficient = CoefficientUtils.fromJSON(json[key]);
+      if (coefficient === undefined) return undefined;
+
+      polynomial.setCoefficient(power, coefficient);
     }
-    return new Polynomial(newCoefficients);
+
+    return polynomial;
+  }
+
+  public toJSON(): any {
+    const json: Record<number, Coefficient> = {};
+    this.getCoefficients().forEach(
+      ({ power, coefficient }) => (json[power] = coefficient.toJSON())
+    );
+    return json;
   }
 
   /**
@@ -336,38 +148,68 @@ export default class Polynomial {
    * @returns the String representation
    */
   public toString(): string {
-    let string = "";
-    const descendingPowers = this.descendingPowers();
-    for (let i = 0; i < descendingPowers.length; i++) {
-      const power = descendingPowers[i];
-      if (i != 0) {
-        string += " + ";
-      }
-      const coefficient = this.coefficients[power];
-      if (coefficient) {
-        string += coefficient.toString();
-        if (power == 1) {
-          string += "z";
-        } else if (power != 0) {
-          string += `z^${power}`;
-        }
-      }
-    }
-    if (string == "") {
-      string = "0";
-    }
-    return `Polynomial(${string})`;
+    const string = this.getCoefficients().reduce(
+      (string, { power, coefficient }) =>
+        coefficient.toString() +
+        (power > 0 ? "z" : "") +
+        (power > 1 ? `^${power}` : "") +
+        (string !== "" ? " + " : "") +
+        string,
+      ""
+    );
+    return `Polynomial(${string || "0"})`;
   }
 
   /**
-   * Get the polynomial coefficients parameters
+   * Compute the MathML representation of the polynomial
    *
-   * @returns the ellipse equation parameters of the polynomial coefficients
+   * @returns the MathML representation of the polynomial
    */
-  public getCoefficientsParameters(): number[] {
-    return Object.keys(this.coefficients)
-      .map(Number)
-      .sort((a, b) => a - b)
-      .flatMap((power) => this.coefficients[power]?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]);
+  public toMathML(): string {
+    let mathML = "";
+    this.getCoefficients()
+      .reverse()
+      .filter(({ power: _, coefficient }) => !coefficient.isZero())
+      .forEach(({ power, coefficient }, index) => {
+        mathML += index != 0 ? `<mrow><mo>${coefficient.hasMinus() ? "-" : "+"}</mo></mrow>` : "";
+        let coefMathML = coefficient.toMathML(power, power == 0);
+        coefMathML += power == 1 ? "<mi>z</mi>" : "";
+        coefMathML += power > 1 ? `<msup><mi>z</mi><mn>${power}</mn></msup>` : "";
+        mathML += `<mrow>${coefMathML}</mrow>`;
+      });
+    return mathML || "<mrow><mn>0</mn></mrow>";
+  }
+
+  /**
+   * Copy the polynomial
+   *
+   * @returns the copy of the polynomial
+   */
+  public copy(): Polynomial {
+    const polynomial = new Polynomial({});
+    this.getCoefficients().forEach(({ power, coefficient }) =>
+      polynomial.setCoefficient(power, coefficient)
+    );
+    return polynomial;
+  }
+
+  /**
+   * Return a random polynomial with the provided settings
+   *
+   * @param params parameters of the random polynomial
+   * @returns the new random polynomial
+   */
+  public static getRandomPolynomial(params: RandomPolynomialParameters): Polynomial {
+    const maxCount = Math.min(params.coefficientsCount, Polynomial.MAX_DEGREE + 1);
+    const powers = RandomUtils.distinctIntegersBetween(0, Polynomial.MAX_DEGREE, maxCount);
+
+    const polynomial = new Polynomial({});
+    powers.forEach((p) => {
+      const coefficient = CoefficientUtils.getRandomCoefficient(params.coefficientsParameters);
+      polynomial.setCoefficient(p, coefficient);
+    });
+    return polynomial;
   }
 }
+
+export default Polynomial;

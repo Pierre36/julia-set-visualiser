@@ -306,11 +306,11 @@ describe("Interactions", () => {
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NUMERATOR,
-      props.configuration.fractalFunction.numerator.getCoefficientsParameters()
+      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.DENOMINATOR,
-      props.configuration.fractalFunction.denominator.getCoefficientsParameters()
+      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
     );
   });
 

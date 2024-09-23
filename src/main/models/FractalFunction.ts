@@ -1,203 +1,220 @@
 import Polynomial from "@/models/Polynomial";
-import ComplexCircle from "@/models/ComplexCircle";
-import ComplexLine from "@/models/ComplexLine";
 import Complex from "@/models/Complex";
-import CoefficientUtils from "@/models/CoefficientUtils";
+import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
-import type ComplexEllipse from "@/models/ComplexEllipse";
-import type CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "./Coefficient";
+import { staticImplements } from "@/typescript/decorators";
+import type { JsonSerialisable, JsonSerialisableStatic } from "./JsonSerialisable";
 
-/**
- * Representation of a function.
- */
-export default class FractalFunction {
+export interface RandomFractalFunctionParameters {
+  functionTypes: Set<FunctionTypes>;
+  minCoefficientsCount: number;
+  maxCoefficientsCount: number;
+  coefficientsParameters: RandomCoefficientParameters;
+}
+
+const defaultDenominator = new Polynomial({ 0: new Complex(1, 0) });
+
+/** Representation of a fractal function */
+@staticImplements<JsonSerialisableStatic>()
+class FractalFunction implements JsonSerialisable {
   /**
    * Fractal function constructor
    *
    * @param numerator numerator of the function
-   * @param denominator denominator of the function
    * @param functionType type of the function
-   * @param newtonCoefficient newton coefficient
-   * coefficient of the function when it is a function of type Newton
+   * @param denominator denominator of the function
+   * @param newtonCoefficient newton coefficient of the function when it is a function of type Newton
    */
   public constructor(
-    public numerator: Polynomial,
-    public denominator: Polynomial,
-    public functionType: FunctionTypes,
-    public newtonCoefficient: ComplexCircle | ComplexLine | Complex | ComplexEllipse
-  ) {}
+    private numerator: Polynomial,
+    private functionType: FunctionTypes,
+    private denominator: Polynomial = new Polynomial({}),
+    public newtonCoefficient: Coefficient = new Complex(0, 0)
+  ) {
+    this.numerator = numerator;
 
-  /**
-   * Create a function from a JSON
-   *
-   * @param functionJSON object containing the JSON for a function
-   * @returns the function made from the JSON
-   */
-  public static fromJSON({
-    numerator,
-    denominator,
-    functionType,
-    newtonCoefficient,
-  }: {
-    numerator: any;
-    denominator: any;
-    functionType: any;
-    newtonCoefficient: any;
-  }): FractalFunction {
-    return new FractalFunction(
-      Polynomial.fromJSON(numerator),
-      Polynomial.fromJSON(denominator),
-      functionType,
-      CoefficientUtils.fromJSON(newtonCoefficient)
-    );
+    this.functionType = functionType;
+
+    if (functionType === FunctionTypes.DEFAULT) this.denominator = defaultDenominator.copy();
+    if (functionType === FunctionTypes.NEWTON) this.denominator = this.numerator.getDerivative();
+    if (functionType === FunctionTypes.FRACTION) this.denominator = denominator;
+
+    this.newtonCoefficient = newtonCoefficient;
   }
 
   /**
-   * Convert a function to a JSON object
+   * Collect the defined coefficients of the fractal function numerator
    *
-   * @returns the JSON object constructed from the function
+   * @returns the coefficients of the fractal function numerator
    */
-  public toJSON() {
-    return {
-      numerator: this.numerator.toJSON(),
-      denominator: this.denominator.toJSON(),
-      functionType: this.functionType,
-      newtonCoefficient: CoefficientUtils.toJSON(this.newtonCoefficient),
-    };
+  public getNumeratorCoefficients(): { power: number; coefficient: Coefficient }[] {
+    return this.numerator.getCoefficients();
   }
 
   /**
-   * Get the coefficient at a given power in the numerator or the denominator
+   * Collect the defined coefficients of the fractal function denominator
+   *
+   * @returns the coefficients of the fractal function denominator
+   */
+  public getDenominatorCoefficients(): { power: number; coefficient: Coefficient }[] {
+    return this.denominator.getCoefficients();
+  }
+
+  /**
+   * Get the coefficient at a given power in the numerator or denominator
    *
    * @param power power associated to the wanted coefficient
    * @param inNumerator `true` if the coefficient is from the numerator, `false` otherwise
-   * @returns the coefficient
-   * @throws an error if the power is superior to MAX_DEGREE or if the coefficient does not exist
-   * for the provided power
+   * @returns the coefficient or `undefined` it there is no coefficients for the provided power
    */
-  public getCoefficient(
-    power: number,
-    inNumerator: boolean
-  ): Complex | ComplexCircle | ComplexLine | ComplexEllipse {
-    if (inNumerator) {
-      return this.numerator.getCoefficient(power);
-    } else {
-      return this.denominator.getCoefficient(power);
-    }
+  public getCoefficient(power: number, inNumerator: boolean): Coefficient | undefined {
+    if (inNumerator) return this.numerator.getCoefficient(power);
+    return this.denominator.getCoefficient(power);
   }
 
   /**
-   * Set the coefficient at a given power in the numerator or the denominator
+   * Set the coefficient at a given power in the numerator or denominator
    *
    * @param power power associated to the wanted coefficient
-   * @param inNumerator `true` if the coefficient is in the numerator, `false` otherwise
    * @param coefficient new coefficient
-   * @throws an error if the power is superior to MAX_DEGREE
-   * @throws an error if the provided coefficient is undefined
+   * @param inNumerator `true` if the coefficient is in the numerator, `false` otherwise
+   * @throws an error if the power is outside [0, MAX_DEGREE]
    */
-  public setCoefficient(
-    power: number,
-    inNumerator: boolean,
-    coefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse
-  ) {
+  public setCoefficient(power: number, coefficient: Coefficient, inNumerator: boolean) {
     if (inNumerator) {
       this.numerator.setCoefficient(power, coefficient);
-      if (this.functionType == FunctionTypes.NEWTON && power >= 1) {
-        this.denominator.setCoefficient(power - 1, coefficient.multipliedBy(power));
-      }
+      if (this.functionType === FunctionTypes.NEWTON)
+        this.denominator = this.numerator.getDerivative();
     } else {
-      if (this.functionType == FunctionTypes.FRACTION) {
+      if (this.functionType === FunctionTypes.FRACTION)
         this.denominator.setCoefficient(power, coefficient);
-      } else {
-        throw Error(
-          "Coefficient should not be inserted in the denominator of NEWTON and DEFAULT functions."
-        );
-      }
     }
   }
 
   /**
-   * Remove the coefficient at a given power in the numerator or the denominator
+   * Remove the coefficient at a given power in the numerator or denominator
    *
    * @param power power associated to the wanted coefficient.
    * @param inNumerator `true` if the coefficient is in the numerator, `false` otherwise
-   * @throws an error if the power is superior to MAX_DEGREE
-   * @throws an error if the coefficient should be removed from the numerator when the function type is NEWTON or DEFAULT
    */
   public removeCoefficient(power: number, inNumerator: boolean) {
     if (inNumerator) {
       this.numerator.removeCoefficient(power);
-      if (this.functionType == FunctionTypes.NEWTON && power >= 1) {
-        this.denominator.removeCoefficient(power - 1);
-      }
+      if (this.functionType === FunctionTypes.NEWTON)
+        this.denominator = this.numerator.getDerivative();
     } else {
-      if (this.functionType == FunctionTypes.FRACTION) {
-        this.denominator.removeCoefficient(power);
-      } else {
-        throw Error(
-          "Coefficient should not be removed from the denominator of NEWTON and DEFAULT functions."
-        );
-      }
+      if (this.functionType === FunctionTypes.FRACTION) this.denominator.removeCoefficient(power);
     }
+  }
+
+  /**
+   * Get the list of available powers (powers without coefficients) in ascending order in the
+   * fractal function numerator
+   *
+   * @returns the list of available powers in the numerator
+   */
+  public getNumeratorAvailablePowers(): number[] {
+    return this.numerator.getAvailablePowers();
+  }
+
+  /**
+   * Get the list of available powers (powers without coefficients) in ascending order in the
+   * fractal function denominator
+   *
+   * @returns the list of available powers in the denominator
+   */
+  public getDenominatorAvailablePowers(): number[] {
+    return this.denominator.getAvailablePowers();
+  }
+
+  /**
+   * Get the fractal function numerator coefficients parameters
+   *
+   * @returns the ellipse equation parameters of the numerator coefficients
+   */
+  public getNumeratorCoefficientsEllipseParameters(): number[] {
+    return this.numerator.getCoefficientsEllipseParameters();
+  }
+
+  /**
+   * Get the fractal function denominator coefficients parameters
+   *
+   * @returns the ellipse equation parameters of the denominator coefficients
+   */
+  public getDenominatorCoefficientsEllipseParameters(): number[] {
+    return this.denominator.getCoefficientsEllipseParameters();
+  }
+
+  /**
+   * Get the function type
+   *
+   * @returns the function type
+   */
+  public getFunctionType() {
+    return this.functionType;
   }
 
   /**
    * Set the function type
    *
    * @param newFunctionType new function type
-   * @throws an error if the new function type is incorrect
    */
   public setFunctionType(newFunctionType: FunctionTypes) {
     this.functionType = newFunctionType;
     if (newFunctionType == FunctionTypes.NEWTON) {
       this.newtonCoefficient = new Complex(1, 0);
       this.denominator = this.numerator.getDerivative();
-    } else if (
-      newFunctionType == FunctionTypes.DEFAULT ||
-      newFunctionType == FunctionTypes.FRACTION
-    ) {
-      this.denominator = new Polynomial({ 0: new Complex(1, 0) });
-      this.newtonCoefficient = new Complex(0, 0);
     } else {
-      throw Error(
-        `The function type must be "${FunctionTypes.DEFAULT}",  "${FunctionTypes.NEWTON}" or "${FunctionTypes.FRACTION}", got ${newFunctionType}`
-      );
+      this.newtonCoefficient = new Complex(0, 0);
+      this.denominator = defaultDenominator.copy();
     }
   }
 
-  /**
-   * Set the Newton coefficient
-   *
-   * @param newNewtonCoefficient new Newton coefficient
-   */
-  public setNewtonCoefficient(
-    newNewtonCoefficient: Complex | ComplexCircle | ComplexLine | ComplexEllipse
-  ) {
-    this.newtonCoefficient = newNewtonCoefficient;
+  public static fromJSON(json: any): FractalFunction | undefined {
+    if (json === undefined) return undefined;
+
+    if (json.functionType === undefined || !(json.functionType in FunctionTypes)) return undefined;
+
+    const newtonCoefficient = CoefficientUtils.fromJSON(json.newtonCoefficient);
+    if (newtonCoefficient === undefined) return undefined;
+
+    const numerator = Polynomial.fromJSON(json.numerator);
+    if (numerator === undefined) return undefined;
+
+    const denominator = Polynomial.fromJSON(json.denominator);
+    if (denominator === undefined) return undefined;
+
+    return new FractalFunction(numerator, json.functionType, denominator, newtonCoefficient);
+  }
+
+  public toJSON() {
+    return {
+      numerator: this.numerator.toJSON(),
+      denominator: this.denominator.toJSON(),
+      functionType: this.functionType,
+      newtonCoefficient: this.newtonCoefficient.toJSON(),
+    };
   }
 
   /**
-   * Return a copy of the function
+   * Get a string representation of the fractal function
    *
-   * @returns a copy of the function
+   * @returns {String} the String representation
    */
-  public copy(): FractalFunction {
-    return new FractalFunction(
-      this.numerator.copy(),
-      this.denominator.copy(),
-      this.functionType,
-      this.newtonCoefficient.copy()
-    );
+  public toString(): string {
+    return `FractalFunction(${this.numerator}, ${this.denominator}, ${this.functionType}, ${this.newtonCoefficient})`;
   }
 
+  // TODO Try to simplify this
   /**
    * Compute a MathML representation of the fractal function
    *
    * @returns a MathML representation of the fractal function
    */
   public toMathML(): string {
-    // Initialize equation
+    // Initialise equation
     let mathML = "<math display='block'>";
 
     // Prepare useful bit of equations
@@ -217,13 +234,13 @@ export default class FractalFunction {
     if (this.functionType != FunctionTypes.DEFAULT) {
       if (this.functionType == FunctionTypes.NEWTON) {
         mathML += "<mi>z</mi>";
-        if (this.newtonCoefficient.showMinus()) {
+        if (this.newtonCoefficient.hasMinus()) {
           mathML += "<mo>+</mo>";
         } else {
           mathML += "<mo>-</mo>";
         }
         if (this.newtonCoefficient instanceof Complex) {
-          mathML += this.newtonCoefficient.toMathML(false);
+          mathML += this.newtonCoefficient.toMathML(undefined, false);
         } else {
           mathML += this.newtonCoefficient.toMathML("N");
         }
@@ -255,111 +272,55 @@ export default class FractalFunction {
   }
 
   /**
-   * Return a random fractal function with the provided settings
+   * Copy the function
    *
-   * @param functionTypes set of the function types
-   * @param coefficientTypes set the available coefficient types
-   * @param coefficientsCountMinMax min and max number of coefficients
-   * @param complexModulusMinMax min and max modulus for constant coefficients
-   * @param circleCentreModulusMinMax min and max centre modulus for circle coefficients
-   * @param radiusMinMax min and max radius for circle coefficients
-   * @param circleDurationMinMax min and max duration for circle coefficients
-   * @param startEndModulusMinMax min and max start and end modulus for line coefficients
-   * @param lineDurationMinMax min and max duration for line coefficients
-   * @param ellipseCentreModulusMinMax min and max centre modulus for ellipse coefficients
-   * @param halfWidthMinMax min and max half-width for ellipse coefficients
-   * @param halfHeightMinMax min and max half-height for ellipse coefficients
-   * @param rotationAngleMinMax min and max rotation angle for ellipse coefficients
-   * @param ellipseDurationMinMax min and max duration for ellipse coefficients
-   * @returns the new random fractal function
+   * @returns a copy of the function
    */
-  public static getRandomFractalFunction(
-    functionTypes: Set<FunctionTypes>,
-    coefficientTypes: Set<CoefficientTypes>,
-    coefficientsCountMinMax: { min: number; max: number },
-    complexModulusMinMax: { min: number; max: number },
-    circleCentreModulusMinMax: { min: number; max: number },
-    radiusMinMax: { min: number; max: number },
-    circleDurationMinMax: { min: number; max: number },
-    startEndModulusMinMax: { min: number; max: number },
-    lineDurationMinMax: { min: number; max: number },
-    ellipseCentreModulusMinMax: { min: number; max: number },
-    halfWidthMinMax: { min: number; max: number },
-    halfHeightMinMax: { min: number; max: number },
-    rotationAngleMinMax: { min: number; max: number },
-    ellipseDurationMinMax: { min: number; max: number }
-  ): FractalFunction {
-    const newFunctionType = RandomUtils.pickAmong(Array.from(functionTypes));
-    const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(
-      coefficientTypes,
-      complexModulusMinMax,
-      circleCentreModulusMinMax,
-      radiusMinMax,
-      circleDurationMinMax,
-      startEndModulusMinMax,
-      lineDurationMinMax,
-      ellipseCentreModulusMinMax,
-      halfWidthMinMax,
-      halfHeightMinMax,
-      rotationAngleMinMax,
-      ellipseDurationMinMax
+  public copy(): FractalFunction {
+    return new FractalFunction(
+      this.numerator.copy(),
+      this.functionType,
+      this.denominator.copy(),
+      this.newtonCoefficient.copy()
     );
-    const coefficientsCount = RandomUtils.integerBetween(
-      coefficientsCountMinMax.min,
-      coefficientsCountMinMax.max
-    );
-    let numeratorCoefficientsCount;
-    if (newFunctionType == FunctionTypes.FRACTION) {
-      numeratorCoefficientsCount = RandomUtils.integerBetween(1, coefficientsCount);
-    } else {
-      numeratorCoefficientsCount = coefficientsCount;
-    }
-    const newNumerator = Polynomial.getRandomPolynomial(
-      coefficientsCount,
-      coefficientTypes,
-      complexModulusMinMax,
-      circleCentreModulusMinMax,
-      radiusMinMax,
-      circleDurationMinMax,
-      startEndModulusMinMax,
-      lineDurationMinMax,
-      ellipseCentreModulusMinMax,
-      halfWidthMinMax,
-      halfHeightMinMax,
-      rotationAngleMinMax,
-      ellipseDurationMinMax
-    );
-    let newDenominator;
-    if (newFunctionType == FunctionTypes.DEFAULT) {
-      newDenominator = new Polynomial({ 0: new Complex(1, 0) });
-    } else if (newFunctionType == FunctionTypes.NEWTON) {
-      newDenominator = newNumerator.getDerivative();
-    } else {
-      newDenominator = Polynomial.getRandomPolynomial(
-        Math.max(1, coefficientsCount - numeratorCoefficientsCount),
-        coefficientTypes,
-        complexModulusMinMax,
-        circleCentreModulusMinMax,
-        radiusMinMax,
-        circleDurationMinMax,
-        startEndModulusMinMax,
-        lineDurationMinMax,
-        ellipseCentreModulusMinMax,
-        halfWidthMinMax,
-        halfHeightMinMax,
-        rotationAngleMinMax,
-        ellipseDurationMinMax
-      );
-    }
-
-    return new FractalFunction(newNumerator, newDenominator, newFunctionType, newNewtonCoefficient);
   }
 
   /**
-   * Returns a String representation of the fractal function.
-   * @returns {String} The String representation.
+   * Return a random fractal function with the provided settings
+   *
+   * @param params parameters of the random fractal function
+   * @returns the new random fractal function
    */
-  public toString(): string {
-    return `FractalFunction(${this.numerator}, ${this.denominator}, ${this.functionType}, ${this.newtonCoefficient})`;
+  public static getRandomFractalFunction(params: RandomFractalFunctionParameters): FractalFunction {
+    const newFunctionType = RandomUtils.pickAmong(Array.from(params.functionTypes));
+    const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(
+      params.coefficientsParameters
+    );
+    const coefficientsCount = RandomUtils.integerBetween(
+      params.minCoefficientsCount,
+      params.maxCoefficientsCount
+    );
+
+    const numeratorCoefficientsCount =
+      newFunctionType === FunctionTypes.FRACTION
+        ? RandomUtils.integerBetween(1, coefficientsCount)
+        : coefficientsCount;
+
+    const newNumerator = Polynomial.getRandomPolynomial({
+      coefficientsCount: numeratorCoefficientsCount,
+      coefficientsParameters: params.coefficientsParameters,
+    });
+
+    let newDenominator;
+    if (newFunctionType === FunctionTypes.FRACTION) {
+      newDenominator = Polynomial.getRandomPolynomial({
+        coefficientsCount: Math.max(1, coefficientsCount - numeratorCoefficientsCount),
+        coefficientsParameters: params.coefficientsParameters,
+      });
+    }
+
+    return new FractalFunction(newNumerator, newFunctionType, newDenominator, newNewtonCoefficient);
   }
 }
+
+export default FractalFunction;

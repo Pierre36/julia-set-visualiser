@@ -1,10 +1,24 @@
 import RandomUtils from "@/utils/RandomUtils";
 import Complex from "@/models/Complex";
+import { staticImplements } from "@/typescript/decorators";
+import type { JsonSerialisableStatic } from "./JsonSerialisable";
 
-/**
- * Representation of an attractor with a value and colour parameters.
- */
-export default class Attractor {
+export interface RandomAttractorParameters {
+  minHue: number;
+  maxHue: number;
+  minSaturationStrength: number;
+  maxSaturationStrength: number;
+  minSaturationOffset: number;
+  maxSaturationOffset: number;
+  minValueStrength: number;
+  maxValueStrength: number;
+  minValueOffset: number;
+  maxValueOffset: number;
+}
+
+/** Representation of an attractor with a value and colour parameters */
+@staticImplements<JsonSerialisableStatic>()
+class Attractor {
   /**
    * Attractor constructor
    *
@@ -25,27 +39,35 @@ export default class Attractor {
   ) {}
 
   /**
-   * Create an attractor from a JSON
+   * Return a string representation of the attractor
    *
-   * @param attractorJSON object containing the JSON for an attractor
-   * @returns the attractor made from the JSON
+   * @returns the String representation
    */
-  public static fromJSON(attractorJSON: any): Attractor {
+  public toString(): string {
+    return `Attractor(${this.complex}, ${this.hue}, ${this.saturationStrength}, ${this.saturationOffset}, ${this.valueStrength}, ${this.valueOffset})`;
+  }
+
+  public static fromJSON(json: any): Attractor | undefined {
+    if (json === undefined) return undefined;
+
+    if (json.hue === undefined || !Number.isFinite(json.hue)) return undefined;
+    if (json.saturationStrength === undefined || !Number.isFinite(json.saturationStrength))
+      return undefined;
+    if (json.saturationOffset === undefined || !Number.isFinite(json.saturationOffset))
+      return undefined;
+    if (json.valueStrength === undefined || !Number.isFinite(json.valueStrength)) return undefined;
+    if (json.valueOffset === undefined || !Number.isFinite(json.valueOffset)) return undefined;
+
     return new Attractor(
-      attractorJSON["complex"] ? Complex.fromJSON(attractorJSON["complex"]) : undefined,
-      attractorJSON["hue"],
-      attractorJSON["saturationStrength"],
-      attractorJSON["saturationOffset"],
-      attractorJSON["valueStrength"],
-      attractorJSON["valueOffset"]
+      Complex.fromJSON(json.complex),
+      json.hue,
+      json.saturationStrength,
+      json.saturationOffset,
+      json.valueStrength,
+      json.valueOffset
     );
   }
 
-  /**
-   * Convert an attractor to a JSON object
-   *
-   * @returns the JSON object constructed from the attractor
-   */
   public toJSON(): any {
     return {
       complex: this.complex ? this.complex.toJSON() : undefined,
@@ -74,36 +96,26 @@ export default class Attractor {
   }
 
   /**
-   * Return a random attractor with the given settings
+   * Create a random attractor with the given settings
    *
-   * @param hueMinMax min and max hue
-   * @param saturationStrengthMinMax min and max saturation strength.
-   * @param saturationOffsetMinMax min and max saturation offset.
-   * @param valueStrengthMinMax min and max value strength.
-   * @param valueOffsetMinMax min and max value offset.
-   * @returns the new random attractor.
+   * @param params parameters of the random attractor
+   * @returns the new random attractor
    */
-  public static getRandomAttractor(
-    hueMinMax: { min: number; max: number },
-    saturationStrengthMinMax: { min: number; max: number },
-    saturationOffsetMinMax: { min: number; max: number },
-    valueStrengthMinMax: { min: number; max: number },
-    valueOffsetMinMax: { min: number; max: number }
-  ): Attractor {
-    const newHue = RandomUtils.integerBetween(hueMinMax.min, hueMinMax.max);
+  public static getRandomAttractor(params: RandomAttractorParameters): Attractor {
+    const newHue = RandomUtils.integerBetween(params.minHue, params.maxHue);
     const newSaturationStrength = RandomUtils.floatBetween(
-      saturationStrengthMinMax.min,
-      saturationStrengthMinMax.max
+      params.minSaturationStrength,
+      params.maxSaturationStrength
     );
     const newSaturationOffset = RandomUtils.floatBetween(
-      saturationOffsetMinMax.min,
-      saturationOffsetMinMax.max
+      params.minSaturationOffset,
+      params.maxSaturationOffset
     );
     const newValueStrength = RandomUtils.floatBetween(
-      valueStrengthMinMax.min,
-      valueStrengthMinMax.max
+      params.minValueStrength,
+      params.maxValueStrength
     );
-    const newValueOffset = RandomUtils.floatBetween(valueOffsetMinMax.min, valueOffsetMinMax.max);
+    const newValueOffset = RandomUtils.floatBetween(params.minValueOffset, params.maxValueOffset);
     return new Attractor(
       undefined,
       newHue,
@@ -113,13 +125,6 @@ export default class Attractor {
       newValueOffset
     );
   }
-
-  /**
-   * Return a string representation of the attractor
-   *
-   * @returns the String representation
-   */
-  public toString(): string {
-    return `Attractor(${this.complex}, ${this.hue}, ${this.saturationStrength}, ${this.saturationOffset}, ${this.valueStrength}, ${this.valueOffset})`;
-  }
 }
+
+export default Attractor;

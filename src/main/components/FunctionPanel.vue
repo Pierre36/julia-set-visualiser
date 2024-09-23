@@ -7,9 +7,6 @@ import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import Complex from "@/models/Complex";
 import FractalFunction from "@/models/FractalFunction";
 import FunctionTypes from "@/constants/FunctionTypes";
-import type ComplexCircle from "@/models/ComplexCircle";
-import type ComplexEllipse from "@/models/ComplexEllipse";
-import type ComplexLine from "@/models/ComplexLine";
 import { computed, ref, type Ref } from "vue";
 
 const fractalFunction = defineModel<FractalFunction>("fractalFunction", { required: true });
@@ -20,74 +17,35 @@ const functionTypeOptions: Ref<ComboBoxOption<FunctionTypes>[]> = ref([
   { id: FunctionTypes.FRACTION, text: "Fraction" },
 ]);
 
-// TODO Update fractal function to compute this itself or something like that
-const numeratorCoefficientsList = computed(() =>
-  fractalFunction.value.numerator.getCoefficientPowers().map((degree) => ({
-    degree: degree,
-    coefficient: fractalFunction.value.getCoefficient(degree, true),
-  }))
-);
-// TODO Update fractal function to compute this itself or something like that
-const denominatorCoefficientsList = computed(() =>
-  fractalFunction.value.denominator.getCoefficientPowers().map((degree) => ({
-    degree: degree,
-    coefficient: fractalFunction.value.getCoefficient(degree, false),
-  }))
-);
-// TODO Update fractal function to compute this itself or something like that
+const numeratorCoefficients = computed(() => fractalFunction.value.getNumeratorCoefficients());
+const denominatorCoefficients = computed(() => fractalFunction.value.getDenominatorCoefficients());
+
 const numeratorAvailablePowers = computed(() =>
-  fractalFunction.value.numerator.getAvailablePowers()
+  fractalFunction.value.getNumeratorAvailablePowers()
 );
-// TODO Update fractal function to compute this itself or something like that
 const denominatorAvailablePowers = computed(() =>
-  fractalFunction.value.denominator.getAvailablePowers()
+  fractalFunction.value.getDenominatorAvailablePowers()
 );
+
 const canAddCoefficientToNumerator = computed(() => numeratorAvailablePowers.value.length != 0);
 const canAddCoefficientToDenominator = computed(() => denominatorAvailablePowers.value.length != 0);
+
 const numeratorHeading = computed(() =>
-  fractalFunction.value.functionType == FunctionTypes.FRACTION
+  fractalFunction.value.getFunctionType() == FunctionTypes.FRACTION
     ? "Numerator coefficients"
     : "Coefficients"
 );
 
-// TODO If function type was a property depending on which the fields of the fractal function would be updated, we could use this in a v-model
-function updateFunctionType(newFunctionType: FunctionTypes) {
-  fractalFunction.value.setFunctionType(newFunctionType);
-}
-
-// TODO Same as above
-function updateNewtonCoefficient(
-  newNewtonCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine
-) {
-  fractalFunction.value.setNewtonCoefficient(newNewtonCoefficient);
-}
-
 function updateDegree(previousDegree: number, newDegree: number, inNumerator: boolean) {
-  if (previousDegree != newDegree) {
-    fractalFunction.value.setCoefficient(
-      newDegree,
-      inNumerator,
-      fractalFunction.value.getCoefficient(previousDegree, inNumerator).copy()
-    );
+  const coefficient = fractalFunction.value.getCoefficient(previousDegree, inNumerator);
+  if (previousDegree != newDegree && coefficient !== undefined) {
+    fractalFunction.value.setCoefficient(newDegree, coefficient.copy(), inNumerator);
     fractalFunction.value.removeCoefficient(previousDegree, inNumerator);
   }
 }
 
-// TODO Same as above
-function updateCoefficient(
-  power: number,
-  newCoefficient: Complex | ComplexCircle | ComplexEllipse | ComplexLine,
-  inNumerator: boolean
-) {
-  fractalFunction.value.setCoefficient(power, inNumerator, newCoefficient);
-}
-
-function deleteCoefficient(power: number, inNumerator: boolean) {
-  fractalFunction.value.removeCoefficient(power, inNumerator);
-}
-
 function addCoefficient(power: number, inNumerator: boolean) {
-  fractalFunction.value.setCoefficient(power, inNumerator, new Complex(0, 0));
+  fractalFunction.value.setCoefficient(power, new Complex(0, 0), inNumerator);
 }
 </script>
 
@@ -142,16 +100,15 @@ function addCoefficient(power: number, inNumerator: boolean) {
             id="function-type-combobox"
             label="Function type"
             :options="functionTypeOptions"
-            :selected="fractalFunction.functionType"
-            @update:selected="updateFunctionType"
+            :selected="fractalFunction.getFunctionType()"
+            @update:selected="(newType) => fractalFunction.setFunctionType(newType)"
           />
-          <template v-if="fractalFunction.functionType == 'NEWTON'">
+          <template v-if="fractalFunction.getFunctionType() == 'NEWTON'">
             <h4 class="column-span-2">Newton coefficient</h4>
             <CoefficientInput
               class="column-span-2"
-              :coefficient="fractalFunction.newtonCoefficient"
+              v-model:coefficient="fractalFunction.newtonCoefficient"
               :level="5"
-              @update:coefficient="updateNewtonCoefficient"
             />
           </template>
         </div>
@@ -209,14 +166,16 @@ function addCoefficient(power: number, inNumerator: boolean) {
         <div>
           <CoefficientItem
             class="coefficient-item"
-            v-for="coef in numeratorCoefficientsList"
-            :key="coef.degree"
-            :degree="Number(coef.degree)"
+            v-for="coef in numeratorCoefficients"
+            :key="coef.power"
+            :degree="coef.power"
             :coefficient="coef.coefficient"
             :availablePowers="numeratorAvailablePowers"
-            @update:degree="(newDegree) => updateDegree(coef.degree, newDegree, true)"
-            @update:coefficient="(newCoef) => updateCoefficient(coef.degree, newCoef, true)"
-            @delete:coefficient="deleteCoefficient(coef.degree, true)"
+            @update:degree="(newDegree) => updateDegree(coef.power, newDegree, true)"
+            @update:coefficient="
+              (newCoef) => fractalFunction.setCoefficient(coef.power, newCoef, true)
+            "
+            @delete:coefficient="fractalFunction.removeCoefficient(coef.power, true)"
           />
           <IconTextButton
             v-if="canAddCoefficientToNumerator"
@@ -228,7 +187,7 @@ function addCoefficient(power: number, inNumerator: boolean) {
         </div>
       </section>
 
-      <section v-if="fractalFunction.functionType == 'FRACTION'">
+      <section v-if="fractalFunction.getFunctionType() == 'FRACTION'">
         <ExpandableDisclosure
           class="section-header"
           :headingLevel="3"
@@ -280,14 +239,16 @@ function addCoefficient(power: number, inNumerator: boolean) {
         <div>
           <CoefficientItem
             class="coefficient-item"
-            v-for="coef in denominatorCoefficientsList"
-            :key="coef.degree"
-            :degree="Number(coef.degree)"
+            v-for="coef in denominatorCoefficients"
+            :key="coef.power"
+            :degree="coef.power"
             :coefficient="coef.coefficient"
             :availablePowers="denominatorAvailablePowers"
-            @update:degree="(newDegree) => updateDegree(coef.degree, newDegree, false)"
-            @update:coefficient="(newCoef) => updateCoefficient(coef.degree, newCoef, false)"
-            @delete:coefficient="deleteCoefficient(coef.degree, false)"
+            @update:degree="(newDegree) => updateDegree(coef.power, newDegree, false)"
+            @update:coefficient="
+              (newCoef) => fractalFunction.setCoefficient(coef.power, newCoef, false)
+            "
+            @delete:coefficient="fractalFunction.removeCoefficient(coef.power, false)"
           />
           <IconTextButton
             v-if="canAddCoefficientToDenominator"

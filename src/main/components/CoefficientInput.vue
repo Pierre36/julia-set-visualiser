@@ -10,6 +10,7 @@ import ComplexInput from "@/components/ComplexInput.vue";
 import ComplexCircleInput from "@/components/ComplexCircleInput.vue";
 import ComplexLineInput from "@/components/ComplexLineInput.vue";
 import ComplexEllipseInput from "@/components/ComplexEllipseInput.vue";
+import type Coefficient from "@/models/Coefficient";
 
 export interface Props {
   level?: number;
@@ -17,10 +18,7 @@ export interface Props {
 
 const { level = 4 } = defineProps<Props>();
 
-const coefficient = defineModel<Complex | ComplexCircle | ComplexLine | ComplexEllipse>(
-  "coefficient",
-  { default: new Complex(0, 0) }
-);
+const coefficient = defineModel<Coefficient>("coefficient", { default: new Complex(0, 0) });
 
 const typeOptions = [
   { id: CoefficientTypes.CONSTANT, text: "Constant" },
@@ -74,7 +72,7 @@ function changeType(newType: CoefficientTypes): void {
     <template v-else-if="coefficient instanceof ComplexLine">
       <ComplexLineInput v-model:line="coefficient" :level="level" />
     </template>
-    <template v-else>
+    <template v-else-if="coefficient instanceof ComplexEllipse">
       <ComplexEllipseInput v-model:ellipse="coefficient" :level="level" />
     </template>
   </div>

@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import Complex from "@/models/Complex";
 import RandomUtils from "@/utils/RandomUtils";
 import NumberUtils from "@/utils/NumberUtils";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -15,15 +16,93 @@ describe("constructor", () => {
   });
 });
 
+describe("mod", () => {
+  const testCases = [
+    { input: new Complex(0, 0), output: 0 },
+    { input: new Complex(1, 1), output: Math.sqrt(2) },
+  ];
+
+  testCases.forEach(({ input, output }) =>
+    it(`returns ${output} for '${input}'`, () => expect(input.mod()).toEqual(output))
+  );
+});
+
+describe("arg", () => {
+  const testCases = [
+    { input: new Complex(0, 0), output: 0 },
+    { input: new Complex(1, 1), output: Math.PI / 4 },
+  ];
+
+  testCases.forEach(({ input, output }) =>
+    it(`returns ${output} for '${input}'`, () => expect(input.arg()).toEqual(output))
+  );
+});
+
+describe("isZero", () => {
+  const testCases = [
+    { complex: new Complex(0, 0), isZero: true },
+    { complex: new Complex(0.1, 0), isZero: false },
+  ];
+
+  testCases.forEach(({ complex, isZero }) =>
+    it(`returns ${isZero} for ${complex}`, () => expect(complex.isZero()).toBe(isZero))
+  );
+});
+
+describe("hasMinus", () => {
+  const testCases = [
+    { complex: new Complex(-1, 0), hasMinus: true },
+    { complex: new Complex(0, -1), hasMinus: true },
+    { complex: new Complex(1, 0), hasMinus: false },
+    { complex: new Complex(0, 1), hasMinus: false },
+    { complex: new Complex(1, -1), hasMinus: false },
+  ];
+
+  testCases.forEach(({ complex, hasMinus }) =>
+    it(`returns ${hasMinus} for ${complex}`, () => expect(complex.hasMinus()).toBe(hasMinus))
+  );
+});
+
+describe("multipliedBy", () => {
+  const testCases = [
+    { complex: new Complex(3, 6), factor: 0, result: new Complex(0, 0) },
+    { complex: new Complex(3, 6), factor: 2, result: new Complex(6, 12) },
+    { complex: new Complex(3, 6), factor: -5, result: new Complex(-15, -30) },
+  ];
+
+  testCases.forEach(({ complex, factor, result }) =>
+    it(`returns ${result} for ${complex} multiplied by ${factor}`, () =>
+      expect(complex.multipliedBy(factor)).toEqual(result))
+  );
+});
+
+describe("getEllipseParameters", () => {
+  it("returns a constant", () =>
+    expect(new Complex(1, 1).getEllipseParameters()).toEqual([
+      0,
+      0,
+      0,
+      0,
+      Math.sqrt(2),
+      Math.PI / 4,
+    ]));
+});
+
 describe("fromJSON", () => {
-  it("properly constructs from JSON", () => {
-    const re = 3;
-    const im = 6;
+  const testCases = [
+    { description: "reads JSON correctly", json: { re: 3, im: 6 }, output: new Complex(3, 6) },
+    { description: "ignores other keys", json: { re: 3, im: 6, _: 4 }, output: new Complex(3, 6) },
+    { description: "checks types", json: { re: "3", im: "6" }, output: undefined },
+    { description: "checks types", json: { re: true, im: false }, output: undefined },
+    { description: "expects all keys", json: { re: 3 }, output: undefined },
+    { description: "expects all keys", json: { im: 6 }, output: undefined },
+    { description: "expects all keys", json: { re: 3, not_im: 6 }, output: undefined },
+    { description: "handles undefined correctly", json: undefined, output: undefined },
+  ];
 
-    const complex = Complex.fromJSON({ re: re, im: im });
-
-    expect(complex).toEqual(new Complex(re, im));
-  });
+  testCases.forEach(({ description, json, output }) =>
+    it(`${description}`, () => expect(Complex.fromJSON(json)).toEqual(output))
+  );
 });
 
 describe("toJSON", () => {
@@ -33,67 +112,115 @@ describe("toJSON", () => {
 
     const json = new Complex(re, im).toJSON();
 
-    expect(json).toEqual({ re: re, im: im });
+    expect(json).toEqual({ type: CoefficientTypes.CONSTANT, re: re, im: im });
   });
 });
 
 describe("fromString", () => {
   const testCases = [
-    { input: "a + 3i", expectedOutput: undefined },
-    { input: "", expectedOutput: undefined },
-    { input: "1", expectedOutput: new Complex(1, 0) },
-    { input: "1i", expectedOutput: new Complex(0, 1) },
-    { input: "1 + i", expectedOutput: new Complex(1, 1) },
-    { input: "1 + 2i", expectedOutput: new Complex(1, 2) },
-    { input: "1 - i", expectedOutput: new Complex(1, -1) },
-    { input: "1 - 2i", expectedOutput: new Complex(1, -2) },
-    { input: "1.5", expectedOutput: new Complex(1.5, 0) },
-    { input: "0.2i", expectedOutput: new Complex(0, 0.2) },
-    { input: "0.2 + 2.5676i", expectedOutput: new Complex(0.2, 2.5676) },
-    { input: "i", expectedOutput: new Complex(0, 1) },
-    { input: "-i", expectedOutput: new Complex(0, -1) },
-    { input: "-1", expectedOutput: new Complex(-1, 0) },
-    { input: "-3i", expectedOutput: new Complex(0, -3) },
-    { input: "-0.5i", expectedOutput: new Complex(0, -0.5) },
-    { input: "-2 + 2i", expectedOutput: new Complex(-2, 2) },
-    { input: "2 - 4i", expectedOutput: new Complex(2, -4) },
+    { input: "a + 3i", output: undefined },
+    { input: "", output: undefined },
+    { input: "1", output: new Complex(1, 0) },
+    { input: "1i", output: new Complex(0, 1) },
+    { input: "1 + i", output: new Complex(1, 1) },
+    { input: "1 + 2i", output: new Complex(1, 2) },
+    { input: "1 - i", output: new Complex(1, -1) },
+    { input: "1 - 2i", output: new Complex(1, -2) },
+    { input: "1.5", output: new Complex(1.5, 0) },
+    { input: "0.2i", output: new Complex(0, 0.2) },
+    { input: "0.2 + 2.5676i", output: new Complex(0.2, 2.5676) },
+    { input: "i", output: new Complex(0, 1) },
+    { input: "-i", output: new Complex(0, -1) },
+    { input: "-1", output: new Complex(-1, 0) },
+    { input: "-3i", output: new Complex(0, -3) },
+    { input: "-0.5i", output: new Complex(0, -0.5) },
+    { input: "-2 + 2i", output: new Complex(-2, 2) },
+    { input: "2 - 4i", output: new Complex(2, -4) },
   ];
 
-  testCases.forEach(({ input, expectedOutput }) => {
-    it(`returns ${expectedOutput} for '${input}'`, () => {
-      const complex = Complex.fromString(input);
-
-      expect(complex).toEqual(expectedOutput);
-    });
-  });
+  testCases.forEach(({ input, output }) =>
+    it(`returns ${output} for '${input}'`, () => expect(Complex.fromString(input)).toEqual(output))
+  );
 });
 
-describe("mod", () => {
-  it("returns 0 for 0 + 0i", () => {
-    const complex = new Complex(0, 0);
+describe("toString", () => {
+  const testCases = [
+    { re: 1, im: 0, str: "1" },
+    { re: -1, im: 0, str: "-1" },
+    { re: 3.6, im: 0, str: "3.6" },
+    { re: -3.6, im: 0, str: "-3.6" },
+    { re: 0, im: 1, str: "i" },
+    { re: 0, im: -1, str: "-i" },
+    { re: 0, im: 3.6, str: "3.6i" },
+    { re: 0, im: -3.6, str: "-3.6i" },
+    { re: 1, im: 1, str: "1 + i" },
+    { re: 2, im: 2, str: "2 + 2i" },
+    { re: 3.6, im: 4.2, str: "3.6 + 4.2i" },
+    { re: -1, im: -1, str: "-1 - i" },
+    { re: -2, im: -2, str: "-2 - 2i" },
+    { re: -3.6, im: -4.2, str: "-3.6 - 4.2i" },
+  ];
 
-    expect(complex.mod()).toBe(0);
-  });
-
-  it("returns sqrt(2) for 1 + 1i", () => {
-    const complex = new Complex(1, 1);
-
-    expect(complex.mod()).toBe(Math.sqrt(2));
-  });
+  testCases.forEach(({ re, im, str }) =>
+    it(`returns ${str} for (${re}, ${im})`, () =>
+      expect(new Complex(re, im).toString()).toEqual(str))
+  );
 });
 
-describe("arg", () => {
-  it("returns 0 for 0 + 0i", () => {
-    const complex = new Complex(0, 0);
+describe("toMathML", () => {
+  const testCases = [
+    { complex: new Complex(1, 0), mathML: "<mn>1</mn>", showOne: true },
+    { complex: new Complex(-1, 0), mathML: "<mn>1</mn>", showOne: true },
+    { complex: new Complex(1, 0), mathML: "", showOne: false },
+    { complex: new Complex(-1, 0), mathML: "", showOne: false },
+    { complex: new Complex(3.6, 0), mathML: "<mn>3.6</mn>", showOne: true },
+    { complex: new Complex(-3.6, 0), mathML: "<mn>3.6</mn>", showOne: true },
+    { complex: new Complex(0, 1), mathML: "<mi>i</mi>", showOne: true },
+    { complex: new Complex(0, -1), mathML: "<mi>i</mi>", showOne: true },
+    { complex: new Complex(0, 3.6), mathML: "<mn>3.6</mn><mi>i</mi>", showOne: true },
+    { complex: new Complex(0, -3.6), mathML: "<mn>3.6</mn><mi>i</mi>", showOne: true },
+    {
+      complex: new Complex(1, 1),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>1</mn><mo>+</mo><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+    {
+      complex: new Complex(2, 2),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>2</mn><mo>+</mo><mn>2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+    {
+      complex: new Complex(3.6, 4.2),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>3.6</mn><mo>+</mo><mn>4.2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+    {
+      complex: new Complex(-1, -1),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>-1</mn><mo>-</mo><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+    {
+      complex: new Complex(-2, -2),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>-2</mn><mo>-</mo><mn>2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+    {
+      complex: new Complex(-3.6, -4.2),
+      mathML:
+        "<mo form='prefix' stretchy='false'>(</mo><mn>-3.6</mn><mo>-</mo><mn>4.2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>",
+      showOne: true,
+    },
+  ];
 
-    expect(complex.arg()).toBe(0);
-  });
-
-  it("returns pi/4 for 1 + 1i", () => {
-    const complex = new Complex(1, 1);
-
-    expect(complex.arg()).toBe(Math.PI / 4);
-  });
+  testCases.forEach(({ complex, mathML, showOne = true }) =>
+    it(`creates a correct MathML representation for ${complex} when 'showOne' is ${showOne}`, () =>
+      expect(complex.toMathML(undefined, showOne)).toEqual(mathML))
+  );
 });
 
 describe("copy", () => {
@@ -105,276 +232,14 @@ describe("copy", () => {
   });
 });
 
-describe("toMathML", () => {
-  it("works with 1", () => {
-    const complex = new Complex(1, 0);
-
-    expect(complex.toMathML()).toEqual("<mn>1</mn>");
-  });
-
-  it("works with 1 when not showing 1", () => {
-    const complex = new Complex(1, 0);
-
-    expect(complex.toMathML(false)).toEqual("");
-  });
-
-  it("works with -1 when not showing 1", () => {
-    const complex = new Complex(-1, 0);
-
-    expect(complex.toMathML(false)).toEqual("");
-  });
-
-  it("works with -1", () => {
-    const complex = new Complex(-1, 0);
-
-    expect(complex.toMathML()).toEqual("<mn>1</mn>");
-  });
-
-  it("works with 3.6", () => {
-    const complex = new Complex(3.6, 0);
-
-    expect(complex.toMathML()).toEqual("<mn>3.6</mn>");
-  });
-
-  it("works with -3.6", () => {
-    const complex = new Complex(-3.6, 0);
-
-    expect(complex.toMathML()).toEqual("<mn>3.6</mn>");
-  });
-
-  it("works with i", () => {
-    const complex = new Complex(0, 1);
-
-    expect(complex.toMathML()).toEqual("<mi>i</mi>");
-  });
-
-  it("works with -i", () => {
-    const complex = new Complex(0, -1);
-
-    expect(complex.toMathML()).toEqual("<mi>i</mi>");
-  });
-
-  it("works with 3.6i", () => {
-    const complex = new Complex(0, 3.6);
-
-    expect(complex.toMathML()).toEqual("<mn>3.6</mn><mi>i</mi>");
-  });
-
-  it("works with -3.6i", () => {
-    const complex = new Complex(0, -3.6);
-
-    expect(complex.toMathML()).toEqual("<mn>3.6</mn><mi>i</mi>");
-  });
-
-  it("works with 1 + i", () => {
-    const complex = new Complex(1, 1);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>1</mn><mo>+</mo><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-
-  it("works with 2 + 2i", () => {
-    const complex = new Complex(2, 2);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>2</mn><mo>+</mo><mn>2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-
-  it("works with 3.6 + 4.2i", () => {
-    const complex = new Complex(3.6, 4.2);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>3.6</mn><mo>+</mo><mn>4.2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-
-  it("works with -1 - i", () => {
-    const complex = new Complex(-1, -1);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>-1</mn><mo>-</mo><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-
-  it("works with -2 - 2i", () => {
-    const complex = new Complex(-2, -2);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>-2</mn><mo>-</mo><mn>2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-
-  it("works with -3.6 - 4.2i", () => {
-    const complex = new Complex(-3.6, -4.2);
-
-    expect(complex.toMathML()).toEqual(
-      "<mo form='prefix' stretchy='false'>(</mo><mn>-3.6</mn><mo>-</mo><mn>4.2</mn><mi>i</mi><mo form='prefix' stretchy='false'>)</mo>"
-    );
-  });
-});
-
-describe("toString", () => {
-  it("works with 1", () => {
-    const complex = new Complex(1, 0);
-
-    expect(complex.toString()).toEqual("1");
-  });
-
-  it("works with -1", () => {
-    const complex = new Complex(-1, 0);
-
-    expect(complex.toString()).toEqual("-1");
-  });
-
-  it("works with 3.6", () => {
-    const complex = new Complex(3.6, 0);
-
-    expect(complex.toString()).toEqual("3.6");
-  });
-
-  it("works with -3.6", () => {
-    const complex = new Complex(-3.6, 0);
-
-    expect(complex.toString()).toEqual("-3.6");
-  });
-
-  it("works with i", () => {
-    const complex = new Complex(0, 1);
-
-    expect(complex.toString()).toEqual("i");
-  });
-
-  it("works with -i", () => {
-    const complex = new Complex(0, -1);
-
-    expect(complex.toString()).toEqual("-i");
-  });
-
-  it("works with 3.6i", () => {
-    const complex = new Complex(0, 3.6);
-
-    expect(complex.toString()).toEqual("3.6i");
-  });
-
-  it("works with -3.6i", () => {
-    const complex = new Complex(0, -3.6);
-
-    expect(complex.toString()).toEqual("-3.6i");
-  });
-
-  it("works with 1 + i", () => {
-    const complex = new Complex(1, 1);
-
-    expect(complex.toString()).toEqual("1 + i");
-  });
-
-  it("works with 2 + 2i", () => {
-    const complex = new Complex(2, 2);
-
-    expect(complex.toString()).toEqual("2 + 2i");
-  });
-
-  it("works with 3.6 + 4.2i", () => {
-    const complex = new Complex(3.6, 4.2);
-
-    expect(complex.toString()).toEqual("3.6 + 4.2i");
-  });
-
-  it("works with -1 - i", () => {
-    const complex = new Complex(-1, -1);
-
-    expect(complex.toString()).toEqual("-1 - i");
-  });
-
-  it("works with -2 - 2i", () => {
-    const complex = new Complex(-2, -2);
-
-    expect(complex.toString()).toEqual("-2 - 2i");
-  });
-
-  it("works with -3.6 - 4.2i", () => {
-    const complex = new Complex(-3.6, -4.2);
-
-    expect(complex.toString()).toEqual("-3.6 - 4.2i");
-  });
-});
-
-describe("isZero", () => {
-  it("properly returns true for 0", () => {
-    const complex = new Complex(0, 0);
-
-    expect(complex.isZero()).toBe(true);
-  });
-
-  it("properly returns false for something different from 0", () => {
-    const complex = new Complex(0.1, 0);
-
-    expect(complex.isZero()).toBe(false);
-  });
-});
-
-describe("showMinus", () => {
-  it("properly returns true for -1", () => {
-    const complex = new Complex(-1, 0);
-
-    expect(complex.showMinus()).toBe(true);
-  });
-
-  it("properly returns true for -i", () => {
-    const complex = new Complex(0, -1);
-
-    expect(complex.showMinus()).toBe(true);
-  });
-
-  it("properly returns false for 1", () => {
-    const complex = new Complex(1, 0);
-
-    expect(complex.showMinus()).toBe(false);
-  });
-
-  it("properly returns false for i", () => {
-    const complex = new Complex(0, 1);
-
-    expect(complex.showMinus()).toBe(false);
-  });
-
-  it("properly returns false for 1 - i", () => {
-    const complex = new Complex(1, -1);
-
-    expect(complex.showMinus()).toBe(false);
-  });
-});
-
-describe("multipliedBy", () => {
-  it("properly multiplies by 0", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedBy(0)).toEqual(new Complex(0, 0));
-  });
-
-  it("properly multiplies by positive", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedBy(2)).toEqual(new Complex(6, 12));
-  });
-
-  it("properly multiplies by negative", () => {
-    const complex = new Complex(3, 6);
-
-    expect(complex.multipliedBy(-5)).toEqual(new Complex(-15, -30));
-  });
-});
-
 describe("getRandomComplex", () => {
   it("properly returns a random complex number", () => {
     RandomUtils.floatBetween = vi.fn(() => 1);
 
-    const modulusMinMax = { min: 0, max: 2 };
-    const randomComplex = Complex.getRandomComplex(modulusMinMax);
+    const params = { minModulus: 0, maxModulus: 2 };
+    const randomComplex = Complex.getRandomComplex(params);
 
-    expect(RandomUtils.floatBetween).toBeCalledWith(modulusMinMax.min, modulusMinMax.max);
+    expect(RandomUtils.floatBetween).toBeCalledWith(params.minModulus, params.maxModulus);
     expect(RandomUtils.floatBetween).toBeCalledWith(0, 2 * Math.PI);
 
     expect(randomComplex).toEqual(

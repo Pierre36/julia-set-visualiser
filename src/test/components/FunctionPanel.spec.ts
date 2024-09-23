@@ -23,9 +23,7 @@ const fractalFunction = new FractalFunction(
     0: new ComplexCircle(new Complex(0, 0), 1, 2000),
     2: new Complex(1, 0),
   }),
-  new Polynomial({}),
-  FunctionTypes.DEFAULT,
-  new Complex(1, 0)
+  FunctionTypes.DEFAULT
 );
 
 beforeAll(() => {
@@ -99,7 +97,7 @@ describe("Render", () => {
       { id: FunctionTypes.NEWTON, text: "Newton" },
       { id: FunctionTypes.FRACTION, text: "Fraction" },
     ]);
-    expect(defaultComboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
+    expect(defaultComboBox.vm.$props.selected).toBe(props.fractalFunction.getFunctionType());
     expect(defaultComboBox.vm.$props.label).toBe("Function type");
     expect(coefficientInput.exists()).toBe(false);
 
@@ -119,7 +117,7 @@ describe("Render", () => {
 
     // Check the section content renders correctly
     expect(subHeadings.length).toBe(2);
-    expect(newtonComboBox.vm.$props.selected).toBe(props.fractalFunction.functionType);
+    expect(newtonComboBox.vm.$props.selected).toBe(props.fractalFunction.getFunctionType());
     expect(subHeadings[1].text()).toBe("Newton coefficient");
     expect(coefficientInput.exists()).toBe(true);
     expect(coefficientInput.vm.$props.coefficient).toEqual(props.fractalFunction.newtonCoefficient);
@@ -152,14 +150,14 @@ describe("Render", () => {
       props.fractalFunction.getCoefficient(0, true)
     );
     expect(coefficientItems[0].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.numerator.getAvailablePowers()
+      props.fractalFunction.getNumeratorAvailablePowers()
     );
     expect(coefficientItems[1].vm.$props.degree).toBe(2);
     expect(coefficientItems[1].vm.$props.coefficient).toEqual(
       props.fractalFunction.getCoefficient(2, true)
     );
     expect(coefficientItems[1].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.numerator.getAvailablePowers()
+      props.fractalFunction.getNumeratorAvailablePowers()
     );
 
     // Check the add button renders correctly
@@ -179,29 +177,11 @@ describe("Render", () => {
     expect(disclosure.vm.$props.headingText).toBe("Numerator coefficients");
 
     // Mount the FunctionPanel with a full numerator
-    props.fractalFunction = new FractalFunction(
-      new Polynomial({
-        0: new Complex(0, 0),
-        1: new Complex(0, 0),
-        2: new Complex(0, 0),
-        3: new Complex(0, 0),
-        4: new Complex(0, 0),
-        5: new Complex(0, 0),
-        6: new Complex(0, 0),
-        7: new Complex(0, 0),
-        8: new Complex(0, 0),
-        9: new Complex(0, 0),
-        10: new Complex(0, 0),
-        11: new Complex(0, 0),
-        12: new Complex(0, 0),
-        13: new Complex(0, 0),
-        14: new Complex(0, 0),
-        15: new Complex(0, 0),
-      }),
-      new Polynomial({}),
-      FunctionTypes.DEFAULT,
-      new Complex(1, 0)
-    );
+    const fullPolynomial = new Polynomial({});
+    for (let p = 0; p <= Polynomial.MAX_DEGREE; p++) {
+      fullPolynomial.setCoefficient(p, new Complex(0, 0));
+    }
+    props.fractalFunction = new FractalFunction(fullPolynomial, FunctionTypes.DEFAULT);
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 
     // Get the DOM elements
@@ -264,7 +244,7 @@ describe("Render", () => {
       props.fractalFunction.getCoefficient(0, false)
     );
     expect(coefficientItems[0].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.denominator.getAvailablePowers()
+      props.fractalFunction.getDenominatorAvailablePowers()
     );
 
     // Check the add button renders correctly
@@ -272,27 +252,14 @@ describe("Render", () => {
     expect(addButton.vm.$props.text).toBe("New Coefficient");
 
     // Mount the FunctionPanel with a full denominator
+    const fullPolynomial = new Polynomial({});
+    for (let p = 0; p <= Polynomial.MAX_DEGREE; p++) {
+      fullPolynomial.setCoefficient(p, new Complex(0, 0));
+    }
     props.fractalFunction = new FractalFunction(
       new Polynomial({}),
-      new Polynomial({
-        0: new Complex(0, 0),
-        1: new Complex(0, 0),
-        2: new Complex(0, 0),
-        3: new Complex(0, 0),
-        4: new Complex(0, 0),
-        5: new Complex(0, 0),
-        6: new Complex(0, 0),
-        7: new Complex(0, 0),
-        8: new Complex(0, 0),
-        9: new Complex(0, 0),
-        10: new Complex(0, 0),
-        11: new Complex(0, 0),
-        12: new Complex(0, 0),
-        13: new Complex(0, 0),
-        14: new Complex(0, 0),
-        15: new Complex(0, 0),
-      }),
       FunctionTypes.FRACTION,
+      fullPolynomial,
       new Complex(1, 0)
     );
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
@@ -328,7 +295,7 @@ describe("Interactions", () => {
     comboBox.vm.$emit("update:selected", newFunctionType);
 
     // Check the function type has changed accordingly
-    expect(props.fractalFunction.functionType).toBe(newFunctionType);
+    expect(props.fractalFunction.getFunctionType()).toBe(newFunctionType);
   });
 
   it("changes the newton coefficient with the newton coefficient input", () => {
@@ -366,7 +333,7 @@ describe("Interactions", () => {
     coefficientItems[0].vm.$emit("update:degree", newDegree);
 
     // Check the numerator has changed accordingly
-    expect(() => props.fractalFunction.getCoefficient(oldDegree, true)).toThrowError();
+    expect(props.fractalFunction.getCoefficient(oldDegree, true)).toBeUndefined();
     expect(props.fractalFunction.getCoefficient(newDegree, true)).toEqual(oldCoefficient);
   });
 
@@ -400,7 +367,7 @@ describe("Interactions", () => {
     coefficientItems[0].vm.$emit("delete:coefficient");
 
     // Check the numerator has changed accordingly
-    expect(() => props.fractalFunction.getCoefficient(0, true)).toThrowError();
+    expect(props.fractalFunction.getCoefficient(0, true)).toBeUndefined();
   });
 
   it("adds a numerator coefficient with the add button", () => {
@@ -436,7 +403,7 @@ describe("Interactions", () => {
     coefficientItems[0].vm.$emit("update:degree", newDegree);
 
     // Check the denominator has changed accordingly
-    expect(() => props.fractalFunction.getCoefficient(oldDegree, false)).toThrowError();
+    expect(props.fractalFunction.getCoefficient(oldDegree, false)).toBeUndefined();
     expect(props.fractalFunction.getCoefficient(newDegree, false)).toEqual(oldCoefficient);
   });
 
@@ -472,7 +439,7 @@ describe("Interactions", () => {
     coefficientItems[0].vm.$emit("delete:coefficient");
 
     // Check the denominator has changed accordingly
-    expect(() => props.fractalFunction.getCoefficient(0, false)).toThrowError();
+    expect(props.fractalFunction.getCoefficient(0, false)).toBeUndefined();
   });
 
   it("adds a denominator coefficient with the add button", () => {
