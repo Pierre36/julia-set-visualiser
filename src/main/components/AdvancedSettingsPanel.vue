@@ -1,44 +1,10 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
-import type Complex from "@/models/Complex";
+import type Configuration from "@/models/Configuration";
 
-export default defineComponent({
-  name: "AdvancedSettingsPanel",
-  components: { ExpandableDisclosure, ComplexInput, NumberInput },
-  props: {
-    configuration: { type: Object, required: true },
-  },
-  emits: ["change"],
-  methods: {
-    updateResolutionScale(newResolutionScale: number) {
-      this.configuration.resolutionScale = newResolutionScale;
-      this.$emit("change");
-    },
-    updateCoordinatesScale(newCoordinatesScale: number) {
-      this.configuration.coordinatesScale = newCoordinatesScale;
-      this.$emit("change");
-    },
-    updateCoordinatesCentre(newCoordinatesCentre: Complex) {
-      this.configuration.coordinatesCentre = newCoordinatesCentre;
-      this.$emit("change");
-    },
-    updateIterationsCount(newIterationsCount: number) {
-      this.configuration.iterationsCount = newIterationsCount;
-      this.$emit("change");
-    },
-    updateEpsilon(newEpsilon: number) {
-      this.configuration.epsilon = newEpsilon;
-      this.$emit("change");
-    },
-    updateJuliaBound(newJuliaBound: number) {
-      this.configuration.juliaBound = newJuliaBound;
-      this.$emit("change");
-    },
-  },
-});
+const configuration = defineModel<Configuration>("configuration", { required: true });
 </script>
 
 <template>
@@ -82,25 +48,22 @@ export default defineComponent({
         <div class="content">
           <h4>Resolution</h4>
           <NumberInput
-            :value="configuration.resolutionScale"
+            v-model:value="configuration.resolutionScale"
             :min="0"
             :step="0.1"
             label="Resolution"
-            @update:value="updateResolutionScale"
           />
           <h4>Scale</h4>
           <NumberInput
-            :value="configuration.coordinatesScale"
+            v-model:value="configuration.coordinatesScale"
             :min="0"
             :step="0.1"
             label="Coordinates scale"
-            @update:value="updateCoordinatesScale"
           />
           <h4>Centre</h4>
           <ComplexInput
-            :complex="configuration.coordinatesCentre"
+            v-model:complex="configuration.coordinatesCentre"
             label="Coordinates centre"
-            @update:complex="updateCoordinatesCentre"
           />
         </div>
       </section>
@@ -127,29 +90,22 @@ export default defineComponent({
         <div class="content">
           <h4>Iterations</h4>
           <NumberInput
-            :value="configuration.iterationsCount"
+            v-model:value="configuration.iterationsCount"
             :min="1"
             :step="1"
             :isIntegerOnly="true"
             wrongInputMessage="Please enter a valid number of iterations"
             label="Number of iterations"
-            @update:value="updateIterationsCount"
           />
           <h4>Epsilon</h4>
           <NumberInput
-            :value="configuration.epsilon"
+            v-model:value="configuration.epsilon"
             :min="0"
             :step="0.000001"
             label="Epsilon"
-            @update:value="updateEpsilon"
           />
           <h4>Julia bound</h4>
-          <NumberInput
-            :value="configuration.juliaBound"
-            :step="0.1"
-            label="Julia bound"
-            @update:value="updateJuliaBound"
-          />
+          <NumberInput v-model:value="configuration.juliaBound" :step="0.1" label="Julia bound" />
         </div>
       </section>
     </div>

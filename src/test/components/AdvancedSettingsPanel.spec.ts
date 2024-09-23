@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { describe, it, expect, beforeEach, beforeAll, afterAll } from "vitest";
+import { config, mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 import Complex from "@/models/Complex";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
@@ -7,13 +7,23 @@ import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import ComplexInput from "@/components/ComplexInput.vue";
 
-describe("Render", () => {
-  let props: { configuration: Configuration };
+interface TestProps {
+  configuration: Configuration;
+}
 
+let props: TestProps;
+
+beforeAll(() => {
+  config.global.renderStubDefaultSlot = true;
+});
+
+afterAll(() => {
+  config.global.renderStubDefaultSlot = false;
+});
+
+describe("Render", () => {
   beforeEach(() => {
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: Configuration.defaultConfiguration() };
   });
 
   it("renders the header correctly", () => {
@@ -122,12 +132,8 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: { configuration: Configuration };
-
   beforeEach(() => {
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: Configuration.defaultConfiguration() };
   });
 
   it("changes the resolution when updating the resolution input", () => {
@@ -144,7 +150,6 @@ describe("Interactions", () => {
     const newResolution = 0.36;
     resolutionInput.vm.$emit("update:value", newResolution);
     expect(props.configuration.resolutionScale).toBe(newResolution);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 
   it("changes the coordinates scale when updating the scale input", () => {
@@ -161,7 +166,6 @@ describe("Interactions", () => {
     const newScale = 0.36;
     scaleInput.vm.$emit("update:value", newScale);
     expect(props.configuration.coordinatesScale).toBe(newScale);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 
   it("changes the coordinates centre when updating the centre input", () => {
@@ -178,7 +182,6 @@ describe("Interactions", () => {
     const newCentre = new Complex(4, 2);
     centreInput.vm.$emit("update:complex", newCentre);
     expect(props.configuration.coordinatesCentre).toBe(newCentre);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 
   it("changes the number of iterations when updating the iteration input", () => {
@@ -195,7 +198,6 @@ describe("Interactions", () => {
     const newIterationsCount = 36;
     iterationInput.vm.$emit("update:value", newIterationsCount);
     expect(props.configuration.iterationsCount).toBe(newIterationsCount);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 
   it("changes epsilon when updating the epsilon input", () => {
@@ -212,7 +214,6 @@ describe("Interactions", () => {
     const newEpsilon = 0.000036;
     epsilonInput.vm.$emit("update:value", newEpsilon);
     expect(props.configuration.epsilon).toBe(newEpsilon);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 
   it("changes the Julia bound when updating the Julia bound input", () => {
@@ -229,6 +230,5 @@ describe("Interactions", () => {
     const newJuliaBound = -36;
     juliaBoundInput.vm.$emit("update:value", newJuliaBound);
     expect(props.configuration.juliaBound).toBe(newJuliaBound);
-    expect(advancedPanel.emitted().change).toBeDefined();
   });
 });
