@@ -72,8 +72,8 @@ function changeType(newType: CoefficientTypes): void {
     <template v-else-if="coefficient instanceof ComplexLine">
       <ComplexLineInput v-model:line="coefficient" :level="level" />
     </template>
-    <template v-else-if="coefficient instanceof ComplexEllipse">
-      <ComplexEllipseInput v-model:ellipse="coefficient" :level="level" />
+    <template v-else>
+      <ComplexEllipseInput v-model:ellipse="coefficient as ComplexEllipse" :level="level" />
     </template>
   </div>
 </template>
