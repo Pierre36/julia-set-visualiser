@@ -1,26 +1,31 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
-import SidePanel from "@/components/SidePanel.vue";
+import SidePanel, { type Props } from "@/components/SidePanel.vue";
 import FunctionPanel from "@/components/FunctionPanel.vue";
 import ColoursPanel from "@/components/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
 import RandomPanel from "@/components/RandomPanel.vue";
 import PanelId from "@/components/PanelId";
+import FractalFunction from "@/models/FractalFunction";
+import Polynomial from "@/models/Polynomial";
+import Complex from "@/models/Complex";
+import FunctionTypes from "@/constants/FunctionTypes";
+import Attractor from "@/models/Attractor";
+
+interface TestProps extends Props {
+  configuration: Configuration;
+}
+
+let props: TestProps;
+
+const currentPanel = PanelId.COLOURS;
+const configuration = Configuration.defaultConfiguration();
+const collapsed = false;
 
 describe("Render", () => {
-  let props: {
-    currentPanel: PanelId;
-    configuration: Configuration;
-    collapsed: boolean;
-  };
-
   beforeEach(() => {
-    props = {
-      currentPanel: PanelId.COLOURS,
-      configuration: Configuration.defaultConfiguration(),
-      collapsed: false,
-    };
+    props = { currentPanel, configuration: configuration.copy(), collapsed };
   });
 
   it("renders properly when collapsed", () => {
@@ -138,18 +143,8 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    currentPanel: PanelId;
-    configuration: Configuration;
-    collapsed: boolean;
-  };
-
   beforeEach(() => {
-    props = {
-      currentPanel: PanelId.COLOURS,
-      configuration: Configuration.defaultConfiguration(),
-      collapsed: false,
-    };
+    props = { currentPanel, configuration: configuration.copy(), collapsed };
   });
 
   it("emits change the FUNCTION panel emits change", () => {
@@ -161,9 +156,13 @@ describe("Interactions", () => {
     const panelContainer = sidePanel.find("#side-panel");
     const functionPanel = panelContainer.findComponent(FunctionPanel);
 
-    // Make FUNCTION panel emit change and check the SidePanel emits change
-    functionPanel.vm.$emit("change");
-    expect(sidePanel.emitted().change).toBeDefined();
+    // Make FUNCTION panel emit change and check the configuration is updated
+    const newFractalFunction = new FractalFunction(
+      new Polynomial({ 0: new Complex(3, 6) }),
+      FunctionTypes.DEFAULT
+    );
+    functionPanel.vm.$emit("update:fractalFunction", newFractalFunction);
+    expect(props.configuration.fractalFunction).toEqual(newFractalFunction);
   });
 
   it("emits change the COLOURS panel emits change", () => {
@@ -175,9 +174,21 @@ describe("Interactions", () => {
     const panelContainer = sidePanel.find("#side-panel");
     const coloursPanel = panelContainer.findComponent(ColoursPanel);
 
-    // Make COLOURS panel emit change and check the SidePanel emits change
-    coloursPanel.vm.$emit("change");
-    expect(sidePanel.emitted().change).toBeDefined();
+    // Make COLOURS panel emit changes
+    const newJuliaHSV = [1, 2, 3];
+    const newDefaultAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
+    const newInfinityAttractor = new Attractor(undefined, 6, 7, 8, 9, 10);
+    const newAttractors = [new Attractor(new Complex(4, 2), 11, 12, 13, 14, 15)];
+    coloursPanel.vm.$emit("update:juliaHSV", newJuliaHSV);
+    coloursPanel.vm.$emit("update:defaultAttractor", newDefaultAttractor);
+    coloursPanel.vm.$emit("update:infinityAttractor", newInfinityAttractor);
+    coloursPanel.vm.$emit("update:attractors", newAttractors);
+
+    // Check the configuration is updated
+    expect(props.configuration.juliaHSV).toEqual(newJuliaHSV);
+    expect(props.configuration.defaultAttractor).toEqual(newDefaultAttractor);
+    expect(props.configuration.infinityAttractor).toEqual(newInfinityAttractor);
+    expect(props.configuration.attractors).toEqual(newAttractors);
   });
 
   it("emits change the ADVANCED panel emits change", () => {
@@ -189,9 +200,10 @@ describe("Interactions", () => {
     const panelContainer = sidePanel.find("#side-panel");
     const advancedPanel = panelContainer.findComponent(AdvancedSettingsPanel);
 
-    // Make ADVANCED panel emit change and check the SidePanel emits change
-    advancedPanel.vm.$emit("change");
-    expect(sidePanel.emitted().change).toBeDefined();
+    // Make ADVANCED panel emit change and check the configuration is updated
+    const newConfiguration = Configuration.emptyConfiguration("test", "test");
+    advancedPanel.vm.$emit("update:configuration", newConfiguration);
+    expect(sidePanel.emitted()["update:configuration"]).toEqual([[newConfiguration]]);
   });
 
   it("emits change the RANDOM panel emits change", () => {
@@ -203,8 +215,9 @@ describe("Interactions", () => {
     const panelContainer = sidePanel.find("#side-panel");
     const randomPanel = panelContainer.findComponent(RandomPanel);
 
-    // Make ADVANCED panel emit change and check the SidePanel emits change
-    randomPanel.vm.$emit("change");
-    expect(sidePanel.emitted().change).toBeDefined();
+    // Make ADVANCED panel emit change and check the configuration is updated
+    const newConfiguration = Configuration.emptyConfiguration("test", "test");
+    randomPanel.vm.$emit("update:configuration", newConfiguration);
+    expect(sidePanel.emitted()["update:configuration"]).toEqual([[newConfiguration]]);
   });
 });

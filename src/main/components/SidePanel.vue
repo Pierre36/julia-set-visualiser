@@ -1,21 +1,18 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import FunctionPanel from "@/components/FunctionPanel.vue";
 import ColoursPanel from "@/components/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/AdvancedSettingsPanel.vue";
 import RandomPanel from "@/components/RandomPanel.vue";
 import Configuration from "@/models/Configuration";
 
-export default defineComponent({
-  name: "SidePanel",
-  components: { FunctionPanel, ColoursPanel, AdvancedSettingsPanel, RandomPanel },
-  props: {
-    currentPanel: { type: String, required: true },
-    configuration: { type: Configuration, required: true },
-    collapsed: { type: Boolean, default: true },
-  },
-  emits: ["change"],
-});
+export interface Props {
+  currentPanel: string;
+  collapsed?: boolean;
+}
+
+const { currentPanel, collapsed = true } = defineProps<Props>();
+
+const configuration = defineModel<Configuration>("configuration", { required: true });
 </script>
 
 <template>
@@ -24,26 +21,19 @@ export default defineComponent({
       <FunctionPanel
         v-show="currentPanel == 'FUNCTION'"
         v-model:fractalFunction="configuration.fractalFunction"
-        @change="$emit('change')"
       />
       <ColoursPanel
         v-show="currentPanel == 'COLOURS'"
-        :juliaHSV="configuration.juliaHSV"
-        :defaultAttractor="configuration.defaultAttractor"
-        :infinityAttractor="configuration.infinityAttractor"
-        :attractors="configuration.attractors"
-        @change="$emit('change')"
+        v-model:juliaHSV="configuration.juliaHSV"
+        v-model:defaultAttractor="configuration.defaultAttractor"
+        v-model:infinityAttractor="configuration.infinityAttractor"
+        v-model:attractors="configuration.attractors"
       />
       <AdvancedSettingsPanel
         v-show="currentPanel == 'ADVANCED'"
-        :configuration="configuration"
-        @change="$emit('change')"
+        v-model:configuration="configuration"
       />
-      <RandomPanel
-        v-show="currentPanel == 'RANDOM'"
-        :configuration="configuration"
-        @change="$emit('change')"
-      />
+      <RandomPanel v-show="currentPanel == 'RANDOM'" v-model:configuration="configuration" />
     </div>
   </Transition>
 </template>
