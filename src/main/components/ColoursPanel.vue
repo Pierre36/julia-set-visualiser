@@ -1,60 +1,30 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import AttractorItem from "@/components/AttractorItem.vue";
 import ExpandableDisclosure from "@/components/ExpandableDisclosure.vue";
 import SliderInput from "@/components/SliderInput.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
+import { computed, type ComputedRef } from "vue";
 
-export default defineComponent({
-  name: "ColoursPanel",
-  components: {
-    ExpandableDisclosure,
-    SliderInput,
-    AttractorItem,
-    IconTextButton,
-  },
-  props: {
-    juliaHSV: { type: Array<number>, required: true },
-    defaultAttractor: { type: Attractor, required: true },
-    infinityAttractor: { type: Attractor, required: true },
-    attractors: { type: Array<Attractor>, required: true },
-  },
-  emits: ["change"],
-  computed: {
-    visualizerColour() {
-      const l = this.juliaHSV[2] * (1 - this.juliaHSV[1] / 2);
-      let s = 0;
-      if (l != 0 && l != 1) {
-        s = (this.juliaHSV[2] - l) / Math.min(l, 1 - l);
-      }
-      return `hsl(${this.juliaHSV[0]}, ${s * 100}%, ${l * 100}%)`;
-    },
-  },
-  methods: {
-    updateJuliaHue(newHue: number) {
-      this.juliaHSV[0] = newHue;
-      this.$emit("change");
-    },
-    updateJuliaSaturation(newSaturation: number) {
-      this.juliaHSV[1] = newSaturation;
-      this.$emit("change");
-    },
-    updateJuliaValue(newValue: number) {
-      this.juliaHSV[2] = newValue;
-      this.$emit("change");
-    },
-    addAttractor() {
-      this.attractors.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
-      this.$emit("change");
-    },
-    deleteAttractor(index: number) {
-      this.attractors.splice(index, 1);
-      this.$emit("change");
-    },
-  },
+const juliaHSV = defineModel<number[]>("juliaHSV", { required: true });
+const defaultAttractor = defineModel<Attractor>("defaultAttractor", { required: true });
+const infinityAttractor = defineModel<Attractor>("infinityAttractor", { required: true });
+const attractors = defineModel<Attractor[]>("attractors", { required: true });
+
+const visualizerColour: ComputedRef<string> = computed(() => {
+  const l = juliaHSV.value[2] * (1 - juliaHSV.value[1] / 2);
+  const s = l != 0 && l != 1 ? (juliaHSV.value[2] - l) / Math.min(l, 1 - l) : 0;
+  return `hsl(${juliaHSV.value[0]}, ${s * 100}%, ${l * 100}%)`;
 });
+
+function addAttractor(): void {
+  attractors.value.push(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
+}
+
+function deleteAttractor(index: number): void {
+  attractors.value.splice(index, 1);
+}
 </script>
 
 <template>
@@ -80,34 +50,31 @@ export default defineComponent({
           <div class="colour-visualizer" :style="'background-color:' + visualizerColour"></div>
           <SliderInput
             class="span-2 julia-slider-input"
-            :value="juliaHSV[0]"
+            v-model:value="juliaHSV[0]"
             :min="0"
             :max="360"
             :step="1"
             :isIntegerOnly="true"
             :level="5"
             label="Hue"
-            @update:value="(newHue) => updateJuliaHue(newHue)"
           />
           <SliderInput
             class="span-2 julia-slider-input"
-            :value="juliaHSV[1]"
+            v-model:value="juliaHSV[1]"
             :min="0"
             :max="1"
             :step="0.01"
             :level="5"
             label="Saturation"
-            @update:value="(newSaturation) => updateJuliaSaturation(newSaturation)"
           />
           <SliderInput
             class="span-2 julia-slider-input"
-            :value="juliaHSV[2]"
+            v-model:value="juliaHSV[2]"
             :min="0"
             :max="1"
             :step="0.01"
             :level="5"
             label="Value"
-            @update:value="(newValue) => updateJuliaValue(newValue)"
           />
         </div>
       </section>
@@ -124,25 +91,22 @@ export default defineComponent({
             class="attractor-item"
             :isDefault="true"
             :isInfinity="false"
-            :attractor="defaultAttractor"
-            @change="$emit('change')"
+            v-model:attractor="defaultAttractor"
           />
           <AttractorItem
             class="attractor-item"
             :isDefault="false"
             :isInfinity="true"
-            :attractor="infinityAttractor"
-            @change="$emit('change')"
+            v-model:attractor="infinityAttractor"
           />
           <AttractorItem
-            v-for="(attractor, index) in attractors"
+            v-for="(_, index) in attractors"
             class="attractor-item"
             :key="index"
             :isDefault="false"
             :isInfinity="false"
-            :attractor="attractor"
+            v-model:attractor="attractors[index]"
             @delete:attractor="deleteAttractor(index)"
-            @change="$emit('change')"
           />
           <IconTextButton
             v-if="attractors.length <= 15"

@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import { describe, it, expect, beforeEach, afterAll, beforeAll } from "vitest";
+import { config, mount } from "@vue/test-utils";
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import ColoursPanel from "@/components/ColoursPanel.vue";
@@ -8,21 +8,31 @@ import SliderInput from "@/components/SliderInput.vue";
 import AttractorItem from "@/components/AttractorItem.vue";
 import IconTextButton from "@/components/IconTextButton.vue";
 
-describe("Render", () => {
-  let props: {
-    juliaHSV: number[];
-    defaultAttractor: Attractor;
-    infinityAttractor: Attractor;
-    attractors: Attractor[];
-  };
+interface TestProps {
+  juliaHSV: number[];
+  defaultAttractor: Attractor;
+  infinityAttractor: Attractor;
+  attractors: Attractor[];
+}
 
+let props: TestProps;
+
+const juliaHSV = [210, 0, 0];
+const defaultAttractor = new Attractor(undefined, 36, 0.3, 0.4, 0.5, 0.6);
+const infinityAttractor = new Attractor(undefined, 42, 0.7, 0.8, 0.9, 1.0);
+const attractor = new Attractor(new Complex(3, 6), 78, 1.1, 1.2, 1.3, 1.4);
+
+beforeAll(() => {
+  config.global.renderStubDefaultSlot = true;
+});
+
+afterAll(() => {
+  config.global.renderStubDefaultSlot = false;
+});
+
+describe("Render", () => {
   beforeEach(() => {
-    props = {
-      juliaHSV: [210, 0, 0],
-      defaultAttractor: new Attractor(undefined, 36, 0.3, 0.4, 0.5, 0.6),
-      infinityAttractor: new Attractor(undefined, 42, 0.7, 0.8, 0.9, 1.0),
-      attractors: [new Attractor(new Complex(3, 6), 78, 1.1, 1.2, 1.3, 1.4)],
-    };
+    props = { juliaHSV, defaultAttractor, infinityAttractor, attractors: [attractor] };
   });
 
   it("renders the header correctly", () => {
@@ -133,20 +143,8 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    juliaHSV: number[];
-    defaultAttractor: Attractor;
-    infinityAttractor: Attractor;
-    attractors: Attractor[];
-  };
-
   beforeEach(() => {
-    props = {
-      juliaHSV: [210, 0, 0],
-      defaultAttractor: new Attractor(undefined, 36, 0.3, 0.4, 0.5, 0.6),
-      infinityAttractor: new Attractor(undefined, 42, 0.7, 0.8, 0.9, 1.0),
-      attractors: [new Attractor(new Complex(3, 6), 78, 1.1, 1.2, 1.3, 1.4)],
-    };
+    props = { juliaHSV, defaultAttractor, infinityAttractor, attractors: [attractor] };
   });
 
   it("changes the Julia hue when updating the Julia hue slider", () => {
@@ -163,7 +161,6 @@ describe("Interactions", () => {
     const newHue = 42;
     hueSlider.vm.$emit("update:value", newHue);
     expect(props.juliaHSV[0]).toBe(newHue);
-    expect(coloursPanel.emitted().change).toBeDefined();
   });
 
   it("changes the Julia saturation when updating the Julia saturation slider", () => {
@@ -180,7 +177,6 @@ describe("Interactions", () => {
     const newSaturation = 0.36;
     saturationSlider.vm.$emit("update:value", newSaturation);
     expect(props.juliaHSV[1]).toBe(newSaturation);
-    expect(coloursPanel.emitted().change).toBeDefined();
   });
 
   it("changes the Julia value when updating the Julia value slider", () => {
@@ -197,7 +193,6 @@ describe("Interactions", () => {
     const newValue = 0.36;
     valueSlider.vm.$emit("update:value", newValue);
     expect(props.juliaHSV[2]).toBe(newValue);
-    expect(coloursPanel.emitted().change).toBeDefined();
   });
 
   it("emits change when the default attractor changes", () => {
@@ -210,8 +205,9 @@ describe("Interactions", () => {
     const defaultAttractorItem = fatouSection.findAllComponents(AttractorItem)[0];
 
     // Change the default attractor and check change is emitted
-    defaultAttractorItem.vm.$emit("change");
-    expect(coloursPanel.emitted().change).toBeDefined();
+    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
+    defaultAttractorItem.vm.$emit("update:attractor", newAttractor);
+    expect(coloursPanel.emitted()["update:defaultAttractor"]).toEqual([[newAttractor]]);
   });
 
   it("emits change when the infinity attractor changes", () => {
@@ -224,8 +220,9 @@ describe("Interactions", () => {
     const infinityAttractorItem = fatouSection.findAllComponents(AttractorItem)[1];
 
     // Change the infinity attractor and check change is emitted
-    infinityAttractorItem.vm.$emit("change");
-    expect(coloursPanel.emitted().change).toBeDefined();
+    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
+    infinityAttractorItem.vm.$emit("update:attractor", newAttractor);
+    expect(coloursPanel.emitted()["update:infinityAttractor"]).toEqual([[newAttractor]]);
   });
 
   it("emits change when a normal attractor changes", () => {
@@ -238,8 +235,9 @@ describe("Interactions", () => {
     const normalAttractorItem = fatouSection.findAllComponents(AttractorItem)[2];
 
     // Change the normal attractor and check change is emitted
-    normalAttractorItem.vm.$emit("change");
-    expect(coloursPanel.emitted().change).toBeDefined();
+    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
+    normalAttractorItem.vm.$emit("update:attractor", newAttractor);
+    expect(props.attractors[0]).toEqual(newAttractor);
   });
 
   it("deletes the attractor when attractorItem emits deletion event", () => {
@@ -254,7 +252,6 @@ describe("Interactions", () => {
     // Change the normal attractor and check change is emitted
     normalAttractorItem.vm.$emit("delete:attractor");
     expect(props.attractors.length).toBe(0);
-    expect(coloursPanel.emitted().change).toBeDefined();
   });
 
   it("adds an attractor when clicking the add button", () => {
@@ -270,6 +267,5 @@ describe("Interactions", () => {
     addButton.trigger("click");
     expect(props.attractors.length).toBe(2);
     expect(props.attractors[1]).toEqual(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
-    expect(coloursPanel.emitted().change).toBeDefined();
   });
 });
