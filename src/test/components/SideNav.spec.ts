@@ -1,30 +1,31 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import SideNav from "@/components/SideNav.vue";
+import SideNav, { type Props } from "@/components/SideNav.vue";
 import PanelId from "@/components/PanelId";
 
+interface TestProps extends Props {
+  currentPanel: PanelId;
+  sidePanelCollapsed: boolean;
+}
+
+let props: TestProps;
+
+const currentPanel = PanelId.COLOURS;
+const panels = [
+  { id: PanelId.FUNCTION, name: "Panel 0", icon: "icon0" },
+  { id: PanelId.COLOURS, name: "Panel 1", icon: "icon1" },
+  { id: PanelId.ADVANCED, name: "Panel 2", icon: "icon2" },
+];
+const sidePanelCollapsed = false;
+const label = "label";
+
 describe("Render", () => {
-  let props: {
-    currentPanel: PanelId;
-    panels: { id: PanelId; name: string; icon: string }[];
-    sidePanelCollapsed: boolean;
-    label: string;
-  };
   let navItemHeight: number;
   let navHeight: number;
 
   beforeEach(() => {
     // Prepare props
-    props = {
-      currentPanel: PanelId.COLOURS,
-      panels: [
-        { id: PanelId.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PanelId.COLOURS, name: "Panel 1", icon: "icon1" },
-        { id: PanelId.ADVANCED, name: "Panel 2", icon: "icon2" },
-      ],
-      sidePanelCollapsed: false,
-      label: "label",
-    };
+    props = { currentPanel, panels, sidePanelCollapsed, label };
 
     // Mock clientHeight
     navItemHeight = 10;
@@ -178,27 +179,12 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    currentPanel: PanelId;
-    panels: { id: PanelId; name: string; icon: string }[];
-    sidePanelCollapsed: boolean;
-    label: string;
-  };
   let navItemHeight: number;
   let navHeight: number;
 
   beforeEach(() => {
     // Prepare props
-    props = {
-      currentPanel: PanelId.COLOURS,
-      panels: [
-        { id: PanelId.FUNCTION, name: "Panel 0", icon: "icon0" },
-        { id: PanelId.COLOURS, name: "Panel 1", icon: "icon1" },
-        { id: PanelId.ADVANCED, name: "Panel 2", icon: "icon2" },
-      ],
-      sidePanelCollapsed: false,
-      label: "label",
-    };
+    props = { currentPanel, panels, sidePanelCollapsed, label };
 
     // Mock clientHeight
     navItemHeight = 10;
@@ -284,9 +270,13 @@ describe("Interactions", () => {
     let nav = sidenav.find("nav");
     let tabs = nav.findAll("[role='tab']");
 
+    // Check no event is emitted when clicking on unselected tab
+    await tabs[0].find("button").trigger("click");
+    expect(sidenav.emitted()["update:sidePanelCollapsed"]).toBeUndefined();
+
     // Click the selected nav tab and check the event is emitted
-    await tabs[1].find("button").trigger("click");
-    expect(sidenav.emitted()["update:sidePanelCollapsed"]).toEqual([[]]);
+    await tabs[0].find("button").trigger("click");
+    expect(sidenav.emitted()["update:sidePanelCollapsed"]).toEqual([[true]]);
 
     // Mount SideNav with collapsed side panels
     props.sidePanelCollapsed = true;
@@ -299,7 +289,7 @@ describe("Interactions", () => {
 
     // Click a tab and check the event is emitted
     await tabs[0].find("button").trigger("click");
-    expect(sidenav.emitted()["update:sidePanelCollapsed"]).toEqual([[]]);
+    expect(sidenav.emitted()["update:sidePanelCollapsed"]).toEqual([[false]]);
   });
 
   it("focuses the selected element when focused in", async () => {

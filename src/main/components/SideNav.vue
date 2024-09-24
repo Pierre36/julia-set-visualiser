@@ -1,106 +1,112 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-import type PanelId from "@/components/PanelId";
+<script setup lang="ts">
+import PanelId from "@/components/PanelId";
 import type { Panel } from "@/components/SideBar.vue";
+import { computed, onMounted, onUnmounted, ref, useTemplateRef, type ComputedRef } from "vue";
 
-export default defineComponent({
-  name: "SideNav",
-  props: {
-    currentPanel: { type: String, required: true },
-    panels: { type: Array<Panel>, required: true },
-    sidePanelCollapsed: { type: Boolean, default: true },
-    label: { type: String, default: "" },
-  },
-  emits: ["update:sidePanelCollapsed", "update:currentPanel"],
-  data() {
-    return {
-      displayedPanelsCount: 0,
-      focusedIndex: 0,
-      popupShown: false,
-      hasFocus: false,
-    };
-  },
-  computed: {
-    displayedPanels() {
-      return this.panels.filter((_, index) => index < this.displayedPanelsCount);
-    },
-    hiddenPanels() {
-      return this.panels.filter((_, index) => index >= this.displayedPanelsCount);
-    },
-    focusedPanel() {
-      return this.panels[this.focusedIndex].id;
-    },
-    currentPanelIndex() {
-      return this.panels.findIndex((panel) => panel.id === this.currentPanel);
-    },
-  },
-  created() {
-    window.addEventListener("resize", this.updateDisplayedPanelsCount);
-  },
-  mounted() {
-    document.addEventListener("click", this.closePopup);
-    this.updateDisplayedPanelsCount();
-  },
-  beforeUnmount() {
-    document.removeEventListener("click", this.closePopup);
-    window.removeEventListener("resize", this.updateDisplayedPanelsCount);
-  },
-  methods: {
-    updateDisplayedPanelsCount() {
-      this.displayedPanelsCount = Math.max(
-        Math.floor(
-          (this.$refs.tablist as HTMLElement).clientHeight /
-            (this.$refs.moreListItem as HTMLElement).clientHeight
-        ) - 1,
-        0
-      );
-    },
-    changePanel(newPanel: PanelId) {
-      this.$emit("update:currentPanel", newPanel);
-      if (this.sidePanelCollapsed || newPanel == this.currentPanel) {
-        this.$emit("update:sidePanelCollapsed");
-      }
-    },
-    switchPopup() {
-      this.popupShown = !this.popupShown;
-    },
-    closePopup(event: any) {
-      if (this.popupShown && !(this.$refs.moreButton as HTMLElement).contains(event.target)) {
-        this.popupShown = false;
-      }
-    },
-    changeFocus(newFocusedIndex: number) {
-      this.focusedIndex = newFocusedIndex;
-      this.popupShown = newFocusedIndex >= this.displayedPanelsCount;
-    },
-    moveFocusDown() {
-      this.changeFocus((this.focusedIndex + 1) % this.panels.length);
-    },
-    moveFocusUp() {
-      this.changeFocus((this.focusedIndex + this.panels.length - 1) % this.panels.length);
-    },
-    moveFocusToFirst() {
-      this.changeFocus(0);
-    },
-    moveFocusToLast() {
-      this.changeFocus(this.panels.length - 1);
-    },
-    onFocusIn() {
-      if (!this.hasFocus) {
-        this.hasFocus = true;
-        if ((this.$refs.tablist as HTMLElement).matches(":focus-visible")) {
-          this.changeFocus(this.currentPanelIndex);
-        }
-      }
-    },
-    onFocusOut() {
-      if (!(this.$refs.tablist as HTMLElement).matches(":focus-within")) {
-        this.hasFocus = false;
-        this.popupShown = false;
-      }
-    },
-  },
+export interface Props {
+  panels: Panel[];
+  label?: string;
+}
+
+const { panels, label = "" } = defineProps<Props>();
+
+const currentPanel = defineModel<PanelId>("currentPanel", { required: true });
+const sidePanelCollapsed = defineModel<boolean>("sidePanelCollapsed", { default: true });
+
+const displayedPanelsCount = ref(0);
+const focusedIndex = ref(0);
+const popupShown = ref(false);
+const hasFocus = ref(false);
+
+const tablist = useTemplateRef<HTMLElement>("tablist");
+const moreListItem = useTemplateRef<HTMLElement>("moreListItem");
+const moreButton = useTemplateRef<HTMLElement>("moreButton");
+
+const displayedPanels: ComputedRef<Panel[]> = computed(() =>
+  panels.filter((_, index) => index < displayedPanelsCount.value)
+);
+
+const hiddenPanels: ComputedRef<Panel[]> = computed(() =>
+  panels.filter((_, index) => index >= displayedPanelsCount.value)
+);
+
+const focusedPanel: ComputedRef<PanelId> = computed(() => panels[focusedIndex.value].id);
+
+const currentPanelIndex: ComputedRef<number> = computed(() =>
+  panels.findIndex((panel) => panel.id === currentPanel.value)
+);
+
+onMounted(() => {
+  window.addEventListener("resize", updateDisplayedPanelsCount);
+  document.addEventListener("click", closePopup);
+  updateDisplayedPanelsCount();
 });
+
+onUnmounted(() => {
+  document.removeEventListener("click", closePopup);
+  window.removeEventListener("resize", updateDisplayedPanelsCount);
+});
+
+function updateDisplayedPanelsCount() {
+  displayedPanelsCount.value = Math.max(
+    Math.floor(tablist.value!.clientHeight / moreListItem.value!.clientHeight) - 1,
+    0
+  );
+}
+
+function changePanel(newPanel: PanelId) {
+  if (sidePanelCollapsed.value || newPanel == currentPanel.value) {
+    sidePanelCollapsed.value = !sidePanelCollapsed.value;
+  }
+  currentPanel.value = newPanel;
+}
+
+function switchPopup() {
+  popupShown.value = !popupShown.value;
+}
+
+function closePopup(event: any) {
+  if (popupShown.value && !moreButton.value!.contains(event.target)) {
+    popupShown.value = false;
+  }
+}
+
+function changeFocus(newFocusedIndex: number) {
+  focusedIndex.value = newFocusedIndex;
+  popupShown.value = newFocusedIndex >= displayedPanelsCount.value;
+}
+
+function moveFocusDown() {
+  changeFocus((focusedIndex.value + 1) % panels.length);
+}
+
+function moveFocusUp() {
+  changeFocus((focusedIndex.value + panels.length - 1) % panels.length);
+}
+
+function moveFocusToFirst() {
+  changeFocus(0);
+}
+
+function moveFocusToLast() {
+  changeFocus(panels.length - 1);
+}
+
+function onFocusIn() {
+  if (!hasFocus.value) {
+    hasFocus.value = true;
+    if (tablist.value!.matches(":focus-visible")) {
+      changeFocus(currentPanelIndex.value);
+    }
+  }
+}
+
+function onFocusOut() {
+  if (!tablist.value?.matches(":focus-within")) {
+    hasFocus.value = false;
+    popupShown.value = false;
+  }
+}
 </script>
 
 <template>
@@ -157,6 +163,7 @@ export default defineComponent({
           <li
             v-for="panel in hiddenPanels"
             role="tab"
+            :key="panel.id"
             :class="{ focused: focusedPanel == panel.id }"
             aria-controls="side-panel"
             :aria-selected="currentPanel == panel.id"
