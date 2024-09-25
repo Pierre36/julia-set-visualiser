@@ -1,15 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import AnimationOverlay from "@/components/AnimationOverlay.vue";
+import AnimationOverlay, { type Props } from "@/components/AnimationOverlay.vue";
+
+let props: Props;
+
+const fps = 36;
 
 describe("Render", () => {
-  let props: { fps: number };
-
-  beforeEach(() => {
-    props = {
-      fps: 36,
-    };
-  });
+  beforeEach(() => (props = { fps }));
 
   it("renders correctly", () => {
     // Mount the AnimationOverlay
@@ -32,13 +30,7 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: { fps: number };
-
-  beforeEach(() => {
-    props = {
-      fps: 36,
-    };
-  });
+  beforeEach(() => (props = { fps }));
 
   it("shows fps when clicking metrics button", async () => {
     // Mount the AnimationOverlay
@@ -52,7 +44,7 @@ describe("Interactions", () => {
     await animationOverlay.vm.$nextTick();
     let metrics = animationOverlay.find(".metrics");
     expect(metrics.exists()).toBe(true);
-    expect(metrics.text()).toBe(props.fps.toString());
+    expect(metrics.text()).toBe(fps.toString());
     expect(metricsButton.text()).toBe("Hide metrics");
 
     // Click the metrics button again and check the metrics are hidden
@@ -131,6 +123,17 @@ describe("Interactions", () => {
     const event = new KeyboardEvent("keyup", { key: "f" });
     const input = document.createElement("input");
     input.dispatchEvent(event);
+    await animationOverlay.vm.$nextTick();
+    expect(animationOverlay.emitted().fullscreen).toBeUndefined();
+  });
+
+  it("does not trigger fullscreen when pressing a key that is not 'f'", async () => {
+    // Mount the AnimationOverlay
+    const animationOverlay = mount(AnimationOverlay, { props: props });
+
+    // Press 'f' key and check fullscreen is emitted
+    const event = new KeyboardEvent("keyup", { key: "a" });
+    document.dispatchEvent(event);
     await animationOverlay.vm.$nextTick();
     expect(animationOverlay.emitted().fullscreen).toBeUndefined();
   });

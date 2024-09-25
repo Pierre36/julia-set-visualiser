@@ -1,60 +1,53 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
 
-export default defineComponent({
-  name: "AnimationOverlay",
-  props: {
-    fps: { type: Number, default: 0 },
-  },
-  emits: ["pause", "unpause", "fullscreen"],
-  data() {
-    return {
-      metricsDisplayed: false,
-      paused: false,
-      isFullscreen: false,
-      mouseMoveTimer: null as any,
-      menuDisplayed: false,
-    };
-  },
-  mounted() {
-    // Add an event listener for the fullscreen event
-    document.addEventListener("fullscreenchange", () => {
-      this.isFullscreen = !this.isFullscreen;
-    });
+export interface Props {
+  fps?: number;
+}
 
-    // Add a shortcut to switch fullscreen
-    document.addEventListener("keyup", (event: KeyboardEvent) => {
-      if (!(event.target instanceof HTMLInputElement) && event.key == "f") {
-        this.updateFullscreen();
-      }
-    });
-  },
-  methods: {
-    updatePaused() {
-      this.paused = !this.paused;
-      if (this.paused) {
-        this.$emit("pause");
-      } else {
-        this.$emit("unpause");
-      }
-    },
-    updateFullscreen() {
-      if (this.isFullscreen) {
-        document.exitFullscreen();
-      } else {
-        this.$emit("fullscreen");
-      }
-    },
-    onMouseMove() {
-      this.menuDisplayed = true;
-      this.mouseMoveTimer = setTimeout(() => (this.menuDisplayed = false), 3000);
-    },
-    onMouseLeave() {
-      this.menuDisplayed = false;
-      if (this.mouseMoveTimer) clearTimeout(this.mouseMoveTimer);
-    },
-  },
+const { fps = 0 } = defineProps<Props>();
+
+const emit = defineEmits<{ (e: "pause"): void; (e: "unpause"): void; (e: "fullscreen"): void }>();
+
+const metricsDisplayed = ref(false);
+const paused = ref(false);
+const isFullscreen = ref(false);
+const menuDisplayed = ref(false);
+
+const mouseMoveTimer = setTimeout(() => (menuDisplayed.value = false), 3000);
+
+onMounted(() => {
+  document.addEventListener("fullscreenchange", () => (isFullscreen.value = !isFullscreen.value));
+  document.addEventListener("keyup", (event: KeyboardEvent) => {
+    if (!(event.target instanceof HTMLInputElement) && event.key == "f") updateFullscreen();
+  });
 });
+
+function updatePaused() {
+  paused.value = !paused.value;
+  if (paused.value) {
+    emit("pause");
+  } else {
+    emit("unpause");
+  }
+}
+
+function updateFullscreen() {
+  if (isFullscreen.value) {
+    document.exitFullscreen();
+  } else {
+    emit("fullscreen");
+  }
+}
+
+function onMouseMove() {
+  menuDisplayed.value = true;
+}
+
+function onMouseLeave() {
+  menuDisplayed.value = false;
+  clearTimeout(mouseMoveTimer);
+}
 </script>
 
 <template>
