@@ -1,166 +1,145 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, useTemplateRef, watch, type Ref } from "vue";
 import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import Configuration from "@/models/Configuration";
 import AnimationOverlay from "@/components/AnimationOverlay.vue";
-import Complex from "@/models/Complex";
-import FractalFunction from "@/models/FractalFunction";
-import Attractor from "@/models/Attractor";
 import FunctionTypes from "@/constants/FunctionTypes";
 
-export default defineComponent({
-  name: "AnimationFrame",
-  components: { AnimationOverlay },
-  props: {
-    configuration: { type: Configuration, required: true },
-  },
-  data() {
-    return {
-      fractalGenerator: null as WebGpuFractalGenerator | null,
-      error: null as any,
-      fps: 0 as number,
-    };
-  },
-  // TODO resetFractalEngineTime whenever the configuration changes
-  watch: {
-    "configuration.resolutionScale"(newResolutionScale: number) {
-      this.fractalGenerator?.updateCanvasResolution(newResolutionScale);
-    },
-    "configuration.coordinatesScale"(newCoordinatesScale: number) {
-      this.fractalGenerator?.updateParameter(
-        FractalGeneratorParameters.COORDINATES_SCALE,
-        newCoordinatesScale
-      );
-    },
-    "configuration.coordinatesCentre"(newCoordinatesCentre: Complex) {
-      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
-        newCoordinatesCentre.re,
-        newCoordinatesCentre.im,
-      ]);
-    },
-    "configuration.iterationsCount"(newIterationsCount: number) {
-      this.fractalGenerator?.updateParameter(
-        FractalGeneratorParameters.ITERATIONS_COUNT,
-        newIterationsCount
-      );
-    },
-    "configuration.epsilon"(newEpsilon: number) {
-      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, newEpsilon);
-    },
-    "configuration.juliaBound"(newJuliaBound: number) {
-      this.fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, newJuliaBound);
-    },
-    "configuration.fractalFunction": {
-      handler(newFractalFunction: FractalFunction) {
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.IS_NEWTON,
-          newFractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
-        );
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.NEWTON_COEFFICIENT,
-          newFractalFunction.newtonCoefficient.getEllipseParameters()
-        );
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.NUMERATOR,
-          newFractalFunction.getNumeratorCoefficientsEllipseParameters()
-        );
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.DENOMINATOR,
-          newFractalFunction.getDenominatorCoefficientsEllipseParameters()
-        );
-      },
-      deep: true,
-    },
-    "configuration.juliaHSV": {
-      handler(newJuliaHSV: number[]) {
-        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_HSV, newJuliaHSV);
-      },
-      deep: true,
-    },
-    "configuration.defaultAttractor": {
-      handler(newDefaultAttractor: Attractor) {
-        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
-          newDefaultAttractor.hue,
-          newDefaultAttractor.saturationStrength,
-          newDefaultAttractor.saturationOffset,
-          newDefaultAttractor.valueStrength,
-          newDefaultAttractor.valueOffset,
-        ]);
-      },
-      deep: true,
-    },
-    "configuration.infinityAttractor": {
-      handler(newInfinityAttractor: Attractor) {
-        this.fractalGenerator?.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
-          newInfinityAttractor.hue,
-          newInfinityAttractor.saturationStrength,
-          newInfinityAttractor.saturationOffset,
-          newInfinityAttractor.valueStrength,
-          newInfinityAttractor.valueOffset,
-        ]);
-      },
-      deep: true,
-    },
-    "configuration.attractors": {
-      handler(newAttractors: Attractor[]) {
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.ATTRACTORS_COUNT,
-          newAttractors.length
-        );
-        this.fractalGenerator?.updateParameter(
-          FractalGeneratorParameters.ATTRACTORS,
-          newAttractors.flatMap((attractor) => [
-            attractor.complex?.mod() || 0,
-            attractor.complex?.arg() || 0,
-            attractor.hue,
-            attractor.saturationStrength,
-            attractor.saturationOffset,
-            attractor.valueStrength,
-            attractor.valueOffset,
-          ])
-        );
-      },
-      deep: true,
-    },
-  },
-  async mounted() {
-    // Initialise fractal engine
-    const fractalGeneratorInit = await WebGpuFractalGenerator.initialise(
-      this.$refs.animationCanvas as HTMLCanvasElement
+const configuration = defineModel<Configuration>("configuration", { required: true });
+
+let fractalGenerator: WebGpuFractalGenerator;
+const error: Ref<Error | undefined> = ref(undefined);
+const fps = ref(0);
+
+const canvas = useTemplateRef<HTMLCanvasElement>("animationCanvas");
+
+watch(
+  () => configuration.value.resolutionScale,
+  (scale) => fractalGenerator?.updateCanvasResolution(scale)
+);
+watch(
+  () => configuration.value.coordinatesScale,
+  (scale) => fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_SCALE, scale)
+);
+watch(
+  () => configuration.value.coordinatesCentre,
+  (centre) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
+      centre.re,
+      centre.im,
+    ]),
+  { deep: true }
+);
+watch(
+  () => configuration.value.iterationsCount,
+  (count) => fractalGenerator?.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, count)
+);
+watch(
+  () => configuration.value.epsilon,
+  (epsilon) => fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, epsilon)
+);
+watch(
+  () => configuration.value.juliaBound,
+  (bound) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, bound)
+);
+watch(
+  () => configuration.value.fractalFunction,
+  (fractalFunction) => {
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.IS_NEWTON,
+      fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
     );
-    if (fractalGeneratorInit instanceof Error) {
-      this.error = fractalGeneratorInit;
-      console.error(this.error);
-      return;
-    }
-    this.fractalGenerator = fractalGeneratorInit;
-
-    // Start the animation
-    this.fractalGenerator.startAnimation(this.configuration);
-
-    // Update dimension ratio when canvas changes size
-    new ResizeObserver(() => {
-      this.fractalGenerator?.updateViewportDimensionRatio();
-    }).observe(this.$refs.animationCanvas as HTMLCanvasElement);
-
-    // Update resolution on window resize
-    window.addEventListener("resize", () => {
-      this.fractalGenerator?.updateCanvasResolution(this.configuration.resolutionScale);
-    });
-
-    // Update fps every 0.3 seconds
-    setInterval(() => (this.fps = Math.round(this.fractalGenerator?.fps || 0)), 300);
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      fractalFunction.newtonCoefficient.getEllipseParameters()
+    );
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.NUMERATOR,
+      fractalFunction.getNumeratorCoefficientsEllipseParameters()
+    );
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.DENOMINATOR,
+      fractalFunction.getDenominatorCoefficientsEllipseParameters()
+    );
   },
-  methods: {
-    // TODO Rename
-    // TODO Expose after switch to composition API
-    resetFractalEngineTime() {
-      console.debug("[>>] Resetting the FractalEngine time...");
-      this.fractalGenerator?.resetAnimationTime();
-      console.debug("[OK] FractalEngine time reset");
-    },
+  { deep: true }
+);
+watch(
+  () => configuration.value.juliaHSV,
+  (hsv) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_HSV, hsv),
+  { deep: true }
+);
+watch(
+  () => configuration.value.defaultAttractor,
+  (attractor) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
+      attractor.hue,
+      attractor.saturationStrength,
+      attractor.saturationOffset,
+      attractor.valueStrength,
+      attractor.valueOffset,
+    ]),
+  { deep: true }
+);
+watch(
+  () => configuration.value.infinityAttractor,
+  (attractor) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
+      attractor.hue,
+      attractor.saturationStrength,
+      attractor.saturationOffset,
+      attractor.valueStrength,
+      attractor.valueOffset,
+    ]),
+  { deep: true }
+);
+watch(
+  () => configuration.value.attractors,
+  (attractors) => {
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.ATTRACTORS_COUNT,
+      attractors.length
+    );
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.ATTRACTORS,
+      attractors.flatMap((attractor) => [
+        attractor.complex?.mod() || 0,
+        attractor.complex?.arg() || 0,
+        attractor.hue,
+        attractor.saturationStrength,
+        attractor.saturationOffset,
+        attractor.valueStrength,
+        attractor.valueOffset,
+      ])
+    );
   },
+  { deep: true }
+);
+
+onMounted(async () => {
+  // Initialise fractal engine
+  const fractalGeneratorInit = await WebGpuFractalGenerator.initialise(canvas.value!);
+  if (fractalGeneratorInit instanceof Error) {
+    error.value = fractalGeneratorInit;
+    console.error(error.value);
+    return;
+  }
+  fractalGenerator = fractalGeneratorInit;
+
+  // Start the animation
+  fractalGenerator.startAnimation(configuration.value);
+
+  // Update dimension ratio when canvas changes size
+  new ResizeObserver(() => fractalGenerator.updateViewportDimensionRatio()).observe(canvas.value!);
+
+  // Update resolution on window resize
+  window.addEventListener("resize", () =>
+    fractalGenerator.updateCanvasResolution(configuration.value.resolutionScale)
+  );
+
+  // Update fps every 0.3 seconds
+  setInterval(() => (fps.value = Math.round(fractalGenerator.fps)), 300);
 });
 </script>
 

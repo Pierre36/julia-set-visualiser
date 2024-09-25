@@ -10,14 +10,18 @@ import FunctionTypes from "@/constants/FunctionTypes";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import type FractalFunction from "@/models/FractalFunction";
 
-describe("Render", () => {
-  let props: { configuration: Configuration };
+interface TestProps {
+  configuration: Configuration;
+}
 
+let props: TestProps;
+
+const configuration = Configuration.defaultConfiguration();
+
+describe("Render", () => {
   beforeEach(() => {
     // Prepare the props
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: configuration.copy() };
 
     // Mock the WebGpuFractalGenerator initialise method
     const mockedFractalGenerator = vi.mocked(WebGpuFractalGenerator.prototype, true);
@@ -71,7 +75,6 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: { configuration: Configuration };
   let initialise: MockInstance<
     (
       canvas: HTMLCanvasElement,
@@ -82,9 +85,7 @@ describe("Interactions", () => {
 
   beforeEach(() => {
     // Prepare the props
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: configuration.copy() };
 
     // Mock the WebGpuFractalGenerator methods
     mockedFractalGenerator = vi.mocked(WebGpuFractalGenerator.prototype, true);
@@ -314,6 +315,34 @@ describe("Interactions", () => {
     );
   });
 
+  it("updates the fractal engine when the fractal function changes", async () => {
+    // Mount the AnimationFrame
+    const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
+    await flushPromises();
+
+    // Change the fractal function
+    animationFrame.vm.$props.configuration.fractalFunction.setFunctionType(FunctionTypes.DEFAULT);
+    await animationFrame.vm.$nextTick();
+
+    // Check the fractal engine is updated
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.IS_NEWTON,
+      0
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.NUMERATOR,
+      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
+    );
+    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+      FractalGeneratorParameters.DENOMINATOR,
+      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
+    );
+  });
+
   it("updates the fractal engine when the Julia HSV changes", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
@@ -417,42 +446,3 @@ describe("Interactions", () => {
     expect(animationOverlay.vm.$props.fps).toBe(newFPS);
   });
 });
-
-// TODO Uncomment after switching to Composition API
-// describe("Exposed method: resetWebGpuFractalGeneratorTime", () => {
-//   let props: {
-//     configuration: Configuration;
-//   };
-//   let mockedFractalGenerator: WebGpuFractalGenerator;
-
-//   beforeEach(() => {
-//     // Prepare the props
-//     props = {
-//       configuration: Configuration.defaultConfiguration(),
-//     };
-
-//     // Mock the WebGpuFractalGenerator methods
-//     mockedFractalGenerator = vi.mocked(WebGpuFractalGenerator.prototype, true);
-//     mockedFractalGenerator.startAnimation = vi.fn();
-//     mockedFractalGenerator.resetAnimationTime = vi.fn();
-//     vi.spyOn(WebGpuFractalGenerator, "initialise").mockReturnValue(mockedFractalGenerator as any);
-
-//     // Mock the ResizeObserver
-//     vi.stubGlobal(
-//       "ResizeObserver",
-//       vi.fn(() => ({ observe: vi.fn() }))
-//     );
-//   });
-
-//   it("resets the fractal engine animation time correctly", async () => {
-//     // Mount the AnimationFrame
-//     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
-//     await flushPromises();
-
-//     // Use resetWebGpuFractalGeneratorTime
-//     animationFrame.resetWebGpuFractalGeneratorTime();
-
-//     // Check resetAnimationTime is called
-//     expect(mockedFractalGenerator.resetAnimationTime).toBeCalled();
-//   });
-// });
