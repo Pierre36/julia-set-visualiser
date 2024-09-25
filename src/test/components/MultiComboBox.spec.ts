@@ -1,29 +1,32 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import MultiComboBox from "@/components/MultiComboBox.vue";
+import MultiComboBox, { type Props } from "@/components/MultiComboBox.vue";
+
+interface TestProps<T> extends Props<T> {
+  selected: Set<T>;
+}
+
+let props: TestProps<String>;
+
+const id = "id";
+const options = [
+  { id: "0", text: "option0" },
+  { id: "1", text: "option1" },
+  { id: "2", text: "option2" },
+];
+const label = "label";
+const noOptionsSelectedText = "no options selected text";
+const allOptionsSelectedText = "all options selected text";
 
 describe("Button render", () => {
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
-
   beforeEach(() => {
     props = {
-      id: "id",
-      options: [
-        { id: "0", text: "option0" },
-        { id: "1", text: "option1" },
-        { id: "2", text: "option2" },
-      ],
+      id,
+      options,
       selected: new Set(["1"]),
-      label: "label",
-      noOptionsSelectedText: "no options selected text",
-      allOptionsSelectedText: "all options selected text",
+      label,
+      noOptionsSelectedText,
+      allOptionsSelectedText,
     };
   });
 
@@ -76,24 +79,14 @@ describe("Button render", () => {
 });
 
 describe("List render", () => {
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label?: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
-
   beforeEach(() => {
     props = {
-      id: "id",
-      options: [
-        { id: "0", text: "option0" },
-        { id: "1", text: "option1" },
-        { id: "2", text: "option2" },
-      ],
+      id,
+      options,
       selected: new Set(["0"]),
+      label,
+      noOptionsSelectedText,
+      allOptionsSelectedText,
     };
   });
 
@@ -114,7 +107,7 @@ describe("List render", () => {
   it("contains all the options", () => {
     const multiComboBox = mount(MultiComboBox, { props: props });
     const optionItems = multiComboBox.findAll("[role='option']");
-    props.options.forEach((option) => {
+    options.forEach((option) => {
       expect(optionItems.some((item) => item.text().includes(option.text))).toBe(true);
     });
   });
@@ -138,24 +131,14 @@ describe("List render", () => {
 });
 
 describe("MultiComboBox interactions with popup closed", () => {
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label?: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
-
   beforeEach(() => {
     props = {
-      id: "id",
-      options: [
-        { id: "0", text: "option0" },
-        { id: "1", text: "option1" },
-        { id: "2", text: "option2" },
-      ],
+      id,
+      options,
       selected: new Set(["1"]),
+      label,
+      noOptionsSelectedText,
+      allOptionsSelectedText,
     };
   });
 
@@ -201,24 +184,14 @@ describe("MultiComboBox interactions with popup closed", () => {
 });
 
 describe("MultiComboBox focus interactions", () => {
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label?: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
-
   beforeEach(() => {
     props = {
-      id: "id",
-      options: [
-        { id: "0", text: "option0" },
-        { id: "1", text: "option1" },
-        { id: "2", text: "option2" },
-      ],
+      id,
+      options,
       selected: new Set(["1"]),
+      label,
+      noOptionsSelectedText,
+      allOptionsSelectedText,
     };
   });
 
@@ -318,25 +291,8 @@ describe("MultiComboBox focus interactions", () => {
 });
 
 describe("MultiComboBox interactions with popup open", () => {
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label?: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
-
   beforeEach(() => {
-    props = {
-      id: "id",
-      options: [
-        { id: "0", text: "option0" },
-        { id: "1", text: "option1" },
-        { id: "2", text: "option2" },
-      ],
-      selected: new Set(["1"]),
-    };
+    props = { id, options, selected: new Set(["1"]) };
   });
 
   it("closes the popup when clicking outside it", async () => {
@@ -354,6 +310,24 @@ describe("MultiComboBox interactions with popup open", () => {
 
     // Check it is closed
     expect(popup.isVisible()).toBe(false);
+  });
+
+  it("removes the event listener when unmounting the component", async () => {
+    // Spy the document
+    vi.spyOn(document, "addEventListener");
+    vi.spyOn(document, "removeEventListener");
+
+    // Mount the ComboBox
+    const comboBox = mount(MultiComboBox, { props: props });
+
+    // Check a listener is created
+    expect(document.addEventListener).toBeCalled();
+
+    // Unmount the component
+    comboBox.unmount();
+
+    // Check the listener is removed
+    expect(document.removeEventListener).toBeCalled();
   });
 
   it("closes the popup when pressing 'escape'", async () => {
@@ -417,7 +391,7 @@ describe("MultiComboBox interactions with popup open", () => {
     await button.trigger("keydown.enter");
 
     // Check the correct event is emitted
-    expect(multiComboBox.emitted()["update:selected"]).toEqual([[new Set(["1", "2"])]]);
+    expect(props.selected).toEqual(new Set(["1", "2"]));
   });
 
   it("emits an event when selecting a new option", async () => {
@@ -433,7 +407,7 @@ describe("MultiComboBox interactions with popup open", () => {
     await optionItem.trigger("click");
 
     // Check the correct event is emitted
-    expect(multiComboBox.emitted()["update:selected"]).toEqual([[new Set(["1", "2"])]]);
+    expect(props.selected).toEqual(new Set(["1", "2"]));
   });
 
   it("emits an event when deselecting an option", async () => {
@@ -449,7 +423,7 @@ describe("MultiComboBox interactions with popup open", () => {
     await optionItem.trigger("click");
 
     // Check the correct event is emitted
-    expect(multiComboBox.emitted()["update:selected"]).toEqual([[new Set([])]]);
+    expect(props.selected).toEqual(new Set([]));
   });
 });
 
@@ -458,19 +432,11 @@ describe("MultiComboBox popup scroll behavior", () => {
   const popupHeight = 100;
   const optionHeight = 10;
   let scrollTop = 0;
-  let props: {
-    id: string;
-    options: { id: string; text: string }[];
-    selected: Set<string>;
-    label?: string;
-    noOptionsSelectedText?: string;
-    allOptionsSelectedText?: string;
-  };
 
   beforeEach(() => {
-    props = { id: "id", options: [], selected: new Set() };
+    props = { id, options: [], selected: new Set() };
     for (let i = 0; i < optionsCount; i++) {
-      props.options.push({ id: i.toString(), text: `option${i}` });
+      props.options!.push({ id: i.toString(), text: `option${i}` });
     }
     HTMLElement.prototype.scrollTo = (_, scrollY?) => (scrollTop = scrollY as number);
   });

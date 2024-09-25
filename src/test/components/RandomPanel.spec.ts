@@ -614,7 +614,10 @@ describe("Interactions", () => {
     }
 
     // Get the DOM elements
-    const multiComboBoxes = randomPanel.findAllComponents(MultiComboBox);
+    // @ts-ignore
+    const multiComboBoxes: VueWrapper<MultiComboBox>[] =
+      // @ts-ignore
+      randomPanel.findAllComponents(MultiComboBox);
     const minMaxInputs = randomPanel.findAllComponents(MinMaxInput);
     const randomizeButton = randomPanel.findComponent(IconTextButton);
 

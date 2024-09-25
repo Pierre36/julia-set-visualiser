@@ -1,122 +1,129 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup generic="T" lang="ts">
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue";
+import type { ComboBoxOption } from "./ComboBox.vue";
 
-export default defineComponent({
-  name: "MultiComboBox",
-  props: {
-    id: { type: String, required: true },
-    options: { type: Array<{ id: string; text: string }>, default: [] },
-    selected: { type: Set, default: new Set() },
-    label: { type: String, default: "" },
-    noOptionsSelectedText: { type: String, default: null },
-    allOptionsSelectedText: { type: String, default: null },
-  },
-  emits: ["update:selected"],
-  data() {
-    return {
-      popupOpen: false,
-      focusedIndex: 0,
-      CHECKBOX_PATH:
-        "m424-325.847 268.922-268.922-42.153-42.153L424-410.153l-114-114L267.847-482 424-325.847ZM212.309-140.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h535.382q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-535.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v535.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846ZM200-760V-200-760Z",
-      CHECKBOX_OUTLINE_PATH:
-        "M212.309-140.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h535.382q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-535.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v535.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846Z",
-    };
-  },
-  computed: {
-    selectedOptions() {
-      return this.options.filter((option) => this.selected.has(option.id));
-    },
-    inputText() {
-      const selectedCount = this.selectedOptions.length;
-      if (this.allOptionsSelectedText != null && selectedCount == this.options.length) {
-        return this.allOptionsSelectedText;
-      } else if (this.noOptionsSelectedText != null && selectedCount == 0) {
-        return this.noOptionsSelectedText;
-      } else if (selectedCount == 1) {
-        return this.selectedOptions[0].text;
-      } else {
-        return `${this.selectedOptions.length} selected options`;
-      }
-    },
-    focusedOption() {
-      return this.options[this.focusedIndex];
-    },
-  },
-  mounted() {
-    document.addEventListener("click", this.closePopupIfClickIsOutside);
-  },
-  methods: {
-    makeFocusedVisible() {
-      const optionItem = (this.$refs.optionItems as HTMLUListElement[]).find(
-        (o) => o.dataset.id == this.focusedOption.id
-      ) as HTMLUListElement;
-      const popup = this.$refs.popup as HTMLElement;
+export interface Props<T> {
+  id: string;
+  options?: ComboBoxOption<T>[];
+  label?: string;
+  noOptionsSelectedText?: string;
+  allOptionsSelectedText?: string;
+}
 
-      const top = optionItem.offsetTop - popup.scrollTop;
-      const bottom = top + optionItem.clientHeight;
+const {
+  id,
+  options = [],
+  label = "",
+  noOptionsSelectedText = null,
+  allOptionsSelectedText = null,
+} = defineProps<Props<T>>();
 
-      if (top < 0) {
-        popup.scrollTo(0, optionItem.offsetTop);
-      } else if (bottom > popup.clientHeight) {
-        popup.scrollTo(0, optionItem.offsetTop - popup.clientHeight + optionItem.clientHeight);
-      }
-    },
-    closePopupIfClickIsOutside(e: any) {
-      this.popupOpen &&=
-        (this.$refs.popup as HTMLElement).contains(e.target) ||
-        (this.$refs.input as HTMLElement).contains(e.target);
-    },
-    openPopup() {
-      this.moveFocusToFirst();
-      this.popupOpen = true;
-    },
-    closePopup() {
-      this.popupOpen = false;
-      (this.$refs.input as HTMLElement).focus();
-    },
-    moveFocusDown() {
-      this.focusedIndex = (this.focusedIndex + 1) % this.options.length;
-      this.makeFocusedVisible();
-    },
-    moveFocusUp() {
-      this.focusedIndex = (this.focusedIndex + this.options.length - 1) % this.options.length;
-      this.makeFocusedVisible();
-    },
-    moveFocusToFirst() {
-      this.focusedIndex = 0;
-      this.makeFocusedVisible();
-    },
-    moveFocusToLast() {
-      this.focusedIndex = this.options.length - 1;
-      this.makeFocusedVisible();
-    },
-    toggleOptionSelected(optionId: string) {
-      this.focusedIndex = this.options.findIndex((option) => option.id == optionId);
-      const newSelected = new Set();
-      this.selected.forEach((id) => newSelected.add(id));
-      if (this.selected.has(optionId)) {
-        newSelected.delete(optionId);
-      } else {
-        newSelected.add(optionId);
-      }
-      this.$emit("update:selected", newSelected);
-    },
-    onDownKeyPressed() {
-      if (!this.popupOpen) {
-        this.openPopup();
-      } else {
-        this.moveFocusDown();
-      }
-    },
-    onClick() {
-      if (!this.popupOpen) {
-        this.openPopup();
-      } else {
-        this.toggleOptionSelected(this.focusedOption.id);
-      }
-    },
-  },
+const selected = defineModel<Set<T>>("selected", { required: true });
+
+const popupOpen = ref(false);
+const focusedIndex = ref(0);
+
+const CHECKBOX_PATH =
+  "m424-325.847 268.922-268.922-42.153-42.153L424-410.153l-114-114L267.847-482 424-325.847ZM212.309-140.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h535.382q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-535.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v535.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846ZM200-760V-200-760Z";
+const CHECKBOX_OUTLINE_PATH =
+  "M212.309-140.001q-30.308 0-51.308-21t-21-51.308v-535.382q0-30.308 21-51.308t51.308-21h535.382q30.308 0 51.308 21t21 51.308v535.382q0 30.308-21 51.308t-51.308 21H212.309Zm0-59.999h535.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-535.382q0-4.616-3.846-8.463-3.847-3.846-8.463-3.846H212.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v535.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846Z";
+
+const popup = useTemplateRef<HTMLElement>("popup");
+const input = useTemplateRef<HTMLInputElement>("input");
+const optionItems = useTemplateRef<HTMLLIElement[]>("optionItems");
+
+const selectedOptions = computed(() => options.filter((option) => selected.value.has(option.id)));
+const inputText = computed(() => {
+  const selectedCount = selectedOptions.value.length;
+  if (allOptionsSelectedText != null && selectedCount == options.length) {
+    return allOptionsSelectedText;
+  } else if (noOptionsSelectedText != null && selectedCount == 0) {
+    return noOptionsSelectedText;
+  } else if (selectedCount == 1) {
+    return selectedOptions.value[0].text;
+  } else {
+    return `${selectedOptions.value.length} selected options`;
+  }
 });
+const focusedOption = computed(() => options[focusedIndex.value]);
+
+onMounted(() => document.addEventListener("click", closePopupIfClickIsOutside));
+onUnmounted(() => document.removeEventListener("click", closePopupIfClickIsOutside));
+
+function makeFocusedVisible() {
+  const optionItem = optionItems.value?.find((o) => o.dataset.id == focusedOption.value.id);
+
+  const top = optionItem!.offsetTop - popup.value!.scrollTop;
+  const bottom = top + optionItem!.clientHeight;
+
+  if (top < 0) {
+    popup.value?.scrollTo(0, optionItem!.offsetTop);
+  } else if (bottom > popup.value!.clientHeight) {
+    popup.value?.scrollTo(
+      0,
+      optionItem!.offsetTop - popup.value.clientHeight + optionItem!.clientHeight
+    );
+  }
+}
+
+function closePopupIfClickIsOutside(e: any) {
+  popupOpen.value &&= popup.value!.contains(e.target) || input.value!.contains(e.target);
+}
+
+function openPopup() {
+  moveFocusToFirst();
+  popupOpen.value = true;
+}
+
+function closePopup() {
+  popupOpen.value = false;
+  input.value?.focus();
+}
+
+function moveFocusDown() {
+  focusedIndex.value = (focusedIndex.value + 1) % options.length;
+  makeFocusedVisible();
+}
+
+function moveFocusUp() {
+  focusedIndex.value = (focusedIndex.value + options.length - 1) % options.length;
+  makeFocusedVisible();
+}
+
+function moveFocusToFirst() {
+  focusedIndex.value = 0;
+  makeFocusedVisible();
+}
+
+function moveFocusToLast() {
+  focusedIndex.value = options.length - 1;
+  makeFocusedVisible();
+}
+
+function toggleOptionSelected(optionId: T) {
+  focusedIndex.value = options.findIndex((option) => option.id == optionId);
+  if (selected.value.has(optionId)) {
+    selected.value.delete(optionId);
+  } else {
+    selected.value.add(optionId);
+  }
+}
+
+function onDownKeyPressed() {
+  if (!popupOpen.value) {
+    openPopup();
+  } else {
+    moveFocusDown();
+  }
+}
+
+function onClick() {
+  if (!popupOpen.value) {
+    openPopup();
+  } else {
+    toggleOptionSelected(focusedOption.value.id);
+  }
+}
 </script>
 
 <template>
@@ -153,7 +160,7 @@ export default defineComponent({
       <li
         ref="optionItems"
         v-for="(option, index) in options"
-        :key="option.id"
+        :key="String(option.id)"
         :id="id + '_option_' + option.id"
         :data-id="option.id"
         :class="{ focused: index == focusedIndex }"
