@@ -255,8 +255,8 @@ describe("copy", () => {
   });
 });
 
-describe("randomize", () => {
-  it("properly randomizes the configuration", () => {
+describe("randomise", () => {
+  it("properly randomises the configuration", () => {
     const id = "ID";
     const name = "Name";
     const resolutionScale = 1;
@@ -322,7 +322,7 @@ describe("randomize", () => {
       maxJuliaBound: 13,
     };
 
-    configuration.randomize(params);
+    configuration.randomise(params);
 
     expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(
       fractalFunctionParameters

@@ -102,7 +102,7 @@ describe("Render", () => {
     // Check the header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(true);
     expect(disclosure.vm.$props.headingLevel).toBe(2);
-    expect(disclosure.vm.$props.headingText).toBe("Randomize");
+    expect(disclosure.vm.$props.headingText).toBe("Randomise");
   });
 
   it("renders the function section correctly", async () => {
@@ -572,7 +572,7 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
   });
 
-  it("renders the randomize button correctly", () => {
+  it("renders the randomise button correctly", () => {
     // Mount the RandomPanel
     const randomPanel = mount(RandomPanel, { props: props, shallow: true });
 
@@ -582,7 +582,7 @@ describe("Render", () => {
     const button = buttonSection.findComponent(IconTextButton);
 
     // Check the button renders correctly
-    expect(button.vm.$props.text).toBe("Randomize");
+    expect(button.vm.$props.text).toBe("Randomise");
   });
 });
 
@@ -591,12 +591,12 @@ describe("Interactions", () => {
     props = { configuration: Configuration.defaultConfiguration() };
   });
 
-  it("randomizes correctly", async () => {
+  it("randomises correctly", async () => {
     // Mount the RandomPanel
     const randomPanel = mount(RandomPanel, { props: props, shallow: false });
 
-    // Mock the configuration randomize function
-    props.configuration.randomize = vi.fn();
+    // Mock the configuration randomise function
+    props.configuration.randomise = vi.fn();
 
     // Open all disclosures
     const disclosures = randomPanel.findAllComponents(ExpandableDisclosure);
@@ -613,7 +613,7 @@ describe("Interactions", () => {
       // @ts-ignore
       randomPanel.findAllComponents(MultiComboBox);
     const minMaxInputs = randomPanel.findAllComponents(MinMaxInput);
-    const randomizeButton = randomPanel.findComponent(IconTextButton);
+    const randomiseButton = randomPanel.findComponent(IconTextButton);
 
     // Select the function and coefficient types
     const newFunctionTypes = new Set(["functionType"]);
@@ -628,11 +628,11 @@ describe("Interactions", () => {
       await randomPanel.vm.$nextTick();
     }
 
-    // Click the randomize button
-    randomizeButton.vm.$emit("click");
+    // Click the randomise button
+    randomiseButton.vm.$emit("click");
 
-    // Check randomize is called correctly
-    expect(props.configuration.randomize).toBeCalledWith({
+    // Check randomise is called correctly
+    expect(props.configuration.randomise).toBeCalledWith({
       fractalFunction: {
         types: newFunctionTypes,
         minCoefficientsCount: 0,

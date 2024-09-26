@@ -87,19 +87,19 @@ const randomParameters = ref({
   maxJuliaBound: -3,
 });
 
-function randomize() {
-  configuration.value.randomize(randomParameters.value);
+function randomise() {
+  configuration.value.randomise(randomParameters.value);
 }
 </script>
 
 <template>
   <div class="panel-container">
     <header>
-      <ExpandableDisclosure :headingCentred="true" :headingLevel="2" headingText="Randomize">
-        <p>This panel allows to randomize the parameters of the fractal.</p>
+      <ExpandableDisclosure :headingCentred="true" :headingLevel="2" headingText="Randomise">
+        <p>This panel allows to randomise the parameters of the fractal.</p>
         <p>You can edit the range of values the parameters can take.</p>
         <p>
-          Click the randomize button at the bottom to give random values to all parameters of the
+          Click the randomise button at the bottom to give random values to all parameters of the
           fractal.
         </p>
       </ExpandableDisclosure>
@@ -468,7 +468,7 @@ function randomize() {
             In this section, you can change the range of values the advanced parameters can take.
           </p>
           <p>
-            Note that the resolution cannot be randomized. Therefore, the resolution chosen in the
+            Note that the resolution cannot be randomised. Therefore, the resolution chosen in the
             advanced panel will stay the same.
           </p>
         </ExpandableDisclosure>
@@ -560,9 +560,9 @@ function randomize() {
       <section>
         <IconTextButton
           class="full-width"
-          text="Randomize"
+          text="Randomise"
           svgPath="M648-253q24.583 0 41.792-17.208Q707-287.417 707-312q0-24.583-17.208-41.792Q672.583-371 648-371q-24.583 0-41.792 17.208Q589-336.583 589-312q0 24.583 17.208 41.792Q623.417-253 648-253ZM478-423q24.583 0 41.792-17.208Q537-457.417 537-482q0-24.583-17.208-41.792Q502.583-541 478-541q-24.583 0-41.792 17.208Q419-506.583 419-482q0 24.583 17.208 41.792Q453.417-423 478-423ZM312-589q24.583 0 41.792-17.208Q371-623.417 371-648q0-24.583-17.208-41.792Q336.583-707 312-707q-24.583 0-41.792 17.208Q253-672.583 253-648q0 24.583 17.208 41.792Q287.417-589 312-589ZM180-120q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"
-          @click="randomize()"
+          @click="randomise()"
         />
       </section>
     </div>

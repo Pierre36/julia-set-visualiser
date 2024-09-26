@@ -30,7 +30,7 @@ const panels: Ref<Panel[]> = ref([
   { id: PanelId.FUNCTION, name: "Function", icon: functionIcon },
   { id: PanelId.COLOURS, name: "Colours", icon: coloursIcon },
   { id: PanelId.ADVANCED, name: "Advanced settings", icon: advancedIcon },
-  { id: PanelId.RANDOM, name: "Randomize", icon: randomIcon },
+  { id: PanelId.RANDOM, name: "Randomise", icon: randomIcon },
 ]);
 
 onMounted(

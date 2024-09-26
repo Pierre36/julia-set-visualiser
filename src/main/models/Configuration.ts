@@ -225,7 +225,7 @@ export default class Configuration implements JsonSerialisable {
    *
    * @param params parameters of the random configuration
    */
-  public randomize(params: RandomConfigurationParameters) {
+  public randomise(params: RandomConfigurationParameters) {
     this.coordinatesScale = RandomUtils.floatBetween(
       params.minViewportScale,
       params.maxViewportScale

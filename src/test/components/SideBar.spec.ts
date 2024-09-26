@@ -44,7 +44,7 @@ describe("Render", () => {
       { id: "FUNCTION", name: "Function" },
       { id: "COLOURS", name: "Colours" },
       { id: "ADVANCED", name: "Advanced settings" },
-      { id: "RANDOM", name: "Randomize" },
+      { id: "RANDOM", name: "Randomise" },
     ]);
     expect(sideNav.vm.$props.sidePanelCollapsed).toBe(true);
     expect(sideNav.vm.$props.label).toBe("Settings panels");
