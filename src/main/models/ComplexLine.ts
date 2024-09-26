@@ -4,8 +4,7 @@ import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomLineParameters {
-  startParameters: RandomComplexParameters;
-  endParameters: RandomComplexParameters;
+  startEndParameters: RandomComplexParameters;
   minDuration: number;
   maxDuration: number;
 }
@@ -106,8 +105,8 @@ export default class ComplexLine implements Coefficient {
    */
   public static getRandomComplexLine(params: RandomLineParameters): ComplexLine {
     return new ComplexLine(
-      Complex.getRandomComplex(params.startParameters),
-      Complex.getRandomComplex(params.endParameters),
+      Complex.getRandomComplex(params.startEndParameters),
+      Complex.getRandomComplex(params.startEndParameters),
       RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
     );
   }
