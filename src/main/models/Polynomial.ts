@@ -5,7 +5,7 @@ import type { JsonSerialisable } from "./JsonSerialisable";
 
 export interface RandomPolynomialParameters {
   coefficientsCount: number;
-  coefficientsParameters: RandomCoefficientParameters;
+  coefficients: RandomCoefficientParameters;
 }
 
 /** Representation of a complex polynomial */
@@ -209,7 +209,7 @@ export default class Polynomial implements JsonSerialisable {
 
     const polynomial = new Polynomial({});
     powers.forEach((p) => {
-      const coefficient = CoefficientUtils.getRandomCoefficient(params.coefficientsParameters);
+      const coefficient = CoefficientUtils.getRandomCoefficient(params.coefficients);
       polynomial.setCoefficient(p, coefficient);
     });
     return polynomial;

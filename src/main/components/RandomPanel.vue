@@ -25,32 +25,28 @@ const disclosureSvgPath =
   "M480-357q-6 0-11-2t-10-7L261-564q-8-8-7.5-21.5T262-607q10-10 21.5-8.5T304-606l176 176 176-176q8-8 21.5-9t21.5 9q10 8 8.5 21t-9.5 22L501-366q-5 5-10 7t-11 2Z";
 
 const randomParameters = ref({
-  functionParameters: {
-    functionTypes: new Set([FunctionTypes.DEFAULT, FunctionTypes.NEWTON, FunctionTypes.FRACTION]),
+  fractalFunction: {
+    types: new Set([FunctionTypes.DEFAULT, FunctionTypes.NEWTON, FunctionTypes.FRACTION]),
     minCoefficientsCount: 2,
     maxCoefficientsCount: 5,
-    coefficientsParameters: {
-      coefficientTypes: new Set([
+    coefficients: {
+      types: new Set([
         CoefficientTypes.CONSTANT,
         CoefficientTypes.CIRCLE,
         CoefficientTypes.LINE,
         CoefficientTypes.ELLIPSE,
       ]),
-      constantParameters: { minModulus: 0.1, maxModulus: 10 },
-      circleParameters: {
-        centerParameters: { minModulus: 0.1, maxModulus: 10 },
+      constant: { minMod: 0.1, maxMod: 10 },
+      circle: {
+        centre: { minMod: 0.1, maxMod: 10 },
         minRadius: 0.1,
         maxRadius: 10,
         minDuration: 5,
         maxDuration: 30,
       },
-      lineParameters: {
-        startEndParameters: { minModulus: 0.1, maxModulus: 10 },
-        minDuration: 5,
-        maxDuration: 30,
-      },
-      ellipseParameters: {
-        centerParameters: { minModulus: 0.1, maxModulus: 10 },
+      line: { startEnd: { minMod: 0.1, maxMod: 10 }, minDuration: 5, maxDuration: 30 },
+      ellipse: {
+        centre: { minMod: 0.1, maxMod: 10 },
         minHalfWidth: 0.1,
         maxHalfWidth: 10,
         minHalfHeight: 0.1,
@@ -68,7 +64,7 @@ const randomParameters = ref({
   maxJuliaSaturation: 0,
   minJuliaValue: 1,
   maxJuliaValue: 1,
-  attractorsParameters: {
+  attractors: {
     minHue: 0,
     maxHue: 360,
     minSaturationStrength: 0.01,
@@ -82,7 +78,7 @@ const randomParameters = ref({
   },
   minViewportScale: 1,
   maxViewportScale: 3,
-  viewportCentreParameters: { minModulus: 0, maxModulus: 0 },
+  viewportCentre: { minMod: 0, maxMod: 0 },
   minIterationsCount: 10,
   maxIterationsCount: 40,
   minEpsilon: 0.000005,
@@ -125,7 +121,7 @@ function randomize() {
           <MultiComboBox
             id="function-types-multi-combobox"
             :options="functionTypeOptions"
-            v-model:selected="randomParameters.functionParameters.functionTypes"
+            v-model:selected="randomParameters.fractalFunction.types"
             label="Function types"
             noOptionsSelectedText="No function type"
             allOptionsSelectedText="All function types"
@@ -134,17 +130,15 @@ function randomize() {
           <MultiComboBox
             id="coefficient-types-multi-combobox"
             :options="coefficientTypeOptions"
-            v-model:selected="
-              randomParameters.functionParameters.coefficientsParameters.coefficientTypes
-            "
+            v-model:selected="randomParameters.fractalFunction.coefficients.types"
             label="Coefficient types"
             noOptionsSelectedText="No coefficient type"
             allOptionsSelectedText="All coefficient types"
           />
           <h4>Number of coefficients</h4>
           <MinMaxInput
-            v-model:minValue="randomParameters.functionParameters.minCoefficientsCount"
-            v-model:maxValue="randomParameters.functionParameters.maxCoefficientsCount"
+            v-model:minValue="randomParameters.fractalFunction.minCoefficientsCount"
+            v-model:maxValue="randomParameters.fractalFunction.maxCoefficientsCount"
             :min="1"
             :max="32"
             :step="1"
@@ -162,14 +156,8 @@ function randomize() {
             <h5>Complex modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.constantParameters
-                  .minModulus
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.constantParameters
-                  .maxModulus
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.constant.minMod"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.constant.maxMod"
               :min="0"
               :max="100"
               :step="0.1"
@@ -189,14 +177,8 @@ function randomize() {
             <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .centerParameters.minModulus
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .centerParameters.maxModulus
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.circle.centre.minMod"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.circle.centre.maxMod"
               :min="0"
               :max="100"
               :step="0.1"
@@ -208,14 +190,8 @@ function randomize() {
             <h5>Radius</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .minRadius
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .maxRadius
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.circle.minRadius"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.circle.maxRadius"
               :min="0"
               :max="100"
               :step="0.1"
@@ -227,14 +203,8 @@ function randomize() {
             <h5>Duration</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .minDuration
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.circleParameters
-                  .maxDuration
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.circle.minDuration"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.circle.maxDuration"
               :min="1"
               :max="300"
               :step="1"
@@ -254,14 +224,8 @@ function randomize() {
             <h5>Start and end modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.lineParameters
-                  .startEndParameters.minModulus
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.lineParameters
-                  .startEndParameters.maxModulus
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.line.startEnd.minMod"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.line.startEnd.maxMod"
               :min="0"
               :max="100"
               :step="0.1"
@@ -273,14 +237,8 @@ function randomize() {
             <h5>Duration</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.lineParameters
-                  .minDuration
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.lineParameters
-                  .maxDuration
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.line.minDuration"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.line.maxDuration"
               :min="1"
               :max="300"
               :step="1"
@@ -300,14 +258,8 @@ function randomize() {
             <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .centerParameters.minModulus
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .centerParameters.maxModulus
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.ellipse.centre.minMod"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.ellipse.centre.maxMod"
               :min="0"
               :max="100"
               :step="0.1"
@@ -319,14 +271,8 @@ function randomize() {
             <h5>Half-width</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .minHalfWidth
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .maxHalfWidth
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.ellipse.minHalfWidth"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.ellipse.maxHalfWidth"
               :min="0"
               :max="100"
               :step="0.1"
@@ -338,14 +284,8 @@ function randomize() {
             <h5>Half-height</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .minHalfHeight
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .maxHalfHeight
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.ellipse.minHalfHeight"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.ellipse.maxHalfHeight"
               :min="0"
               :max="100"
               :step="0.1"
@@ -358,12 +298,10 @@ function randomize() {
             <MinMaxInput
               class="parameter-input"
               v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .minRotationAngle
+                randomParameters.fractalFunction.coefficients.ellipse.minRotationAngle
               "
               v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .maxRotationAngle
+                randomParameters.fractalFunction.coefficients.ellipse.maxRotationAngle
               "
               :min="0"
               :max="360"
@@ -376,14 +314,8 @@ function randomize() {
             <h5>Duration</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .minDuration
-              "
-              v-model:maxValue="
-                randomParameters.functionParameters.coefficientsParameters.ellipseParameters
-                  .maxDuration
-              "
+              v-model:minValue="randomParameters.fractalFunction.coefficients.ellipse.minDuration"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.ellipse.maxDuration"
               :min="1"
               :max="300"
               :step="1"
@@ -460,8 +392,8 @@ function randomize() {
             <h5>Hue</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractorsParameters.minHue"
-              v-model:maxValue="randomParameters.attractorsParameters.maxHue"
+              v-model:minValue="randomParameters.attractors.minHue"
+              v-model:maxValue="randomParameters.attractors.maxHue"
               :min="0"
               :max="360"
               :step="1"
@@ -473,8 +405,8 @@ function randomize() {
             <h5>Saturation strength</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractorsParameters.minSaturationStrength"
-              v-model:maxValue="randomParameters.attractorsParameters.maxSaturationStrength"
+              v-model:minValue="randomParameters.attractors.minSaturationStrength"
+              v-model:maxValue="randomParameters.attractors.maxSaturationStrength"
               :min="0"
               :max="100"
               :step="0.1"
@@ -486,8 +418,8 @@ function randomize() {
             <h5>Saturation offset</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractorsParameters.minSaturationOffset"
-              v-model:maxValue="randomParameters.attractorsParameters.maxSaturationOffset"
+              v-model:minValue="randomParameters.attractors.minSaturationOffset"
+              v-model:maxValue="randomParameters.attractors.maxSaturationOffset"
               :min="0"
               :max="100"
               :step="0.1"
@@ -499,8 +431,8 @@ function randomize() {
             <h5>Value strength</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractorsParameters.minValueStrength"
-              v-model:maxValue="randomParameters.attractorsParameters.maxValueStrength"
+              v-model:minValue="randomParameters.attractors.minValueStrength"
+              v-model:maxValue="randomParameters.attractors.maxValueStrength"
               :min="0"
               :max="100"
               :step="0.1"
@@ -512,8 +444,8 @@ function randomize() {
             <h5>Value offset</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractorsParameters.minValueOffset"
-              v-model:maxValue="randomParameters.attractorsParameters.maxValueOffset"
+              v-model:minValue="randomParameters.attractors.minValueOffset"
+              v-model:maxValue="randomParameters.attractors.maxValueOffset"
               :min="0"
               :max="100"
               :step="0.1"
@@ -564,8 +496,8 @@ function randomize() {
             <h5>Centre modulus</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.viewportCentreParameters.minModulus"
-              v-model:maxValue="randomParameters.viewportCentreParameters.maxModulus"
+              v-model:minValue="randomParameters.viewportCentre.minMod"
+              v-model:maxValue="randomParameters.viewportCentre.maxMod"
               :min="0"
               :max="100"
               :step="0.1"

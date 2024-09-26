@@ -7,17 +7,17 @@ import FunctionTypes from "@/constants/FunctionTypes";
 import type { JsonSerialisable } from "@/models/JsonSerialisable";
 
 export interface RandomConfigurationParameters {
-  functionParameters: RandomFractalFunctionParameters;
+  fractalFunction: RandomFractalFunctionParameters;
   minJuliaHue: number;
   maxJuliaHue: number;
   minJuliaSaturation: number;
   maxJuliaSaturation: number;
   minJuliaValue: number;
   maxJuliaValue: number;
-  attractorsParameters: RandomAttractorParameters;
+  attractors: RandomAttractorParameters;
   minViewportScale: number;
   maxViewportScale: number;
-  viewportCentreParameters: RandomComplexParameters;
+  viewportCentre: RandomComplexParameters;
   minIterationsCount: number;
   maxIterationsCount: number;
   minEpsilon: number;
@@ -230,22 +230,22 @@ export default class Configuration implements JsonSerialisable {
       params.minViewportScale,
       params.maxViewportScale
     );
-    this.coordinatesCentre = Complex.getRandomComplex(params.viewportCentreParameters);
+    this.coordinatesCentre = Complex.getRandomComplex(params.viewportCentre);
     this.iterationsCount = RandomUtils.integerBetween(
       params.minIterationsCount,
       params.maxIterationsCount
     );
     this.epsilon = RandomUtils.floatBetween(params.minEpsilon, params.maxEpsilon);
     this.juliaBound = RandomUtils.floatBetween(params.minJuliaBound, params.maxJuliaBound);
-    this.fractalFunction = FractalFunction.getRandomFractalFunction(params.functionParameters);
+    this.fractalFunction = FractalFunction.getRandomFractalFunction(params.fractalFunction);
     this.juliaHSV[0] = RandomUtils.integerBetween(params.minJuliaHue, params.maxJuliaHue);
     this.juliaHSV[1] = RandomUtils.floatBetween(
       params.minJuliaSaturation,
       params.maxJuliaSaturation
     );
     this.juliaHSV[2] = RandomUtils.floatBetween(params.minJuliaValue, params.maxJuliaValue);
-    this.defaultAttractor = Attractor.getRandomAttractor(params.attractorsParameters);
-    this.infinityAttractor = Attractor.getRandomAttractor(params.attractorsParameters);
+    this.defaultAttractor = Attractor.getRandomAttractor(params.attractors);
+    this.infinityAttractor = Attractor.getRandomAttractor(params.attractors);
     this.attractors = [];
   }
 }

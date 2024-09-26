@@ -7,10 +7,10 @@ import type Coefficient from "./Coefficient";
 import type { JsonSerialisable } from "./JsonSerialisable";
 
 export interface RandomFractalFunctionParameters {
-  functionTypes: Set<FunctionTypes>;
+  types: Set<FunctionTypes>;
   minCoefficientsCount: number;
   maxCoefficientsCount: number;
-  coefficientsParameters: RandomCoefficientParameters;
+  coefficients: RandomCoefficientParameters;
 }
 
 const defaultDenominator = new Polynomial({ 0: new Complex(1, 0) });
@@ -296,10 +296,8 @@ export default class FractalFunction implements JsonSerialisable {
    * @returns the new random fractal function
    */
   public static getRandomFractalFunction(params: RandomFractalFunctionParameters): FractalFunction {
-    const newFunctionType = RandomUtils.pickAmong(Array.from(params.functionTypes));
-    const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(
-      params.coefficientsParameters
-    );
+    const newFunctionType = RandomUtils.pickAmong(Array.from(params.types));
+    const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(params.coefficients);
     const coefficientsCount = RandomUtils.integerBetween(
       params.minCoefficientsCount,
       params.maxCoefficientsCount
@@ -312,14 +310,14 @@ export default class FractalFunction implements JsonSerialisable {
 
     const newNumerator = Polynomial.getRandomPolynomial({
       coefficientsCount: numeratorCoefficientsCount,
-      coefficientsParameters: params.coefficientsParameters,
+      coefficients: params.coefficients,
     });
 
     let newDenominator;
     if (newFunctionType === FunctionTypes.FRACTION) {
       newDenominator = Polynomial.getRandomPolynomial({
         coefficientsCount: Math.max(1, coefficientsCount - numeratorCoefficientsCount),
-        coefficientsParameters: params.coefficientsParameters,
+        coefficients: params.coefficients,
       });
     }
 

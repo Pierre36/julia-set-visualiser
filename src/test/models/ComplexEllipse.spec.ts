@@ -197,9 +197,9 @@ describe("getRandomComplexEllipse", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
-    const centerParameters = { minModulus: 1, maxModulus: 2 };
+    const centre = { minMod: 1, maxMod: 2 };
     const params = {
-      centerParameters,
+      centre,
       minHalfWidth: 3,
       maxHalfWidth: 4,
       minHalfHeight: 5,
@@ -215,7 +215,7 @@ describe("getRandomComplexEllipse", () => {
     expect(RandomUtils.floatBetween).toBeCalledWith(5, 6);
     expect(RandomUtils.floatBetween).toBeCalledWith(7, 8);
     expect(RandomUtils.integerBetween).toBeCalledWith(9, 10);
-    expect(Complex.getRandomComplex).toBeCalledWith(centerParameters);
+    expect(Complex.getRandomComplex).toBeCalledWith(centre);
 
     expect(randomEllipse).toEqual(new ComplexEllipse(new Complex(1, 0), 1, 1, 1, 1000));
   });

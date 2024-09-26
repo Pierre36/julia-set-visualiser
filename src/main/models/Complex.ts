@@ -7,8 +7,8 @@ const COMPLEX_REGEX =
   /^(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)([+-])(\d*|\d+\.\d+)i)$/;
 
 export interface RandomComplexParameters {
-  minModulus: number;
-  maxModulus: number;
+  minMod: number;
+  maxMod: number;
 }
 
 /** Representation of a complex number */
@@ -188,7 +188,7 @@ export default class Complex implements Coefficient {
    * @returns the new complex number
    */
   public static getRandomComplex(params: RandomComplexParameters): Complex {
-    const modulus = RandomUtils.floatBetween(params.minModulus, params.maxModulus);
+    const modulus = RandomUtils.floatBetween(params.minMod, params.maxMod);
     const angle = RandomUtils.floatBetween(0, 2 * Math.PI);
     return new Complex(
       NumberUtils.toPrecision(modulus * Math.cos(angle), 2),

@@ -28,23 +28,17 @@ describe("fromJSON", () => {
 });
 
 describe("getRandomCoefficient", () => {
-  const coefficientTypes = new Set([
+  const types = new Set([
     CoefficientTypes.CONSTANT,
     CoefficientTypes.CIRCLE,
     CoefficientTypes.LINE,
     CoefficientTypes.ELLIPSE,
   ]);
-  const constantParameters = {} as RandomComplexParameters;
-  const circleParameters = {} as RandomCircleParameters;
-  const lineParameters = {} as RandomLineParameters;
-  const ellipseParameters = {} as RandomEllipseParameters;
-  const params = {
-    coefficientTypes,
-    constantParameters,
-    circleParameters,
-    lineParameters,
-    ellipseParameters,
-  };
+  const constant = {} as RandomComplexParameters;
+  const circle = {} as RandomCircleParameters;
+  const line = {} as RandomLineParameters;
+  const ellipse = {} as RandomEllipseParameters;
+  const params = { types, constant, circle, line, ellipse };
 
   const randomConstant = new Complex(3, 6);
   const randomCircle = new ComplexCircle(new Complex(3, 6), 4, 2);
@@ -71,7 +65,7 @@ describe("getRandomCoefficient", () => {
 
       expect(actual).toEqual(output);
 
-      expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(coefficientTypes));
+      expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(types));
     })
   );
 });

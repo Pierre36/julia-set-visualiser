@@ -236,10 +236,10 @@ describe("getRandomComplex", () => {
   it("properly returns a random complex number", () => {
     RandomUtils.floatBetween = vi.fn(() => 1);
 
-    const params = { minModulus: 0, maxModulus: 2 };
+    const params = { minMod: 0, maxMod: 2 };
     const randomComplex = Complex.getRandomComplex(params);
 
-    expect(RandomUtils.floatBetween).toBeCalledWith(params.minModulus, params.maxModulus);
+    expect(RandomUtils.floatBetween).toBeCalledWith(params.minMod, params.maxMod);
     expect(RandomUtils.floatBetween).toBeCalledWith(0, 2 * Math.PI);
 
     expect(randomComplex).toEqual(

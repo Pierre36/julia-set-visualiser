@@ -4,7 +4,7 @@ import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomEllipseParameters {
-  centerParameters: RandomComplexParameters;
+  centre: RandomComplexParameters;
   minHalfWidth: number;
   maxHalfWidth: number;
   minHalfHeight: number;
@@ -131,7 +131,7 @@ export default class ComplexEllipse implements Coefficient {
    */
   public static getRandomComplexEllipse(params: RandomEllipseParameters): ComplexEllipse {
     return new ComplexEllipse(
-      Complex.getRandomComplex(params.centerParameters),
+      Complex.getRandomComplex(params.centre),
       RandomUtils.floatBetween(params.minHalfWidth, params.maxHalfWidth),
       RandomUtils.floatBetween(params.minHalfHeight, params.maxHalfHeight),
       RandomUtils.floatBetween(params.minRotationAngle, params.maxRotationAngle),

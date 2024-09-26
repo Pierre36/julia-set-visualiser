@@ -299,21 +299,21 @@ describe("randomize", () => {
     const randomAttractor = new Attractor(undefined, 0, 1, 2, 3, 4);
     Attractor.getRandomAttractor = vi.fn(() => randomAttractor);
 
-    const functionParameters = {} as RandomFractalFunctionParameters;
+    const fractalFunctionParameters = {} as RandomFractalFunctionParameters;
     const attractorsParameters = {} as RandomAttractorParameters;
-    const viewportCentreParameters = {} as RandomComplexParameters;
+    const viewportCentre = {} as RandomComplexParameters;
     const params = {
-      functionParameters,
+      fractalFunction: fractalFunctionParameters,
       minJuliaHue: 0,
       maxJuliaHue: 1,
       minJuliaSaturation: 2,
       maxJuliaSaturation: 3,
       minJuliaValue: 4,
       maxJuliaValue: 5,
-      attractorsParameters,
+      attractors: attractorsParameters,
       minViewportScale: 6,
       maxViewportScale: 7,
-      viewportCentreParameters,
+      viewportCentre,
       minIterationsCount: 8,
       maxIterationsCount: 9,
       minEpsilon: 10,
@@ -324,14 +324,16 @@ describe("randomize", () => {
 
     configuration.randomize(params);
 
-    expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(functionParameters);
+    expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(
+      fractalFunctionParameters
+    );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(0, 1);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(2, 3);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(4, 5);
     expect(Attractor.getRandomAttractor).toHaveBeenCalledWith(attractorsParameters);
     expect(Attractor.getRandomAttractor).toBeCalledTimes(2);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(6, 7);
-    expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCentreParameters);
+    expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCentre);
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(8, 9);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(10, 11);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(12, 13);

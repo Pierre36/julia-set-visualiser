@@ -154,14 +154,14 @@ describe("getRandomComplexCircle", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
-    const centerParameters = { minModulus: 0, maxModulus: 1 };
-    const params = { centerParameters, minRadius: 2, maxRadius: 3, minDuration: 4, maxDuration: 5 };
+    const centre = { minMod: 0, maxMod: 1 };
+    const params = { centre, minRadius: 2, maxRadius: 3, minDuration: 4, maxDuration: 5 };
 
     const randomCircle = ComplexCircle.getRandomComplexCircle(params);
 
     expect(RandomUtils.floatBetween).toBeCalledWith(2, 3);
     expect(RandomUtils.integerBetween).toBeCalledWith(4, 5);
-    expect(Complex.getRandomComplex).toBeCalledWith(centerParameters);
+    expect(Complex.getRandomComplex).toBeCalledWith(centre);
 
     expect(randomCircle).toEqual(new ComplexCircle(new Complex(1, 0), 1, 1000));
   });

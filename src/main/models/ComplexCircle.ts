@@ -4,7 +4,7 @@ import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 
 export interface RandomCircleParameters {
-  centerParameters: RandomComplexParameters;
+  centre: RandomComplexParameters;
   minRadius: number;
   maxRadius: number;
   minDuration: number;
@@ -86,7 +86,7 @@ export default class ComplexCircle implements Coefficient {
    */
   public static getRandomComplexCircle(params: RandomCircleParameters): ComplexCircle {
     return new ComplexCircle(
-      Complex.getRandomComplex(params.centerParameters),
+      Complex.getRandomComplex(params.centre),
       RandomUtils.floatBetween(params.minRadius, params.maxRadius),
       RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
     );

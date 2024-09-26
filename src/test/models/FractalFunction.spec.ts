@@ -499,14 +499,10 @@ describe("getRandomFractalFunction", () => {
   const randomCoefficient = new Complex(2, 4);
   const randomPolynomial = new Polynomial({ 3: new Complex(6, 0) });
 
-  const functionTypes = new Set([
-    FunctionTypes.DEFAULT,
-    FunctionTypes.FRACTION,
-    FunctionTypes.NEWTON,
-  ]);
+  const types = new Set([FunctionTypes.DEFAULT, FunctionTypes.FRACTION, FunctionTypes.NEWTON]);
   const minCoefficientsCount = 3;
   const maxCoefficientsCount = 6;
-  const coefficientsParameters = {} as RandomCoefficientParameters;
+  const coefficients = {} as RandomCoefficientParameters;
 
   const testCases = [
     {
@@ -537,14 +533,14 @@ describe("getRandomFractalFunction", () => {
       Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
 
       const randomFractalFunction = FractalFunction.getRandomFractalFunction({
-        functionTypes,
+        types: types,
         minCoefficientsCount,
         maxCoefficientsCount,
-        coefficientsParameters,
+        coefficients,
       });
 
-      expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(functionTypes));
-      expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(coefficientsParameters);
+      expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(types));
+      expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(coefficients);
       expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
         minCoefficientsCount,
         maxCoefficientsCount
@@ -555,16 +551,16 @@ describe("getRandomFractalFunction", () => {
 
         expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith({
           coefficientsCount: 1,
-          coefficientsParameters,
+          coefficients,
         });
         expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith({
           coefficientsCount: 2,
-          coefficientsParameters,
+          coefficients,
         });
       } else {
         expect(Polynomial.getRandomPolynomial).toHaveBeenCalledWith({
           coefficientsCount: minCoefficientsCount,
-          coefficientsParameters,
+          coefficients,
         });
       }
 

@@ -277,13 +277,13 @@ describe("getRandomPolynomial", () => {
     CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
     RandomUtils.distinctIntegersBetween = vi.fn(() => [0, 1]);
 
-    const coefficientsParameters = {} as RandomCoefficientParameters;
-    const params = { coefficientsCount: 2, coefficientsParameters };
+    const coefficients = {} as RandomCoefficientParameters;
+    const params = { coefficientsCount: 2, coefficients };
 
     const randomPolynomial = Polynomial.getRandomPolynomial(params);
 
     expect(RandomUtils.distinctIntegersBetween).toHaveBeenCalledWith(0, Polynomial.MAX_DEGREE, 2);
-    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(coefficientsParameters);
+    expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(coefficients);
     expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledTimes(2);
 
     expect(randomPolynomial).toEqual(

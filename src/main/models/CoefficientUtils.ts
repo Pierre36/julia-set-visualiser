@@ -7,11 +7,11 @@ import CoefficientTypes from "@/constants/CoefficientTypes";
 import type Coefficient from "@/models/Coefficient";
 
 export interface RandomCoefficientParameters {
-  coefficientTypes: Set<CoefficientTypes>;
-  constantParameters: RandomComplexParameters;
-  circleParameters: RandomCircleParameters;
-  lineParameters: RandomLineParameters;
-  ellipseParameters: RandomEllipseParameters;
+  types: Set<CoefficientTypes>;
+  constant: RandomComplexParameters;
+  circle: RandomCircleParameters;
+  line: RandomLineParameters;
+  ellipse: RandomEllipseParameters;
 }
 
 /** Utility class to create coefficients */
@@ -42,15 +42,15 @@ export default class CoefficientUtils {
    * @returns the new random coefficient
    */
   public static getRandomCoefficient(params: RandomCoefficientParameters) {
-    switch (RandomUtils.pickAmong(Array.from(params.coefficientTypes))) {
+    switch (RandomUtils.pickAmong(Array.from(params.types))) {
       case CoefficientTypes.CIRCLE:
-        return ComplexCircle.getRandomComplexCircle(params.circleParameters);
+        return ComplexCircle.getRandomComplexCircle(params.circle);
       case CoefficientTypes.LINE:
-        return ComplexLine.getRandomComplexLine(params.lineParameters);
+        return ComplexLine.getRandomComplexLine(params.line);
       case CoefficientTypes.ELLIPSE:
-        return ComplexEllipse.getRandomComplexEllipse(params.ellipseParameters);
+        return ComplexEllipse.getRandomComplexEllipse(params.ellipse);
       case CoefficientTypes.CONSTANT:
-        return Complex.getRandomComplex(params.constantParameters);
+        return Complex.getRandomComplex(params.constant);
     }
   }
 }

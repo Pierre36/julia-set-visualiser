@@ -168,12 +168,12 @@ describe("getRandomComplexLine", () => {
     RandomUtils.integerBetween = vi.fn(() => 1);
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
-    const startEndParameters = { minModulus: 0, maxModulus: 1 };
-    const params = { startEndParameters, minDuration: 4, maxDuration: 5 };
+    const startEnd = { minMod: 0, maxMod: 1 };
+    const params = { startEnd, minDuration: 4, maxDuration: 5 };
     const randomLine = ComplexLine.getRandomComplexLine(params);
 
     expect(RandomUtils.integerBetween).toBeCalledWith(4, 5);
-    expect(Complex.getRandomComplex).toBeCalledWith(startEndParameters);
+    expect(Complex.getRandomComplex).toBeCalledWith(startEnd);
     expect(Complex.getRandomComplex).toBeCalledTimes(2);
 
     expect(randomLine).toEqual(new ComplexLine(new Complex(1, 0), new Complex(1, 0), 1000));

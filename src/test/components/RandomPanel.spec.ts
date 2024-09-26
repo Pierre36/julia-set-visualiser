@@ -633,27 +633,23 @@ describe("Interactions", () => {
 
     // Check randomize is called correctly
     expect(props.configuration.randomize).toBeCalledWith({
-      functionParameters: {
-        functionTypes: newFunctionTypes,
+      fractalFunction: {
+        types: newFunctionTypes,
         minCoefficientsCount: 0,
         maxCoefficientsCount: 1,
-        coefficientsParameters: {
-          coefficientTypes: newCoefficientTypes,
-          constantParameters: { minModulus: 2, maxModulus: 3 },
-          circleParameters: {
-            centerParameters: { minModulus: 4, maxModulus: 5 },
+        coefficients: {
+          types: newCoefficientTypes,
+          constant: { minMod: 2, maxMod: 3 },
+          circle: {
+            centre: { minMod: 4, maxMod: 5 },
             minRadius: 6,
             maxRadius: 7,
             minDuration: 8,
             maxDuration: 9,
           },
-          lineParameters: {
-            startEndParameters: { minModulus: 10, maxModulus: 11 },
-            minDuration: 12,
-            maxDuration: 13,
-          },
-          ellipseParameters: {
-            centerParameters: { minModulus: 14, maxModulus: 15 },
+          line: { startEnd: { minMod: 10, maxMod: 11 }, minDuration: 12, maxDuration: 13 },
+          ellipse: {
+            centre: { minMod: 14, maxMod: 15 },
             minHalfWidth: 16,
             maxHalfWidth: 17,
             minHalfHeight: 18,
@@ -671,7 +667,7 @@ describe("Interactions", () => {
       maxJuliaSaturation: 27,
       minJuliaValue: 28,
       maxJuliaValue: 29,
-      attractorsParameters: {
+      attractors: {
         minHue: 30,
         maxHue: 31,
         minSaturationStrength: 32,
@@ -685,7 +681,7 @@ describe("Interactions", () => {
       },
       minViewportScale: 40,
       maxViewportScale: 41,
-      viewportCentreParameters: { minModulus: 42, maxModulus: 43 },
+      viewportCentre: { minMod: 42, maxMod: 43 },
       minIterationsCount: 44,
       maxIterationsCount: 45,
       minEpsilon: 46,
