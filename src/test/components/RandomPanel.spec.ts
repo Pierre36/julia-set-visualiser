@@ -80,15 +80,15 @@ const juliaBoundMinMin = -100;
 const juliaBoundMaxDefault = -3;
 const juliaBoundMaxMax = 100;
 
-describe("Render", () => {
-  let props: {
-    configuration: Configuration;
-  };
+interface TestProps {
+  configuration: Configuration;
+}
 
+let props: TestProps;
+
+describe("Render", () => {
   beforeEach(() => {
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: Configuration.defaultConfiguration() };
   });
 
   it("renders the header correctly", () => {
@@ -587,14 +587,8 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  let props: {
-    configuration: Configuration;
-  };
-
   beforeEach(() => {
-    props = {
-      configuration: Configuration.defaultConfiguration(),
-    };
+    props = { configuration: Configuration.defaultConfiguration() };
   });
 
   it("randomizes correctly", async () => {
@@ -654,8 +648,7 @@ describe("Interactions", () => {
             maxDuration: 9,
           },
           lineParameters: {
-            startParameters: { minModulus: 10, maxModulus: 11 },
-            endParameters: { minModulus: 10, maxModulus: 11 },
+            startEndParameters: { minModulus: 10, maxModulus: 11 },
             minDuration: 12,
             maxDuration: 13,
           },
