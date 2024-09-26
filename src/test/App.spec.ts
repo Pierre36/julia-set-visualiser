@@ -3,9 +3,9 @@ import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
 
 import App from "@/App.vue";
-import MainHeader from "@/components/MainHeader.vue";
-import SideBar from "@/components/SideBar.vue";
-import AnimationFrame from "@/components/AnimationFrame.vue";
+import MainHeader from "@/components/layout/MainHeader.vue";
+import SideBar from "@/components/layout/SideBar.vue";
+import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 
 describe("Render", () => {
   let customConfiguration: Configuration;
