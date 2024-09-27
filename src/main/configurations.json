@@ -6,8 +6,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "0": {
@@ -45,11 +45,11 @@
     "id": "Z4+C",
     "name": "z⁴ + cz",
     "resolutionScale": 1,
-    "coordinatesScale": 1.8,
+    "coordinatesScale": 1.7,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "1": {
@@ -69,7 +69,7 @@
     "juliaHSV": [50, 0, 1],
     "defaultAttractor": {
       "hue": 223,
-      "saturationStrength": 0.11,
+      "saturationStrength": 0.15,
       "saturationOffset": 0,
       "valueStrength": 0.26,
       "valueOffset": 1.4
@@ -78,7 +78,7 @@
       "hue": 193,
       "saturationStrength": 0.11,
       "saturationOffset": 0,
-      "valueStrength": 0.5,
+      "valueStrength": 0.35,
       "valueOffset": 1.4
     },
     "attractors": []
@@ -90,8 +90,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "1": { "centre": { "re": 0, "im": 0 }, "radius": 1, "duration": 10000, "type": "CIRCLE" },
@@ -122,11 +122,11 @@
     "id": "JULIA_SIERPINSKI",
     "name": "Julia & Sierpiński",
     "resolutionScale": 1,
-    "coordinatesScale": 1.8,
+    "coordinatesScale": 2.2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 2.5,
     "fractalFunction": {
       "numerator": {
         "0": { "re": -1, "im": 0, "type": "CONSTANT" },
@@ -151,9 +151,9 @@
     },
     "infinityAttractor": {
       "hue": 193,
-      "saturationStrength": 0.11,
+      "saturationStrength": 0.2,
       "saturationOffset": 0,
-      "valueStrength": 0.5,
+      "valueStrength": 0.4,
       "valueOffset": 1.4
     },
     "attractors": []
@@ -165,8 +165,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 12,
-    "epsilon": 0.00001,
-    "juliaBound": -3.6,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -207,8 +207,8 @@
     "coordinatesScale": 1.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "1": {
@@ -249,8 +249,8 @@
     "coordinatesScale": 10,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -2.6,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -303,8 +303,8 @@
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 40,
-    "epsilon": 0.000005,
-    "juliaBound": -3,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -322,10 +322,10 @@
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
       "hue": 210,
-      "saturationStrength": 0.11,
+      "saturationStrength": 0.15,
       "saturationOffset": 0,
       "valueStrength": 0.5,
-      "valueOffset": 1.4
+      "valueOffset": 1.7
     },
     "infinityAttractor": {
       "hue": 210,
@@ -343,8 +343,8 @@
     "coordinatesScale": 3.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 30,
-    "epsilon": 0.00001,
-    "juliaBound": -2,
+    "epsilon": 0.005,
+    "juliaBound": 2.5,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -374,7 +374,7 @@
     },
     "juliaHSV": [0, 0, 1],
     "defaultAttractor": {
-      "hue": 40,
+      "hue": 50,
       "saturationStrength": 0.1,
       "saturationOffset": 3,
       "valueStrength": 0.4,
@@ -396,8 +396,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 15,
-    "epsilon": 0.000005,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -449,8 +449,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.00001,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "0": {
@@ -489,8 +489,8 @@
     "coordinatesScale": 2.3,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 19,
-    "epsilon": 0.000005,
-    "juliaBound": -3.5,
+    "epsilon": 0.005,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 3, "im": -5.9, "type": "CONSTANT" },
@@ -544,8 +544,8 @@
     "coordinatesScale": 2.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 13,
-    "epsilon": 0.00001,
-    "juliaBound": -4.6,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "2": {
@@ -596,8 +596,8 @@
     "coordinatesScale": 2.7,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 25,
-    "epsilon": 0.0000081,
-    "juliaBound": -4.4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "9": { "re": -0.33, "im": -0.052, "type": "CONSTANT" },
@@ -636,8 +636,8 @@
     "coordinatesScale": 3,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 11,
-    "epsilon": 0.0000064,
-    "juliaBound": -3.7,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "3": {
@@ -695,8 +695,8 @@
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 36,
-    "epsilon": 0.00005,
-    "juliaBound": -3.3,
+    "epsilon": 0.005,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "4": {
@@ -741,8 +741,8 @@
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 13,
-    "epsilon": 0.0000063,
-    "juliaBound": -3.7,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "5": {
@@ -806,8 +806,8 @@
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 19,
-    "epsilon": 0.0000085,
-    "juliaBound": -3.5,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "2": {
@@ -858,8 +858,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 18,
-    "epsilon": 0.00001,
-    "juliaBound": -3.4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "5": { "re": -8.5, "im": -2.2, "type": "CONSTANT" },
@@ -923,8 +923,8 @@
     "coordinatesScale": 1.5,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 11,
-    "epsilon": 0.0000067,
-    "juliaBound": -4,
+    "epsilon": 0.01,
+    "juliaBound": 3,
     "fractalFunction": {
       "numerator": {
         "4": {

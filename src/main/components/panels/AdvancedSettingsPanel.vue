@@ -101,7 +101,7 @@ const configuration = defineModel<Configuration>("configuration", { required: tr
           <NumberInput
             v-model:value="configuration.epsilon"
             :min="0"
-            :step="0.000001"
+            :step="0.001"
             label="Epsilon"
           />
           <h4>Julia bound</h4>

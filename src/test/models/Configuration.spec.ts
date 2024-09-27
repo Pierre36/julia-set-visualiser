@@ -63,7 +63,7 @@ describe("constructor", () => {
 describe("toString", () => {
   it("properly returns a string representation of the configuration", () => {
     expect(Configuration.defaultConfiguration("ID", "Name").toString()).toBe(
-      "Configuration(ID, Name, 1, 2, 0, 20, 0.00001, -4, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), [])"
+      "Configuration(ID, Name, 1, 2, 0, 20, 0.01, 3, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), [])"
     );
   });
 });

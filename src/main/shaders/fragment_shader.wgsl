@@ -1,22 +1,6 @@
 const PI: f32 = 3.14159265358979323846;
 const INFINITY: f32 = 10000000000;
 
-// TODO Remove when configurations updated
-// const EPSILON: f32 = 0.01;
-// const ITERATIONS_COUNT: u32 = 20;
-// const JULIA_HSV: vec3f = vec3f(0, 0, 1);
-// const INFINITY_HUE: f32 = 210;
-// const INFINITY_SAT_STRENGTH: f32 = 0.11;
-// const INFINITY_SAT_OFFSET: f32 = 0;
-// const INFINITY_VAL_STRENGTH: f32 = 0.26;
-// const INFINITY_VAL_OFFSET: f32 = 1.4;
-// const DEFAULT_HUE: f32 = 210;
-// const DEFAULT_SAT_STRENGTH: f32 = 0.11;
-// const DEFAULT_SAT_OFFSET: f32 = 0;
-// const DEFAULT_VAL_STRENGTH: f32 = 0.26;
-// const DEFAULT_VAL_OFFSET: f32 = 1.4;
-// const JULIA_BOUND: f32 = 3;
-
 struct ColourParameters {
   hue: f32,
   sat_strength: f32,

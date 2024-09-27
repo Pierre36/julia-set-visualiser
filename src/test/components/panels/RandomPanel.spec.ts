@@ -70,14 +70,14 @@ const iterationsCountMinMin = 0;
 const iterationsCountMaxDefault = 40;
 const iterationsCountMaxMax = 100;
 
-const epsilonMinDefault = 0.000005;
-const epsilonMinMin = 0.0000001;
-const epsilonMaxDefault = 0.000015;
-const epsilonMaxMax = 0.001;
+const epsilonMinDefault = 0.005;
+const epsilonMinMin = 0.0001;
+const epsilonMaxDefault = 0.015;
+const epsilonMaxMax = 0.1;
 
-const juliaBoundMinDefault = -5;
+const juliaBoundMinDefault = 2;
 const juliaBoundMinMin = -100;
-const juliaBoundMaxDefault = -3;
+const juliaBoundMaxDefault = 5;
 const juliaBoundMaxMax = 100;
 
 interface TestProps {
@@ -555,7 +555,7 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.maxValue).toBe(epsilonMaxDefault);
     expect(minMaxInputs[1].vm.$props.min).toBe(epsilonMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(epsilonMaxMax);
-    expect(minMaxInputs[1].vm.$props.step).toBe(0.000001);
+    expect(minMaxInputs[1].vm.$props.step).toBe(0.001);
     expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum value of epsilon");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum value of epsilon");

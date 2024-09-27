@@ -116,7 +116,7 @@ describe("Render", () => {
     expect(numberInputs[1].vm.$props.value).toBe(props.configuration.epsilon);
     expect(numberInputs[1].vm.$props.min).toBe(0);
     expect(numberInputs[1].vm.$props.max).toBeUndefined();
-    expect(numberInputs[1].vm.$props.step).toBe(0.000001);
+    expect(numberInputs[1].vm.$props.step).toBe(0.001);
     expect(numberInputs[1].vm.$props.isIntegerOnly).toBe(false);
     expect(numberInputs[1].vm.$props.label).toBe("Epsilon");
 
