@@ -35,7 +35,7 @@ describe("Render", () => {
     );
   });
 
-  it("renders properly", () => {
+  it("renders properly", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
 
@@ -46,7 +46,12 @@ describe("Render", () => {
 
     // Check the AnimationFrame is rendered properly
     expect(canvas.exists()).toBe(true);
-    expect(animationOverlay.vm.$props.fps).toBe(0);
+    expect(animationOverlay.vm.$props.metrics).toEqual({
+      fps: 0,
+      javascriptTime: 0,
+      computeTime: 0,
+      renderTime: 0,
+    });
     expect(errorMessage.exists()).toBe(false);
   });
 
@@ -428,7 +433,7 @@ describe("Interactions", () => {
     );
   });
 
-  it("updates the fps when the fractal engine fps changes", async () => {
+  it("updates the metrics when the fractal engine metrics changes", async () => {
     // Use fake timers to avoid waiting
     vi.useFakeTimers();
 
@@ -437,14 +442,14 @@ describe("Interactions", () => {
     await flushPromises();
 
     // Change the fps
-    const newFPS = 36;
-    mockedFractalGenerator.fps = newFPS;
+    const newMetrics = { fps: 5, javascriptTime: 6, computeTime: 7, renderTime: 8 };
+    mockedFractalGenerator.getTimingMeasurements = vi.fn(() => newMetrics);
     vi.advanceTimersByTime(300);
     await animationFrame.vm.$nextTick();
 
     // Check the fps is updated
     const animationOverlay = animationFrame.findComponent(AnimationOverlay);
-    expect(animationOverlay.vm.$props.fps).toBe(newFPS);
+    expect(animationOverlay.vm.$props.metrics).toEqual(newMetrics);
   });
 
   it("destroys the fractal generator when unmounted", async () => {

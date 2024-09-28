@@ -4,10 +4,10 @@ import AnimationOverlay, { type Props } from "@/components/animation/AnimationOv
 
 let props: Props;
 
-const fps = 36;
+const metrics = { fps: 1, javascriptTime: 2, computeTime: 3, renderTime: 4 };
 
 describe("Render", () => {
-  beforeEach(() => (props = { fps }));
+  beforeEach(() => (props = { metrics }));
 
   it("renders correctly", () => {
     // Mount the AnimationOverlay
@@ -30,9 +30,9 @@ describe("Render", () => {
 });
 
 describe("Interactions", () => {
-  beforeEach(() => (props = { fps }));
+  beforeEach(() => (props = { metrics }));
 
-  it("shows fps when clicking metrics button", async () => {
+  it("shows metrics when clicking metrics button", async () => {
     // Mount the AnimationOverlay
     const animationOverlay = mount(AnimationOverlay, { props: props });
 
@@ -44,7 +44,10 @@ describe("Interactions", () => {
     await animationOverlay.vm.$nextTick();
     let metrics = animationOverlay.find(".metrics");
     expect(metrics.exists()).toBe(true);
-    expect(metrics.text()).toBe(fps.toString());
+    expect(metrics.text()).toContain("FPS: 1 f/s");
+    expect(metrics.text()).toContain("Javascript: 2.000 ms");
+    expect(metrics.text()).toContain("Compute shader: 3.000 ms");
+    expect(metrics.text()).toContain("Render shaders: 4.000 ms");
     expect(metricsButton.text()).toBe("Hide metrics");
 
     // Click the metrics button again and check the metrics are hidden

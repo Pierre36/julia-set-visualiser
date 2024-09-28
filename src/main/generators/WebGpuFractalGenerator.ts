@@ -5,6 +5,10 @@ import Polynomial from "@/models/Polynomial";
 import Configuration from "@/models/Configuration";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import FunctionTypes from "@/constants/FunctionTypes";
+import type TimingHelper from "@/measurements/TimingHelper";
+import TimingHelperFactory from "@/measurements/TimingHelperFactory";
+import RollingAverage from "@/measurements/RollingAverage";
+import type Measurements from "@/measurements/Measurements";
 
 /** Number of vertices to render */
 const VERTICES_COUNT = 6;
@@ -106,11 +110,23 @@ export default class WebGpuFractalGenerator {
   /** `true` if the animation is paused, `false` otherwise */
   private paused: boolean;
 
-  /** Last 10 FPS to get the average FPS from */
-  private last10FPS: number[];
+  /** Helper responsible of measuring the GPU performances for the compute pipeline */
+  private computeTimingHelper: TimingHelper;
 
-  /** Number of frame per second of the animation */
-  public fps: number;
+  /** Helper responsible of measuring the GPU performances for the render pipeline */
+  private renderTimingHelper: TimingHelper;
+
+  /** Average number of frame per seconds */
+  private fpsAverage: RollingAverage;
+
+  /** Average time per frame taken by javascript */
+  private javascriptTime: RollingAverage;
+
+  /** Average time per frame taken by the compute shader*/
+  private computeTime: RollingAverage;
+
+  /** Average time per frame taken by the render shader*/
+  private renderTime: RollingAverage;
 
   /**
    * Fractal Generator constructor
@@ -134,8 +150,12 @@ export default class WebGpuFractalGenerator {
   ) {
     this.paused = false;
     this.animationTime = 0;
-    this.fps = 0;
-    this.last10FPS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.computeTimingHelper = TimingHelperFactory.getTimingHelper(gpuDevice);
+    this.renderTimingHelper = TimingHelperFactory.getTimingHelper(gpuDevice);
+    this.fpsAverage = new RollingAverage();
+    this.javascriptTime = new RollingAverage();
+    this.computeTime = new RollingAverage();
+    this.renderTime = new RollingAverage();
   }
 
   /**
@@ -193,7 +213,12 @@ export default class WebGpuFractalGenerator {
       throw new Error("Unable to initialize WebGPU. No appropriate GPUAdapter found.");
     }
 
-    return await adapter.requestDevice();
+    const canTimestamp = adapter.features.has("timestamp-query");
+    const device = await adapter.requestDevice({
+      requiredFeatures: canTimestamp ? ["timestamp-query"] : [],
+    });
+
+    return device;
   }
 
   /**
@@ -525,7 +550,7 @@ export default class WebGpuFractalGenerator {
   public startAnimation(configuration: Configuration): void {
     this.updateCanvasResolution(configuration.resolutionScale);
     this.initBufferValues(configuration);
-    requestAnimationFrame((time) => this.render(time, 0, 0));
+    requestAnimationFrame((time) => this.render(time, 0));
   }
 
   /**
@@ -688,17 +713,21 @@ export default class WebGpuFractalGenerator {
    * @param timeIncrement increment of the animation time
    * @param framesCount number of frames since the beginning of the animation
    */
-  private render(time: number, timeIncrement: number, framesCount: number) {
+  private render(time: number, timeIncrement: number) {
+    const startTime = performance.now();
+
     if (!this.paused) {
       this.animationTime += timeIncrement;
       this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime, false);
       this.drawFractal();
     }
 
+    this.javascriptTime.addSample(performance.now() - startTime);
+
     requestAnimationFrame((newTime) => {
       const frameDuration = newTime - time;
-      this.updateFPS(frameDuration, framesCount);
-      this.render(newTime, this.paused ? 0 : frameDuration, framesCount + 1);
+      this.fpsAverage.addSample(1000 / frameDuration);
+      this.render(newTime, this.paused ? 0 : frameDuration);
     });
   }
 
@@ -708,13 +737,13 @@ export default class WebGpuFractalGenerator {
   private drawFractal() {
     const encoder = this.gpuDevice.createCommandEncoder();
 
-    const computePass = encoder.beginComputePass();
+    const computePass = this.computeTimingHelper.beginComputePass(encoder);
     computePass.setPipeline(this.computePipeline);
     computePass.setBindGroup(0, this.bindGroup);
     computePass.dispatchWorkgroups(1, 1);
     computePass.end();
 
-    const renderPass = encoder.beginRenderPass({
+    const renderPass = this.renderTimingHelper.beginRenderPass(encoder, {
       colorAttachments: [
         {
           view: this.context.getCurrentTexture().createView(),
@@ -731,21 +760,23 @@ export default class WebGpuFractalGenerator {
     renderPass.end();
 
     this.gpuDevice.queue.submit([encoder.finish()]);
+
+    this.computeTimingHelper.getResult().then((t) => this.computeTime.addSample(t / 1_000_000));
+    this.renderTimingHelper.getResult().then((t) => this.renderTime.addSample(t / 1_000_000));
   }
 
   /**
-   * Update the fps
+   * Get the different average timing measurements
    *
-   * @param frameDuration duration of the frame in milliseconds
-   * @param framesCount number of frames since the beginning of the animation
+   * @returns the timing measurements
    */
-  private updateFPS(frameDuration: number, framesCount: number) {
-    let frameFPS = 1000 / (10 * frameDuration);
-    if (frameFPS == Infinity) {
-      frameFPS = 0;
-    }
-    this.fps = this.fps - this.last10FPS[framesCount % 10] + frameFPS;
-    this.last10FPS[framesCount % 10] = frameFPS;
+  getTimingMeasurements(): Measurements {
+    return {
+      fps: this.fpsAverage.get(),
+      javascriptTime: this.javascriptTime.get(),
+      computeTime: this.computeTime.get(),
+      renderTime: this.renderTime.get(),
+    };
   }
 
   /**

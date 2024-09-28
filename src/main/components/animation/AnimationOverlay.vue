@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type Measurements from "@/measurements/Measurements";
 import { onMounted, ref } from "vue";
 
 export interface Props {
-  fps?: number;
+  metrics: Measurements;
 }
 
-const { fps = 0 } = defineProps<Props>();
+const { metrics } = defineProps<Props>();
 
 const emit = defineEmits<{ (e: "pause"): void; (e: "unpause"): void; (e: "fullscreen"): void }>();
 
@@ -52,7 +53,12 @@ function onMouseLeave() {
 
 <template>
   <div class="animation-overlay" @mousemove="onMouseMove" @mouseleave="onMouseLeave">
-    <div class="metrics" v-if="metricsDisplayed">{{ fps }}</div>
+    <div class="metrics" v-if="metricsDisplayed">
+      <div>{{ `FPS: ${metrics.fps.toFixed(0)} f/s` }}</div>
+      <div>{{ `Javascript: ${metrics.javascriptTime.toFixed(3)} ms` }}</div>
+      <div>{{ `Compute shader: ${metrics.computeTime.toFixed(3)} ms` }}</div>
+      <div>{{ `Render shaders: ${metrics.renderTime.toFixed(3)} ms` }}</div>
+    </div>
     <div class="animation-menu" :class="{ show: menuDisplayed }">
       <button ref="metricsButton" class="icon-button" @click="metricsDisplayed = !metricsDisplayed">
         <svg viewBox="0 -960 960 960">
@@ -116,6 +122,9 @@ function onMouseLeave() {
 
 .metrics {
   padding: 0.5rem;
+  background: #000000dd;
+  max-width: fit-content;
+  font-family: monospace;
 }
 
 .animation-menu {

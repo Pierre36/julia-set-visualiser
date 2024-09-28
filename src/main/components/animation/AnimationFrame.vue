@@ -10,7 +10,7 @@ const configuration = defineModel<Configuration>("configuration", { required: tr
 
 let fractalGenerator: WebGpuFractalGenerator;
 const error: Ref<Error | undefined> = ref(undefined);
-const fps = ref(0);
+const metrics = ref({ fps: 0, javascriptTime: 0, computeTime: 0, renderTime: 0 });
 
 const canvas = useTemplateRef<HTMLCanvasElement>("animationCanvas");
 
@@ -139,7 +139,7 @@ onMounted(async () => {
   );
 
   // Update fps every 0.3 seconds
-  setInterval(() => (fps.value = Math.round(fractalGenerator.fps)), 300);
+  setInterval(() => (metrics.value = fractalGenerator.getTimingMeasurements()), 300);
 });
 
 onUnmounted(() => fractalGenerator?.destroy());
@@ -150,7 +150,7 @@ onUnmounted(() => fractalGenerator?.destroy());
     <canvas ref="animationCanvas"></canvas>
     <AnimationOverlay
       v-if="error == null"
-      :fps="fps"
+      :metrics="metrics"
       @fullscreen="$refs.animationFrame.requestFullscreen()"
       @pause="fractalGenerator?.pause()"
       @unpause="fractalGenerator?.unpause()"
