@@ -98,6 +98,7 @@ describe("Interactions", () => {
     initialise = vi
       .spyOn(WebGpuFractalGenerator, "initialise")
       .mockReturnValue(mockedFractalGenerator as any);
+    mockedFractalGenerator.destroy = vi.fn();
 
     // Mock the ResizeObserver
     vi.stubGlobal(
@@ -444,5 +445,16 @@ describe("Interactions", () => {
     // Check the fps is updated
     const animationOverlay = animationFrame.findComponent(AnimationOverlay);
     expect(animationOverlay.vm.$props.fps).toBe(newFPS);
+  });
+
+  it("destroys the fractal generator when unmounted", async () => {
+    // Mount and unmount the AnimationFrame
+    const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
+    await flushPromises();
+    animationFrame.unmount();
+    await flushPromises();
+
+    // Check the fractal generator has been destroyed
+    expect(mockedFractalGenerator.destroy).toBeCalled();
   });
 });

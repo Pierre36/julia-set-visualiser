@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef, watch, type Ref } from "vue";
+import { onMounted, onUnmounted, ref, useTemplateRef, watch, type Ref } from "vue";
 import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import Configuration from "@/models/Configuration";
@@ -141,6 +141,8 @@ onMounted(async () => {
   // Update fps every 0.3 seconds
   setInterval(() => (fps.value = Math.round(fractalGenerator.fps)), 300);
 });
+
+onUnmounted(() => fractalGenerator?.destroy());
 </script>
 
 <template>

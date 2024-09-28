@@ -768,4 +768,13 @@ export default class WebGpuFractalGenerator {
   public resetAnimationTime() {
     this.animationTime = 0;
   }
+
+  /**
+   * Stops the animation and destroy the fractal generator
+   */
+  public destroy() {
+    this.paused = true;
+    Object.entries(this.buffers).forEach((entry) => entry[1].buffer.destroy());
+    this.gpuDevice.destroy();
+  }
 }
