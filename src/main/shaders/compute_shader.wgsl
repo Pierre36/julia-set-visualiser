@@ -14,12 +14,13 @@ struct EllipseParameters {
   half_height: f32,
   offset_mod: f32,
   offset_arg: f32,
+  power: f32,
 };
 
 @group(0) @binding(1) var<uniform> time: f32;
 @group(0) @binding(2) var<uniform> function_params: FunctionParameters;
 @group(0) @binding(3) var<storage> coefficient_params: array<EllipseParameters>;
-@group(0) @binding(4) var<storage, read_write> fraction: array<vec2f>;
+@group(0) @binding(4) var<storage, read_write> fraction: array<vec3f>;
 
 fn evaluate(params: EllipseParameters) -> vec2f {
   let theta = select(2 * PI * (time % params.duration) / params.duration, 0, params.duration <= 0);
@@ -37,15 +38,15 @@ fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   return vec2f(z1.x * z2.x, z1.y + z2.y);
 }
 
-fn evaluateWithoutNewton(params: EllipseParameters) -> vec2f{
+fn evaluateWithoutNewton(params: EllipseParameters) -> vec2f {
   return polarWithAngle(evaluate(params), params.angle);
 }
 
-fn evaluateWithNewton(params: EllipseParameters, newton_params: EllipseParameters, power: f32) -> vec2f {
+fn evaluateWithNewton(params: EllipseParameters, newton_params: EllipseParameters) -> vec2f {
   return multiply(
     evaluateWithoutNewton(params), 
     polarWithAngle(
-      power * vec2f(cos(newton_params.angle), -sin(newton_params.angle)) - evaluate(newton_params),
+      params.power * vec2f(cos(newton_params.angle), -sin(newton_params.angle)) - evaluate(newton_params),
       newton_params.angle
     )
   );
@@ -55,9 +56,9 @@ fn evaluateWithNewton(params: EllipseParameters, newton_params: EllipseParameter
 @workgroup_size(16, 2)
 fn computeMain(@builtin(global_invocation_id) index: vec3u) {
   let params = coefficient_params[index.x + index.y * 16];
-  fraction[index.x + index.y * 16] = select(
+  fraction[index.x + index.y * 16] = vec3f(select(
     evaluateWithoutNewton(params),
-    evaluateWithNewton(params, function_params.newton_coef, f32(index.x)),
+    evaluateWithNewton(params, function_params.newton_coef),
     index.y == 0 && function_params.is_newton == 1
-  );
+  ), params.power);
 }

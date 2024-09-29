@@ -1,6 +1,12 @@
 const PI: f32 = 3.14159265358979323846;
 const INFINITY: f32 = 10000000000;
 
+struct FunctionParameters {
+  is_newton: u32,
+  numerator_coefs_count: u32,
+  denominator_coefs_count: u32,
+};
+
 struct ColourParameters {
   hue: f32,
   sat_strength: f32,
@@ -24,7 +30,8 @@ struct Attractor {
   @align(16) colour: ColourParameters,
 };
 
-@group(0) @binding(4) var<storage, read_write> fraction: array<vec2f>;
+@group(0) @binding(2) var<uniform> function_params: FunctionParameters;
+@group(0) @binding(4) var<storage, read_write> fraction: array<vec3f>;
 @group(0) @binding(5) var<uniform> fractal_params: FractalParameters;
 @group(0) @binding(6) var<storage> attractors: array<Attractor>;
 
@@ -32,20 +39,19 @@ fn polar(re: f32, im: f32) -> vec2f {
   return vec2f(sqrt(re * re + im * im), atan2(im, re));
 }
 
-fn evaluatePolynomial(z: vec2f, offset: u32) -> vec2f {
+fn evaluatePolynomial(z: vec2f, offset: u32, coefs_count: u32) -> vec2f {
   var re: f32 = 0;
   var im: f32 = 0;
 
   var r: f32 = 0;
   var theta: f32 = 0;
-  for (var k: f32 = 0; k < 16; k = k + 1) {
+  for (var k: u32 = 0; k < coefs_count; k++) {
     let coef = fraction[u32(k) + offset];
-    if (coef.x > 0) {
-      r = select(coef.x * pow(z.x, k), coef.x, k == 0);
-      theta = k * z.y + coef.y;
-      re += r * cos(theta);
-      im += r * sin(theta);
-    }
+    let power = coef.z;
+    r = select(coef.x * pow(z.x, power), coef.x, power == 0);
+    theta = power * z.y + coef.y;
+    re += r * cos(theta);
+    im += r * sin(theta);
   }
 
   return polar(re, im);
@@ -59,8 +65,8 @@ fn applyFunction(z: vec2f) -> vec2f {
   // TODO /!\ Returning infinity may not always be OK (for exemple for fractions)
   return select(
     divide(
-      evaluatePolynomial(z, 0), 
-      evaluatePolynomial(z, 16)
+      evaluatePolynomial(z, 0, function_params.numerator_coefs_count), 
+      evaluatePolynomial(z, 16, function_params.denominator_coefs_count)
     ), 
     vec2f(INFINITY, z.y), 
     z.x >= INFINITY

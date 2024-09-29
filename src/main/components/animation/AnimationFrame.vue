@@ -51,6 +51,14 @@ watch(
       fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
     );
     fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
+      fractalFunction.getNumeratorCoefficients().length
+    );
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
+      fractalFunction.getDenominatorCoefficients().length
+    );
+    fractalGenerator?.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
       fractalFunction.newtonCoefficient.getEllipseParameters()
     );

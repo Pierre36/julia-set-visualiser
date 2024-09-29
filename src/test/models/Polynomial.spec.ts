@@ -155,12 +155,21 @@ describe("getCoefficientsEllipseParameters", () => {
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
-    expect(polynomial.getCoefficientsEllipseParameters()).toEqual([
+    const expectedResult = [
       ...coefficient0.getEllipseParameters(),
+      0,
       ...coefficient1.getEllipseParameters(),
+      1,
       ...coefficient2.getEllipseParameters(),
-      ...Array(78).fill(0),
-    ]);
+      2,
+      ...Array(91).fill(0),
+    ];
+
+    for (let i = 0; i < 16; i++) {
+      expectedResult[(i + 1) * 7 - 1] = i;
+    }
+
+    expect(polynomial.getCoefficientsEllipseParameters()).toEqual(expectedResult);
   });
 });
 

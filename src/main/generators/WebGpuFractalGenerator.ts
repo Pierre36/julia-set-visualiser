@@ -55,6 +55,16 @@ const PARAMS_MAPPING: {
   COORDINATES_SCALE: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 1 },
   COORDINATES_CENTRE: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 2, isArray: true },
   IS_NEWTON: { bufferName: BufferNames.FUNCTION_UNIFORMS, offset: 0, view: BufferViews.UINT32 },
+  NUMERATOR_COEFFICIENTS_COUNT: {
+    bufferName: BufferNames.FUNCTION_UNIFORMS,
+    offset: 1,
+    view: BufferViews.UINT32,
+  },
+  DENOMINATOR_COEFFICIENTS_COUNT: {
+    bufferName: BufferNames.FUNCTION_UNIFORMS,
+    offset: 2,
+    view: BufferViews.UINT32,
+  },
   NEWTON_COEFFICIENT: {
     bufferName: BufferNames.FUNCTION_UNIFORMS,
     offset: 4,
@@ -64,7 +74,7 @@ const PARAMS_MAPPING: {
   NUMERATOR: { bufferName: BufferNames.FUNCTION_STORAGE, offset: 0, isArray: true },
   DENOMINATOR: {
     bufferName: BufferNames.FUNCTION_STORAGE,
-    offset: (Polynomial.MAX_DEGREE + 1) * 6,
+    offset: (Polynomial.MAX_DEGREE + 1) * 7,
     isArray: true,
   },
   ITERATIONS_COUNT: {
@@ -328,10 +338,10 @@ export default class WebGpuFractalGenerator {
     return {
       buffer: gpuDevice.createBuffer({
         label: BufferNames.FUNCTION_STORAGE,
-        size: (Polynomial.MAX_DEGREE + 1) * 6 * 2 * 4,
+        size: (Polynomial.MAX_DEGREE + 1) * 7 * 2 * 4,
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
       }),
-      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 6 * 2),
+      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 7 * 2),
       views: new Map(),
     };
   }
@@ -346,10 +356,10 @@ export default class WebGpuFractalGenerator {
     return {
       buffer: gpuDevice.createBuffer({
         label: BufferNames.FRACTION_STORAGE,
-        size: (Polynomial.MAX_DEGREE + 1) * 2 * 2 * 4,
+        size: (Polynomial.MAX_DEGREE + 1) * 3 * 2 * 4,
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
       }),
-      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 2 * 2),
+      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 3 * 2),
       views: new Map(),
     };
   }
@@ -430,7 +440,7 @@ export default class WebGpuFractalGenerator {
       entries: [
         { binding: 0, visibility: GPUShaderStage.VERTEX, buffer: {} },
         { binding: 1, visibility: GPUShaderStage.COMPUTE, buffer: {} },
-        { binding: 2, visibility: GPUShaderStage.COMPUTE, buffer: {} },
+        { binding: 2, visibility: GPUShaderStage.COMPUTE | GPUShaderStage.FRAGMENT, buffer: {} },
         {
           binding: 3,
           visibility: GPUShaderStage.COMPUTE,
@@ -576,6 +586,14 @@ export default class WebGpuFractalGenerator {
     this.updateParameter(
       FractalGeneratorParameters.IS_NEWTON,
       configuration.fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
+      configuration.fractalFunction.getNumeratorCoefficients().length
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
+      configuration.fractalFunction.getDenominatorCoefficients().length
     );
     this.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,

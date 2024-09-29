@@ -109,9 +109,18 @@ export default class Polynomial implements JsonSerialisable {
    * @returns the ellipse equation parameters of the polynomial coefficients
    */
   public getCoefficientsEllipseParameters(): number[] {
-    return this.coefficients.flatMap(
-      (coefficient) => coefficient?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]
-    );
+    return this.coefficients
+      .slice()
+      .map((coefficient, power) => ({ power, coef: coefficient }))
+      .sort((a, b) => {
+        if (a.coef === undefined && b.coef !== undefined) return 1;
+        if (a.coef !== undefined && b.coef === undefined) return -1;
+        return 0;
+      })
+      .flatMap(({ power, coef }) => [
+        ...(coef?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]),
+        power,
+      ]);
   }
 
   /**
