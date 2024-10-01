@@ -46,9 +46,9 @@ fn evaluatePolynomial(z: vec2f, offset: u32, coefs_count: u32) -> vec2f {
   var r: f32 = 0;
   var theta: f32 = 0;
   for (var k: u32 = 0; k < coefs_count; k++) {
-    let coef = fraction[u32(k) + offset];
+    let coef = fraction[k + offset];
     let power = coef.z;
-    r = select(coef.x * pow(z.x, power), coef.x, power == 0);
+    r = select(coef.x * clamp(pow(z.x, power), 0, INFINITY), coef.x, power == 0);
     theta = power * z.y + coef.y;
     re += r * cos(theta);
     im += r * sin(theta);
