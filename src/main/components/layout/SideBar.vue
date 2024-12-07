@@ -2,7 +2,7 @@
 import SideNav from "@/components/panels/SideNav.vue";
 import SidePanel from "@/components/panels/SidePanel.vue";
 import Configuration from "@/models/Configuration";
-import { onMounted, ref, type Ref } from "vue";
+import { onBeforeMount, ref, type Ref } from "vue";
 import PanelId from "@/components/panels/PanelId";
 
 const LOCALE_STORAGE_KEY = "side_panel_collapsed";
@@ -33,7 +33,7 @@ const panels: Ref<Panel[]> = ref([
   { id: PanelId.RANDOM, name: "Randomise", icon: randomIcon },
 ]);
 
-onMounted(
+onBeforeMount(
   () => (sidePanelCollapsed.value = !(localStorage.getItem(LOCALE_STORAGE_KEY) === "false"))
 );
 
