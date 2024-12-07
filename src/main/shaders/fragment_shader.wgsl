@@ -113,7 +113,6 @@ fn evaluateFractionAtInfinity() -> vec2f {
   let higher_numerator_coef = fraction[function_params.numerator_coefs_count - 1];
   let higher_denominator_coef = fraction[function_params.denominator_coefs_count + 15];
 
-  // TODO Is it true? I think I am using Horner method now
   let numerator_degree = getPolynomialDegree(0, function_params.numerator_coefs_count);
   let denominator_degree = getPolynomialDegree(16, function_params.denominator_coefs_count);
 
