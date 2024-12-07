@@ -197,3 +197,15 @@ a:focus-visible {
 ::-webkit-scrollbar-thumb {
   background-color: var(--gray-350);
 }
+
+/* MathML */
+
+@supports (-webkit-appearance: none) {
+  math {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    row-gap: 0.4rem;
+  }
+}
