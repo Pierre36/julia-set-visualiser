@@ -637,8 +637,8 @@ export default class WebGpuFractalGenerator {
     this.updateParameter(
       FractalGeneratorParameters.ATTRACTORS,
       configuration.attractors.flatMap((attractor) => [
-        attractor.complex?.mod() || 0,
-        attractor.complex?.arg() || 0,
+        attractor.complex?.re || 0,
+        attractor.complex?.im || 0,
         attractor.hue,
         attractor.saturationStrength,
         attractor.saturationOffset,

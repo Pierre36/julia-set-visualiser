@@ -30,6 +30,10 @@ fn evaluate(params: EllipseParameters) -> vec2f {
   );
 }
 
+fn fromPolar(polar: vec2f) -> vec2f {
+  return polar.x * vec2f(cos(polar.y), sin(polar.y));
+}
+
 fn polarWithAngle(complex: vec2f, angle: f32) -> vec2f {
   return vec2f(length(complex), atan2(complex.y, complex.x) + angle);
 }
@@ -56,9 +60,14 @@ fn evaluateWithNewton(params: EllipseParameters, newton_params: EllipseParameter
 @workgroup_size(16, 2)
 fn computeMain(@builtin(global_invocation_id) index: vec3u) {
   let params = coefficient_params[index.x + index.y * 16];
-  fraction[index.x + index.y * 16] = vec3f(select(
+  let power = select(
+    params.power - coefficient_params[index.x - 1 + index.y * 16].power,
+    params.power,
+    index.x == 0
+  );
+  fraction[index.x + index.y * 16] = vec3f(fromPolar(select(
     evaluateWithoutNewton(params),
     evaluateWithNewton(params, function_params.newton_coef),
     index.y == 0 && function_params.is_newton == 1
-  ), params.power);
+  )), power);
 }

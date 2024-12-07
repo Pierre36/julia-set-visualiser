@@ -1,5 +1,7 @@
 const PI: f32 = 3.14159265358979323846;
-const INFINITY: f32 = 10000000000;
+const INFINITY: f32 = 1e10;
+const INFINITY_POINT: vec2f = vec2f(INFINITY, INFINITY);
+const ZERO_POINT: vec2f = vec2f(0, 0);
 
 struct FunctionParameters {
   is_newton: u32,
@@ -39,59 +41,127 @@ fn polar(re: f32, im: f32) -> vec2f {
   return vec2f(sqrt(re * re + im * im), atan2(im, re));
 }
 
-fn evaluatePolynomial(z: vec2f, offset: u32, coefs_count: u32) -> vec2f {
-  var re: f32 = 0;
-  var im: f32 = 0;
+fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
+  return select(
+    vec2f(z1.x * z2.x - z1.y * z2.y,  z1.x * z2.y + z2.x * z1.y),
+    INFINITY_POINT,
+    length(z1) > INFINITY || length(z2) > INFINITY
+  );
+}
 
-  var r: f32 = 0;
-  var theta: f32 = 0;
-  for (var k: u32 = 0; k < coefs_count; k++) {
-    let coef = fraction[k + offset];
-    let power = coef.z;
-    r = select(coef.x * clamp(pow(z.x, power), 0, INFINITY), coef.x, power == 0);
-    theta = power * z.y + coef.y;
-    re += r * cos(theta);
-    im += r * sin(theta);
+fn divide(z1: vec2f, z2: vec2f, value_when_both_infinity: vec2f) -> vec2f {
+  let mod_z1 = length(z1);
+  let mod_z2 = length(z2);
+  
+  if (mod_z1 == 0) {
+    return ZERO_POINT;
   }
 
-  return polar(re, im);
+  if (mod_z2 == 0) {
+    return INFINITY_POINT;
+  }
+
+  if (mod_z1 > INFINITY) {
+    if (mod_z2 < mod_z1) {
+      return INFINITY_POINT;
+    }
+    if (mod_z2 > mod_z1) {
+      return ZERO_POINT;
+    }
+    return value_when_both_infinity;
+  }
+  
+  if (mod_z2 > INFINITY) {
+    return ZERO_POINT;
+  }
+
+  return multiply(z1, vec2f(z2.x, -z2.y)) / (mod_z2 * mod_z2);
 }
 
-fn divide(z1: vec2f, z2: vec2f) -> vec2f {
-  return vec2f(z1.x / z2.x, z1.y - z2.y);
+fn power(z: vec2f, p: f32) -> vec2f {
+  if (p == 0) {
+    return vec2f(1, 0);
+  }
+
+  var result = z;
+  for (var n: f32 = 0; n < p - 1; n = n + 1) {
+    result = multiply(result, z);
+  }
+  return result;
 }
 
-fn applyFunction(z: vec2f) -> vec2f {
-  // TODO /!\ Returning infinity may not always be OK (for exemple for fractions)
+fn evaluatePolynomial(z: vec2f, offset: u32, coefs_count: u32) -> vec2f {
+  var result = vec2f(0, 0);
+
+  for (var k: u32 = offset + coefs_count; k > offset; k--) {
+    let coef = fraction[k - 1];
+    result = multiply(result + coef.xy, power(z, coef.z));
+  }
+
+  return result;
+}
+
+fn getPolynomialDegree(offset: u32, coefs_count: u32) -> f32 {
+  var power: f32 = 0;
+  for (var k: u32 = offset; k < coefs_count + offset; k++) {
+    power += fraction[k].z;
+  }
+  return power;
+}
+
+fn evaluateFractionAtInfinity() -> vec2f {
+  let higher_numerator_coef = fraction[function_params.numerator_coefs_count - 1];
+  let higher_denominator_coef = fraction[function_params.denominator_coefs_count + 15];
+
+  // TODO Is it true? I think I am using Horner method now
+  let numerator_degree = getPolynomialDegree(0, function_params.numerator_coefs_count);
+  let denominator_degree = getPolynomialDegree(16, function_params.denominator_coefs_count);
+
   return select(
-    divide(
-      evaluatePolynomial(z, 0, function_params.numerator_coefs_count), 
-      evaluatePolynomial(z, 16, function_params.denominator_coefs_count)
-    ), 
-    vec2f(INFINITY, z.y), 
-    z.x >= INFINITY
+    select(
+      divide(higher_numerator_coef.xy, higher_denominator_coef.xy, vec2f(1, 0)),
+      ZERO_POINT,
+      numerator_degree < denominator_degree
+    ),
+    INFINITY_POINT,
+    numerator_degree > denominator_degree
+  );
+}
+
+fn applyFunction(z: vec2f, value_at_infinity: vec2f) -> vec2f {
+  if (length(z) >= INFINITY) {
+    return value_at_infinity;
+  }
+  return divide(
+    evaluatePolynomial(z, 0, function_params.numerator_coefs_count),
+    evaluatePolynomial(z, 16, function_params.denominator_coefs_count),
+    value_at_infinity
   );
 }
 
 fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
-  return select(
-    select(
-      2 * sqrt(max(z1.x * z1.x + z2.x * z2.x - 2 * z1.x * z2.x * cos(z2.y - z1.y), 0)) / (sqrt((1 + z1.x * z1.x)) * sqrt((1 + z2.x * z2.x))),
-      2 / sqrt(1 + z1.x * z1.x),
-      z2.x >= INFINITY
-    ),
-    select(
-      2 / sqrt(1 + z2.x * z2.x), 
-      0, 
-      z2.x >= INFINITY
-    ),
-    z1.x >= INFINITY
-  );
+  let mod_z2 = length(z2);
+  let mod_z1 = length(z1);
+  
+  let inverse_sqrt_1_plus_squared_mod_z1 = 1 / sqrt(1 + mod_z1 * mod_z1);
+  let inverse_sqrt_1_plus_squared_mod_z2 = 1 / sqrt(1 + mod_z2 * mod_z2);
+
+  if (mod_z1 >= INFINITY) {
+    if (mod_z2 >= INFINITY) {
+      return 0;
+    }
+    return inverse_sqrt_1_plus_squared_mod_z2;
+  }
+
+  if (mod_z2 >= INFINITY) {
+    return inverse_sqrt_1_plus_squared_mod_z2;
+  } 
+  return length(z1 - z2) * inverse_sqrt_1_plus_squared_mod_z1 * inverse_sqrt_1_plus_squared_mod_z2;
 }
 
 fn colourAccordingToAttractor(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
   // If it converges to infinity, colour using infinity colouring
-  if (fkz.x >= INFINITY) {
+  if (length(fkz) >= INFINITY) {
     return getColour(adjusted_divergence, fractal_params.infinity_colour); 
   }
 
@@ -109,7 +179,7 @@ fn colourAccordingToAttractor(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
 fn colourAccordingToSet(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
   return select(
     fractal_params.julia_hsv, // If it belongs to the Julia Set, return the Julia colour
-    colourAccordingToAttractor(adjusted_divergence, fkz), // If it belongs to the Fatou Set, coulour based on the attractor
+    colourAccordingToAttractor(adjusted_divergence, fkz), // If it belongs to the Fatou Set, colour based on the attractor
     adjusted_divergence <= 0
   );
 }
@@ -121,27 +191,27 @@ fn getColour(adjusted_divergence: f32, colour_params: ColourParameters) -> vec3f
   return vec3f(colour_params.hue, saturation, value);
 }
 
-fn hsvToRgba(hsv: vec3f) -> vec4f {
+fn hsv2rgba(hsv: vec3f) -> vec4f {
   return vec4f(hsv.z * mix(vec3f(1), clamp(abs((hsv.x / 60 + vec3f(0, 4, 2)) % 6 - 3) - 1, vec3f(0), vec3f(1)), hsv.y), 1);
 }
 
 @fragment
-fn fragmentMain(@location(0) coords: vec2f) -> @location(0) vec4f {
-  let z = polar(coords.x, coords.y);
-
+fn fragmentMain(@location(0) z: vec2f) -> @location(0) vec4f {
   var fkz = z;
-  var fkzeps = z + vec2(fractal_params.epsilon, 0);
+  var fkzeps = z + fractal_params.epsilon;
+
+  let value_at_infinity = evaluateFractionAtInfinity();
 
   var divergence: f32 = 0;
   var distance: f32 = INFINITY;
-  var iteration: u32 = 0;
-  while (iteration < fractal_params.iterations_count && distance > 0) {
-    fkz = applyFunction(fkz);
-    fkzeps = applyFunction(fkzeps);
+  var k: u32 = 0;
+  while (k < fractal_params.iterations_count && distance > 0) {
+    fkz = applyFunction(fkz, value_at_infinity);
+    fkzeps = applyFunction(fkzeps, value_at_infinity);
     distance = chordalDistance(fkz, fkzeps);
     divergence += distance;
-    iteration++;
+    k++;
   }
 
-  return hsvToRgba(colourAccordingToSet(log(divergence) - fractal_params.julia_bound, fkz));
+  return hsv2rgba(colourAccordingToSet(log(divergence) - fractal_params.julia_bound, fkz));
 }
