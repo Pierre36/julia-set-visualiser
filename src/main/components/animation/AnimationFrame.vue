@@ -112,8 +112,10 @@ watch(
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.ATTRACTORS,
       attractors.flatMap((attractor) => [
-        attractor.complex?.mod() || 0,
-        attractor.complex?.arg() || 0,
+        attractor.complex?.re || 0,
+        attractor.complex?.im || 0,
+        0,
+        0,
         attractor.hue,
         attractor.saturationStrength,
         attractor.saturationOffset,

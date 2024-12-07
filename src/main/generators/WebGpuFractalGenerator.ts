@@ -395,10 +395,10 @@ export default class WebGpuFractalGenerator {
     return {
       buffer: gpuDevice.createBuffer({
         label: BufferNames.ATTRACTORS_STORAGE,
-        size: (2 + 5) * 16 * 4,
+        size: (4 + 5) * 16 * 4,
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
       }),
-      values: new Float32Array((2 + 5) * 16),
+      values: new Float32Array((4 + 5) * 16),
       views: new Map(),
     };
   }
@@ -639,6 +639,8 @@ export default class WebGpuFractalGenerator {
       configuration.attractors.flatMap((attractor) => [
         attractor.complex?.re || 0,
         attractor.complex?.im || 0,
+        0,
+        0,
         attractor.hue,
         attractor.saturationStrength,
         attractor.saturationOffset,
