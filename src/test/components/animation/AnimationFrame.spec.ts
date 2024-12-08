@@ -425,7 +425,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ATTRACTORS,
-      [0, 0, 36, 0.1, 0.2, 0.3, 0.4]
+      [0, 0, 0, 0, 36, 0.1, 0.2, 0.3, 0.4]
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ATTRACTORS_COUNT,
