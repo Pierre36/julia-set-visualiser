@@ -106,7 +106,7 @@ function downloadConfiguration() {
 
 <template>
   <header>
-    <img class="logo" src="/logo.svg" alt="logo" />
+    <img class="logo" src="@/static/images/logo.svg" alt="logo" />
     <h1>Julia Set Visualizer</h1>
     <ComboBox
       id="configuration-combobox"

@@ -39,7 +39,7 @@ describe("Render", () => {
     const downloadToast = toasts[1];
 
     // Check the logo is rendered correctly
-    expect(logo.attributes().src).toBe("/logo.svg");
+    expect(logo.attributes().src).toContain("/logo.svg");
 
     // Check the heading is rendered correctly
     expect(heading.text()).toBe("Julia Set Visualizer");
