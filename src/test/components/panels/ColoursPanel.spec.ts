@@ -59,7 +59,7 @@ describe("Render", () => {
     const disclosure = juliaSection.findComponent(ExpandableDisclosure);
     const sectionContent = juliaSection.find(".content");
     const subHeading = sectionContent.find("h4");
-    const colourVisualizer = sectionContent.find(".colour-visualizer");
+    const colourVisualiser = sectionContent.find(".colour-visualiser");
     const sliderInputs = sectionContent.findAllComponents(SliderInput);
 
     // Check the info header renders correctly
@@ -70,8 +70,8 @@ describe("Render", () => {
     // Check the sub heading is rendered correctly
     expect(subHeading.text()).toBe("Colour");
 
-    // Check the colourVisualizer has the right colour
-    expect(colourVisualizer.attributes().style).toBe("background-color: rgb(0, 0, 0);");
+    // Check the colourVisualiser has the right colour
+    expect(colourVisualiser.attributes().style).toBe("background-color: rgb(0, 0, 0);");
 
     // Check the SliderInputs are rendered correctly
     expect(sliderInputs[0].vm.$props.value).toBe(props.juliaHSV[0]);

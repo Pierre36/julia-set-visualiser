@@ -107,7 +107,6 @@ export default class Complex implements Coefficient {
     return complex;
   }
 
-  // TODO Try to simplify this
   public toString(): string {
     if (this.im != 0) {
       if (this.re != 0) {
@@ -139,7 +138,6 @@ export default class Complex implements Coefficient {
     }
   }
 
-  // TODO Try to simplify this
   public toMathML(_ = undefined, showOne = true): string {
     let displayedRe = this.re;
     let displayedIm = this.im;

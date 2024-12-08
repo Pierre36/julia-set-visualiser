@@ -12,7 +12,7 @@ const defaultAttractor = defineModel<Attractor>("defaultAttractor", { required: 
 const infinityAttractor = defineModel<Attractor>("infinityAttractor", { required: true });
 const attractors = defineModel<Attractor[]>("attractors", { required: true });
 
-const visualizerColour: ComputedRef<string> = computed(() => {
+const visualiserColour: ComputedRef<string> = computed(() => {
   const l = juliaHSV.value[2] * (1 - juliaHSV.value[1] / 2);
   const s = l != 0 && l != 1 ? (juliaHSV.value[2] - l) / Math.min(l, 1 - l) : 0;
   return `hsl(${juliaHSV.value[0]}, ${s * 100}%, ${l * 100}%)`;
@@ -47,7 +47,7 @@ function deleteAttractor(index: number): void {
         </ExpandableDisclosure>
         <div class="content">
           <h4>Colour</h4>
-          <div class="colour-visualizer" :style="'background-color:' + visualizerColour"></div>
+          <div class="colour-visualiser" :style="'background-color:' + visualiserColour"></div>
           <SliderInput
             class="span-2 julia-slider-input"
             v-model:value="juliaHSV[0]"
@@ -122,7 +122,7 @@ function deleteAttractor(index: number): void {
 </template>
 
 <style scoped>
-.colour-visualizer {
+.colour-visualiser {
   width: 2.5rem;
   height: 1.4rem;
   border: 2px solid var(--gray-100);

@@ -43,7 +43,7 @@ describe("Render", () => {
     expect(logo.attributes().src).toContain("/logo.svg");
 
     // Check the heading is rendered correctly
-    expect(heading.text()).toBe("Julia Set Visualizer");
+    expect(heading.text()).toBe("Julia Set Visualiser");
 
     // Check the combobox is rendered correctly
     expect(combobox.vm.$props.label).toBe("Configuration");

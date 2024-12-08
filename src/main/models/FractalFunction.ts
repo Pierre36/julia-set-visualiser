@@ -211,7 +211,6 @@ export default class FractalFunction implements JsonSerialisable {
     return `FractalFunction(${this.numerator}, ${this.denominator}, ${this.functionType}, ${this.newtonCoefficient})`;
   }
 
-  // TODO Try to simplify this
   /**
    * Compute a MathML representation of the fractal function
    *

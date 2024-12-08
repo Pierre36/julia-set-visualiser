@@ -26,7 +26,7 @@ export interface RandomConfigurationParameters {
   maxJuliaBound: number;
 }
 
-/** Julia Set Visualizer configuration */
+/** Julia Set Visualiser configuration */
 export default class Configuration implements JsonSerialisable {
   /**
    * Configuration constructor
