@@ -46,9 +46,13 @@ async function loadLocalStorageConfiguration() {
     return;
   }
 
-  let localConfiguration = Configuration.fromJSON(JSON.parse(localConfigurationString));
-  if (localConfiguration === undefined) {
-    console.error("[KO] Could not load the local storage configuration: invalid JSON");
+  let localConfiguration;
+  try {
+    localConfiguration = Configuration.fromJSON(JSON.parse(localConfigurationString));
+    if (localConfiguration === undefined) throw new Error("JSON configuration is invalid");
+  } catch (error) {
+    console.error(`[KO] Could not load the local storage configuration: ${error}`);
+    localStorage.removeItem(LOCALE_STORAGE_KEY);
     return;
   }
 
