@@ -128,6 +128,10 @@ const configuration = defineModel<Configuration>("configuration", { required: tr
   margin-bottom: 0.75rem;
 }
 
+#side-panel .info-list li {
+  margin: 0.5rem;
+}
+
 #side-panel .info-list-item-title {
   font-weight: 500;
 }

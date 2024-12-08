@@ -30,14 +30,12 @@ const configuration = defineModel<Configuration>("configuration", { required: tr
           <ul class="info-list">
             <li>
               <span class="info-list-item-title">Resolution</span>: This is the resolution of the
-              viewport. A value of 1 means that the resolution of the window is used. In order for
-              any change to the resolution to be applied, the configuration has to be saved and the
-              page reloaded.
+              viewport. A value of 1 means that the resolution of the window is used.
             </li>
             <li>
               <span class="info-list-item-title">Scale</span>: This is the scale of the viewport. A
-              scale of 1 corresponds means the smallest axis of the viewport has a length of 2 (from
-              -1 to 1 if the centre of the viewport is 0).
+              scale of 1 means the smallest axis of the viewport has a length of 2 (from -1 to 1 if
+              the centre of the viewport is 0).
             </li>
             <li>
               <span class="info-list-item-title">Centre</span>: This is the complex number at the
