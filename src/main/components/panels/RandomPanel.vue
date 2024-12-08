@@ -81,10 +81,10 @@ const randomParameters = ref({
   viewportCentre: { minMod: 0, maxMod: 0 },
   minIterationsCount: 10,
   maxIterationsCount: 40,
-  minEpsilon: 0.005,
-  maxEpsilon: 0.015,
-  minJuliaBound: 2,
-  maxJuliaBound: 5,
+  minEpsilon: 0.0005,
+  maxEpsilon: 0.0015,
+  minJuliaBound: -1,
+  maxJuliaBound: 3,
 });
 
 function randomise() {
@@ -532,9 +532,9 @@ function randomise() {
               class="parameter-input"
               v-model:minValue="randomParameters.minEpsilon"
               v-model:maxValue="randomParameters.maxEpsilon"
-              :min="0.0001"
+              :min="0.00001"
               :max="0.1"
-              :step="0.001"
+              :step="0.0001"
               :isIntegerOnly="false"
               minLabel="Minimum value of epsilon"
               maxLabel="Maximum value of epsilon"

@@ -6,8 +6,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "0": {
@@ -48,8 +48,8 @@
     "coordinatesScale": 1.7,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "1": {
@@ -90,8 +90,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "1": { "centre": { "re": 0, "im": 0 }, "radius": 1, "duration": 10000, "type": "CIRCLE" },
@@ -125,8 +125,8 @@
     "coordinatesScale": 2.2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 2.5,
+    "epsilon": 0.001,
+    "juliaBound": 0,
     "fractalFunction": {
       "numerator": {
         "0": { "re": -1, "im": 0, "type": "CONSTANT" },
@@ -165,8 +165,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 12,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -207,8 +207,8 @@
     "coordinatesScale": 1.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "1": {
@@ -249,8 +249,8 @@
     "coordinatesScale": 10,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -303,8 +303,8 @@
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 40,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "0": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -344,7 +344,7 @@
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 30,
     "epsilon": 0.005,
-    "juliaBound": 2.5,
+    "juliaBound": 2.7,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -381,11 +381,11 @@
       "valueOffset": 1.4
     },
     "infinityAttractor": {
-      "hue": 0,
-      "saturationStrength": 0,
-      "saturationOffset": 0,
-      "valueStrength": 0,
-      "valueOffset": 0
+      "hue": 50,
+      "saturationStrength": 0.1,
+      "saturationOffset": 3,
+      "valueStrength": 0.4,
+      "valueOffset": 1.4
     },
     "attractors": []
   },
@@ -396,8 +396,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 15,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 1.5,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 1, "im": 0, "type": "CONSTANT" },
@@ -449,8 +449,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 20,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "0": {
@@ -489,8 +489,8 @@
     "coordinatesScale": 2.3,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 19,
-    "epsilon": 0.005,
-    "juliaBound": 3,
+    "epsilon": 0.0005,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "2": { "re": 3, "im": -5.9, "type": "CONSTANT" },
@@ -544,8 +544,8 @@
     "coordinatesScale": 2.8,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 13,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.006,
+    "juliaBound": 1.5,
     "fractalFunction": {
       "numerator": {
         "2": {
@@ -581,11 +581,11 @@
       "valueOffset": 0.53
     },
     "infinityAttractor": {
-      "hue": 290,
-      "saturationStrength": 0.11,
-      "saturationOffset": 0.76,
-      "valueStrength": 0.15,
-      "valueOffset": 2.8
+      "hue": 29,
+      "saturationStrength": 0.12,
+      "saturationOffset": 0.65,
+      "valueStrength": 0.42,
+      "valueOffset": 0.53
     },
     "attractors": []
   },
@@ -596,8 +596,8 @@
     "coordinatesScale": 2.7,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 25,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.002,
+    "juliaBound": 0.1,
     "fractalFunction": {
       "numerator": {
         "9": { "re": -0.33, "im": -0.052, "type": "CONSTANT" },
@@ -617,14 +617,14 @@
       "hue": 219,
       "saturationStrength": 0.085,
       "saturationOffset": 0.97,
-      "valueStrength": 0.18,
+      "valueStrength": 0.3,
       "valueOffset": 0.67
     },
     "infinityAttractor": {
       "hue": 199,
       "saturationStrength": 0.084,
       "saturationOffset": 0.9,
-      "valueStrength": 0.29,
+      "valueStrength": 0.4,
       "valueOffset": 1.9
     },
     "attractors": []
@@ -636,8 +636,8 @@
     "coordinatesScale": 3,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 11,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0,
     "fractalFunction": {
       "numerator": {
         "3": {
@@ -680,11 +680,11 @@
       "valueOffset": 1.5
     },
     "infinityAttractor": {
-      "hue": 343,
-      "saturationStrength": 0.19,
-      "saturationOffset": 0.49,
-      "valueStrength": 0.48,
-      "valueOffset": 2.8
+      "hue": 84,
+      "saturationStrength": 0.2,
+      "saturationOffset": 0.53,
+      "valueStrength": 0.39,
+      "valueOffset": 1.5
     },
     "attractors": []
   },
@@ -695,8 +695,8 @@
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 36,
-    "epsilon": 0.005,
-    "juliaBound": 3,
+    "epsilon": 0.0005,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "4": {
@@ -741,8 +741,8 @@
     "coordinatesScale": 1.9,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 13,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 2,
     "fractalFunction": {
       "numerator": {
         "5": {
@@ -806,8 +806,8 @@
     "coordinatesScale": 1.4,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 19,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 0.5,
     "fractalFunction": {
       "numerator": {
         "2": {
@@ -858,8 +858,8 @@
     "coordinatesScale": 2,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 18,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "5": { "re": -8.5, "im": -2.2, "type": "CONSTANT" },
@@ -908,11 +908,11 @@
       "valueOffset": 0.057
     },
     "infinityAttractor": {
-      "hue": 199,
-      "saturationStrength": 0.14,
-      "saturationOffset": 0.69,
-      "valueStrength": 0.43,
-      "valueOffset": 1.4
+      "hue": 89,
+      "saturationStrength": 0.087,
+      "saturationOffset": 0.091,
+      "valueStrength": 0.41,
+      "valueOffset": 0.057
     },
     "attractors": []
   },
@@ -923,8 +923,8 @@
     "coordinatesScale": 1.5,
     "coordinatesCentre": { "re": 0, "im": 0 },
     "iterationsCount": 11,
-    "epsilon": 0.01,
-    "juliaBound": 3,
+    "epsilon": 0.001,
+    "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
         "4": {
@@ -978,11 +978,11 @@
       "valueOffset": 0.46
     },
     "infinityAttractor": {
-      "hue": 172,
-      "saturationStrength": 0.19,
-      "saturationOffset": 0.97,
-      "valueStrength": 0.16,
-      "valueOffset": 0.49
+      "hue": 340,
+      "saturationStrength": 0.082,
+      "saturationOffset": 0.039,
+      "valueStrength": 0.24,
+      "valueOffset": 0.46
     },
     "attractors": []
   }
