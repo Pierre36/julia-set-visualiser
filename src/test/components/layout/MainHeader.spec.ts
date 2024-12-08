@@ -31,9 +31,10 @@ describe("Render", () => {
     const heading = mainHeader.find("h1");
     // @ts-ignore
     const combobox: VueWrapper<ComboBox> = mainHeader.findComponent(ComboBox);
-    const buttons = mainHeader.findAll("button");
+    const buttons = mainHeader.findAll(".icon-button");
     const saveButton = buttons[0];
     const downloadButton = buttons[1];
+    const docButton = buttons[2];
     const toasts = mainHeader.findAllComponents(NotificationToast);
     const saveToast = toasts[0];
     const downloadToast = toasts[1];
@@ -64,6 +65,12 @@ describe("Render", () => {
     expect(downloadToast.vm.$props.text).toBe("Custom configuration downloaded!");
     expect(downloadToast.vm.$props.animationDuration).toBe(500);
     expect(downloadToast.vm.$props.displayDuration).toBe(1500);
+
+    // Check the documentation button is rendered correctly
+    expect(docButton.text()).toBe("Documentation");
+    expect(docButton.attributes()["href"]).toBe(
+      "https://github.com/Pierre36/julia-set-visualiser/blob/main/README.md"
+    );
   });
 
   it("renders correctly when the locale storage is empty", async () => {
