@@ -153,7 +153,7 @@ fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
   }
 
   if (mod_z2 >= INFINITY) {
-    return inverse_sqrt_1_plus_squared_mod_z2;
+    return inverse_sqrt_1_plus_squared_mod_z1;
   } 
   return length(z1 - z2) * inverse_sqrt_1_plus_squared_mod_z1 * inverse_sqrt_1_plus_squared_mod_z2;
 }
