@@ -56,12 +56,7 @@ const emit = defineEmits<{ (e: "delete:attractor"): void }>();
       label="Saturation strength"
     />
     <h5>Offset</h5>
-    <NumberInput
-      v-model:value="attractor.saturationOffset"
-      :min="0"
-      :step="0.1"
-      label="Saturation offset"
-    />
+    <NumberInput v-model:value="attractor.saturationOffset" :step="0.1" label="Saturation offset" />
     <h4 class="span-2 subtitle">Value</h4>
     <h5>Strength</h5>
     <NumberInput
@@ -71,7 +66,7 @@ const emit = defineEmits<{ (e: "delete:attractor"): void }>();
       label="Value strength"
     />
     <h5>Offset</h5>
-    <NumberInput v-model:value="attractor.valueOffset" :min="0" :step="0.1" label="Value offset" />
+    <NumberInput v-model:value="attractor.valueOffset" :step="0.1" label="Value offset" />
   </div>
 </template>
 
