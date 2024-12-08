@@ -746,7 +746,7 @@ export default class WebGpuFractalGenerator {
 
     requestAnimationFrame((newTime) => {
       const frameDuration = newTime - time;
-      this.fpsAverage.addSample(1000 / frameDuration);
+      if (frameDuration != 0) this.fpsAverage.addSample(1000 / frameDuration);
       this.render(newTime, this.paused ? 0 : frameDuration);
     });
   }
