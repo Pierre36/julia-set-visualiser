@@ -11,4 +11,5 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src/main", import.meta.url)),
     },
   },
+  base: "/julia-set-visualiser/",
 });
