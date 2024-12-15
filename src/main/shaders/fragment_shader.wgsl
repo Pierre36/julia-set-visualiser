@@ -43,7 +43,7 @@ fn polar(re: f32, im: f32) -> vec2f {
 
 fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   return select(
-    vec2f(z1.x * z2.x - z1.y * z2.y,  z1.x * z2.y + z2.x * z1.y),
+    vec2f(mat2x2f(z1.x, z1.y, -z1.y, z1.x) * z2.xy),
     INFINITY_POINT,
     length(z1) > INFINITY || length(z2) > INFINITY
   );
