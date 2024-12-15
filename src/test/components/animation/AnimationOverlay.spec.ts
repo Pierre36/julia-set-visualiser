@@ -177,4 +177,22 @@ describe("Interactions", () => {
     await overlay.trigger("mouseleave");
     expect(menu.classes()).not.toContain("show");
   });
+
+  it("hides the menu when the mouse has not moved in the last 2 seconds", async () => {
+    // Mount the AnimationOverlay
+    const animationOverlay = mount(AnimationOverlay, { props: props });
+
+    // Get the elements
+    const overlay = animationOverlay.find(".animation-overlay");
+    const menu = animationOverlay.find(".animation-menu");
+
+    // Moves the mouse to display the menu
+    await overlay.trigger("mousemove");
+    expect(menu.classes()).toContain("show");
+
+    // Wait 2 seconds  and check the menu is hidden
+    setTimeout(() => {
+      expect(menu.classes()).not.toContain("show");
+    }, 2000);
+  });
 });

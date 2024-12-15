@@ -6,6 +6,8 @@ export interface Props {
   metrics: Measurements;
 }
 
+const HIDE_OVERLAY_TIMEOUT = 2000;
+
 const { metrics } = defineProps<Props>();
 
 const emit = defineEmits<{ (e: "pause"): void; (e: "unpause"): void; (e: "fullscreen"): void }>();
@@ -15,7 +17,7 @@ const paused = ref(false);
 const isFullscreen = ref(false);
 const menuDisplayed = ref(false);
 
-const mouseMoveTimer = setTimeout(() => (menuDisplayed.value = false), 3000);
+var mouseMoveTimer: number;
 
 onMounted(() => {
   document.addEventListener("fullscreenchange", () => (isFullscreen.value = !isFullscreen.value));
@@ -43,6 +45,8 @@ function updateFullscreen() {
 
 function onMouseMove() {
   menuDisplayed.value = true;
+  clearTimeout(mouseMoveTimer);
+  mouseMoveTimer = setTimeout(() => (menuDisplayed.value = false), HIDE_OVERLAY_TIMEOUT);
 }
 
 function onMouseLeave() {
@@ -143,7 +147,8 @@ function onMouseLeave() {
 
 .animation-menu.show,
 .animation-menu:hover,
-.animation-menu:focus-within {
+.animation-menu:focus-visible,
+.animation-menu:has(:focus-visible) {
   opacity: 1;
   pointer-events: auto;
 }
