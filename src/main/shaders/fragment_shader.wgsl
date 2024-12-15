@@ -142,8 +142,8 @@ fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
   let mod_z2 = length(z2);
   let mod_z1 = length(z1);
   
-  let inverse_sqrt_1_plus_squared_mod_z1 = 1 / sqrt(1 + mod_z1 * mod_z1);
-  let inverse_sqrt_1_plus_squared_mod_z2 = 1 / sqrt(1 + mod_z2 * mod_z2);
+  let inverse_sqrt_1_plus_squared_mod_z1 = inverseSqrt(1 + mod_z1 * mod_z1);
+  let inverse_sqrt_1_plus_squared_mod_z2 = inverseSqrt(1 + mod_z2 * mod_z2);
 
   if (mod_z1 >= INFINITY) {
     if (mod_z2 >= INFINITY) {
