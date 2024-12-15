@@ -576,10 +576,10 @@ export default class WebGpuFractalGenerator {
       FractalGeneratorParameters.COORDINATES_SCALE,
       configuration.coordinatesScale
     );
-    this.updateParameter(
-      FractalGeneratorParameters.COORDINATES_CENTRE,
-      configuration.coordinatesCentre
-    );
+    this.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
+      configuration.coordinatesCentre.re,
+      configuration.coordinatesCentre.im,
+    ]);
 
     this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime);
 
