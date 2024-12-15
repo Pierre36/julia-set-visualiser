@@ -37,31 +37,26 @@ struct Attractor {
 @group(0) @binding(5) var<uniform> fractal_params: FractalParameters;
 @group(0) @binding(6) var<storage> attractors: array<Attractor>;
 
-fn polar(re: f32, im: f32) -> vec2f {
-  return vec2f(sqrt(re * re + im * im), atan2(im, re));
-}
-
 fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   return select(
     vec2f(mat2x2f(z1.x, z1.y, -z1.y, z1.x) * z2.xy),
     INFINITY_POINT,
-    length(z1) > INFINITY || length(z2) > INFINITY
+    length(z1) >= INFINITY || length(z2) >= INFINITY
   );
 }
 
 fn divide(z1: vec2f, z2: vec2f, value_when_both_infinity: vec2f) -> vec2f {
   let mod_z1 = length(z1);
-  let mod_z2 = length(z2);
-  
   if (mod_z1 == 0) {
     return ZERO_POINT;
   }
 
+  let mod_z2 = length(z2);
   if (mod_z2 == 0) {
     return INFINITY_POINT;
   }
 
-  if (mod_z1 > INFINITY) {
+  if (mod_z1 >= INFINITY) {
     if (mod_z2 < mod_z1) {
       return INFINITY_POINT;
     }
@@ -71,7 +66,7 @@ fn divide(z1: vec2f, z2: vec2f, value_when_both_infinity: vec2f) -> vec2f {
     return value_when_both_infinity;
   }
   
-  if (mod_z2 > INFINITY) {
+  if (mod_z2 >= INFINITY) {
     return ZERO_POINT;
   }
 
@@ -154,7 +149,7 @@ fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
 
   if (mod_z2 >= INFINITY) {
     return inverse_sqrt_1_plus_squared_mod_z1;
-  } 
+  }
   return length(z1 - z2) * inverse_sqrt_1_plus_squared_mod_z1 * inverse_sqrt_1_plus_squared_mod_z2;
 }
 
