@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import FunctionPanel from "@/components/panels/FunctionPanel.vue";
-import ColoursPanel from "@/components/panels/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/panels/AdvancedSettingsPanel.vue";
+import ColoursPanel from "@/components/panels/ColoursPanel.vue";
+import FunctionPanel from "@/components/panels/FunctionPanel.vue";
 import RandomPanel from "@/components/panels/RandomPanel.vue";
 import Configuration from "@/models/Configuration";
 

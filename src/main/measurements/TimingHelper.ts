@@ -9,7 +9,7 @@ export default interface TimingHelper {
    */
   beginRenderPass(
     encoder: GPUCommandEncoder,
-    descriptor: GPURenderPassDescriptor
+    descriptor: GPURenderPassDescriptor,
   ): GPURenderPassEncoder;
 
   /**
@@ -21,7 +21,7 @@ export default interface TimingHelper {
    */
   beginComputePass(
     encoder: GPUCommandEncoder,
-    descriptor?: GPUComputePassDescriptor
+    descriptor?: GPUComputePassDescriptor,
   ): GPUComputePassEncoder;
 
   /**

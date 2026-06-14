@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, type ComputedRef } from "vue";
-import ComboBox, { type ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import CoefficientInput from "@/components/inputs/CoefficientInput.vue";
+import ComboBox, { type ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import type Coefficient from "@/models/Coefficient";
+import { computed, type ComputedRef } from "vue";
 
 export interface Props {
   availablePowers: number[];

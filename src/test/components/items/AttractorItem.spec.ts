@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import NumberInput from "@/components/inputs/NumberInput.vue";
+import SliderInput from "@/components/inputs/SliderInput.vue";
+import AttractorItem, { type Props } from "@/components/items/AttractorItem.vue";
 import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
-import AttractorItem, { type Props } from "@/components/items/AttractorItem.vue";
-import SliderInput from "@/components/inputs/SliderInput.vue";
-import NumberInput from "@/components/inputs/NumberInput.vue";
-import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   attractor: Attractor;

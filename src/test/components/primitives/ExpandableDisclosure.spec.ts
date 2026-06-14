@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
 import ExpandableDisclosure, { type Props } from "@/components/primitives/ExpandableDisclosure.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 let props: Props;
 

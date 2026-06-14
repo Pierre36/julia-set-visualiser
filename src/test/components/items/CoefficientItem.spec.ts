@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount, VueWrapper } from "@vue/test-utils";
-import Complex from "@/models/Complex";
 import CoefficientInput from "@/components/inputs/CoefficientInput.vue";
 import CoefficientItem, { type Props } from "@/components/items/CoefficientItem.vue";
 import ComboBox from "@/components/primitives/ComboBox.vue";
 import type Coefficient from "@/models/Coefficient";
+import Complex from "@/models/Complex";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   coefficient: Coefficient;

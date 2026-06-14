@@ -1,10 +1,10 @@
+import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import ComplexCircle, { type RandomCircleParameters } from "@/models/ComplexCircle";
 import ComplexEllipse, { type RandomEllipseParameters } from "@/models/ComplexEllipse";
 import ComplexLine, { type RandomLineParameters } from "@/models/ComplexLine";
-import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import RandomUtils from "@/utils/RandomUtils";
-import CoefficientTypes from "@/constants/CoefficientTypes";
-import type Coefficient from "@/models/Coefficient";
 
 export interface RandomCoefficientParameters {
   types: Set<CoefficientTypes>;

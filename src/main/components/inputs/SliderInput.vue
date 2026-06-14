@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, type ComputedRef } from "vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import { computed, type ComputedRef } from "vue";
 
 export interface Props {
   min: number;

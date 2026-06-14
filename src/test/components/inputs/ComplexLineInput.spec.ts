@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
-import Complex from "@/models/Complex";
-import ComplexLine from "@/models/ComplexLine";
 import ComplexInput from "@/components/inputs/ComplexInput.vue";
-import NumberInput from "@/components/inputs/NumberInput.vue";
 import type { Props } from "@/components/inputs/ComplexLineInput.vue";
 import ComplexLineInput from "@/components/inputs/ComplexLineInput.vue";
+import NumberInput from "@/components/inputs/NumberInput.vue";
+import Complex from "@/models/Complex";
+import ComplexLine from "@/models/ComplexLine";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   line: ComplexLine;

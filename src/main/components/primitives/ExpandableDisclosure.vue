@@ -131,7 +131,8 @@ function toggleExpanded() {
 
 .expand-enter-active,
 .expand-leave-active {
-  transition: opacity var(--animation-duration) ease-in-out,
+  transition:
+    opacity var(--animation-duration) ease-in-out,
     padding-block var(--animation-duration) ease-in-out;
 }
 

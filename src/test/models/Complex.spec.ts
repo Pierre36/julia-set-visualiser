@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import Complex from "@/models/Complex";
-import RandomUtils from "@/utils/RandomUtils";
-import NumberUtils from "@/utils/NumberUtils";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import Complex from "@/models/Complex";
+import NumberUtils from "@/utils/NumberUtils";
+import RandomUtils from "@/utils/RandomUtils";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -23,7 +23,7 @@ describe("mod", () => {
   ];
 
   testCases.forEach(({ input, output }) =>
-    it(`returns ${output} for '${input}'`, () => expect(input.mod()).toEqual(output))
+    it(`returns ${output} for '${input}'`, () => expect(input.mod()).toEqual(output)),
   );
 });
 
@@ -34,7 +34,7 @@ describe("arg", () => {
   ];
 
   testCases.forEach(({ input, output }) =>
-    it(`returns ${output} for '${input}'`, () => expect(input.arg()).toEqual(output))
+    it(`returns ${output} for '${input}'`, () => expect(input.arg()).toEqual(output)),
   );
 });
 
@@ -45,7 +45,7 @@ describe("isZero", () => {
   ];
 
   testCases.forEach(({ complex, isZero }) =>
-    it(`returns ${isZero} for ${complex}`, () => expect(complex.isZero()).toBe(isZero))
+    it(`returns ${isZero} for ${complex}`, () => expect(complex.isZero()).toBe(isZero)),
   );
 });
 
@@ -59,7 +59,7 @@ describe("hasMinus", () => {
   ];
 
   testCases.forEach(({ complex, hasMinus }) =>
-    it(`returns ${hasMinus} for ${complex}`, () => expect(complex.hasMinus()).toBe(hasMinus))
+    it(`returns ${hasMinus} for ${complex}`, () => expect(complex.hasMinus()).toBe(hasMinus)),
   );
 });
 
@@ -72,7 +72,7 @@ describe("multipliedBy", () => {
 
   testCases.forEach(({ complex, factor, result }) =>
     it(`returns ${result} for ${complex} multiplied by ${factor}`, () =>
-      expect(complex.multipliedBy(factor)).toEqual(result))
+      expect(complex.multipliedBy(factor)).toEqual(result)),
   );
 });
 
@@ -101,7 +101,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(Complex.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(Complex.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -139,7 +139,7 @@ describe("fromString", () => {
   ];
 
   testCases.forEach(({ input, output }) =>
-    it(`returns ${output} for '${input}'`, () => expect(Complex.fromString(input)).toEqual(output))
+    it(`returns ${output} for '${input}'`, () => expect(Complex.fromString(input)).toEqual(output)),
   );
 });
 
@@ -163,7 +163,7 @@ describe("toString", () => {
 
   testCases.forEach(({ re, im, str }) =>
     it(`returns ${str} for (${re}, ${im})`, () =>
-      expect(new Complex(re, im).toString()).toEqual(str))
+      expect(new Complex(re, im).toString()).toEqual(str)),
   );
 });
 
@@ -219,7 +219,7 @@ describe("toMathML", () => {
 
   testCases.forEach(({ complex, mathML, showOne = true }) =>
     it(`creates a correct MathML representation for ${complex} when 'showOne' is ${showOne}`, () =>
-      expect(complex.toMathML(undefined, showOne)).toEqual(mathML))
+      expect(complex.toMathML(undefined, showOne)).toEqual(mathML)),
   );
 });
 
@@ -243,7 +243,7 @@ describe("getRandomComplex", () => {
     expect(RandomUtils.floatBetween).toBeCalledWith(0, 2 * Math.PI);
 
     expect(randomComplex).toEqual(
-      new Complex(NumberUtils.toPrecision(Math.cos(1), 2), NumberUtils.toPrecision(Math.sin(1), 2))
+      new Complex(NumberUtils.toPrecision(Math.cos(1), 2), NumberUtils.toPrecision(Math.sin(1), 2)),
     );
   });
 });

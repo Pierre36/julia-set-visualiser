@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach, beforeAll, afterAll } from "vitest";
-import { config, mount } from "@vue/test-utils";
-import Configuration from "@/models/Configuration";
-import Complex from "@/models/Complex";
+import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import NumberInput from "@/components/inputs/NumberInput.vue";
 import AdvancedSettingsPanel from "@/components/panels/AdvancedSettingsPanel.vue";
 import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
-import NumberInput from "@/components/inputs/NumberInput.vue";
-import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import Complex from "@/models/Complex";
+import Configuration from "@/models/Configuration";
+import { config, mount } from "@vue/test-utils";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps {
   configuration: Configuration;
@@ -107,7 +107,7 @@ describe("Render", () => {
     expect(numberInputs[0].vm.$props.step).toBe(1);
     expect(numberInputs[0].vm.$props.isIntegerOnly).toBe(true);
     expect(numberInputs[0].vm.$props.wrongInputMessage).toBe(
-      "Please enter a valid number of iterations"
+      "Please enter a valid number of iterations",
     );
     expect(numberInputs[0].vm.$props.label).toBe("Number of iterations");
 

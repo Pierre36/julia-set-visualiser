@@ -1,17 +1,17 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
-import Configuration from "@/models/Configuration";
-import SidePanel, { type Props } from "@/components/panels/SidePanel.vue";
-import FunctionPanel from "@/components/panels/FunctionPanel.vue";
-import ColoursPanel from "@/components/panels/ColoursPanel.vue";
 import AdvancedSettingsPanel from "@/components/panels/AdvancedSettingsPanel.vue";
-import RandomPanel from "@/components/panels/RandomPanel.vue";
+import ColoursPanel from "@/components/panels/ColoursPanel.vue";
+import FunctionPanel from "@/components/panels/FunctionPanel.vue";
 import PanelId from "@/components/panels/PanelId";
-import FractalFunction from "@/models/FractalFunction";
-import Polynomial from "@/models/Polynomial";
-import Complex from "@/models/Complex";
+import RandomPanel from "@/components/panels/RandomPanel.vue";
+import SidePanel, { type Props } from "@/components/panels/SidePanel.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
 import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
+import Configuration from "@/models/Configuration";
+import FractalFunction from "@/models/FractalFunction";
+import Polynomial from "@/models/Polynomial";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   configuration: Configuration;
@@ -159,7 +159,7 @@ describe("Interactions", () => {
     // Make FUNCTION panel emit change and check the configuration is updated
     const newFractalFunction = new FractalFunction(
       new Polynomial({ 0: new Complex(3, 6) }),
-      FunctionTypes.DEFAULT
+      FunctionTypes.DEFAULT,
     );
     functionPanel.vm.$emit("update:fractalFunction", newFractalFunction);
     expect(props.configuration.fractalFunction).toEqual(newFractalFunction);

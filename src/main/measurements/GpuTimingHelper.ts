@@ -30,14 +30,14 @@ export default class GpuTimingHelper implements TimingHelper {
 
   public beginRenderPass(
     encoder: GPUCommandEncoder,
-    descriptor: GPUCommandEncoderDescriptor
+    descriptor: GPUCommandEncoderDescriptor,
   ): GPURenderPassEncoder {
     return this.beginTimestampPass(encoder, "beginRenderPass", descriptor);
   }
 
   public beginComputePass(
     encoder: GPUCommandEncoder,
-    descriptor: GPUCommandEncoderDescriptor = {}
+    descriptor: GPUCommandEncoderDescriptor = {},
   ): GPUComputePassEncoder {
     return this.beginTimestampPass(encoder, "beginComputePass", descriptor);
   }
@@ -53,7 +53,7 @@ export default class GpuTimingHelper implements TimingHelper {
   private beginTimestampPass(
     encoder: GPUCommandEncoder,
     functionName: string,
-    descriptor: GPUCommandEncoderDescriptor
+    descriptor: GPUCommandEncoderDescriptor,
   ) {
     const pass = (encoder as any)[functionName]({
       ...descriptor,

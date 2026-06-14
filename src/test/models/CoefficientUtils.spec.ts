@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 import CoefficientUtils from "@/models/CoefficientUtils";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import ComplexCircle, { type RandomCircleParameters } from "@/models/ComplexCircle";
 import ComplexEllipse, { type RandomEllipseParameters } from "@/models/ComplexEllipse";
 import ComplexLine, { type RandomLineParameters } from "@/models/ComplexLine";
 import RandomUtils from "@/utils/RandomUtils";
-import CoefficientTypes from "@/constants/CoefficientTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("fromJSON", () => {
   const constant = new Complex(3, 6);
@@ -23,7 +23,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(CoefficientUtils.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(CoefficientUtils.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -59,13 +59,13 @@ describe("getRandomCoefficient", () => {
 
   testCases.forEach(({ type, output }) =>
     it(`randomises ${type} coefficients`, () => {
-      RandomUtils.pickAmong<CoefficientTypes> = vi.fn(() => type);
+      vi.spyOn(RandomUtils, "pickAmong").mockImplementation(() => type);
 
       const actual = CoefficientUtils.getRandomCoefficient(params);
 
       expect(actual).toEqual(output);
 
       expect(RandomUtils.pickAmong).toHaveBeenCalledWith(Array.from(types));
-    })
+    }),
   );
 });

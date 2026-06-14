@@ -1,10 +1,10 @@
-import Polynomial from "@/models/Polynomial";
+import FunctionTypes from "@/constants/FunctionTypes";
 import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
-import RandomUtils from "@/utils/RandomUtils";
-import FunctionTypes from "@/constants/FunctionTypes";
 import type { JsonSerialisable } from "@/models/JsonSerialisable";
+import Polynomial from "@/models/Polynomial";
+import RandomUtils from "@/utils/RandomUtils";
 
 export interface RandomConfigurationParameters {
   fractalFunction: RandomFractalFunctionParameters;
@@ -58,7 +58,7 @@ export default class Configuration implements JsonSerialisable {
     public juliaHSV: number[],
     public defaultAttractor: Attractor,
     public infinityAttractor: Attractor,
-    public attractors: Attractor[]
+    public attractors: Attractor[],
   ) {}
 
   /**
@@ -80,7 +80,7 @@ export default class Configuration implements JsonSerialisable {
       [0, 0, 1],
       new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
       new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
-      []
+      [],
     );
   }
 
@@ -103,7 +103,7 @@ export default class Configuration implements JsonSerialisable {
       [0, 0, 0],
       new Attractor(undefined, 0, 0, 0, 0, 0),
       new Attractor(undefined, 0, 0, 0, 0, 0),
-      []
+      [],
     );
   }
 
@@ -175,7 +175,7 @@ export default class Configuration implements JsonSerialisable {
       json.juliaHSV,
       defaultAttractor,
       infinityAttractor,
-      attractors
+      attractors,
     );
   }
 
@@ -216,7 +216,7 @@ export default class Configuration implements JsonSerialisable {
       this.juliaHSV.slice(),
       this.defaultAttractor.copy(),
       this.infinityAttractor.copy(),
-      this.attractors.map((a) => a.copy())
+      this.attractors.map((a) => a.copy()),
     );
   }
 
@@ -228,12 +228,12 @@ export default class Configuration implements JsonSerialisable {
   public randomise(params: RandomConfigurationParameters) {
     this.coordinatesScale = RandomUtils.floatBetween(
       params.minViewportScale,
-      params.maxViewportScale
+      params.maxViewportScale,
     );
     this.coordinatesCentre = Complex.getRandomComplex(params.viewportCentre);
     this.iterationsCount = RandomUtils.integerBetween(
       params.minIterationsCount,
-      params.maxIterationsCount
+      params.maxIterationsCount,
     );
     this.epsilon = RandomUtils.floatBetween(params.minEpsilon, params.maxEpsilon);
     this.juliaBound = RandomUtils.floatBetween(params.minJuliaBound, params.maxJuliaBound);
@@ -241,7 +241,7 @@ export default class Configuration implements JsonSerialisable {
     this.juliaHSV[0] = RandomUtils.integerBetween(params.minJuliaHue, params.maxJuliaHue);
     this.juliaHSV[1] = RandomUtils.floatBetween(
       params.minJuliaSaturation,
-      params.maxJuliaSaturation
+      params.maxJuliaSaturation,
     );
     this.juliaHSV[2] = RandomUtils.floatBetween(params.minJuliaValue, params.maxJuliaValue);
     this.defaultAttractor = Attractor.getRandomAttractor(params.attractors);

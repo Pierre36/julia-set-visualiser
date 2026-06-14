@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 import Complex from "@/models/Complex";
 import ComplexLine from "@/models/ComplexLine";
 import RandomUtils from "@/utils/RandomUtils";
-import CoefficientTypes from "@/constants/CoefficientTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -25,7 +25,7 @@ describe("isZero", () => {
   ];
 
   testCases.forEach(({ line, isZero }) =>
-    it(`returns ${isZero} for ${line}`, () => expect(line.isZero()).toBe(isZero))
+    it(`returns ${isZero} for ${line}`, () => expect(line.isZero()).toBe(isZero)),
   );
 });
 
@@ -55,7 +55,7 @@ describe("multipliedBy", () => {
 
   testCases.forEach(({ line, factor, result }) =>
     it(`returns ${result} for ${line} multiplied by ${factor}`, () =>
-      expect(line.multipliedBy(factor)).toEqual(result))
+      expect(line.multipliedBy(factor)).toEqual(result)),
   );
 });
 
@@ -77,7 +77,7 @@ describe("getEllipseParameters", () => {
   ];
 
   testCases.forEach(({ line, result }) =>
-    it(`returns ${result} for ${line}`, () => expect(line.getEllipseParameters()).toEqual(result))
+    it(`returns ${result} for ${line}`, () => expect(line.getEllipseParameters()).toEqual(result)),
   );
 });
 
@@ -114,7 +114,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(ComplexLine.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(ComplexLine.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -138,7 +138,7 @@ describe("toJSON", () => {
 describe("toString", () => {
   it("properly returns a string representation of the complex line", () => {
     expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 1).toString()).toBe(
-      "ComplexLine(3 + 6i, 4 + 2i, 1)"
+      "ComplexLine(3 + 6i, 4 + 2i, 1)",
     );
   });
 });
@@ -146,7 +146,7 @@ describe("toString", () => {
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () =>
     expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000).toMathML(1)).toBe(
-      "<msub><mi>l</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>"
+      "<msub><mi>l</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>",
     ));
 });
 

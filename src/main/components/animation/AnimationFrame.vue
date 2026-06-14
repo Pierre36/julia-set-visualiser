@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, useTemplateRef, watch, type Ref } from "vue";
-import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
-import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
-import Configuration from "@/models/Configuration";
 import AnimationOverlay from "@/components/animation/AnimationOverlay.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
+import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
+import Configuration from "@/models/Configuration";
+import { onMounted, onUnmounted, ref, useTemplateRef, watch, type Ref } from "vue";
 
 const configuration = defineModel<Configuration>("configuration", { required: true });
 
@@ -16,11 +16,11 @@ const canvas = useTemplateRef<HTMLCanvasElement>("animationCanvas");
 
 watch(
   () => configuration.value.resolutionScale,
-  (scale) => fractalGenerator?.updateCanvasResolution(scale)
+  (scale) => fractalGenerator?.updateCanvasResolution(scale),
 );
 watch(
   () => configuration.value.coordinatesScale,
-  (scale) => fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_SCALE, scale)
+  (scale) => fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_SCALE, scale),
 );
 watch(
   () => configuration.value.coordinatesCentre,
@@ -29,54 +29,54 @@ watch(
       centre.re,
       centre.im,
     ]),
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => configuration.value.iterationsCount,
-  (count) => fractalGenerator?.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, count)
+  (count) => fractalGenerator?.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, count),
 );
 watch(
   () => configuration.value.epsilon,
-  (epsilon) => fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, epsilon)
+  (epsilon) => fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, epsilon),
 );
 watch(
   () => configuration.value.juliaBound,
-  (bound) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, bound)
+  (bound) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, bound),
 );
 watch(
   () => configuration.value.fractalFunction,
   (fractalFunction) => {
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.IS_NEWTON,
-      fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
+      fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0,
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
-      fractalFunction.getNumeratorCoefficients().length
+      fractalFunction.getNumeratorCoefficients().length,
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
-      fractalFunction.getDenominatorCoefficients().length
+      fractalFunction.getDenominatorCoefficients().length,
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      fractalFunction.newtonCoefficient.getEllipseParameters()
+      fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.NUMERATOR,
-      fractalFunction.getNumeratorCoefficientsEllipseParameters()
+      fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.DENOMINATOR,
-      fractalFunction.getDenominatorCoefficientsEllipseParameters()
+      fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   },
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => configuration.value.juliaHSV,
   (hsv) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_HSV, hsv),
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => configuration.value.defaultAttractor,
@@ -88,7 +88,7 @@ watch(
       attractor.valueStrength,
       attractor.valueOffset,
     ]),
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => configuration.value.infinityAttractor,
@@ -100,14 +100,14 @@ watch(
       attractor.valueStrength,
       attractor.valueOffset,
     ]),
-  { deep: true }
+  { deep: true },
 );
 watch(
   () => configuration.value.attractors,
   (attractors) => {
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.ATTRACTORS_COUNT,
-      attractors.length
+      attractors.length,
     );
     fractalGenerator?.updateParameter(
       FractalGeneratorParameters.ATTRACTORS,
@@ -121,10 +121,10 @@ watch(
         attractor.saturationOffset,
         attractor.valueStrength,
         attractor.valueOffset,
-      ])
+      ]),
     );
   },
-  { deep: true }
+  { deep: true },
 );
 
 onMounted(async () => {
@@ -145,7 +145,7 @@ onMounted(async () => {
 
   // Update resolution on window resize
   window.addEventListener("resize", () =>
-    fractalGenerator.updateCanvasResolution(configuration.value.resolutionScale)
+    fractalGenerator.updateCanvasResolution(configuration.value.resolutionScale),
   );
 
   // Update fps every 0.3 seconds

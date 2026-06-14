@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
+import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 import MainHeader from "@/components/layout/MainHeader.vue";
 import SideBar from "@/components/layout/SideBar.vue";
-import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 import Configuration from "@/models/Configuration";
+import { ref, type Ref } from "vue";
 
 const configuration = ref(Configuration.defaultConfiguration()) as Ref<Configuration>;
 

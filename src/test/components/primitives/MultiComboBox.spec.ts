@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import MultiComboBox, { type Props } from "@/components/primitives/MultiComboBox.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 interface TestProps<T> extends Props<T> {
   selected: Set<T>;
 }
 
-let props: TestProps<String>;
+let props: TestProps<string>;
 
 const id = "id";
 const options = [
@@ -32,46 +32,46 @@ describe("Button render", () => {
 
   it("is noOptionsSelectedText when the selected is empty and noOptionsSelectedText is set", () => {
     props.selected = new Set();
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.text()).toContain(props.noOptionsSelectedText);
   });
 
   it("is noOptionsSelectedText when the selected is not in the options and noOptionsSelectedText is set", () => {
     props.selected = new Set(["-1"]);
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.text()).toContain(props.noOptionsSelectedText);
   });
 
   it("contains the selected option text when only one option is selected", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.text()).toContain("option1");
   });
 
   it("contains the number of selected options when multiple options are selected", () => {
     props.selected = new Set(["0", "1"]);
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.text()).toContain("2 selected options");
   });
 
   it("is allOptionsSelectedText when all options are selected and allOptionsSelectedText is set", () => {
     props.selected = new Set(["0", "1", "2"]);
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.text()).toContain(props.allOptionsSelectedText);
   });
 
   it("has the correct label", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.attributes()["aria-label"]).toBe(props.label);
   });
 
   it("has the correct aria attributes", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     expect(button.attributes().role).toBe("combobox");
     expect(button.attributes()["aria-controls"]).toBe(props.id + "_popup");
@@ -91,13 +91,13 @@ describe("List render", () => {
   });
 
   it("has the role 'listbox'", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const popup = multiComboBox.find("#" + props.id + "_popup");
     expect(popup.attributes().role).toBe("listbox");
   });
 
   it("has options with role 'option'", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const optionItems = multiComboBox.findAll("li");
     optionItems.forEach((item) => {
       expect(item.attributes().role).toBe("option");
@@ -105,7 +105,7 @@ describe("List render", () => {
   });
 
   it("contains all the options", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const optionItems = multiComboBox.findAll("[role='option']");
     options.forEach((option) => {
       expect(optionItems.some((item) => item.text().includes(option.text))).toBe(true);
@@ -113,7 +113,7 @@ describe("List render", () => {
   });
 
   it("has the proper aria-selected attributes", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const options = multiComboBox.findAll("[role='option']");
     expect(options[0].attributes()["aria-selected"]).toBe("true");
     for (let i = 1; i < options.length; i++) {
@@ -122,7 +122,7 @@ describe("List render", () => {
   });
 
   it("is closed by default", () => {
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
     expect(popup.isVisible()).toBe(false);
@@ -144,7 +144,7 @@ describe("MultiComboBox interactions with popup closed", () => {
 
   it("opens the popup when clicking the button", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -158,7 +158,7 @@ describe("MultiComboBox interactions with popup closed", () => {
 
   it("opens the popup when pressing 'down'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -171,7 +171,7 @@ describe("MultiComboBox interactions with popup closed", () => {
 
   it("opens the popup when pressing 'enter'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -197,7 +197,7 @@ describe("MultiComboBox focus interactions", () => {
 
   it("has the focus on the first option item when opening the popup", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const optionItems = multiComboBox.findAll("[role='option']");
 
@@ -217,7 +217,7 @@ describe("MultiComboBox focus interactions", () => {
 
   it("moves the focus down when pressing 'down'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const optionItems = multiComboBox.findAll("[role='option']");
 
@@ -238,7 +238,7 @@ describe("MultiComboBox focus interactions", () => {
 
   it("moves the focus up when pressing 'up'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const optionItems = multiComboBox.findAll("[role='option']");
 
@@ -259,7 +259,7 @@ describe("MultiComboBox focus interactions", () => {
 
   it("moves the focus to the first option when pressing 'home'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const optionItems = multiComboBox.findAll("[role='option']");
 
@@ -275,7 +275,7 @@ describe("MultiComboBox focus interactions", () => {
 
   it("moves the focus to the last option when pressing 'end'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const optionItems = multiComboBox.findAll("[role='option']");
 
@@ -297,7 +297,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("closes the popup when clicking outside it", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -318,7 +318,7 @@ describe("MultiComboBox interactions with popup open", () => {
     vi.spyOn(document, "removeEventListener");
 
     // Mount the ComboBox
-    const comboBox = mount(MultiComboBox, { props: props });
+    const comboBox = mount(MultiComboBox as unknown, { props: props });
 
     // Check a listener is created
     expect(document.addEventListener).toBeCalled();
@@ -332,7 +332,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("closes the popup when pressing 'escape'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -348,7 +348,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("closes the popup when pressing tab", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -364,7 +364,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("keeps the popup open when clicking inside it (not on an option)", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
 
@@ -378,7 +378,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("emits an event when pressing 'enter'", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
 
     // Open the popup
@@ -396,7 +396,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("emits an event when selecting a new option", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
 
     // Open the popup
@@ -412,7 +412,7 @@ describe("MultiComboBox interactions with popup open", () => {
 
   it("emits an event when deselecting an option", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
 
     // Open the popup
@@ -443,7 +443,7 @@ describe("MultiComboBox popup scroll behavior", () => {
 
   it("scrolls to show focused item", async () => {
     // Mount the MultiComboBox
-    const multiComboBox = mount(MultiComboBox, { props: props });
+    const multiComboBox = mount(MultiComboBox as unknown, { props: props });
     const button = multiComboBox.find("button");
     const popup = multiComboBox.find("#" + props.id + "_popup");
     const optionItems = multiComboBox.findAll("[role='option']");
@@ -454,7 +454,7 @@ describe("MultiComboBox popup scroll behavior", () => {
     optionItems.forEach((item, index) => {
       vi.spyOn(item.element, "clientHeight", "get").mockImplementation(() => optionHeight);
       vi.spyOn(item.element as HTMLElement, "offsetTop", "get").mockImplementation(
-        () => index * optionHeight
+        () => index * optionHeight,
       );
     });
 

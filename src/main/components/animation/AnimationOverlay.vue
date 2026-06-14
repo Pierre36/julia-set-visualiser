@@ -17,7 +17,7 @@ const paused = ref(false);
 const isFullscreen = ref(false);
 const menuDisplayed = ref(false);
 
-var mouseMoveTimer: number;
+let mouseMoveTimer: number;
 
 onMounted(() => {
   document.addEventListener("fullscreenchange", () => (isFullscreen.value = !isFullscreen.value));

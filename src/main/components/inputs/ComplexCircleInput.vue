@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import Complex from "@/models/Complex";
-import ComplexCircle from "@/models/ComplexCircle";
 import ComplexInput from "@/components/inputs/ComplexInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import Complex from "@/models/Complex";
+import ComplexCircle from "@/models/ComplexCircle";
+import { computed } from "vue";
 
 export interface Props {
   level?: number;

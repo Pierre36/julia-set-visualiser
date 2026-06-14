@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach, afterAll, beforeAll } from "vitest";
-import { config, mount } from "@vue/test-utils";
-import Attractor from "@/models/Attractor";
-import Complex from "@/models/Complex";
-import ColoursPanel from "@/components/panels/ColoursPanel.vue";
-import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
 import SliderInput from "@/components/inputs/SliderInput.vue";
 import AttractorItem from "@/components/items/AttractorItem.vue";
+import ColoursPanel from "@/components/panels/ColoursPanel.vue";
+import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
 import IconTextButton from "@/components/primitives/IconTextButton.vue";
+import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
+import { config, mount } from "@vue/test-utils";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps {
   juliaHSV: number[];

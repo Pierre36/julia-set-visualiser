@@ -1,5 +1,5 @@
-import RandomUtils from "@/utils/RandomUtils";
 import Complex from "@/models/Complex";
+import RandomUtils from "@/utils/RandomUtils";
 
 export interface RandomAttractorParameters {
   minHue: number;
@@ -32,7 +32,7 @@ export default class Attractor {
     public saturationStrength: number,
     public saturationOffset: number,
     public valueStrength: number,
-    public valueOffset: number
+    public valueOffset: number,
   ) {}
 
   /**
@@ -67,7 +67,7 @@ export default class Attractor {
       json.saturationStrength,
       json.saturationOffset,
       json.valueStrength,
-      json.valueOffset
+      json.valueOffset,
     );
   }
 
@@ -94,7 +94,7 @@ export default class Attractor {
       this.saturationStrength,
       this.saturationOffset,
       this.valueStrength,
-      this.valueOffset
+      this.valueOffset,
     );
   }
 
@@ -108,15 +108,15 @@ export default class Attractor {
     const newHue = RandomUtils.integerBetween(params.minHue, params.maxHue);
     const newSaturationStrength = RandomUtils.floatBetween(
       params.minSaturationStrength,
-      params.maxSaturationStrength
+      params.maxSaturationStrength,
     );
     const newSaturationOffset = RandomUtils.floatBetween(
       params.minSaturationOffset,
-      params.maxSaturationOffset
+      params.maxSaturationOffset,
     );
     const newValueStrength = RandomUtils.floatBetween(
       params.minValueStrength,
-      params.maxValueStrength
+      params.maxValueStrength,
     );
     const newValueOffset = RandomUtils.floatBetween(params.minValueOffset, params.maxValueOffset);
     return new Attractor(
@@ -125,7 +125,7 @@ export default class Attractor {
       newSaturationStrength,
       newSaturationOffset,
       newValueStrength,
-      newValueOffset
+      newValueOffset,
     );
   }
 }

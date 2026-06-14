@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import ComboBox, { type ComboBoxOption, type Props } from "@/components/primitives/ComboBox.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomEvent } from "../../testUtils";
 
 interface TestProps<T> extends Props<T> {
@@ -25,32 +25,32 @@ describe("Button render", () => {
 
   it("is empty when the selected is null", () => {
     props.selected = null;
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     expect(button.text()).toBe("down-arrow");
   });
 
   it("is empty when the selected is not in the options", () => {
     props.selected = "-1";
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     expect(button.text()).toBe("down-arrow");
   });
 
   it("contains the selected option text when it can", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     expect(button.text()).toContain("option1");
   });
 
   it("has the correct label", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     expect(button.attributes()["aria-label"]).toBe(label);
   });
 
   it("has the correct aria attributes", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     expect(button.attributes().role).toBe("combobox");
     expect(button.attributes()["aria-controls"]).toBe(`${id}_popup`);
@@ -68,13 +68,13 @@ describe("List render", () => {
   });
 
   it("has the role 'listbox'", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const popup = comboBox.find(`#${id}_popup`);
     expect(popup.attributes().role).toBe("listbox");
   });
 
   it("has options with role 'option'", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const optionItems = comboBox.findAll("li");
     optionItems.forEach((item) => {
       expect(item.attributes().role).toBe("option");
@@ -82,7 +82,7 @@ describe("List render", () => {
   });
 
   it("contains all the options", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const optionItems = comboBox.findAll("[role='option']");
     options.forEach((option) => {
       expect(optionItems.some((item) => item.text().includes(option.text))).toBe(true);
@@ -90,13 +90,13 @@ describe("List render", () => {
   });
 
   it("displays the selected option first", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const option = comboBox.find("[role='option']");
     expect(option.text()).toContain(selectedOption.text);
   });
 
   it("has the proper aria-selected attributes", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const options = comboBox.findAll("[role='option']");
     expect(options[0].attributes()["aria-selected"]).toBe("true");
     for (let i = 1; i < options.length; i++) {
@@ -105,7 +105,7 @@ describe("List render", () => {
   });
 
   it("is closed by default", () => {
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
     expect(popup.isVisible()).toBe(false);
@@ -135,7 +135,7 @@ describe("Combobox interactions with popup closed", () => {
 
   it("opens the popup when clicking the button", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -149,7 +149,7 @@ describe("Combobox interactions with popup closed", () => {
 
   it("opens the popup when pressing 'down'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -162,7 +162,7 @@ describe("Combobox interactions with popup closed", () => {
 
   it("opens the popup when pressing 'enter'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -196,7 +196,7 @@ describe("Combobox focus interactions", () => {
 
   it("has the focus on the first option item when opening the popup", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const optionItems = comboBox.findAll("[role='option']");
 
@@ -216,7 +216,7 @@ describe("Combobox focus interactions", () => {
 
   it("moves the focus down when pressing 'down'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const optionItems = comboBox.findAll("[role='option']");
 
@@ -237,7 +237,7 @@ describe("Combobox focus interactions", () => {
 
   it("moves the focus up when pressing 'up'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const optionItems = comboBox.findAll("[role='option']");
 
@@ -258,7 +258,7 @@ describe("Combobox focus interactions", () => {
 
   it("moves the focus to the first option when pressing 'home'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const optionItems = comboBox.findAll("[role='option']");
 
@@ -274,7 +274,7 @@ describe("Combobox focus interactions", () => {
 
   it("moves the focus to the last option when pressing 'end'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const optionItems = comboBox.findAll("[role='option']");
 
@@ -328,7 +328,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("does not close the popup when the click has an invalid target", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -345,7 +345,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("closes the popup when pressing 'escape'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -361,7 +361,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("closes the popup when pressing tab", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -377,7 +377,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("keeps the popup open when clicking inside it (not on an option)", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -391,7 +391,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("emits an event and closes the popup when pressing 'enter'", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -413,7 +413,7 @@ describe("Combobox interactions with popup open", () => {
 
   it("emits an event and closes the popup when clicking on an option", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
 
@@ -437,7 +437,7 @@ describe("Combobox interactions with popup open", () => {
     vi.spyOn(document, "removeEventListener");
 
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
 
     // Check a listener is created
     expect(document.addEventListener).toBeCalled();
@@ -466,7 +466,7 @@ describe("Combobox popup scroll behavior", () => {
 
   it("scrolls to show focused item", async () => {
     // Mount the ComboBox
-    const comboBox = mount(ComboBox, { props: props });
+    const comboBox = mount(ComboBox as unknown, { props: props });
     const button = comboBox.find("button");
     const popup = comboBox.find(`#${id}_popup`);
     const optionItems = comboBox.findAll("[role='option']");
@@ -477,7 +477,7 @@ describe("Combobox popup scroll behavior", () => {
     optionItems.forEach((item, index) => {
       vi.spyOn(item.element, "clientHeight", "get").mockImplementation(() => optionHeight);
       vi.spyOn(item.element as HTMLElement, "offsetTop", "get").mockImplementation(
-        () => index * optionHeight
+        () => index * optionHeight,
       );
     });
 

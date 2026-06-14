@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PanelId from "@/components/panels/PanelId";
 import type { Panel } from "@/components/layout/SideBar.vue";
+import PanelId from "@/components/panels/PanelId";
 import { computed, onMounted, onUnmounted, ref, useTemplateRef, type ComputedRef } from "vue";
 
 export interface Props {
@@ -23,17 +23,17 @@ const moreListItem = useTemplateRef<HTMLElement>("moreListItem");
 const moreButton = useTemplateRef<HTMLElement>("moreButton");
 
 const displayedPanels: ComputedRef<Panel[]> = computed(() =>
-  panels.filter((_, index) => index < displayedPanelsCount.value)
+  panels.filter((_, index) => index < displayedPanelsCount.value),
 );
 
 const hiddenPanels: ComputedRef<Panel[]> = computed(() =>
-  panels.filter((_, index) => index >= displayedPanelsCount.value)
+  panels.filter((_, index) => index >= displayedPanelsCount.value),
 );
 
 const focusedPanel: ComputedRef<PanelId> = computed(() => panels[focusedIndex.value].id);
 
 const currentPanelIndex: ComputedRef<number> = computed(() =>
-  panels.findIndex((panel) => panel.id === currentPanel.value)
+  panels.findIndex((panel) => panel.id === currentPanel.value),
 );
 
 onMounted(() => {
@@ -50,7 +50,7 @@ onUnmounted(() => {
 function updateDisplayedPanelsCount() {
   displayedPanelsCount.value = Math.max(
     Math.floor(tablist.value!.clientHeight / moreListItem.value!.clientHeight) - 1,
-    0
+    0,
   );
 }
 

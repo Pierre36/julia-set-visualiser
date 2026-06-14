@@ -1,7 +1,7 @@
-import RandomUtils from "@/utils/RandomUtils";
-import Complex, { type RandomComplexParameters } from "@/models/Complex";
-import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import RandomUtils from "@/utils/RandomUtils";
 
 export interface RandomLineParameters {
   startEnd: RandomComplexParameters;
@@ -20,7 +20,11 @@ export default class ComplexLine implements Coefficient {
    * @param end end of the line
    * @param duration duration of the animation in milliseconds
    */
-  public constructor(public start: Complex, public end: Complex, public duration: number) {}
+  public constructor(
+    public start: Complex,
+    public end: Complex,
+    public duration: number,
+  ) {}
 
   public isZero() {
     return this.start.isZero() && this.end.isZero();
@@ -34,14 +38,14 @@ export default class ComplexLine implements Coefficient {
     return new ComplexLine(
       this.start.multipliedBy(factor),
       this.end.multipliedBy(factor),
-      this.duration
+      this.duration,
     );
   }
 
   public getEllipseParameters() {
     const centre = new Complex(
       (this.start.re + this.end.re) / 2,
-      (this.start.im + this.end.im) / 2
+      (this.start.im + this.end.im) / 2,
     );
     const centredLineEnd = new Complex(this.end.re - centre.re, this.end.im - centre.im);
     return [
@@ -107,7 +111,7 @@ export default class ComplexLine implements Coefficient {
     return new ComplexLine(
       Complex.getRandomComplex(params.startEnd),
       Complex.getRandomComplex(params.startEnd),
-      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
+      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
     );
   }
 }

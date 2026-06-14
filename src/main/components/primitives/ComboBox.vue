@@ -25,12 +25,12 @@ const optionItems = useTemplateRef<HTMLLIElement[]>("optionItems");
 
 const selectedOption = computed(() => options.find((option) => option.id == selected.value));
 const inputText = computed(() =>
-  selectedOption.value != undefined ? selectedOption.value.text : ""
+  selectedOption.value != undefined ? selectedOption.value.text : "",
 );
 const sortedOptions = computed(() =>
   options
     .slice()
-    .sort((a, b) => (b.id == selected.value ? 1 : 0) - (a.id == selected.value ? 1 : 0))
+    .sort((a, b) => (b.id == selected.value ? 1 : 0) - (a.id == selected.value ? 1 : 0)),
 );
 const focusedOption = computed(() => sortedOptions.value[focusedIndex.value]);
 

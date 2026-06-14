@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
 import NumberUtils from "@/utils/NumberUtils";
+import { describe, expect, it } from "vitest";
 
 describe("toPrecision", () => {
   it("rounds to the provided number of digits", () => {

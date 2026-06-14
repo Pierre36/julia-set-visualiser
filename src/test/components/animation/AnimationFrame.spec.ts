@@ -1,14 +1,14 @@
-import { describe, it, expect, beforeEach, vi, type MockInstance } from "vitest";
-import { flushPromises, mount } from "@vue/test-utils";
-import Configuration from "@/models/Configuration";
-import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
 import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 import AnimationOverlay from "@/components/animation/AnimationOverlay.vue";
-import Complex from "@/models/Complex";
-import Attractor from "@/models/Attractor";
 import FunctionTypes from "@/constants/FunctionTypes";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
+import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
+import Configuration from "@/models/Configuration";
 import type FractalFunction from "@/models/FractalFunction";
+import { flushPromises, mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 
 interface TestProps {
   configuration: Configuration;
@@ -25,13 +25,13 @@ describe("Render", () => {
 
     // Mock the WebGpuFractalGenerator initialise method
     const mockedFractalGenerator = vi.mocked(WebGpuFractalGenerator.prototype, true);
-    vi.spyOn(WebGpuFractalGenerator, "initialise").mockReturnValue(mockedFractalGenerator as any);
+    vi.spyOn(WebGpuFractalGenerator, "initialise").mockReturnValue(mockedFractalGenerator as never);
     mockedFractalGenerator.startAnimation = vi.fn();
 
     // Mock the ResizeObserver
     vi.stubGlobal(
       "ResizeObserver",
-      vi.fn(() => ({ observe: vi.fn() }))
+      vi.fn(() => ({ observe: vi.fn() })),
     );
   });
 
@@ -58,7 +58,7 @@ describe("Render", () => {
   it("shows an error message when fails to initialise the fractal generator", async () => {
     // Make initialise throw an error
     const error = new Error("error message");
-    vi.spyOn(WebGpuFractalGenerator, "initialise").mockReturnValue(error as any);
+    vi.spyOn(WebGpuFractalGenerator, "initialise").mockReturnValue(error as never);
 
     // Mock console.error
     console.error = vi.fn();
@@ -83,7 +83,7 @@ describe("Interactions", () => {
   let initialise: MockInstance<
     (
       canvas: HTMLCanvasElement,
-      fractalFunction: FractalFunction
+      fractalFunction: FractalFunction,
     ) => Promise<Error | WebGpuFractalGenerator>
   >;
   let mockedFractalGenerator: WebGpuFractalGenerator;
@@ -102,13 +102,21 @@ describe("Interactions", () => {
     mockedFractalGenerator.updateParameter = vi.fn();
     initialise = vi
       .spyOn(WebGpuFractalGenerator, "initialise")
-      .mockReturnValue(mockedFractalGenerator as any);
+      .mockReturnValue(mockedFractalGenerator as never);
     mockedFractalGenerator.destroy = vi.fn();
 
     // Mock the ResizeObserver
     vi.stubGlobal(
       "ResizeObserver",
-      vi.fn(() => ({ observe: vi.fn() }))
+      vi.fn().mockImplementation(function (
+        this: ResizeObserver & { callback: ResizeObserverCallback },
+        callback: ResizeObserverCallback,
+      ) {
+        this.observe = vi.fn();
+        this.unobserve = vi.fn();
+        this.disconnect = vi.fn();
+        this.callback = callback;
+      }),
     );
   });
 
@@ -127,27 +135,35 @@ describe("Interactions", () => {
 
     // Trigger the window resize and check createViewport is called
     window.dispatchEvent(new Event("resize"));
-    expect(mockedFractalGenerator.updateCanvasResolution).toBeCalledWith(
-      props.configuration.resolutionScale
+    expect(mockedFractalGenerator.updateCanvasResolution).toHaveBeenCalledWith(
+      props.configuration.resolutionScale,
     );
   });
 
   it("observes the canvas size correctly", async () => {
     // Mock the ResizeObserver to directly call its callback
     const observe = vi.fn();
-    const resizeObserver = vi.fn((callback) => {
-      callback();
-      return { observe: observe };
-    });
-    vi.stubGlobal("ResizeObserver", resizeObserver);
+    vi.stubGlobal(
+      "ResizeObserver",
+      vi.fn().mockImplementation(function (
+        this: ResizeObserver & { callback: ResizeObserverCallback },
+        callback: ResizeObserverCallback,
+      ) {
+        callback([], this);
+        this.observe = observe;
+        this.unobserve = vi.fn();
+        this.disconnect = vi.fn();
+        this.callback = callback;
+      }),
+    );
 
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
     await flushPromises();
 
     // Check the ResizeObserver has been created correctly
-    expect(mockedFractalGenerator.updateViewportDimensionRatio).toBeCalled();
-    expect(observe).toBeCalledWith(animationFrame.find("canvas").element);
+    expect(mockedFractalGenerator.updateViewportDimensionRatio).toHaveBeenCalled();
+    expect(observe).toHaveBeenCalledWith(animationFrame.find("canvas").element);
   });
 
   it("requests full screen when animation overlay emits fullscreen event", async () => {
@@ -221,7 +237,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.COORDINATES_SCALE,
-      newCoordinatesScale
+      newCoordinatesScale,
     );
   });
 
@@ -238,7 +254,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.COORDINATES_CENTRE,
-      [newCoordinatesCentre.re, newCoordinatesCentre.im]
+      [newCoordinatesCentre.re, newCoordinatesCentre.im],
     );
   });
 
@@ -255,7 +271,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ITERATIONS_COUNT,
-      newIterationsCount
+      newIterationsCount,
     );
   });
 
@@ -272,7 +288,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.EPSILON,
-      newEpsilon
+      newEpsilon,
     );
   });
 
@@ -289,7 +305,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.JULIA_BOUND,
-      newJuliaBound
+      newJuliaBound,
     );
   });
 
@@ -305,19 +321,19 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.IS_NEWTON,
-      1
+      1,
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
+      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NUMERATOR,
-      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
+      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.DENOMINATOR,
-      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
+      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   });
 
@@ -333,19 +349,19 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.IS_NEWTON,
-      0
+      0,
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
+      props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.NUMERATOR,
-      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
+      props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.DENOMINATOR,
-      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
+      props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   });
 
@@ -361,7 +377,7 @@ describe("Interactions", () => {
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.JULIA_HSV,
-      props.configuration.juliaHSV
+      props.configuration.juliaHSV,
     );
   });
 
@@ -384,7 +400,7 @@ describe("Interactions", () => {
         props.configuration.defaultAttractor.saturationOffset,
         props.configuration.defaultAttractor.valueStrength,
         props.configuration.defaultAttractor.valueOffset,
-      ]
+      ],
     );
   });
 
@@ -407,7 +423,7 @@ describe("Interactions", () => {
         props.configuration.infinityAttractor.saturationOffset,
         props.configuration.infinityAttractor.valueStrength,
         props.configuration.infinityAttractor.valueOffset,
-      ]
+      ],
     );
   });
 
@@ -418,18 +434,18 @@ describe("Interactions", () => {
 
     // Add an attractor
     animationFrame.vm.$props.configuration.attractors.push(
-      new Attractor(new Complex(0, 0), 36, 0.1, 0.2, 0.3, 0.4)
+      new Attractor(new Complex(0, 0), 36, 0.1, 0.2, 0.3, 0.4),
     );
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ATTRACTORS,
-      [0, 0, 0, 0, 36, 0.1, 0.2, 0.3, 0.4]
+      [0, 0, 0, 0, 36, 0.1, 0.2, 0.3, 0.4],
     );
     expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
       FractalGeneratorParameters.ATTRACTORS_COUNT,
-      props.configuration.attractors.length
+      props.configuration.attractors.length,
     );
   });
 

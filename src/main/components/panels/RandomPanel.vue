@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import MinMaxInput from "@/components/inputs/MinMaxInput.vue";
+import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
+import IconTextButton from "@/components/primitives/IconTextButton.vue";
+import MultiComboBox from "@/components/primitives/MultiComboBox.vue";
 import CoefficientTypes from "@/constants/CoefficientTypes";
 import FunctionTypes from "@/constants/FunctionTypes";
 import Configuration from "@/models/Configuration";
-import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
-import IconTextButton from "@/components/primitives/IconTextButton.vue";
-import MinMaxInput from "@/components/inputs/MinMaxInput.vue";
-import MultiComboBox from "@/components/primitives/MultiComboBox.vue";
 import { ref } from "vue";
 
 const configuration = defineModel<Configuration>("configuration", { required: true });

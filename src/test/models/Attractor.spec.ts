@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import Complex from "@/models/Complex";
 import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
 import RandomUtils from "@/utils/RandomUtils";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -18,7 +18,7 @@ describe("constructor", () => {
       saturationStrength,
       saturationOffset,
       valueStrength,
-      valueOffset
+      valueOffset,
     );
 
     expect(attractor.complex).toBe(complex);
@@ -33,7 +33,7 @@ describe("constructor", () => {
 describe("toString", () => {
   it("properly returns a string representation of the attractor", () =>
     expect(new Attractor(new Complex(4, 2), 210, 3.6, 4.2, 3, 6).toString()).toBe(
-      "Attractor(4 + 2i, 210, 3.6, 4.2, 3, 6)"
+      "Attractor(4 + 2i, 210, 3.6, 4.2, 3, 6)",
     ));
 });
 
@@ -55,7 +55,7 @@ describe("fromJSON", () => {
         saturationStrength,
         saturationOffset,
         valueStrength,
-        valueOffset
+        valueOffset,
       ),
     },
     {
@@ -112,7 +112,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(Attractor.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(Attractor.fromJSON(json)).toEqual(output)),
   );
 
   it("properly constructs from JSON", () => {
@@ -133,7 +133,7 @@ describe("fromJSON", () => {
     });
 
     expect(attractor).toEqual(
-      new Attractor(complex, hue, saturationStrength, saturationOffset, valueStrength, valueOffset)
+      new Attractor(complex, hue, saturationStrength, saturationOffset, valueStrength, valueOffset),
     );
   });
 });
@@ -172,9 +172,9 @@ describe("toJSON", () => {
           saturationStrength,
           saturationOffset,
           valueStrength,
-          valueOffset
-        ).toJSON()
-      ).toEqual(json))
+          valueOffset,
+        ).toJSON(),
+      ).toEqual(json)),
   );
 });
 

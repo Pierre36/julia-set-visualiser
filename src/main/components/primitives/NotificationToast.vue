@@ -46,7 +46,9 @@ defineExpose({ show });
 
 .v-enter-active,
 .v-leave-active {
-  transition: bottom var(--duration) ease-in-out, opacity var(--duration) ease-in-out;
+  transition:
+    bottom var(--duration) ease-in-out,
+    opacity var(--duration) ease-in-out;
 }
 
 .v-enter-from,

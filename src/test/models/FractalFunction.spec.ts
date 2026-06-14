@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
-import FractalFunction from "@/models/FractalFunction";
-import Polynomial from "@/models/Polynomial";
+import FunctionTypes from "@/constants/FunctionTypes";
+import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
-import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
+import FractalFunction from "@/models/FractalFunction";
+import Polynomial from "@/models/Polynomial";
 import RandomUtils from "@/utils/RandomUtils";
-import FunctionTypes from "@/constants/FunctionTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   const numeratorCoefficient = new Complex(3, 6);
@@ -42,7 +42,7 @@ describe("constructor", () => {
       expect(fractalFunction.getDenominatorCoefficients()).toEqual(expectedDenominator);
       expect(fractalFunction.getFunctionType()).toEqual(type);
       expect(fractalFunction.newtonCoefficient).toEqual(newtonCoefficient);
-    })
+    }),
   );
 });
 
@@ -61,7 +61,7 @@ describe("getDenominatorCoefficients", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial({}),
       FunctionTypes.FRACTION,
-      denominator
+      denominator,
     );
 
     expect(fractalFunction.getDenominatorCoefficients()).toEqual(denominator.getCoefficients());
@@ -96,7 +96,7 @@ describe("setCoefficient", () => {
       inNumerator: true,
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: newCoefficient }),
-        FunctionTypes.DEFAULT
+        FunctionTypes.DEFAULT,
       ),
     },
     {
@@ -105,7 +105,7 @@ describe("setCoefficient", () => {
       inNumerator: false,
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
-        FunctionTypes.DEFAULT
+        FunctionTypes.DEFAULT,
       ),
     },
     {
@@ -114,7 +114,7 @@ describe("setCoefficient", () => {
       inNumerator: true,
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: newCoefficient }),
-        FunctionTypes.NEWTON
+        FunctionTypes.NEWTON,
       ),
     },
     {
@@ -123,7 +123,7 @@ describe("setCoefficient", () => {
       inNumerator: true,
       expectedFunction: new FractalFunction(
         new Polynomial({ 0: newCoefficient, 1: numeratorCoefficient }),
-        FunctionTypes.NEWTON
+        FunctionTypes.NEWTON,
       ),
     },
     {
@@ -133,7 +133,7 @@ describe("setCoefficient", () => {
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
         FunctionTypes.FRACTION,
-        new Polynomial({ 1: newCoefficient })
+        new Polynomial({ 1: newCoefficient }),
       ),
     },
   ];
@@ -145,13 +145,13 @@ describe("setCoefficient", () => {
       const fractalFunction = new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
         type,
-        new Polynomial({ 1: denominatorCoefficient })
+        new Polynomial({ 1: denominatorCoefficient }),
       );
 
       fractalFunction.setCoefficient(power, newCoefficient, inNumerator);
 
       expect(fractalFunction).toEqual(expectedFunction);
-    })
+    }),
   );
 });
 
@@ -172,7 +172,7 @@ describe("removeCoefficient", () => {
       inNumerator: false,
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
-        FunctionTypes.DEFAULT
+        FunctionTypes.DEFAULT,
       ),
     },
     {
@@ -187,7 +187,7 @@ describe("removeCoefficient", () => {
       inNumerator: true,
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
-        FunctionTypes.NEWTON
+        FunctionTypes.NEWTON,
       ),
     },
     {
@@ -197,7 +197,7 @@ describe("removeCoefficient", () => {
       expectedFunction: new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
         FunctionTypes.FRACTION,
-        new Polynomial({})
+        new Polynomial({}),
       ),
     },
   ];
@@ -209,13 +209,13 @@ describe("removeCoefficient", () => {
       const fractalFunction = new FractalFunction(
         new Polynomial({ 1: numeratorCoefficient }),
         type,
-        new Polynomial({ 1: denominatorCoefficient })
+        new Polynomial({ 1: denominatorCoefficient }),
       );
 
       fractalFunction.removeCoefficient(power, inNumerator);
 
       expect(fractalFunction).toEqual(expectedFunction);
-    })
+    }),
   );
 });
 
@@ -234,11 +234,11 @@ describe("getDenominatorAvailablePowers", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial({}),
       FunctionTypes.FRACTION,
-      denominator
+      denominator,
     );
 
     expect(fractalFunction.getDenominatorAvailablePowers()).toEqual(
-      denominator.getAvailablePowers()
+      denominator.getAvailablePowers(),
     );
   });
 });
@@ -249,7 +249,7 @@ describe("getNumeratorCoefficientsEllipseParameters", () => {
     const fractalFunction = new FractalFunction(numerator, FunctionTypes.DEFAULT);
 
     expect(fractalFunction.getNumeratorCoefficientsEllipseParameters()).toEqual(
-      numerator.getCoefficientsEllipseParameters()
+      numerator.getCoefficientsEllipseParameters(),
     );
   });
 });
@@ -260,11 +260,11 @@ describe("getDenominatorCoefficientsEllipseParameters", () => {
     const fractalFunction = new FractalFunction(
       new Polynomial({}),
       FunctionTypes.FRACTION,
-      denominator
+      denominator,
     );
 
     expect(fractalFunction.getDenominatorCoefficientsEllipseParameters()).toEqual(
-      denominator.getCoefficientsEllipseParameters()
+      denominator.getCoefficientsEllipseParameters(),
     );
   });
 });
@@ -272,7 +272,7 @@ describe("getDenominatorCoefficientsEllipseParameters", () => {
 describe("getFunctionType", () => {
   it("returns the function type", () =>
     expect(new FractalFunction(new Polynomial({}), FunctionTypes.NEWTON).getFunctionType()).toEqual(
-      FunctionTypes.NEWTON
+      FunctionTypes.NEWTON,
     ));
 });
 
@@ -288,7 +288,7 @@ describe("setFunctionType", () => {
         numerator,
         FunctionTypes.NEWTON,
         new Polynomial({ 1: new Complex(6, 12) }),
-        new Complex(1, 0)
+        new Complex(1, 0),
       ),
     },
     {
@@ -305,7 +305,7 @@ describe("setFunctionType", () => {
       fractalFunction.setFunctionType(newType);
 
       expect(fractalFunction).toEqual(expectedFunction);
-    })
+    }),
   );
 });
 
@@ -323,7 +323,7 @@ describe("fromJSON", () => {
         new Polynomial({ 3: new Complex(3, 6) }),
         functionType,
         new Polynomial({ 6: new Complex(4, 2) }),
-        new Complex(1, 6)
+        new Complex(1, 6),
       ),
     },
     {
@@ -370,7 +370,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(FractalFunction.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(FractalFunction.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -385,7 +385,7 @@ describe("toJSON", () => {
       numerator,
       functionType,
       denominator,
-      newtonCoefficient
+      newtonCoefficient,
     ).toJSON();
 
     expect(json).toEqual({
@@ -404,8 +404,8 @@ describe("toString", () => {
         new Polynomial({}),
         FunctionTypes.FRACTION,
         new Polynomial({}),
-        new Complex(1, 0)
-      ).toString()
+        new Complex(1, 0),
+      ).toString(),
     ).toBe("FractalFunction(Polynomial(0), Polynomial(0), FRACTION, 1)");
   });
 });
@@ -433,7 +433,7 @@ describe("toMathML", () => {
   const positiveNewtonMathML = `${prefix}<mi>z</mi><mo>-</mo>${positiveConstant.toMathML()}${pEqual}</math>${withText}${numerator.toMathML()}</math>`;
   const negativeNewtonMathML = `${prefix}<mi>z</mi><mo>+</mo>${negativeConstant.toMathML()}${pEqual}</math>${withText}${numerator.toMathML()}</math>`;
   const nonConstantNewtonMathML = `${prefix}<mi>z</mi><mo>-</mo>${nonConstant.toMathML(
-    "N"
+    "N",
   )}${pEqual}</math>${withText}${numerator.toMathML()}</math>`;
   const fractionMathML = `${prefix}${pOverQ}</math>${withText}${numerator.toMathML()}</math>${qEqual}${denominator.toMathML()}</math>`;
 
@@ -449,7 +449,7 @@ describe("toMathML", () => {
         numerator,
         FunctionTypes.NEWTON,
         undefined,
-        positiveConstant
+        positiveConstant,
       ),
       mathML: positiveNewtonMathML,
     },
@@ -459,7 +459,7 @@ describe("toMathML", () => {
         numerator,
         FunctionTypes.NEWTON,
         undefined,
-        negativeConstant
+        negativeConstant,
       ),
       mathML: negativeNewtonMathML,
     },
@@ -477,7 +477,7 @@ describe("toMathML", () => {
 
   testCases.forEach(({ functionDescription, fractalFunction, mathML }) =>
     it(`returns the correct mathML string for ${functionDescription}`, () =>
-      expect(fractalFunction.toMathML()).toBe(mathML))
+      expect(fractalFunction.toMathML()).toBe(mathML)),
   );
 });
 
@@ -487,7 +487,7 @@ describe("copy", () => {
       new Polynomial({ 2: new Complex(3, 6) }),
       FunctionTypes.NEWTON,
       new Polynomial({ 1: new Complex(6, 12) }),
-      new Complex(1, 0)
+      new Complex(1, 0),
     );
 
     expect(fractalFunction.copy()).toEqual(fractalFunction);
@@ -511,7 +511,7 @@ describe("getRandomFractalFunction", () => {
         randomPolynomial,
         FunctionTypes.DEFAULT,
         new Polynomial({ 0: new Complex(1, 0) }),
-        randomCoefficient
+        randomCoefficient,
       ),
     },
     {
@@ -520,14 +520,14 @@ describe("getRandomFractalFunction", () => {
         randomPolynomial,
         FunctionTypes.FRACTION,
         randomPolynomial,
-        randomCoefficient
+        randomCoefficient,
       ),
     },
   ];
 
   testCases.forEach(({ type, expectedFunction }) =>
     it(``, () => {
-      RandomUtils.pickAmong<FunctionTypes> = vi.fn(() => type);
+      vi.spyOn(RandomUtils, "pickAmong").mockImplementation(() => type);
       CoefficientUtils.getRandomCoefficient = vi.fn(() => randomCoefficient);
       RandomUtils.integerBetween = vi.fn((min, _) => min);
       Polynomial.getRandomPolynomial = vi.fn(() => randomPolynomial);
@@ -543,7 +543,7 @@ describe("getRandomFractalFunction", () => {
       expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledWith(coefficients);
       expect(RandomUtils.integerBetween).toHaveBeenCalledWith(
         minCoefficientsCount,
-        maxCoefficientsCount
+        maxCoefficientsCount,
       );
 
       if (type === FunctionTypes.FRACTION) {
@@ -565,6 +565,6 @@ describe("getRandomFractalFunction", () => {
       }
 
       expect(randomFractalFunction).toEqual(expectedFunction);
-    })
+    }),
   );
 });

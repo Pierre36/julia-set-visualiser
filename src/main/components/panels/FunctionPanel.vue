@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import ComboBox, { type ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import CoefficientInput from "@/components/inputs/CoefficientInput.vue";
-import IconTextButton from "@/components/primitives/IconTextButton.vue";
 import CoefficientItem from "@/components/items/CoefficientItem.vue";
+import ComboBox, { type ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
+import IconTextButton from "@/components/primitives/IconTextButton.vue";
+import FunctionTypes from "@/constants/FunctionTypes";
 import Complex from "@/models/Complex";
 import FractalFunction from "@/models/FractalFunction";
-import FunctionTypes from "@/constants/FunctionTypes";
 import { computed, ref, type Ref } from "vue";
 
 const fractalFunction = defineModel<FractalFunction>("fractalFunction", { required: true });
@@ -21,10 +21,10 @@ const numeratorCoefficients = computed(() => fractalFunction.value.getNumeratorC
 const denominatorCoefficients = computed(() => fractalFunction.value.getDenominatorCoefficients());
 
 const numeratorAvailablePowers = computed(() =>
-  fractalFunction.value.getNumeratorAvailablePowers()
+  fractalFunction.value.getNumeratorAvailablePowers(),
 );
 const denominatorAvailablePowers = computed(() =>
-  fractalFunction.value.getDenominatorAvailablePowers()
+  fractalFunction.value.getDenominatorAvailablePowers(),
 );
 
 const canAddCoefficientToNumerator = computed(() => numeratorAvailablePowers.value.length != 0);
@@ -33,7 +33,7 @@ const canAddCoefficientToDenominator = computed(() => denominatorAvailablePowers
 const numeratorHeading = computed(() =>
   fractalFunction.value.getFunctionType() == FunctionTypes.FRACTION
     ? "Numerator coefficients"
-    : "Coefficients"
+    : "Coefficients",
 );
 
 function updateDegree(previousDegree: number, newDegree: number, inNumerator: boolean) {

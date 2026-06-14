@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, useTemplateRef, watch, type ComputedRef, type Ref } from "vue";
-import Configuration from "@/models/Configuration";
 import ComboBox, { type ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import NotificationToast from "@/components/primitives/NotificationToast.vue";
+import Configuration from "@/models/Configuration";
+import { computed, onMounted, ref, useTemplateRef, watch, type ComputedRef, type Ref } from "vue";
 
 const LOCALE_STORAGE_KEY = "custom_configuration";
 
@@ -20,7 +20,7 @@ const configurationOptions: ComputedRef<ComboBoxOption<string>[]> = computed(() 
   Object.values(configurations.value).map((configuration) => ({
     id: configuration.id,
     text: configuration.name,
-  }))
+  })),
 );
 
 watch(configuration, switchToCustomConfiguration, { deep: true });
@@ -90,10 +90,10 @@ function saveConfiguration() {
 function downloadConfiguration() {
   console.debug("[>>] Downloading the current custom configuration...");
 
-  var fileContent = JSON.stringify(configuration.value.toJSON());
-  var blob = new Blob([fileContent], { type: "application/json" });
-  var url = window.URL.createObjectURL(blob);
-  var a = document.createElement("a");
+  const fileContent = JSON.stringify(configuration.value.toJSON());
+  const blob = new Blob([fileContent], { type: "application/json" });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
   a.href = url;
   a.download = "custom_configuration.json";
   a.click();
@@ -168,7 +168,9 @@ header {
   min-width: var(--page-min-width);
   background-color: var(--gray-400);
   display: grid;
-  grid-template-columns: var(--sideNav-width) auto minmax(min-content, 15rem) max-content max-content max-content;
+  grid-template-columns:
+    var(--sideNav-width) auto minmax(min-content, 15rem)
+    max-content max-content max-content;
   align-items: center;
   gap: 0.75rem;
   padding-right: 0.5rem;

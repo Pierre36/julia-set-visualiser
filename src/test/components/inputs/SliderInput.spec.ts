@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { DOMWrapper, mount } from "@vue/test-utils";
-import SliderInput, { type Props } from "@/components/inputs/SliderInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import SliderInput, { type Props } from "@/components/inputs/SliderInput.vue";
+import { DOMWrapper, mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   value: number;

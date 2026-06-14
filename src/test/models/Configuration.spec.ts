@@ -1,11 +1,11 @@
-import { describe, it, expect, vi } from "vitest";
-import Configuration from "@/models/Configuration";
+import FunctionTypes from "@/constants/FunctionTypes";
+import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import Configuration from "@/models/Configuration";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
 import Polynomial from "@/models/Polynomial";
-import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
 import RandomUtils from "@/utils/RandomUtils";
-import FunctionTypes from "@/constants/FunctionTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -21,7 +21,7 @@ describe("constructor", () => {
       new Polynomial({}),
       FunctionTypes.DEFAULT,
       new Polynomial({}),
-      new Complex(0, 0)
+      new Complex(0, 0),
     );
     const juliaHSV = [0, 0, 0];
     const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
@@ -41,7 +41,7 @@ describe("constructor", () => {
       juliaHSV,
       defaultAttractor,
       infinityAttractor,
-      attractors
+      attractors,
     );
 
     expect(configuration.id).toBe(id);
@@ -63,7 +63,7 @@ describe("constructor", () => {
 describe("toString", () => {
   it("properly returns a string representation of the configuration", () => {
     expect(Configuration.defaultConfiguration("ID", "Name").toString()).toBe(
-      "Configuration(ID, Name, 1, 2, 0, 20, 0.001, 1, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), [])"
+      "Configuration(ID, Name, 1, 2, 0, 20, 0.001, 1, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), [])",
     );
   });
 });
@@ -79,7 +79,7 @@ describe("fromJSON", () => {
   const juliaBound = 4;
   const fractalFunction = new FractalFunction(
     new Polynomial({ 0: new Complex(3, 4) }),
-    FunctionTypes.DEFAULT
+    FunctionTypes.DEFAULT,
   );
   const juliaHSV = [1, 2, 3];
   const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
@@ -119,7 +119,7 @@ describe("fromJSON", () => {
         juliaHSV,
         defaultAttractor,
         infinityAttractor,
-        [attractor]
+        [attractor],
       ),
     },
     { description: "does not accept undefined", json: undefined, output: undefined },
@@ -167,7 +167,7 @@ describe("fromJSON", () => {
   }
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(Configuration.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(Configuration.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -185,7 +185,7 @@ describe("toJSON", () => {
       new Polynomial({}),
       FunctionTypes.DEFAULT,
       new Polynomial({}),
-      new Complex(0, 0)
+      new Complex(0, 0),
     );
     const juliaHSV = [0, 0, 0];
     const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
@@ -206,7 +206,7 @@ describe("toJSON", () => {
       juliaHSV,
       defaultAttractor,
       infinityAttractor,
-      attractors
+      attractors,
     ).toJSON();
 
     expect(json).toEqual({
@@ -242,12 +242,12 @@ describe("copy", () => {
         new Polynomial({}),
         FunctionTypes.DEFAULT,
         new Polynomial({ 0: new Complex(1, 0) }),
-        new Complex(1, 0)
+        new Complex(1, 0),
       ),
       [0, 0, 0],
       new Attractor(undefined, 0, 0, 0, 0, 0),
       new Attractor(undefined, 0, 0, 0, 0, 0),
-      [new Attractor(new Complex(3, 6), 5, 6, 7, 8, 9)]
+      [new Attractor(new Complex(3, 6), 5, 6, 7, 8, 9)],
     );
 
     expect(configuration.copy()).toEqual(configuration);
@@ -284,12 +284,12 @@ describe("randomise", () => {
       juliaHSV,
       defaultAttractor,
       infinityAttractor,
-      attractors
+      attractors,
     );
 
     const randomFractalFunction = new FractalFunction(
       new Polynomial({ 0: new Complex(3, 6) }),
-      FunctionTypes.DEFAULT
+      FunctionTypes.DEFAULT,
     );
     FractalFunction.getRandomFractalFunction = vi.fn(() => randomFractalFunction);
     RandomUtils.floatBetween = vi.fn((min, _) => min);
@@ -325,7 +325,7 @@ describe("randomise", () => {
     configuration.randomise(params);
 
     expect(FractalFunction.getRandomFractalFunction).toHaveBeenCalledWith(
-      fractalFunctionParameters
+      fractalFunctionParameters,
     );
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(0, 1);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(2, 3);
@@ -352,8 +352,8 @@ describe("randomise", () => {
         [0, 2, 4],
         randomAttractor,
         randomAttractor,
-        []
-      )
+        [],
+      ),
     );
   });
 });

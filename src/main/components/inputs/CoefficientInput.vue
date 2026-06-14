@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import ComplexCircleInput from "@/components/inputs/ComplexCircleInput.vue";
+import ComplexEllipseInput from "@/components/inputs/ComplexEllipseInput.vue";
+import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import ComplexLineInput from "@/components/inputs/ComplexLineInput.vue";
+import ComboBox from "@/components/primitives/ComboBox.vue";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
-import ComplexLine from "@/models/ComplexLine";
 import ComplexEllipse from "@/models/ComplexEllipse";
-import ComboBox from "@/components/primitives/ComboBox.vue";
-import ComplexInput from "@/components/inputs/ComplexInput.vue";
-import ComplexCircleInput from "@/components/inputs/ComplexCircleInput.vue";
-import ComplexLineInput from "@/components/inputs/ComplexLineInput.vue";
-import ComplexEllipseInput from "@/components/inputs/ComplexEllipseInput.vue";
-import type Coefficient from "@/models/Coefficient";
+import ComplexLine from "@/models/ComplexLine";
+import { computed } from "vue";
 
 export interface Props {
   level?: number;

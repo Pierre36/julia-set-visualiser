@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { flushPromises, mount } from "@vue/test-utils";
-import Configuration from "@/models/Configuration";
 import SideBar from "@/components/layout/SideBar.vue";
-import SidePanel from "@/components/panels/SidePanel.vue";
 import SideNav from "@/components/panels/SideNav.vue";
+import SidePanel from "@/components/panels/SidePanel.vue";
+import Configuration from "@/models/Configuration";
+import { flushPromises, mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps {
   configuration: Configuration;

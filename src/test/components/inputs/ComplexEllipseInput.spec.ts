@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
 import type { Props } from "@/components/inputs/ComplexEllipseInput.vue";
-import ComplexEllipse from "@/models/ComplexEllipse";
-import Complex from "@/models/Complex";
 import ComplexEllipseInput from "@/components/inputs/ComplexEllipseInput.vue";
 import ComplexInput from "@/components/inputs/ComplexInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import Complex from "@/models/Complex";
+import ComplexEllipse from "@/models/ComplexEllipse";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   ellipse: ComplexEllipse;

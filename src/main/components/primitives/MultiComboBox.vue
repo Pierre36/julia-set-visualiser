@@ -1,6 +1,6 @@
 <script setup generic="T" lang="ts">
+import type { ComboBoxOption } from "@/components/primitives/ComboBox.vue";
 import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue";
-import type { ComboBoxOption } from "./primitives/ComboBox.vue";
 
 export interface Props<T> {
   id: string;
@@ -61,7 +61,7 @@ function makeFocusedVisible() {
   } else if (bottom > popup.value!.clientHeight) {
     popup.value?.scrollTo(
       0,
-      optionItem!.offsetTop - popup.value.clientHeight + optionItem!.clientHeight
+      optionItem!.offsetTop - popup.value.clientHeight + optionItem!.clientHeight,
     );
   }
 }

@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from "vitest";
-import Polynomial from "@/models/Polynomial";
-import ComplexCircle from "@/models/ComplexCircle";
-import Complex from "@/models/Complex";
 import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
+import Complex from "@/models/Complex";
+import ComplexCircle from "@/models/ComplexCircle";
 import ComplexLine from "@/models/ComplexLine";
+import Polynomial from "@/models/Polynomial";
 import RandomUtils from "@/utils/RandomUtils";
+import { describe, expect, it, vi } from "vitest";
 
 describe("MAX_DEGREE", () => it("is 15", () => expect(Polynomial.MAX_DEGREE).toBe(15)));
 
@@ -59,7 +59,7 @@ describe("getCoefficient", () => {
   ];
 
   testCases.forEach(({ description, power, output }) =>
-    it(`${description}`, () => expect(polynomial.getCoefficient(power)).toEqual(output))
+    it(`${description}`, () => expect(polynomial.getCoefficient(power)).toEqual(output)),
   );
 });
 
@@ -75,21 +75,21 @@ describe("setCoefficient", () => {
     polynomial.setCoefficient(0, newCoefficient0);
 
     expect(polynomial).toEqual(
-      new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2 })
+      new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2 }),
     );
 
     const newCoefficient5 = new Complex(3, 4);
     polynomial.setCoefficient(5, newCoefficient5);
 
     expect(polynomial).toEqual(
-      new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2, 5: newCoefficient5 })
+      new Polynomial({ 0: newCoefficient0, 1: coefficient1, 2: coefficient2, 5: newCoefficient5 }),
     );
   });
 
   it("throws an error if the power is too high", () => {
     const polynomial = new Polynomial({});
     expect(() =>
-      polynomial.setCoefficient(Polynomial.MAX_DEGREE + 1, new Complex(0, 0))
+      polynomial.setCoefficient(Polynomial.MAX_DEGREE + 1, new Complex(0, 0)),
     ).toThrowError();
   });
 
@@ -130,7 +130,7 @@ describe("getDerivative", () => {
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
     expect(polynomial.getDerivative()).toEqual(
-      new Polynomial({ 0: coefficient1, 1: coefficient2.multipliedBy(2) })
+      new Polynomial({ 0: coefficient1, 1: coefficient2.multipliedBy(2) }),
     );
   });
 });
@@ -206,7 +206,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(Polynomial.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(Polynomial.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -228,7 +228,7 @@ describe("toString", () => {
         0: new Complex(0, 0),
         1: new Complex(1, 0),
         2: new Complex(2, 0),
-      }).toString()
+      }).toString(),
     ).toBe("Polynomial(2z^2 + 1z + 0)");
   });
 
@@ -253,10 +253,10 @@ describe("toMathML", () => {
 
     expect(polynomial.toMathML()).toBe(
       `<mrow>${coefficient2.toMathML(
-        2
+        2,
       )}<msup><mi>z</mi><mn>2</mn></msup></mrow><mrow><mo>+</mo></mrow><mrow>${coefficient1.toMathML(
-        1
-      )}<mi>z</mi></mrow><mrow><mo>-</mo></mrow><mrow>${coefficient0.toMathML()}</mrow>`
+        1,
+      )}<mi>z</mi></mrow><mrow><mo>-</mo></mrow><mrow>${coefficient0.toMathML()}</mrow>`,
     );
   });
 
@@ -296,7 +296,7 @@ describe("getRandomPolynomial", () => {
     expect(CoefficientUtils.getRandomCoefficient).toHaveBeenCalledTimes(2);
 
     expect(randomPolynomial).toEqual(
-      new Polynomial({ 0: randomCoefficient, 1: randomCoefficient })
+      new Polynomial({ 0: randomCoefficient, 1: randomCoefficient }),
     );
   });
 });

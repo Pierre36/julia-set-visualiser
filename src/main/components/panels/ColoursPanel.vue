@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Attractor from "@/models/Attractor";
-import Complex from "@/models/Complex";
+import SliderInput from "@/components/inputs/SliderInput.vue";
 import AttractorItem from "@/components/items/AttractorItem.vue";
 import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
-import SliderInput from "@/components/inputs/SliderInput.vue";
 import IconTextButton from "@/components/primitives/IconTextButton.vue";
+import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
 import { computed, type ComputedRef } from "vue";
 
 const juliaHSV = defineModel<number[]>("juliaHSV", { required: true });

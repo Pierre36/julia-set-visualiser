@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Complex from "@/models/Complex";
-import Attractor from "@/models/Attractor";
-import SliderInput from "@/components/inputs/SliderInput.vue";
 import ComplexInput from "@/components/inputs/ComplexInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import SliderInput from "@/components/inputs/SliderInput.vue";
+import Attractor from "@/models/Attractor";
+import Complex from "@/models/Complex";
 
 export interface Props {
   isDefault?: boolean;

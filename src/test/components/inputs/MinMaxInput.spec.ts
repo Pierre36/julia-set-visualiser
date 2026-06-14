@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
 import MinMaxInput, { type Props } from "@/components/inputs/MinMaxInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   minValue: number;

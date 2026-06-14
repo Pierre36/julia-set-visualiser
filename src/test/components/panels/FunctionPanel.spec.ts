@@ -1,16 +1,16 @@
-import { describe, it, expect, beforeEach, beforeAll, afterAll } from "vitest";
-import { config, mount, VueWrapper } from "@vue/test-utils";
-import FractalFunction from "@/models/FractalFunction";
-import Polynomial from "@/models/Polynomial";
-import ComplexCircle from "@/models/ComplexCircle";
-import Complex from "@/models/Complex";
-import FunctionTypes from "@/constants/FunctionTypes";
-import FunctionPanel from "@/components/panels/FunctionPanel.vue";
-import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
-import ComboBox from "@/components/primitives/ComboBox.vue";
 import CoefficientInput from "@/components/inputs/CoefficientInput.vue";
 import CoefficientItem from "@/components/items/CoefficientItem.vue";
+import FunctionPanel from "@/components/panels/FunctionPanel.vue";
+import ComboBox from "@/components/primitives/ComboBox.vue";
+import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
 import IconTextButton from "@/components/primitives/IconTextButton.vue";
+import FunctionTypes from "@/constants/FunctionTypes";
+import Complex from "@/models/Complex";
+import ComplexCircle from "@/models/ComplexCircle";
+import FractalFunction from "@/models/FractalFunction";
+import Polynomial from "@/models/Polynomial";
+import { config, mount, VueWrapper } from "@vue/test-utils";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps {
   fractalFunction: FractalFunction;
@@ -23,7 +23,7 @@ const fractalFunction = new FractalFunction(
     0: new ComplexCircle(new Complex(0, 0), 1, 2000),
     2: new Complex(1, 0),
   }),
-  FunctionTypes.DEFAULT
+  FunctionTypes.DEFAULT,
 );
 
 beforeAll(() => {
@@ -147,17 +147,17 @@ describe("Render", () => {
     expect(coefficientItems.length).toBe(2);
     expect(coefficientItems[0].vm.$props.degree).toBe(0);
     expect(coefficientItems[0].vm.$props.coefficient).toEqual(
-      props.fractalFunction.getCoefficient(0, true)
+      props.fractalFunction.getCoefficient(0, true),
     );
     expect(coefficientItems[0].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.getNumeratorAvailablePowers()
+      props.fractalFunction.getNumeratorAvailablePowers(),
     );
     expect(coefficientItems[1].vm.$props.degree).toBe(2);
     expect(coefficientItems[1].vm.$props.coefficient).toEqual(
-      props.fractalFunction.getCoefficient(2, true)
+      props.fractalFunction.getCoefficient(2, true),
     );
     expect(coefficientItems[1].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.getNumeratorAvailablePowers()
+      props.fractalFunction.getNumeratorAvailablePowers(),
     );
 
     // Check the add button renders correctly
@@ -241,10 +241,10 @@ describe("Render", () => {
     expect(coefficientItems.length).toBe(1);
     expect(coefficientItems[0].vm.$props.degree).toBe(0);
     expect(coefficientItems[0].vm.$props.coefficient).toEqual(
-      props.fractalFunction.getCoefficient(0, false)
+      props.fractalFunction.getCoefficient(0, false),
     );
     expect(coefficientItems[0].vm.$props.availablePowers).toEqual(
-      props.fractalFunction.getDenominatorAvailablePowers()
+      props.fractalFunction.getDenominatorAvailablePowers(),
     );
 
     // Check the add button renders correctly
@@ -260,7 +260,7 @@ describe("Render", () => {
       new Polynomial({}),
       FunctionTypes.FRACTION,
       fullPolynomial,
-      new Complex(1, 0)
+      new Complex(1, 0),
     );
     functionPanel = mount(FunctionPanel, { props: props, shallow: true });
 

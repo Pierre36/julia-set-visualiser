@@ -1,14 +1,14 @@
-import computeShaderSource from "@/shaders/compute_shader.wgsl?raw";
-import vertexShaderSource from "@/shaders/vertex_shader.wgsl?raw";
-import fragmentShaderSource from "@/shaders/fragment_shader.wgsl?raw";
-import Polynomial from "@/models/Polynomial";
-import Configuration from "@/models/Configuration";
-import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import FunctionTypes from "@/constants/FunctionTypes";
+import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import type Measurements from "@/measurements/Measurements";
+import RollingAverage from "@/measurements/RollingAverage";
 import type TimingHelper from "@/measurements/TimingHelper";
 import TimingHelperFactory from "@/measurements/TimingHelperFactory";
-import RollingAverage from "@/measurements/RollingAverage";
-import type Measurements from "@/measurements/Measurements";
+import Configuration from "@/models/Configuration";
+import Polynomial from "@/models/Polynomial";
+import computeShaderSource from "@/shaders/compute_shader.wgsl?raw";
+import fragmentShaderSource from "@/shaders/fragment_shader.wgsl?raw";
+import vertexShaderSource from "@/shaders/vertex_shader.wgsl?raw";
 
 /** Number of vertices to render */
 const VERTICES_COUNT = 6;
@@ -156,7 +156,7 @@ export default class WebGpuFractalGenerator {
     private buffers: { [K in BufferNames]: BufferDetails },
     private bindGroup: GPUBindGroup,
     private computePipeline: GPUComputePipeline,
-    private renderPipeline: GPURenderPipeline
+    private renderPipeline: GPURenderPipeline,
   ) {
     this.paused = false;
     this.animationTime = 0;
@@ -174,7 +174,7 @@ export default class WebGpuFractalGenerator {
    * @param canvas animation canvas
    */
   public static async initialise(
-    canvas: HTMLCanvasElement
+    canvas: HTMLCanvasElement,
   ): Promise<WebGpuFractalGenerator | Error> {
     // Get the GPU device
     const gpuDevice = await this.loadWebGPU();
@@ -203,7 +203,7 @@ export default class WebGpuFractalGenerator {
       buffers,
       bindGroup,
       computePipeline,
-      renderPipeline
+      renderPipeline,
     );
   }
 
@@ -412,7 +412,7 @@ export default class WebGpuFractalGenerator {
    */
   private static createContext(
     canvas: HTMLCanvasElement,
-    gpuDevice: GPUDevice
+    gpuDevice: GPUDevice,
   ): GPUCanvasContext | Error {
     const context = canvas.getContext("webgpu");
 
@@ -472,7 +472,7 @@ export default class WebGpuFractalGenerator {
   private static createBindGroup(
     gpuDevice: GPUDevice,
     bindGroupLayout: GPUBindGroupLayout,
-    buffers: { [K in BufferNames]: BufferDetails }
+    buffers: { [K in BufferNames]: BufferDetails },
   ): GPUBindGroup {
     return gpuDevice.createBindGroup({
       label: "Fractal renderer bind group",
@@ -499,7 +499,7 @@ export default class WebGpuFractalGenerator {
    */
   private static createComputePipeline(
     gpuDevice: GPUDevice,
-    bindGroupLayout: GPUBindGroupLayout
+    bindGroupLayout: GPUBindGroupLayout,
   ): GPUComputePipeline {
     return gpuDevice.createComputePipeline({
       label: "Fractal compute pipeline",
@@ -526,7 +526,7 @@ export default class WebGpuFractalGenerator {
    */
   private static createRenderPipeline(
     gpuDevice: GPUDevice,
-    bindGroupLayout: GPUBindGroupLayout
+    bindGroupLayout: GPUBindGroupLayout,
   ): GPURenderPipeline {
     return gpuDevice.createRenderPipeline({
       label: "Fractal render pipeline",
@@ -574,7 +574,7 @@ export default class WebGpuFractalGenerator {
     this.updateViewportDimensionRatio();
     this.updateParameter(
       FractalGeneratorParameters.COORDINATES_SCALE,
-      configuration.coordinatesScale
+      configuration.coordinatesScale,
     );
     this.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
       configuration.coordinatesCentre.re,
@@ -585,33 +585,33 @@ export default class WebGpuFractalGenerator {
 
     this.updateParameter(
       FractalGeneratorParameters.IS_NEWTON,
-      configuration.fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0
+      configuration.fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0,
     );
     this.updateParameter(
       FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
-      configuration.fractalFunction.getNumeratorCoefficients().length
+      configuration.fractalFunction.getNumeratorCoefficients().length,
     );
     this.updateParameter(
       FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
-      configuration.fractalFunction.getDenominatorCoefficients().length
+      configuration.fractalFunction.getDenominatorCoefficients().length,
     );
     this.updateParameter(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
-      configuration.fractalFunction.newtonCoefficient.getEllipseParameters()
+      configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
 
     this.updateParameter(
       FractalGeneratorParameters.NUMERATOR,
-      configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters()
+      configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     this.updateParameter(
       FractalGeneratorParameters.DENOMINATOR,
-      configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters()
+      configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
 
     this.updateParameter(
       FractalGeneratorParameters.ITERATIONS_COUNT,
-      configuration.iterationsCount
+      configuration.iterationsCount,
     );
     this.updateParameter(FractalGeneratorParameters.EPSILON, configuration.epsilon);
     this.updateParameter(FractalGeneratorParameters.JULIA_BOUND, configuration.juliaBound);
@@ -632,7 +632,7 @@ export default class WebGpuFractalGenerator {
     ]);
     this.updateParameter(
       FractalGeneratorParameters.ATTRACTORS_COUNT,
-      configuration.attractors.length
+      configuration.attractors.length,
     );
     this.updateParameter(
       FractalGeneratorParameters.ATTRACTORS,
@@ -646,7 +646,7 @@ export default class WebGpuFractalGenerator {
         attractor.saturationOffset,
         attractor.valueStrength,
         attractor.valueOffset,
-      ])
+      ]),
     );
   }
 
@@ -666,7 +666,7 @@ export default class WebGpuFractalGenerator {
   public updateViewportDimensionRatio() {
     this.updateParameter(
       FractalGeneratorParameters.DIMENSION_RATIO,
-      this.canvas.clientWidth / this.canvas.clientHeight
+      this.canvas.clientWidth / this.canvas.clientHeight,
     );
   }
 
@@ -722,7 +722,7 @@ export default class WebGpuFractalGenerator {
     this.gpuDevice.queue.writeBuffer(
       this.buffers[bufferName].buffer,
       0,
-      this.buffers[bufferName].values
+      this.buffers[bufferName].values,
     );
   }
 

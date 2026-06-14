@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
-import Complex from "@/models/Complex";
 import ComplexInput, { type Props } from "@/components/inputs/ComplexInput.vue";
+import Complex from "@/models/Complex";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   complex: Complex;

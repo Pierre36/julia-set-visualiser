@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import PanelId from "@/components/panels/PanelId";
 import SideNav from "@/components/panels/SideNav.vue";
 import SidePanel from "@/components/panels/SidePanel.vue";
 import Configuration from "@/models/Configuration";
 import { onBeforeMount, ref, type Ref } from "vue";
-import PanelId from "@/components/panels/PanelId";
 
 const LOCALE_STORAGE_KEY = "side_panel_collapsed";
 
@@ -34,7 +34,7 @@ const panels: Ref<Panel[]> = ref([
 ]);
 
 onBeforeMount(
-  () => (sidePanelCollapsed.value = !(localStorage.getItem(LOCALE_STORAGE_KEY) === "false"))
+  () => (sidePanelCollapsed.value = !(localStorage.getItem(LOCALE_STORAGE_KEY) === "false")),
 );
 
 function updateSidePanelCollapsed(): void {

@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import RandomUtils from "@/utils/RandomUtils";
-import CoefficientTypes from "@/constants/CoefficientTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -25,7 +25,7 @@ describe("isZero", () => {
   ];
 
   testCases.forEach(({ circle, isZero }) =>
-    it(`returns ${isZero} for ${circle}`, () => expect(circle.isZero()).toBe(isZero))
+    it(`returns ${isZero} for ${circle}`, () => expect(circle.isZero()).toBe(isZero)),
   );
 });
 
@@ -55,7 +55,7 @@ describe("multipliedBy", () => {
 
   testCases.forEach(({ circle, factor, result }) =>
     it(`returns ${result} for ${circle} multiplied by ${factor}`, () =>
-      expect(circle.multipliedBy(factor)).toEqual(result))
+      expect(circle.multipliedBy(factor)).toEqual(result)),
   );
 });
 
@@ -104,7 +104,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(ComplexCircle.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(ComplexCircle.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -128,14 +128,14 @@ describe("toJSON", () => {
 describe("toString", () => {
   it("properly returns a string representation of the circle", () =>
     expect(new ComplexCircle(new Complex(4, 2), 3, 6).toString()).toBe(
-      "ComplexCircle(4 + 2i, 3, 6)"
+      "ComplexCircle(4 + 2i, 3, 6)",
     ));
 });
 
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () =>
     expect(new ComplexCircle(new Complex(3, 6), 42, 1000).toMathML(1)).toBe(
-      "<msub><mi>c</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>"
+      "<msub><mi>c</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>",
     ));
 });
 

@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
-import Configuration from "@/models/Configuration";
 import MainHeader from "@/components/layout/MainHeader.vue";
 import ComboBox from "@/components/primitives/ComboBox.vue";
 import NotificationToast from "@/components/primitives/NotificationToast.vue";
+import Configuration from "@/models/Configuration";
+import { flushPromises, mount, VueWrapper } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 interface TestProps {
   configuration: Configuration;
@@ -69,7 +69,7 @@ describe("Render", () => {
     // Check the documentation button is rendered correctly
     expect(docButton.text()).toBe("Documentation");
     expect(docButton.attributes()["href"]).toBe(
-      "https://github.com/Pierre36/julia-set-visualiser/blob/main/README.md"
+      "https://github.com/Pierre36/julia-set-visualiser/blob/main/README.md",
     );
   });
 
@@ -91,7 +91,7 @@ describe("Render", () => {
     // Mount the MainHeader
     localStorage.setItem(
       "custom_configuration",
-      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON())
+      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON()),
     );
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
     await flushPromises();
@@ -125,7 +125,7 @@ describe("Render", () => {
     // Mount the MainHeader
     localStorage.setItem(
       "custom_configuration",
-      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON())
+      JSON.stringify(Configuration.emptyConfiguration("", "").toJSON()),
     );
     const mainHeader = mount(MainHeader, { props: props, shallow: true });
     await flushPromises();
@@ -170,7 +170,7 @@ describe("Interactions", () => {
     savedConfiguration.id = "CUSTOM";
     savedConfiguration.name = "Custom";
     expect(localStorage.getItem("custom_configuration")).toBe(
-      JSON.stringify(savedConfiguration.toJSON())
+      JSON.stringify(savedConfiguration.toJSON()),
     );
     expect(saveToast.vm.show).toBeCalled();
   });

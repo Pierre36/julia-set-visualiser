@@ -26,7 +26,7 @@ const isWrong = ref(false);
 const input = useTemplateRef<HTMLInputElement>("input");
 
 const inputValue: ComputedRef<string | undefined> = computed(() =>
-  isWrong.value ? input.value?.value : value.value.toString()
+  isWrong.value ? input.value?.value : value.value.toString(),
 );
 
 function stepDown(): void {

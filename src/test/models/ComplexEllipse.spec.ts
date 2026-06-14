@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
+import CoefficientTypes from "@/constants/CoefficientTypes";
 import Complex from "@/models/Complex";
 import ComplexEllipse from "@/models/ComplexEllipse";
 import RandomUtils from "@/utils/RandomUtils";
-import CoefficientTypes from "@/constants/CoefficientTypes";
+import { describe, expect, it, vi } from "vitest";
 
 describe("constructor", () => {
   it("properly constructs", () => {
@@ -29,7 +29,7 @@ describe("isZero", () => {
   ];
 
   testCases.forEach(({ ellipse, isZero }) =>
-    it(`returns ${isZero} for ${ellipse}`, () => expect(ellipse.isZero()).toBe(isZero))
+    it(`returns ${isZero} for ${ellipse}`, () => expect(ellipse.isZero()).toBe(isZero)),
   );
 });
 
@@ -59,7 +59,7 @@ describe("multipliedBy", () => {
 
   testCases.forEach(({ ellipse, factor, result }) =>
     it(`returns ${result} for ${ellipse} multiplied by ${factor}`, () =>
-      expect(ellipse.multipliedBy(factor)).toEqual(result))
+      expect(ellipse.multipliedBy(factor)).toEqual(result)),
   );
 });
 
@@ -143,7 +143,7 @@ describe("fromJSON", () => {
   ];
 
   testCases.forEach(({ description, json, output }) =>
-    it(`${description}`, () => expect(ComplexEllipse.fromJSON(json)).toEqual(output))
+    it(`${description}`, () => expect(ComplexEllipse.fromJSON(json)).toEqual(output)),
   );
 });
 
@@ -171,14 +171,14 @@ describe("toJSON", () => {
 describe("toString", () => {
   it("properly returns a string representation of the ellipse", () =>
     expect(new ComplexEllipse(new Complex(4, 2), 3, 6, 4, 2).toString()).toBe(
-      "ComplexEllipse(4 + 2i, 3, 6, 4, 2)"
+      "ComplexEllipse(4 + 2i, 3, 6, 4, 2)",
     ));
 });
 
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () =>
     expect(new ComplexEllipse(new Complex(0, 0), 36, 42, 16, 0).toMathML(1)).toBe(
-      "<msub><mi>e</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>"
+      "<msub><mi>e</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>",
     ));
 });
 

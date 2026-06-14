@@ -1,8 +1,8 @@
-import Polynomial from "@/models/Polynomial";
-import Complex from "@/models/Complex";
-import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
-import RandomUtils from "@/utils/RandomUtils";
 import FunctionTypes from "@/constants/FunctionTypes";
+import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
+import Complex from "@/models/Complex";
+import Polynomial from "@/models/Polynomial";
+import RandomUtils from "@/utils/RandomUtils";
 import type Coefficient from "./Coefficient";
 import type { JsonSerialisable } from "./JsonSerialisable";
 
@@ -29,7 +29,7 @@ export default class FractalFunction implements JsonSerialisable {
     private numerator: Polynomial,
     private functionType: FunctionTypes,
     private denominator: Polynomial = new Polynomial({}),
-    public newtonCoefficient: Coefficient = new Complex(0, 0)
+    public newtonCoefficient: Coefficient = new Complex(0, 0),
   ) {
     this.numerator = numerator;
 
@@ -284,7 +284,7 @@ export default class FractalFunction implements JsonSerialisable {
       this.numerator.copy(),
       this.functionType,
       this.denominator.copy(),
-      this.newtonCoefficient.copy()
+      this.newtonCoefficient.copy(),
     );
   }
 
@@ -299,7 +299,7 @@ export default class FractalFunction implements JsonSerialisable {
     const newNewtonCoefficient = CoefficientUtils.getRandomCoefficient(params.coefficients);
     const coefficientsCount = RandomUtils.integerBetween(
       params.minCoefficientsCount,
-      params.maxCoefficientsCount
+      params.maxCoefficientsCount,
     );
 
     const numeratorCoefficientsCount =

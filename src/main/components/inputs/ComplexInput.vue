@@ -15,7 +15,7 @@ const isWrong = ref(false);
 const input = useTemplateRef<HTMLInputElement>("input");
 
 const inputValue: ComputedRef<string | undefined> = computed(() =>
-  isWrong.value ? input.value?.value : complex.value.toString()
+  isWrong.value ? input.value?.value : complex.value.toString(),
 );
 
 function checkAndUpdate(): void {

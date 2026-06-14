@@ -1,17 +1,17 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
+import CoefficientInput, { type Props } from "@/components/inputs/CoefficientInput.vue";
+import ComplexCircleInput from "@/components/inputs/ComplexCircleInput.vue";
+import ComplexEllipseInput from "@/components/inputs/ComplexEllipseInput.vue";
+import ComplexInput from "@/components/inputs/ComplexInput.vue";
+import ComplexLineInput from "@/components/inputs/ComplexLineInput.vue";
+import ComboBox from "@/components/primitives/ComboBox.vue";
+import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
 import Complex from "@/models/Complex";
 import ComplexCircle from "@/models/ComplexCircle";
 import ComplexEllipse from "@/models/ComplexEllipse";
-import CoefficientTypes from "@/constants/CoefficientTypes";
-import CoefficientInput, { type Props } from "@/components/inputs/CoefficientInput.vue";
-import ComboBox from "@/components/primitives/ComboBox.vue";
-import ComplexInput from "@/components/inputs/ComplexInput.vue";
-import ComplexCircleInput from "@/components/inputs/ComplexCircleInput.vue";
-import ComplexLineInput from "@/components/inputs/ComplexLineInput.vue";
-import ComplexEllipseInput from "@/components/inputs/ComplexEllipseInput.vue";
 import ComplexLine from "@/models/ComplexLine";
-import type Coefficient from "@/models/Coefficient";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps extends Props {
   coefficient: Coefficient;

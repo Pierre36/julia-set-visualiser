@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { mount } from "@vue/test-utils";
 import Configuration from "@/models/Configuration";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import App from "@/App.vue";
+import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 import MainHeader from "@/components/layout/MainHeader.vue";
 import SideBar from "@/components/layout/SideBar.vue";
-import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 
 describe("Render", () => {
   let customConfiguration: Configuration;

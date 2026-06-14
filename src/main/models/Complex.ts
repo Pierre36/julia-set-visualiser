@@ -1,7 +1,7 @@
-import RandomUtils from "@/utils/RandomUtils";
-import NumberUtils from "@/utils/NumberUtils";
-import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import NumberUtils from "@/utils/NumberUtils";
+import RandomUtils from "@/utils/RandomUtils";
 
 const COMPLEX_REGEX =
   /^(?:(-?\d+(?:\.\d+)?)|(-?\d*|-?\d+\.\d+)i|(-?\d+(?:\.\d+)?)([+-])(\d*|\d+\.\d+)i)$/;
@@ -19,7 +19,10 @@ export default class Complex implements Coefficient {
    * @param re real part of the complex number
    * @param im imaginary part of the complex number
    */
-  public constructor(public re: number, public im: number) {}
+  public constructor(
+    public re: number,
+    public im: number,
+  ) {}
 
   /**
    * Compute the modulus of this complex number
@@ -190,7 +193,7 @@ export default class Complex implements Coefficient {
     const angle = RandomUtils.floatBetween(0, 2 * Math.PI);
     return new Complex(
       NumberUtils.toPrecision(modulus * Math.cos(angle), 2),
-      NumberUtils.toPrecision(modulus * Math.sin(angle), 2)
+      NumberUtils.toPrecision(modulus * Math.sin(angle), 2),
     );
   }
 }

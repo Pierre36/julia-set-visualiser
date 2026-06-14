@@ -1,6 +1,6 @@
+import type Coefficient from "@/models/Coefficient";
 import CoefficientUtils, { type RandomCoefficientParameters } from "@/models/CoefficientUtils";
 import RandomUtils from "@/utils/RandomUtils";
-import type Coefficient from "@/models/Coefficient";
 import type { JsonSerialisable } from "./JsonSerialisable";
 
 export interface RandomPolynomialParameters {
@@ -150,7 +150,7 @@ export default class Polynomial implements JsonSerialisable {
   public toJSON(): any {
     const json: Record<number, Coefficient> = {};
     this.getCoefficients().forEach(
-      ({ power, coefficient }) => (json[power] = coefficient.toJSON())
+      ({ power, coefficient }) => (json[power] = coefficient.toJSON()),
     );
     return json;
   }
@@ -168,7 +168,7 @@ export default class Polynomial implements JsonSerialisable {
         (power > 1 ? `^${power}` : "") +
         (string !== "" ? " + " : "") +
         string,
-      ""
+      "",
     );
     return `Polynomial(${string || "0"})`;
   }
@@ -201,7 +201,7 @@ export default class Polynomial implements JsonSerialisable {
   public copy(): Polynomial {
     const polynomial = new Polynomial({});
     this.getCoefficients().forEach(({ power, coefficient }) =>
-      polynomial.setCoefficient(power, coefficient)
+      polynomial.setCoefficient(power, coefficient),
     );
     return polynomial;
   }

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
-import RandomUtils from "@/utils/RandomUtils";
 import NumberUtils from "@/utils/NumberUtils";
+import RandomUtils from "@/utils/RandomUtils";
+import { describe, expect, it, vi } from "vitest";
 
 describe("floatBetween", () => {
   it("returns a random float between the min and max with the precision", () => {

@@ -1,7 +1,7 @@
-import RandomUtils from "@/utils/RandomUtils";
-import Complex, { type RandomComplexParameters } from "@/models/Complex";
-import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import RandomUtils from "@/utils/RandomUtils";
 
 export interface RandomCircleParameters {
   centre: RandomComplexParameters;
@@ -20,7 +20,11 @@ export default class ComplexCircle implements Coefficient {
    * @param radius radius of the circle
    * @param duration duration of the animation in milliseconds
    */
-  public constructor(public centre: Complex, public radius: number, public duration: number) {}
+  public constructor(
+    public centre: Complex,
+    public radius: number,
+    public duration: number,
+  ) {}
 
   public isZero() {
     return this.centre.isZero() && this.radius === 0;
@@ -88,7 +92,7 @@ export default class ComplexCircle implements Coefficient {
     return new ComplexCircle(
       Complex.getRandomComplex(params.centre),
       RandomUtils.floatBetween(params.minRadius, params.maxRadius),
-      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
+      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
     );
   }
 }

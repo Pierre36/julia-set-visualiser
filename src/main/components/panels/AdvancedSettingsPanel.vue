@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
 import ComplexInput from "@/components/inputs/ComplexInput.vue";
 import NumberInput from "@/components/inputs/NumberInput.vue";
+import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
 import type Configuration from "@/models/Configuration";
 
 const configuration = defineModel<Configuration>("configuration", { required: true });

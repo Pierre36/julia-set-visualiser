@@ -1,7 +1,7 @@
-import RandomUtils from "@/utils/RandomUtils";
-import Complex, { type RandomComplexParameters } from "@/models/Complex";
-import type Coefficient from "@/models/Coefficient";
 import CoefficientTypes from "@/constants/CoefficientTypes";
+import type Coefficient from "@/models/Coefficient";
+import Complex, { type RandomComplexParameters } from "@/models/Complex";
+import RandomUtils from "@/utils/RandomUtils";
 
 export interface RandomEllipseParameters {
   centre: RandomComplexParameters;
@@ -33,7 +33,7 @@ export default class ComplexEllipse implements Coefficient {
     public halfWidth: number,
     public halfHeight: number,
     public rotationAngle: number,
-    public duration: number
+    public duration: number,
   ) {}
 
   public isZero() {
@@ -50,7 +50,7 @@ export default class ComplexEllipse implements Coefficient {
       this.halfWidth * factor,
       this.halfHeight * factor,
       this.rotationAngle,
-      this.duration
+      this.duration,
     );
   }
 
@@ -90,7 +90,7 @@ export default class ComplexEllipse implements Coefficient {
       json.halfWidth,
       json.halfHeight,
       json.rotationAngle,
-      json.duration
+      json.duration,
     );
   }
 
@@ -119,7 +119,7 @@ export default class ComplexEllipse implements Coefficient {
       this.halfWidth,
       this.halfHeight,
       this.rotationAngle,
-      this.duration
+      this.duration,
     );
   }
 
@@ -135,7 +135,7 @@ export default class ComplexEllipse implements Coefficient {
       RandomUtils.floatBetween(params.minHalfWidth, params.maxHalfWidth),
       RandomUtils.floatBetween(params.minHalfHeight, params.maxHalfHeight),
       RandomUtils.floatBetween(params.minRotationAngle, params.maxRotationAngle),
-      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000
+      RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
     );
   }
 }

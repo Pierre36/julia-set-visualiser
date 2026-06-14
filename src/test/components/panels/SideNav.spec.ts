@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { mount } from "@vue/test-utils";
-import SideNav, { type Props } from "@/components/panels/SideNav.vue";
 import PanelId from "@/components/panels/PanelId";
+import SideNav, { type Props } from "@/components/panels/SideNav.vue";
+import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 interface TestProps extends Props {
   currentPanel: PanelId;
@@ -32,7 +32,7 @@ describe("Render", () => {
     navHeight = 100;
     vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(() => navHeight);
     vi.spyOn(HTMLLIElement.prototype, "clientHeight", "get").mockImplementation(
-      () => navItemHeight
+      () => navItemHeight,
     );
   });
 
@@ -191,7 +191,7 @@ describe("Interactions", () => {
     navHeight = 100;
     vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(() => navHeight);
     vi.spyOn(HTMLLIElement.prototype, "clientHeight", "get").mockImplementation(
-      () => navItemHeight
+      () => navItemHeight,
     );
   });
 
@@ -674,13 +674,13 @@ describe("Interactions", () => {
     documentEventListeners.forEach((eventListener) => {
       expect(documentRemoveListener).toHaveBeenCalledWith(
         eventListener.event,
-        eventListener.listener
+        eventListener.listener,
       );
     });
     windowEventListeners.forEach((eventListener) => {
       expect(windowRemoveListener).toHaveBeenCalledWith(
         eventListener.event,
-        eventListener.listener
+        eventListener.listener,
       );
     });
   });
