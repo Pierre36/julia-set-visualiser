@@ -9,6 +9,7 @@ struct FunctionParameters {
 
 struct EllipseParameters {
   duration: f32,
+  delay: f32,
   angle: f32,
   half_width: f32,
   half_height: f32,
@@ -23,7 +24,10 @@ struct EllipseParameters {
 @group(0) @binding(4) var<storage, read_write> fraction: array<vec3f>;
 
 fn evaluate(params: EllipseParameters) -> vec2f {
-  let theta = select(2 * PI * (time % params.duration) / params.duration, 0, params.duration <= 0);
+  var theta: f32 = 0.0;
+  if (params.duration > 0.0) {
+    theta = (2 * PI * (time - params.delay) / params.duration) % (2 * PI);
+  }
   return vec2f(
     params.offset_mod * cos(params.offset_arg - params.angle) + params.half_width * cos(theta),
     params.offset_mod * sin(params.offset_arg - params.angle) + params.half_height * sin(theta)

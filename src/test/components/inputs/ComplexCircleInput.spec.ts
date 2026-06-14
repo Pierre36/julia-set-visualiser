@@ -13,7 +13,7 @@ interface TestProps extends Props {
 
 let props: TestProps;
 
-const circle = new ComplexCircle(new Complex(3, 6), 36, 2000);
+const circle = new ComplexCircle(new Complex(3, 6), 36, 2000, 1000);
 const level = 1;
 
 describe("Render", () => {
@@ -29,7 +29,7 @@ describe("Render", () => {
     for (let i = 1; i < 6 && i != level; i++) {
       expect(circleInput.findAll("h" + i).length).toBe(0);
     }
-    expect(circleInput.findAll("h" + level).length).toBe(3);
+    expect(circleInput.findAll("h" + level).length).toBe(4);
   });
 
   it("has a complex input for the centre of the circle", () => {
@@ -68,6 +68,20 @@ describe("Render", () => {
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });
+
+  it("has a number input for the delay of the animation", () => {
+    const circleInput = mount(ComplexCircleInput, { props: props });
+    const fourthHeading = circleInput.findAll("h" + level)[3];
+    expect(fourthHeading.text()).toBe("Delay");
+    const numberInput = circleInput.findAllComponents(NumberInput)[2];
+    expect(numberInput.vm.$props.value).toEqual(circle.delay / 1000);
+    expect(numberInput.vm.$props.min).toBeUndefined();
+    expect(numberInput.vm.$props.max).toBeUndefined();
+    expect(numberInput.vm.$props.step).toBe(1);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
+    expect(numberInput.vm.$props.label).toBe("Delay");
+  });
 });
 
 describe("Interactions", () => {
@@ -103,5 +117,14 @@ describe("Interactions", () => {
     numberInput.vm.$emit("update:value", newDuration / 1000);
     await circleInput.vm.$nextTick();
     expect(circle.duration).toEqual(newDuration);
+  });
+
+  it("correctly changes the delay of the animation", async () => {
+    const circleInput = mount(ComplexCircleInput, { props: props });
+    const numberInput = circleInput.findAllComponents(NumberInput)[2];
+    const newDelay = 2000;
+    numberInput.vm.$emit("update:value", newDelay / 1000);
+    await circleInput.vm.$nextTick();
+    expect(circle.delay).toEqual(newDelay);
   });
 });

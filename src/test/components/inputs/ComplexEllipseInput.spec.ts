@@ -13,7 +13,7 @@ interface TestProps extends Props {
 
 let props: TestProps;
 
-const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
+const ellipse = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000, 1000);
 const level = 1;
 
 describe("Render for type ELLIPSE", () => {
@@ -29,7 +29,7 @@ describe("Render for type ELLIPSE", () => {
     for (let i = 1; i < 6 && i != level; i++) {
       expect(ellipseInput.findAll("h" + i).length).toBe(0);
     }
-    expect(ellipseInput.findAll("h" + level).length).toBe(5);
+    expect(ellipseInput.findAll("h" + level).length).toBe(6);
   });
 
   it("has a complex input for the centre of the ellipse", () => {
@@ -96,6 +96,20 @@ describe("Render for type ELLIPSE", () => {
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });
+
+  it("has a number input for the delay of the animation", () => {
+    const ellipseInput = mount(ComplexEllipseInput, { props: props });
+    const sixthHeading = ellipseInput.findAll("h" + level)[5];
+    expect(sixthHeading.text()).toBe("Delay");
+    const numberInput = ellipseInput.findAllComponents(NumberInput)[4];
+    expect(numberInput.vm.$props.value).toEqual(ellipse.delay / 1000);
+    expect(numberInput.vm.$props.min).toBeUndefined();
+    expect(numberInput.vm.$props.max).toBeUndefined();
+    expect(numberInput.vm.$props.step).toBe(1);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
+    expect(numberInput.vm.$props.label).toBe("Delay");
+  });
 });
 
 describe("Interactions", () => {
@@ -149,5 +163,14 @@ describe("Interactions", () => {
     numberInput.vm.$emit("update:value", newDuration / 1000);
     await ellipseInput.vm.$nextTick();
     expect(ellipse.duration).toEqual(newDuration);
+  });
+
+  it("correctly changes the delay of the animation", async () => {
+    const ellipseInput = mount(ComplexEllipseInput, { props: props });
+    const numberInput = ellipseInput.findAllComponents(NumberInput)[4];
+    const newDelay = 2000;
+    numberInput.vm.$emit("update:value", newDelay / 1000);
+    await ellipseInput.vm.$nextTick();
+    expect(ellipse.delay).toEqual(newDelay);
   });
 });

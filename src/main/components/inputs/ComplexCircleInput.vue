@@ -12,7 +12,7 @@ export interface Props {
 const { level = 4 } = defineProps<Props>();
 
 const circle = defineModel<ComplexCircle>("circle", {
-  default: new ComplexCircle(new Complex(0, 0), 1, 5000),
+  default: new ComplexCircle(new Complex(0, 0), 1, 5000, 0),
 });
 
 const heading = computed(() => `h${level}`);
@@ -20,6 +20,11 @@ const heading = computed(() => `h${level}`);
 const durationSecond = computed({
   get: () => circle.value.duration / 1000,
   set: (duration) => (circle.value.duration = duration * 1000),
+});
+
+const delaySecond = computed({
+  get: () => circle.value.delay / 1000,
+  set: (delay) => (circle.value.delay = delay * 1000),
 });
 </script>
 
@@ -30,6 +35,8 @@ const durationSecond = computed({
   <NumberInput v-model:value="circle.radius" :min="0" :step="0.1" label="Circle radius" />
   <component :is="heading">Duration</component>
   <NumberInput v-model:value="durationSecond" :min="0" :step="1" label="Duration" />
+  <component :is="heading">Delay</component>
+  <NumberInput v-model:value="delaySecond" :step="1" label="Delay" />
 </template>
 
 <style scoped>

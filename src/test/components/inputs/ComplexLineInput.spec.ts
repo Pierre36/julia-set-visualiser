@@ -13,7 +13,7 @@ interface TestProps extends Props {
 
 let props: TestProps;
 
-const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 const level = 1;
 
 describe("Render", () => {
@@ -29,7 +29,7 @@ describe("Render", () => {
     for (let i = 1; i < 6 && i != props.level; i++) {
       expect(lineInput.findAll("h" + i).length).toBe(0);
     }
-    expect(lineInput.findAll("h" + props.level).length).toBe(3);
+    expect(lineInput.findAll("h" + props.level).length).toBe(4);
   });
 
   it("has a complex input for the start of the line", () => {
@@ -63,6 +63,20 @@ describe("Render", () => {
     expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
     expect(numberInput.vm.$props.label).toBe("Duration");
   });
+
+  it("has a number input for the delay of the animation", () => {
+    const lineInput = mount(ComplexLineInput, { props: props });
+    const fourthHeading = lineInput.findAll("h" + level)[3];
+    expect(fourthHeading.text()).toBe("Delay");
+    const numberInput = lineInput.findAllComponents(NumberInput)[1];
+    expect(numberInput.vm.$props.value).toEqual(line.delay / 1000);
+    expect(numberInput.vm.$props.min).toBeUndefined();
+    expect(numberInput.vm.$props.max).toBeUndefined();
+    expect(numberInput.vm.$props.step).toBe(1);
+    expect(numberInput.vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInput.vm.$props.wrongInputMessage).toBe("Please enter a valid number");
+    expect(numberInput.vm.$props.label).toBe("Delay");
+  });
 });
 
 describe("Interactions", () => {
@@ -93,10 +107,19 @@ describe("Interactions", () => {
 
   it("correctly changes the duration of the animation", async () => {
     const lineInput = mount(ComplexLineInput, { props: props });
-    const numberInput = lineInput.findComponent(NumberInput);
+    const numberInput = lineInput.findAllComponents(NumberInput)[0];
     const newDuration = 1000;
     numberInput.vm.$emit("update:value", newDuration / 1000);
     await lineInput.vm.$nextTick();
     expect(line.duration).toEqual(newDuration);
+  });
+
+  it("correctly changes the delay of the animation", async () => {
+    const lineInput = mount(ComplexLineInput, { props: props });
+    const numberInput = lineInput.findAllComponents(NumberInput)[1];
+    const newDelay = 2000;
+    numberInput.vm.$emit("update:value", newDelay / 1000);
+    await lineInput.vm.$nextTick();
+    expect(line.delay).toEqual(newDelay);
   });
 });

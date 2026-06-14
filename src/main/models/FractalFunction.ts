@@ -176,6 +176,7 @@ export default class FractalFunction implements JsonSerialisable {
    * @param json the JSON to deserialise
    * @returns the fractal function or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): FractalFunction | undefined {
     if (json === undefined) return undefined;
 

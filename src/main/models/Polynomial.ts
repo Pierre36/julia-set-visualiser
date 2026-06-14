@@ -118,7 +118,7 @@ export default class Polynomial implements JsonSerialisable {
         return 0;
       })
       .flatMap(({ power, coef }) => [
-        ...(coef?.getEllipseParameters() || [0, 0, 0, 0, 0, 0]),
+        ...(coef?.getEllipseParameters() || [0, 0, 0, 0, 0, 0, 0]),
         power,
       ]);
   }
@@ -129,6 +129,7 @@ export default class Polynomial implements JsonSerialisable {
    * @param json the JSON to deserialise
    * @returns the polynomial or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): Polynomial | undefined {
     if (json === undefined) return undefined;
 
@@ -147,6 +148,7 @@ export default class Polynomial implements JsonSerialisable {
     return polynomial;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     const json: Record<number, Coefficient> = {};
     this.getCoefficients().forEach(

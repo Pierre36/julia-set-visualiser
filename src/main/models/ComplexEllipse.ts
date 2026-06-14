@@ -13,6 +13,8 @@ export interface RandomEllipseParameters {
   maxRotationAngle: number;
   minDuration: number;
   maxDuration: number;
+  minDelay: number;
+  maxDelay: number;
 }
 
 /**
@@ -27,6 +29,7 @@ export default class ComplexEllipse implements Coefficient {
    * @param halfHeight half-height of the ellipse
    * @param rotationAngle rotation angle of the ellipse (in degrees)
    * @param duration duration of the animation in milliseconds.
+   * @param delay delay negative time offset in milliseconds
    */
   public constructor(
     public centre: Complex,
@@ -34,6 +37,7 @@ export default class ComplexEllipse implements Coefficient {
     public halfHeight: number,
     public rotationAngle: number,
     public duration: number,
+    public delay: number,
   ) {}
 
   public isZero() {
@@ -51,12 +55,14 @@ export default class ComplexEllipse implements Coefficient {
       this.halfHeight * factor,
       this.rotationAngle,
       this.duration,
+      this.delay,
     );
   }
 
   public getEllipseParameters() {
     return [
       this.duration,
+      this.delay,
       this.rotationAngle,
       this.halfWidth,
       this.halfHeight,
@@ -71,6 +77,7 @@ export default class ComplexEllipse implements Coefficient {
    * @param json the JSON to deserialise
    * @returns the complex ellipse or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): ComplexEllipse | undefined {
     if (json === undefined) return undefined;
 
@@ -78,6 +85,7 @@ export default class ComplexEllipse implements Coefficient {
     if (json.halfHeight === undefined || !Number.isFinite(json.halfHeight)) return undefined;
     if (json.rotationAngle === undefined || !Number.isFinite(json.rotationAngle)) return undefined;
     if (json.duration === undefined || !Number.isFinite(json.duration)) return undefined;
+    if (json.delay === undefined || !Number.isFinite(json.delay)) return undefined;
 
     if (json.centre === undefined) return undefined;
     const centre = Complex.fromJSON(json.centre);
@@ -91,9 +99,11 @@ export default class ComplexEllipse implements Coefficient {
       json.halfHeight,
       json.rotationAngle,
       json.duration,
+      json.delay,
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return {
       type: CoefficientTypes.ELLIPSE,
@@ -102,11 +112,12 @@ export default class ComplexEllipse implements Coefficient {
       halfHeight: this.halfHeight,
       rotationAngle: this.rotationAngle,
       duration: this.duration,
+      delay: this.delay,
     };
   }
 
   public toString(): string {
-    return `ComplexEllipse(${this.centre}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration})`;
+    return `ComplexEllipse(${this.centre}, ${this.halfWidth}, ${this.halfHeight}, ${this.rotationAngle}, ${this.duration}, ${this.delay})`;
   }
 
   public toMathML(power: number | string): string {
@@ -120,6 +131,7 @@ export default class ComplexEllipse implements Coefficient {
       this.halfHeight,
       this.rotationAngle,
       this.duration,
+      this.delay,
     );
   }
 
@@ -136,6 +148,7 @@ export default class ComplexEllipse implements Coefficient {
       RandomUtils.floatBetween(params.minHalfHeight, params.maxHalfHeight),
       RandomUtils.floatBetween(params.minRotationAngle, params.maxRotationAngle),
       RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
+      RandomUtils.integerBetween(params.minDelay, params.maxDelay) * 1000,
     );
   }
 }

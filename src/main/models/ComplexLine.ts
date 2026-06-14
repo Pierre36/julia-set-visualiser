@@ -7,6 +7,8 @@ export interface RandomLineParameters {
   startEnd: RandomComplexParameters;
   minDuration: number;
   maxDuration: number;
+  minDelay: number;
+  maxDelay: number;
 }
 
 /**
@@ -19,11 +21,13 @@ export default class ComplexLine implements Coefficient {
    * @param start start of the line
    * @param end end of the line
    * @param duration duration of the animation in milliseconds
+   * @param delay delay negative time offset in milliseconds
    */
   public constructor(
     public start: Complex,
     public end: Complex,
     public duration: number,
+    public delay: number,
   ) {}
 
   public isZero() {
@@ -39,6 +43,7 @@ export default class ComplexLine implements Coefficient {
       this.start.multipliedBy(factor),
       this.end.multipliedBy(factor),
       this.duration,
+      this.delay,
     );
   }
 
@@ -50,6 +55,7 @@ export default class ComplexLine implements Coefficient {
     const centredLineEnd = new Complex(this.end.re - centre.re, this.end.im - centre.im);
     return [
       this.duration,
+      this.delay,
       centredLineEnd.arg(),
       centredLineEnd.mod(),
       0,
@@ -64,10 +70,12 @@ export default class ComplexLine implements Coefficient {
    * @param json the JSON to deserialise
    * @returns the complex line or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): ComplexLine | undefined {
     if (json === undefined) return undefined;
 
     if (json.duration === undefined || !Number.isFinite(json.duration)) return undefined;
+    if (json.delay === undefined || !Number.isFinite(json.delay)) return undefined;
 
     if (json.start === undefined) return undefined;
     const start = Complex.fromJSON(json.start);
@@ -77,20 +85,22 @@ export default class ComplexLine implements Coefficient {
     const end = Complex.fromJSON(json.end);
     if (end == undefined) return undefined;
 
-    return new ComplexLine(start, end, json.duration);
+    return new ComplexLine(start, end, json.duration, json.delay);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return {
       type: CoefficientTypes.LINE,
       start: this.start.toJSON(),
       end: this.end.toJSON(),
       duration: this.duration,
+      delay: this.delay,
     };
   }
 
   public toString(): string {
-    return `ComplexLine(${this.start}, ${this.end}, ${this.duration})`;
+    return `ComplexLine(${this.start}, ${this.end}, ${this.duration}, ${this.delay})`;
   }
 
   public toMathML(power: number | string): string {
@@ -98,7 +108,7 @@ export default class ComplexLine implements Coefficient {
   }
 
   public copy(): ComplexLine {
-    return new ComplexLine(this.start.copy(), this.end.copy(), this.duration);
+    return new ComplexLine(this.start.copy(), this.end.copy(), this.duration, this.delay);
   }
 
   /**
@@ -112,6 +122,7 @@ export default class ComplexLine implements Coefficient {
       Complex.getRandomComplex(params.startEnd),
       Complex.getRandomComplex(params.startEnd),
       RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
+      RandomUtils.integerBetween(params.minDelay, params.maxDelay) * 1000,
     );
   }
 }

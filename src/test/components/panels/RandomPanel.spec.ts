@@ -9,6 +9,7 @@ import Configuration from "@/models/Configuration";
 import Polynomial from "@/models/Polynomial";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { findAllTypedComponents } from "../../testUtils";
 
 const coefficientsCountMinDefault = 2;
 const coefficientsCountMinMinMin = 1;
@@ -31,6 +32,11 @@ const durationMinDefault = 5;
 const durationMinMin = 1;
 const durationMaxDefault = 30;
 const durationMaxMax = 300;
+
+const delayMinDefault = -30;
+const delayMinMin = -300;
+const delayMaxDefault = 30;
+const delayMaxMax = 300;
 
 const juliaHueMinDefault = 0;
 const attractorHueMinDefault = 0;
@@ -246,6 +252,16 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum duration of circle coefficients");
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum duration of circle coefficients");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
+    expect(headings5[3].text()).toBe("Delay");
+    expect(minMaxInputs[3].vm.$props.minValue).toBe(delayMinDefault);
+    expect(minMaxInputs[3].vm.$props.maxValue).toBe(delayMaxDefault);
+    expect(minMaxInputs[3].vm.$props.min).toBe(delayMinMin);
+    expect(minMaxInputs[3].vm.$props.max).toBe(delayMaxMax);
+    expect(minMaxInputs[3].vm.$props.step).toBe(1);
+    expect(minMaxInputs[3].vm.$props.isIntegerOnly).toBe(true);
+    expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum delay for circle coefficients");
+    expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum delay for circle coefficients");
+    expect(minMaxInputs[3].vm.$props.level).toBe(6);
 
     // Check the line coefficients part renders correctly
     disclosure = disclosures[2];
@@ -280,6 +296,16 @@ describe("Render", () => {
     expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum duration of line coefficients");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
+    expect(headings5[2].text()).toBe("Delay");
+    expect(minMaxInputs[2].vm.$props.minValue).toBe(delayMinDefault);
+    expect(minMaxInputs[2].vm.$props.maxValue).toBe(delayMaxDefault);
+    expect(minMaxInputs[2].vm.$props.min).toBe(delayMinMin);
+    expect(minMaxInputs[2].vm.$props.max).toBe(delayMaxMax);
+    expect(minMaxInputs[2].vm.$props.step).toBe(1);
+    expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(true);
+    expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum delay for line coefficients");
+    expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum delay for line coefficients");
+    expect(minMaxInputs[2].vm.$props.level).toBe(6);
 
     // Check the circle coefficients part renders correctly
     disclosure = disclosures[3];
@@ -348,6 +374,16 @@ describe("Render", () => {
     expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum duration of ellipse coefficients");
     expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum duration of ellipse coefficients");
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
+    expect(headings5[5].text()).toBe("Delay");
+    expect(minMaxInputs[5].vm.$props.minValue).toBe(delayMinDefault);
+    expect(minMaxInputs[5].vm.$props.maxValue).toBe(delayMaxDefault);
+    expect(minMaxInputs[5].vm.$props.min).toBe(delayMinMin);
+    expect(minMaxInputs[5].vm.$props.max).toBe(delayMaxMax);
+    expect(minMaxInputs[5].vm.$props.step).toBe(1);
+    expect(minMaxInputs[5].vm.$props.isIntegerOnly).toBe(true);
+    expect(minMaxInputs[5].vm.$props.minLabel).toBe("Minimum delay for ellipse coefficients");
+    expect(minMaxInputs[5].vm.$props.maxLabel).toBe("Maximum delay for ellipse coefficients");
+    expect(minMaxInputs[5].vm.$props.level).toBe(6);
   });
 
   it("renders the colours section correctly", async () => {
@@ -608,10 +644,7 @@ describe("Interactions", () => {
     }
 
     // Get the DOM elements
-    // @ts-ignore
-    const multiComboBoxes: VueWrapper<MultiComboBox>[] =
-      // @ts-ignore
-      randomPanel.findAllComponents(MultiComboBox);
+    const multiComboBoxes = findAllTypedComponents(randomPanel, MultiComboBox);
     const minMaxInputs = randomPanel.findAllComponents(MinMaxInput);
     const randomiseButton = randomPanel.findComponent(IconTextButton);
 
@@ -632,7 +665,7 @@ describe("Interactions", () => {
     randomiseButton.vm.$emit("click");
 
     // Check randomise is called correctly
-    expect(props.configuration.randomise).toBeCalledWith({
+    expect(props.configuration.randomise).toHaveBeenCalledWith({
       fractalFunction: {
         types: newFunctionTypes,
         minCoefficientsCount: 0,
@@ -646,48 +679,58 @@ describe("Interactions", () => {
             maxRadius: 7,
             minDuration: 8,
             maxDuration: 9,
+            minDelay: 10,
+            maxDelay: 11,
           },
-          line: { startEnd: { minMod: 10, maxMod: 11 }, minDuration: 12, maxDuration: 13 },
+          line: {
+            startEnd: { minMod: 12, maxMod: 13 },
+            minDuration: 14,
+            maxDuration: 15,
+            minDelay: 16,
+            maxDelay: 17,
+          },
           ellipse: {
-            centre: { minMod: 14, maxMod: 15 },
-            minHalfWidth: 16,
-            maxHalfWidth: 17,
-            minHalfHeight: 18,
-            maxHalfHeight: 19,
-            minRotationAngle: 20,
-            maxRotationAngle: 21,
-            minDuration: 22,
-            maxDuration: 23,
+            centre: { minMod: 18, maxMod: 19 },
+            minHalfWidth: 20,
+            maxHalfWidth: 21,
+            minHalfHeight: 22,
+            maxHalfHeight: 23,
+            minRotationAngle: 24,
+            maxRotationAngle: 25,
+            minDuration: 26,
+            maxDuration: 27,
+            minDelay: 28,
+            maxDelay: 29,
           },
         },
       },
-      minJuliaHue: 24,
-      maxJuliaHue: 25,
-      minJuliaSaturation: 26,
-      maxJuliaSaturation: 27,
-      minJuliaValue: 28,
-      maxJuliaValue: 29,
+      minJuliaHue: 30,
+      maxJuliaHue: 31,
+      minJuliaSaturation: 32,
+      maxJuliaSaturation: 33,
+      minJuliaValue: 34,
+      maxJuliaValue: 35,
       attractors: {
-        minHue: 30,
-        maxHue: 31,
-        minSaturationStrength: 32,
-        maxSaturationStrength: 33,
-        minSaturationOffset: 34,
-        maxSaturationOffset: 35,
-        minValueStrength: 36,
-        maxValueStrength: 37,
-        minValueOffset: 38,
-        maxValueOffset: 39,
+        minHue: 36,
+        maxHue: 37,
+        minSaturationStrength: 38,
+        maxSaturationStrength: 39,
+        minSaturationOffset: 40,
+        maxSaturationOffset: 41,
+        minValueStrength: 42,
+        maxValueStrength: 43,
+        minValueOffset: 44,
+        maxValueOffset: 45,
       },
-      minViewportScale: 40,
-      maxViewportScale: 41,
-      viewportCentre: { minMod: 42, maxMod: 43 },
-      minIterationsCount: 44,
-      maxIterationsCount: 45,
-      minEpsilon: 46,
-      maxEpsilon: 47,
-      minJuliaBound: 48,
-      maxJuliaBound: 49,
+      minViewportScale: 46,
+      maxViewportScale: 47,
+      viewportCentre: { minMod: 48, maxMod: 49 },
+      minIterationsCount: 50,
+      maxIterationsCount: 51,
+      minEpsilon: 52,
+      maxEpsilon: 53,
+      minJuliaBound: 54,
+      maxJuliaBound: 55,
     });
   });
 });

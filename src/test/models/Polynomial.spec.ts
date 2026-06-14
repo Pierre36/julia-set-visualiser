@@ -11,7 +11,7 @@ describe("MAX_DEGREE", () => it("is 15", () => expect(Polynomial.MAX_DEGREE).toB
 describe("constructor", () => {
   it("properly constructs", () => {
     const coefficients = {
-      0: new ComplexCircle(new Complex(0, 0), 1, 2000),
+      0: new ComplexCircle(new Complex(0, 0), 1, 2000, 1000),
       2: new Complex(1, 0),
       36: new Complex(3, 6),
     };
@@ -26,8 +26,8 @@ describe("constructor", () => {
 describe("getCoefficients", () => {
   it("returns the coefficients with their power", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
@@ -66,8 +66,8 @@ describe("getCoefficient", () => {
 describe("setCoefficient", () => {
   it("sets coefficients", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
@@ -102,8 +102,8 @@ describe("setCoefficient", () => {
 describe("removeCoefficient", () => {
   it("removes coefficients", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
@@ -124,8 +124,8 @@ describe("removeCoefficient", () => {
 describe("getDerivative", () => {
   it("computes the derivative", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
@@ -139,8 +139,8 @@ describe("getAvailablePowers", () => {
   it("gets available powers", () => {
     const polynomial = new Polynomial({
       0: new Complex(3, 6),
-      10: new ComplexCircle(new Complex(1, 0), 2, 2000),
-      4: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
+      10: new ComplexCircle(new Complex(1, 0), 2, 2000, 1000),
+      4: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000),
     });
 
     expect(polynomial.getAvailablePowers()).toEqual([1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15]);
@@ -150,8 +150,8 @@ describe("getAvailablePowers", () => {
 describe("getCoefficientsEllipseParameters", () => {
   it("gets coefficients ellipse parameters array", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 
@@ -162,11 +162,11 @@ describe("getCoefficientsEllipseParameters", () => {
       1,
       ...coefficient2.getEllipseParameters(),
       2,
-      ...Array(91).fill(0),
+      ...Array(103).fill(0),
     ];
 
     for (let i = 0; i < 16; i++) {
-      expectedResult[(i + 1) * 7 - 1] = i;
+      expectedResult[(i + 1) * 8 - 1] = i;
     }
 
     expect(polynomial.getCoefficientsEllipseParameters()).toEqual(expectedResult);
@@ -177,9 +177,11 @@ describe("fromJSON", () => {
   const coefficient0 = new Complex(1, 2).toJSON();
   const coefficient1 = new Complex(3, 4).toJSON();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const negativePowerJson: any = {};
   negativePowerJson[-1] = coefficient0;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const tooHighPowerJson: any = {};
   tooHighPowerJson[Polynomial.MAX_DEGREE + 1] = coefficient0;
 
@@ -213,8 +215,8 @@ describe("fromJSON", () => {
 describe("toJSON", () => {
   it("properly exports to JSON", () => {
     const coef0 = new Complex(3, 6);
-    const coef1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coef2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coef1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coef2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const json = new Polynomial({ 0: coef0, 3: coef1, 6: coef2 }).toJSON();
     expect(json).toEqual({ 0: coef0.toJSON(), 3: coef1.toJSON(), 6: coef2.toJSON() });
@@ -240,8 +242,8 @@ describe("toString", () => {
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () => {
     const coefficient0 = new Complex(-3, 0);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
     const coefficient3 = new Complex(0, 0);
 
     const polynomial = new Polynomial({
@@ -270,8 +272,8 @@ describe("toMathML", () => {
 describe("copy", () => {
   it("properly copies", () => {
     const coefficient0 = new Complex(3, 6);
-    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000);
-    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+    const coefficient1 = new ComplexCircle(new Complex(1, 0), 2, 2000, 1000);
+    const coefficient2 = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000);
 
     const polynomial = new Polynomial({ 0: coefficient0, 1: coefficient1, 2: coefficient2 });
 

@@ -9,8 +9,9 @@ describe("constructor", () => {
     const start = new Complex(3, 6);
     const end = new Complex(4, 2);
     const duration = 2000;
+    const delay = 1000;
 
-    const line = new ComplexLine(start, end, duration);
+    const line = new ComplexLine(start, end, duration, delay);
 
     expect(line.start).toBe(start);
     expect(line.end).toBe(end);
@@ -20,8 +21,8 @@ describe("constructor", () => {
 
 describe("isZero", () => {
   const testCases = [
-    { line: new ComplexLine(new Complex(0, 0), new Complex(0, 0), 2000), isZero: true },
-    { line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000), isZero: false },
+    { line: new ComplexLine(new Complex(0, 0), new Complex(0, 0), 2000, 1000), isZero: true },
+    { line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000), isZero: false },
   ];
 
   testCases.forEach(({ line, isZero }) =>
@@ -31,25 +32,27 @@ describe("isZero", () => {
 
 describe("hasMinus", () => {
   it("returns false", () =>
-    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000).hasMinus()).toBe(false));
+    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000).hasMinus()).toBe(
+      false,
+    ));
 });
 
 describe("multipliedBy", () => {
   const testCases = [
     {
-      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
+      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000),
       factor: 0,
-      result: new ComplexLine(new Complex(0, 0), new Complex(0, 0), 2000),
+      result: new ComplexLine(new Complex(0, 0), new Complex(0, 0), 2000, 1000),
     },
     {
-      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
+      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000),
       factor: 2,
-      result: new ComplexLine(new Complex(6, 12), new Complex(8, 4), 2000),
+      result: new ComplexLine(new Complex(6, 12), new Complex(8, 4), 2000, 1000),
     },
     {
-      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000),
+      line: new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000),
       factor: -5,
-      result: new ComplexLine(new Complex(-15, -30), new Complex(-20, -10), 2000),
+      result: new ComplexLine(new Complex(-15, -30), new Complex(-20, -10), 2000, 1000),
     },
   ];
 
@@ -61,18 +64,19 @@ describe("multipliedBy", () => {
 
 describe("getEllipseParameters", () => {
   const duration = 1000;
+  const delay = 2000;
   const testCases = [
     {
-      line: new ComplexLine(new Complex(0, 0), new Complex(0, 0), duration),
-      result: [duration, 0, 0, 0, 0, 0],
+      line: new ComplexLine(new Complex(0, 0), new Complex(0, 0), duration, delay),
+      result: [duration, delay, 0, 0, 0, 0, 0],
     },
     {
-      line: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), duration),
-      result: [duration, 0, 1, 0, 0, 0],
+      line: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), duration, delay),
+      result: [duration, delay, 0, 1, 0, 0, 0],
     },
     {
-      line: new ComplexLine(new Complex(0, -1), new Complex(0, 1), duration),
-      result: [duration, Math.PI / 2, 1, 0, 0, 0],
+      line: new ComplexLine(new Complex(0, -1), new Complex(0, 1), duration, delay),
+      result: [duration, delay, Math.PI / 2, 1, 0, 0, 0],
     },
   ];
 
@@ -85,16 +89,18 @@ describe("fromJSON", () => {
   const start = new Complex(1, 2).toJSON();
   const end = new Complex(3, 4).toJSON();
   const duration = 5;
+  const delay = 6;
 
   const testCases = [
     {
       description: "reads JSON correctly",
-      json: { start, end, duration },
-      output: new ComplexLine(new Complex(1, 2), new Complex(3, 4), 5),
+      json: { start, end, duration, delay },
+      output: new ComplexLine(new Complex(1, 2), new Complex(3, 4), 5, 6),
     },
-    { description: "reject JSON missing start", json: { end, duration }, output: undefined },
-    { description: "reject JSON missing end", json: { start, duration }, output: undefined },
-    { description: "reject JSON missing duration", json: { start, end }, output: undefined },
+    { description: "reject JSON missing start", json: { end, duration, delay }, output: undefined },
+    { description: "reject JSON missing end", json: { start, duration, delay }, output: undefined },
+    { description: "reject JSON missing duration", json: { start, end, delay }, output: undefined },
+    { description: "reject JSON missing delay", json: { start, end, duration }, output: undefined },
     {
       description: "reject JSON with invalid start",
       json: { start: "invalid", end, duration },
@@ -110,6 +116,11 @@ describe("fromJSON", () => {
       json: { start, end, duration: "invalid" },
       output: undefined,
     },
+    {
+      description: "reject JSON with invalid delay",
+      json: { start, end, duration, delay: "invalid" },
+      output: undefined,
+    },
     { description: "handles undefined correctly", json: undefined, output: undefined },
   ];
 
@@ -123,29 +134,31 @@ describe("toJSON", () => {
     const start = new Complex(3, 6);
     const end = new Complex(4, 2);
     const duration = 2000;
+    const delay = 1000;
 
-    const json = new ComplexLine(start, end, duration).toJSON();
+    const json = new ComplexLine(start, end, duration, delay).toJSON();
 
     expect(json).toEqual({
       type: CoefficientTypes.LINE,
       start: start.toJSON(),
       end: end.toJSON(),
-      duration: duration,
+      duration,
+      delay,
     });
   });
 });
 
 describe("toString", () => {
   it("properly returns a string representation of the complex line", () => {
-    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 1).toString()).toBe(
-      "ComplexLine(3 + 6i, 4 + 2i, 1)",
+    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 1, 2).toString()).toBe(
+      "ComplexLine(3 + 6i, 4 + 2i, 1, 2)",
     );
   });
 });
 
 describe("toMathML", () => {
   it("properly returns the corresponding mathML", () =>
-    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000).toMathML(1)).toBe(
+    expect(new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 1000).toMathML(1)).toBe(
       "<msub><mi>l</mi><mn>1</mn></msub><mo form='prefix' stretchy='false'>(</mo><mi>t</mi><mo form='prefix' stretchy='false'>)</mo>",
     ));
 });
@@ -155,8 +168,9 @@ describe("copy", () => {
     const start = new Complex(3, 6);
     const end = new Complex(4, 2);
     const duration = 2000;
+    const delay = 1000;
 
-    const line = new ComplexLine(start, end, duration);
+    const line = new ComplexLine(start, end, duration, delay);
 
     expect(line.copy()).toEqual(line);
     expect(line.copy()).not.toBe(line);
@@ -169,13 +183,14 @@ describe("getRandomComplexLine", () => {
     Complex.getRandomComplex = vi.fn(() => new Complex(1, 0));
 
     const startEnd = { minMod: 0, maxMod: 1 };
-    const params = { startEnd, minDuration: 4, maxDuration: 5 };
+    const params = { startEnd, minDuration: 4, maxDuration: 5, minDelay: 6, maxDelay: 7 };
     const randomLine = ComplexLine.getRandomComplexLine(params);
 
-    expect(RandomUtils.integerBetween).toBeCalledWith(4, 5);
-    expect(Complex.getRandomComplex).toBeCalledWith(startEnd);
-    expect(Complex.getRandomComplex).toBeCalledTimes(2);
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(4, 5);
+    expect(RandomUtils.integerBetween).toHaveBeenCalledWith(6, 7);
+    expect(Complex.getRandomComplex).toHaveBeenCalledWith(startEnd);
+    expect(Complex.getRandomComplex).toHaveBeenCalledTimes(2);
 
-    expect(randomLine).toEqual(new ComplexLine(new Complex(1, 0), new Complex(1, 0), 1000));
+    expect(randomLine).toEqual(new ComplexLine(new Complex(1, 0), new Complex(1, 0), 1000, 1000));
   });
 });

@@ -22,10 +22,11 @@ export default class CoefficientUtils {
    * @param json object containing the JSON for a coefficient
    * @returns the coefficient made from the JSON if it is valid, undefined otherwise
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): Coefficient | undefined {
     if (json === undefined) return undefined;
 
-    if (json.type === CoefficientTypes.CIRCLE) return ComplexCircle.fromJSON(json);
+    if (json.type == CoefficientTypes.CIRCLE) return ComplexCircle.fromJSON(json);
     if (json.type == CoefficientTypes.LINE) return ComplexLine.fromJSON(json);
     if (json.type == CoefficientTypes.ELLIPSE) return ComplexEllipse.fromJSON(json);
     if (json.type == CoefficientTypes.CONSTANT) return Complex.fromJSON(json);

@@ -9,6 +9,8 @@ export interface RandomCircleParameters {
   maxRadius: number;
   minDuration: number;
   maxDuration: number;
+  minDelay: number;
+  maxDelay: number;
 }
 
 /** Representation of a circle in the complex plane */
@@ -19,11 +21,13 @@ export default class ComplexCircle implements Coefficient {
    * @param centre centre of the circle
    * @param radius radius of the circle
    * @param duration duration of the animation in milliseconds
+   * @param delay delay negative time offset in milliseconds
    */
   public constructor(
     public centre: Complex,
     public radius: number,
     public duration: number,
+    public delay: number,
   ) {}
 
   public isZero() {
@@ -35,11 +39,24 @@ export default class ComplexCircle implements Coefficient {
   }
 
   public multipliedBy(factor: number): ComplexCircle {
-    return new ComplexCircle(this.centre.multipliedBy(factor), this.radius * factor, this.duration);
+    return new ComplexCircle(
+      this.centre.multipliedBy(factor),
+      this.radius * factor,
+      this.duration,
+      this.delay,
+    );
   }
 
   public getEllipseParameters() {
-    return [this.duration, 0, this.radius, this.radius, this.centre.mod(), this.centre.arg()];
+    return [
+      this.duration,
+      this.delay,
+      0,
+      this.radius,
+      this.radius,
+      this.centre.mod(),
+      this.centre.arg(),
+    ];
   }
 
   /**
@@ -48,30 +65,34 @@ export default class ComplexCircle implements Coefficient {
    * @param json the JSON to deserialise
    * @returns the complex circle or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): ComplexCircle | undefined {
     if (json === undefined) return undefined;
 
     if (json.radius === undefined || !Number.isFinite(json.radius)) return undefined;
     if (json.duration === undefined || !Number.isFinite(json.duration)) return undefined;
+    if (json.delay === undefined || !Number.isFinite(json.delay)) return undefined;
 
     if (json.centre === undefined) return undefined;
     const centre = Complex.fromJSON(json.centre);
     if (centre == undefined) return undefined;
 
-    return new ComplexCircle(centre, json.radius, json.duration);
+    return new ComplexCircle(centre, json.radius, json.duration, json.delay);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return {
       type: CoefficientTypes.CIRCLE,
       centre: this.centre.toJSON(),
       radius: this.radius,
       duration: this.duration,
+      delay: this.delay,
     };
   }
 
   public toString(): string {
-    return `ComplexCircle(${this.centre}, ${this.radius}, ${this.duration})`;
+    return `ComplexCircle(${this.centre}, ${this.radius}, ${this.duration}, ${this.delay})`;
   }
 
   public toMathML(power: number | string): string {
@@ -79,7 +100,7 @@ export default class ComplexCircle implements Coefficient {
   }
 
   public copy(): ComplexCircle {
-    return new ComplexCircle(this.centre.copy(), this.radius, this.duration);
+    return new ComplexCircle(this.centre.copy(), this.radius, this.duration, this.delay);
   }
 
   /**
@@ -93,6 +114,7 @@ export default class ComplexCircle implements Coefficient {
       Complex.getRandomComplex(params.centre),
       RandomUtils.floatBetween(params.minRadius, params.maxRadius),
       RandomUtils.integerBetween(params.minDuration, params.maxDuration) * 1000,
+      RandomUtils.integerBetween(params.minDelay, params.maxDelay) * 1000,
     );
   }
 }

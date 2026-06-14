@@ -12,6 +12,7 @@ import ComplexEllipse from "@/models/ComplexEllipse";
 import ComplexLine from "@/models/ComplexLine";
 import { mount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it } from "vitest";
+import { findAllTypedComponents } from "../../testUtils";
 
 interface TestProps extends Props {
   coefficient: Coefficient;
@@ -35,9 +36,8 @@ describe("Render", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const firstHeading = coefficientInput.findAll("h" + level)[0];
     expect(firstHeading.text()).toBe("Type");
-    // @ts-ignore
-    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
-    expect(firstComboBox.vm.$props.options).toEqual([
+    const firstComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
+    expect(firstComboBox.props().options).toEqual([
       { id: CoefficientTypes.CONSTANT, text: "Constant" },
       { id: CoefficientTypes.CIRCLE, text: "Circle" },
       { id: CoefficientTypes.LINE, text: "Line" },
@@ -67,8 +67,7 @@ describe("Render for type CONSTANT", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const firstComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CONSTANT);
   });
 
@@ -83,7 +82,7 @@ describe("Render for type CONSTANT", () => {
 });
 
 describe("Render for type CIRCLE", () => {
-  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000);
+  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -94,8 +93,7 @@ describe("Render for type CIRCLE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const firstComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.CIRCLE);
   });
 
@@ -108,7 +106,7 @@ describe("Render for type CIRCLE", () => {
 });
 
 describe("Render for type LINE", () => {
-  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -119,8 +117,7 @@ describe("Render for type LINE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const firstComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.LINE);
   });
 
@@ -133,7 +130,7 @@ describe("Render for type LINE", () => {
 });
 
 describe("Render for type ELLIPSE", () => {
-  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
+  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -144,8 +141,7 @@ describe("Render for type ELLIPSE", () => {
 
   it("has a type combobox with the correct type", () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const firstComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const firstComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     expect(firstComboBox.vm.$props.selected).toBe(CoefficientTypes.ELLIPSE);
   });
 
@@ -169,42 +165,38 @@ describe("Interactions", () => {
 
   it("correctly changes type to CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const typeComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.CIRCLE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexCircle(new Complex(0, 0), 1, 5000)],
+      [new ComplexCircle(new Complex(0, 0), 1, 5000, 0)],
     ]);
   });
 
   it("correctly changes type to LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const typeComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.LINE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000)],
+      [new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000, 0)],
     ]);
   });
 
   it("correctly changes type to ELLIPSE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const typeComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.ELLIPSE);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([
-      [new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000)],
+      [new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000, 0)],
     ]);
   });
 
   it("correctly changes type to CONSTANT", async () => {
-    props.coefficient = new ComplexCircle(new Complex(0, 0), 1, 2000);
+    props.coefficient = new ComplexCircle(new Complex(0, 0), 1, 2000, 0);
     const coefficientInput = mount(CoefficientInput, { props: props });
-    // @ts-ignore
-    const typeComboBox: VueWrapper<ComboBox> = coefficientInput.findAllComponents(ComboBox)[0];
+    const typeComboBox = findAllTypedComponents(coefficientInput, ComboBox)[0];
     typeComboBox.vm.$emit("update:selected", CoefficientTypes.CONSTANT);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[new Complex(0, 0)]]);
@@ -232,7 +224,7 @@ describe("Interactions for type CONSTANT", () => {
 });
 
 describe("Interactions for type CIRCLE", () => {
-  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000);
+  const coefficient = new ComplexCircle(new Complex(3, 6), 42, 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -244,7 +236,7 @@ describe("Interactions for type CIRCLE", () => {
   it("correctly changes the value of the CIRCLE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const circleInput = coefficientInput.findComponent(ComplexCircleInput);
-    const newCircle = new ComplexCircle(new Complex(4, 2), 36, 5000);
+    const newCircle = new ComplexCircle(new Complex(4, 2), 36, 5000, 0);
     circleInput.vm.$emit("update:circle", newCircle);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newCircle]]);
@@ -252,7 +244,7 @@ describe("Interactions for type CIRCLE", () => {
 });
 
 describe("Interactions for type LINE", () => {
-  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000);
+  const coefficient = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -264,7 +256,7 @@ describe("Interactions for type LINE", () => {
   it("correctly changes the value of the LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const lineInput = coefficientInput.findComponent(ComplexLineInput);
-    const newLine = new ComplexLine(new Complex(4, 2), new Complex(3, 6), 5000);
+    const newLine = new ComplexLine(new Complex(4, 2), new Complex(3, 6), 5000, 0);
     lineInput.vm.$emit("update:line", newLine);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newLine]]);
@@ -272,7 +264,7 @@ describe("Interactions for type LINE", () => {
 });
 
 describe("Interactions for type ELLIPSE", () => {
-  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000);
+  const coefficient = new ComplexEllipse(new Complex(3, 6), 36, 42, 16, 2000, 0);
 
   beforeEach(() => {
     props = {
@@ -284,7 +276,7 @@ describe("Interactions for type ELLIPSE", () => {
   it("correctly changes the value of the LINE", async () => {
     const coefficientInput = mount(CoefficientInput, { props: props });
     const ellipseInput = coefficientInput.findComponent(ComplexEllipseInput);
-    const newEllipse = new ComplexEllipse(new Complex(4, 2), 42, 36, 20, 5000);
+    const newEllipse = new ComplexEllipse(new Complex(4, 2), 42, 36, 20, 5000, 0);
     ellipseInput.vm.$emit("update:ellipse", newEllipse);
     await coefficientInput.vm.$nextTick();
     expect(coefficientInput.emitted()["update:coefficient"]).toEqual([[newEllipse]]);

@@ -26,7 +26,7 @@ export default interface Coefficient extends JsonSerialisable {
   /**
    * Get the coefficient described as a list of ellipse parameters
    *
-   * @returns the ellipse parameters of the coefficient (duration, angle, half-width, half-height,
+   * @returns the ellipse parameters of the coefficient (duration, delay, angle, half-width, half-height,
    * offset modulus and offset argument)
    */
   getEllipseParameters(): number[];

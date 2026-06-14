@@ -14,7 +14,8 @@
           "type": "CIRCLE",
           "centre": { "re": 0, "im": 0 },
           "radius": 1,
-          "duration": 5000
+          "duration": 5000,
+          "delay": 0
         },
         "2": { "type": "CONSTANT", "re": 1, "im": 0 }
       },
@@ -56,6 +57,7 @@
           "centre": { "re": 0.2, "im": 0 },
           "radius": 1.1,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "4": { "re": 1.1, "im": 0, "type": "CONSTANT" }
@@ -94,7 +96,13 @@
     "juliaBound": 1,
     "fractalFunction": {
       "numerator": {
-        "1": { "centre": { "re": 0, "im": 0 }, "radius": 1, "duration": 10000, "type": "CIRCLE" },
+        "1": {
+          "centre": { "re": 0, "im": 0 },
+          "radius": 1,
+          "duration": 10000,
+          "delay": 0,
+          "type": "CIRCLE"
+        },
         "2": { "re": 1, "im": 0, "type": "CONSTANT" }
       },
       "denominator": { "0": { "re": 1, "im": 0, "type": "CONSTANT" } },
@@ -134,6 +142,7 @@
           "start": { "re": 1, "im": 0 },
           "end": { "re": 3, "im": 0 },
           "duration": 5000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -180,6 +189,7 @@
         "centre": { "re": 0, "im": 0 },
         "radius": 5,
         "duration": 40000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -215,6 +225,7 @@
           "centre": { "re": 0.2, "im": 0 },
           "radius": 1.1,
           "duration": 40000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "9": { "re": 1.1, "im": 0, "type": "CONSTANT" }
@@ -258,6 +269,7 @@
           "centre": { "re": 1, "im": 0 },
           "radius": 10,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "3": { "re": 1, "im": 0, "type": "CONSTANT" }
@@ -267,6 +279,7 @@
           "centre": { "re": 1, "im": 0 },
           "radius": 10,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "2": { "re": 3, "im": 0, "type": "CONSTANT" }
@@ -276,6 +289,7 @@
         "centre": { "re": 1, "im": 0 },
         "radius": 1.1,
         "duration": 20000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -316,6 +330,7 @@
         "start": { "re": 0, "im": -1 },
         "end": { "re": 0, "im": 1 },
         "duration": 20000,
+        "delay": 0,
         "type": "LINE"
       }
     },
@@ -352,6 +367,7 @@
           "centre": { "re": 0, "im": 0 },
           "radius": 4,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -361,6 +377,7 @@
           "centre": { "re": 0, "im": 0 },
           "radius": 28,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -369,6 +386,7 @@
         "centre": { "re": 1.2, "im": 0 },
         "radius": 2,
         "duration": 30000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -405,6 +423,7 @@
           "centre": { "re": 0.3, "im": 0 },
           "radius": 10,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -414,6 +433,7 @@
           "centre": { "re": 3.5999999999999996, "im": 0 },
           "radius": 120,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -422,6 +442,7 @@
         "start": { "re": 0, "im": 1 },
         "end": { "re": 30, "im": 0 },
         "duration": 60000,
+        "delay": 0,
         "type": "LINE"
       }
     },
@@ -457,6 +478,7 @@
           "start": { "re": 0, "im": -0.1 },
           "end": { "re": 0, "im": 0.1 },
           "duration": 10000,
+          "delay": 0,
           "type": "LINE"
         },
         "3": { "re": 2, "im": 0, "type": "CONSTANT" }
@@ -498,6 +520,7 @@
           "centre": { "re": -0.2, "im": 2.8 },
           "radius": 9.5,
           "duration": 7000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "12": { "re": 0.17, "im": -0.09, "type": "CONSTANT" }
@@ -508,6 +531,7 @@
           "centre": { "re": -1.8, "im": 25.2 },
           "radius": 85.5,
           "duration": 7000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "11": { "re": 2.04, "im": -1.08, "type": "CONSTANT" }
@@ -517,6 +541,7 @@
         "centre": { "re": -3.4, "im": 2.7 },
         "radius": 0.2,
         "duration": 29000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -552,12 +577,14 @@
           "centre": { "re": -7.6, "im": -0.9 },
           "radius": 6.05,
           "duration": 6000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "4": {
           "centre": { "re": 0.6, "im": 2.5 },
           "radius": 6.8,
           "duration": 17000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -566,6 +593,7 @@
           "start": { "re": -0.04, "im": -0.37 },
           "end": { "re": 0.7, "im": -1.3 },
           "duration": 26000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -605,6 +633,7 @@
           "centre": { "re": -2.7, "im": 1.3 },
           "radius": 7.2,
           "duration": 26000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -644,18 +673,21 @@
           "centre": { "re": -0.35, "im": 0.015 },
           "radius": 2.4,
           "duration": 24000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "10": {
           "centre": { "re": 3.2, "im": -4.8 },
           "radius": 5.3,
           "duration": 9000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "13": {
           "start": { "re": 1.8, "im": -1.8 },
           "end": { "re": -0.63, "im": -0.31 },
           "duration": 16000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -664,6 +696,7 @@
           "centre": { "re": 0.61, "im": 8.6 },
           "radius": 6.8,
           "duration": 27000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "11": { "re": -5.2, "im": 2.5, "type": "CONSTANT" }
@@ -703,12 +736,14 @@
           "start": { "re": 1.5, "im": -2.8 },
           "end": { "re": -4.1, "im": -4.7 },
           "duration": 26000,
+          "delay": 0,
           "type": "LINE"
         },
         "14": {
           "centre": { "re": -0.047, "im": -0.42 },
           "radius": 6.3,
           "duration": 5000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "15": { "re": -3.6, "im": -2.8, "type": "CONSTANT" }
@@ -749,6 +784,7 @@
           "centre": { "re": 1.6, "im": 0.8 },
           "radius": 9.7,
           "duration": 27000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "7": { "re": 0.94, "im": 3.4, "type": "CONSTANT" },
@@ -756,6 +792,7 @@
           "start": { "re": 3, "im": 0.36 },
           "end": { "re": -0.3, "im": -1.4 },
           "duration": 18000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -764,6 +801,7 @@
           "centre": { "re": 8, "im": 4 },
           "radius": 48.5,
           "duration": 27000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "6": { "re": 6.58, "im": 23.8, "type": "CONSTANT" },
@@ -771,6 +809,7 @@
           "start": { "re": 30, "im": 3.6 },
           "end": { "re": -3, "im": -14 },
           "duration": 18000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -779,6 +818,7 @@
         "centre": { "re": -3.3, "im": 0.81 },
         "radius": 4.7,
         "duration": 17000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -814,6 +854,7 @@
           "start": { "re": 1, "im": 3.7 },
           "end": { "re": -2.1, "im": -3 },
           "duration": 13000,
+          "delay": 0,
           "type": "LINE"
         },
         "9": { "re": 2.2, "im": -2.6, "type": "CONSTANT" }
@@ -823,6 +864,7 @@
           "centre": { "re": 6.3, "im": 1.4 },
           "radius": 8.8,
           "duration": 20000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -831,6 +873,7 @@
         "centre": { "re": -0.031, "im": -2.5 },
         "radius": 4.8,
         "duration": 27000,
+        "delay": 0,
         "type": "CIRCLE"
       }
     },
@@ -867,12 +910,14 @@
           "centre": { "re": 8.8, "im": 0.15 },
           "radius": 3.5,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "13": {
           "start": { "re": -3, "im": -6.8 },
           "end": { "re": 1.4, "im": 1.4 },
           "duration": 9000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -882,12 +927,14 @@
           "centre": { "re": 105, "im": 1.8 },
           "radius": 42,
           "duration": 10000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "12": {
           "start": { "re": -39, "im": -88 },
           "end": { "re": 18.2, "im": 18.2 },
           "duration": 9000,
+          "delay": 0,
           "type": "LINE"
         }
       },
@@ -896,6 +943,7 @@
         "start": { "re": 1.5, "im": 8.6 },
         "end": { "re": 0.51, "im": 1.3 },
         "duration": 27000,
+        "delay": 0,
         "type": "LINE"
       }
     },
@@ -931,18 +979,21 @@
           "start": { "re": 4.7, "im": 5.8 },
           "end": { "re": 0.53, "im": 3.1 },
           "duration": 6000,
+          "delay": 0,
           "type": "LINE"
         },
         "8": {
           "centre": { "re": 1.3, "im": -2.4 },
           "radius": 6.7,
           "duration": 20000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "14": {
           "centre": { "re": 3.8, "im": -2.5 },
           "radius": 7.3,
           "duration": 26000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },
@@ -951,18 +1002,21 @@
           "start": { "re": 18.8, "im": 23.2 },
           "end": { "re": 2.12, "im": 12.4 },
           "duration": 6000,
+          "delay": 0,
           "type": "LINE"
         },
         "7": {
           "centre": { "re": 10.4, "im": -19.2 },
           "radius": 53.6,
           "duration": 20000,
+          "delay": 0,
           "type": "CIRCLE"
         },
         "13": {
           "centre": { "re": 53.199999999999996, "im": -35 },
           "radius": 102.2,
           "duration": 26000,
+          "delay": 0,
           "type": "CIRCLE"
         }
       },

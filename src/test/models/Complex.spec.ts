@@ -83,6 +83,7 @@ describe("getEllipseParameters", () => {
       0,
       0,
       0,
+      0,
       Math.sqrt(2),
       Math.PI / 4,
     ]));

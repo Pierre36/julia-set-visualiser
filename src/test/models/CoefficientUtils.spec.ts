@@ -9,9 +9,9 @@ import { describe, expect, it, vi } from "vitest";
 
 describe("fromJSON", () => {
   const constant = new Complex(3, 6);
-  const circle = new ComplexCircle(new Complex(3, 6), 4, 2);
-  const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16);
-  const ellipse = new ComplexEllipse(new Complex(3, 6), 4, 2, 1, 6);
+  const circle = new ComplexCircle(new Complex(3, 6), 4, 2, 1);
+  const line = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16, 1);
+  const ellipse = new ComplexEllipse(new Complex(3, 6), 4, 2, 1, 6, 1);
 
   const testCases = [
     { description: "reads constant JSON correctly", json: constant.toJSON(), output: constant },
@@ -41,9 +41,9 @@ describe("getRandomCoefficient", () => {
   const params = { types, constant, circle, line, ellipse };
 
   const randomConstant = new Complex(3, 6);
-  const randomCircle = new ComplexCircle(new Complex(3, 6), 4, 2);
-  const randomLine = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16);
-  const randomEllipse = new ComplexEllipse(new Complex(3, 6), 4, 2, 1, 6);
+  const randomCircle = new ComplexCircle(new Complex(3, 6), 4, 2, 1);
+  const randomLine = new ComplexLine(new Complex(3, 6), new Complex(4, 2), 16, 1);
+  const randomEllipse = new ComplexEllipse(new Complex(3, 6), 4, 2, 1, 6, 1);
 
   Complex.getRandomComplex = vi.fn(() => randomConstant);
   ComplexCircle.getRandomComplexCircle = vi.fn(() => randomCircle);

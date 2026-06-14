@@ -55,7 +55,7 @@ export default class Complex implements Coefficient {
   }
 
   public getEllipseParameters(): number[] {
-    return [0, 0, 0, 0, this.mod(), this.arg()];
+    return [0, 0, 0, 0, 0, this.mod(), this.arg()];
   }
 
   /**
@@ -64,6 +64,7 @@ export default class Complex implements Coefficient {
    * @param json the JSON to deserialise
    * @returns the complex or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): Complex | undefined {
     if (json === undefined) return undefined;
     if (json.re === undefined || !Number.isFinite(json.re)) return undefined;
@@ -71,6 +72,7 @@ export default class Complex implements Coefficient {
     return new Complex(json.re, json.im);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return { type: CoefficientTypes.CONSTANT, re: this.re, im: this.im };
   }

@@ -12,7 +12,7 @@ export interface Props {
 const { level = 4 } = defineProps<Props>();
 
 const line = defineModel<ComplexLine>("line", {
-  default: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
+  default: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000, 0),
 });
 
 const heading = computed(() => `h${level}`);
@@ -20,6 +20,11 @@ const heading = computed(() => `h${level}`);
 const durationSecond = computed({
   get: () => line.value.duration / 1000,
   set: (duration) => (line.value.duration = duration * 1000),
+});
+
+const delaySecond = computed({
+  get: () => line.value.delay / 1000,
+  set: (delay) => (line.value.delay = delay * 1000),
 });
 </script>
 
@@ -30,6 +35,8 @@ const durationSecond = computed({
   <ComplexInput v-model:complex="line.end" label="Line end" />
   <component :is="heading">Duration</component>
   <NumberInput v-model:value="durationSecond" :min="0" :step="1" label="Duration" />
+  <component :is="heading">Delay</component>
+  <NumberInput v-model:value="delaySecond" :step="1" label="Delay" />
 </template>
 
 <style scoped>

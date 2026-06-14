@@ -74,7 +74,7 @@ const PARAMS_MAPPING: {
   NUMERATOR: { bufferName: BufferNames.FUNCTION_STORAGE, offset: 0, isArray: true },
   DENOMINATOR: {
     bufferName: BufferNames.FUNCTION_STORAGE,
-    offset: (Polynomial.MAX_DEGREE + 1) * 7,
+    offset: (Polynomial.MAX_DEGREE + 1) * 8,
     isArray: true,
   },
   ITERATIONS_COUNT: {
@@ -338,10 +338,10 @@ export default class WebGpuFractalGenerator {
     return {
       buffer: gpuDevice.createBuffer({
         label: BufferNames.FUNCTION_STORAGE,
-        size: (Polynomial.MAX_DEGREE + 1) * 7 * 2 * 4,
+        size: (Polynomial.MAX_DEGREE + 1) * 8 * 2 * 4,
         usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
       }),
-      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 7 * 2),
+      values: new Float32Array((Polynomial.MAX_DEGREE + 1) * 8 * 2),
       views: new Map(),
     };
   }
@@ -678,6 +678,7 @@ export default class WebGpuFractalGenerator {
    * @param debug `true` if the updated value should be logged, `false` otherwise. `true` by default.
    * @throws an error if the buffer of the parameter is not initialised or has not the view
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public updateParameter(parameter: FractalGeneratorParameters, value: any, debug = true) {
     const paramsDetails = PARAMS_MAPPING[parameter];
 

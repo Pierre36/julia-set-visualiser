@@ -28,9 +28,9 @@ const typeOptions = [
 ];
 const defaultValues = {
   CONSTANT: new Complex(0, 0),
-  CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000),
-  LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000),
-  ELLIPSE: new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000),
+  CIRCLE: new ComplexCircle(new Complex(0, 0), 1, 5000, 0),
+  LINE: new ComplexLine(new Complex(-1, 0), new Complex(1, 0), 5000, 0),
+  ELLIPSE: new ComplexEllipse(new Complex(0, 0), 1, 1, 0, 5000, 0),
 };
 
 const currentType = computed(() => {

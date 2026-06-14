@@ -43,8 +43,16 @@ const randomParameters = ref({
         maxRadius: 10,
         minDuration: 5,
         maxDuration: 30,
+        minDelay: -30,
+        maxDelay: 30,
       },
-      line: { startEnd: { minMod: 0.1, maxMod: 10 }, minDuration: 5, maxDuration: 30 },
+      line: {
+        startEnd: { minMod: 0.1, maxMod: 10 },
+        minDuration: 5,
+        maxDuration: 30,
+        minDelay: -30,
+        maxDelay: 30,
+      },
       ellipse: {
         centre: { minMod: 0.1, maxMod: 10 },
         minHalfWidth: 0.1,
@@ -55,6 +63,8 @@ const randomParameters = ref({
         maxRotationAngle: 360,
         minDuration: 5,
         maxDuration: 30,
+        minDelay: -30,
+        maxDelay: 30,
       },
     },
   },
@@ -213,6 +223,19 @@ function randomise() {
               maxLabel="Maximum duration of circle coefficients"
               :level="6"
             />
+            <h5>Delay</h5>
+            <MinMaxInput
+              class="parameter-input"
+              v-model:minValue="randomParameters.fractalFunction.coefficients.circle.minDelay"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.circle.maxDelay"
+              :min="-300"
+              :max="300"
+              :step="1"
+              :isIntegerOnly="true"
+              minLabel="Minimum delay for circle coefficients"
+              maxLabel="Maximum delay for circle coefficients"
+              :level="6"
+            />
           </ExpandableDisclosure>
           <ExpandableDisclosure
             headingText="Line coefficients"
@@ -245,6 +268,19 @@ function randomise() {
               :isIntegerOnly="true"
               minLabel="Minimum duration of line coefficients"
               maxLabel="Maximum duration of line coefficients"
+              :level="6"
+            />
+            <h5>Delay</h5>
+            <MinMaxInput
+              class="parameter-input"
+              v-model:minValue="randomParameters.fractalFunction.coefficients.line.minDelay"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.line.maxDelay"
+              :min="-300"
+              :max="300"
+              :step="1"
+              :isIntegerOnly="true"
+              minLabel="Minimum delay for line coefficients"
+              maxLabel="Maximum delay for line coefficients"
               :level="6"
             />
           </ExpandableDisclosure>
@@ -322,6 +358,19 @@ function randomise() {
               :isIntegerOnly="true"
               minLabel="Minimum duration of ellipse coefficients"
               maxLabel="Maximum duration of ellipse coefficients"
+              :level="6"
+            />
+            <h5>Delay</h5>
+            <MinMaxInput
+              class="parameter-input"
+              v-model:minValue="randomParameters.fractalFunction.coefficients.ellipse.minDelay"
+              v-model:maxValue="randomParameters.fractalFunction.coefficients.ellipse.maxDelay"
+              :min="-300"
+              :max="300"
+              :step="1"
+              :isIntegerOnly="true"
+              minLabel="Minimum delay for ellipse coefficients"
+              maxLabel="Maximum delay for ellipse coefficients"
               :level="6"
             />
           </ExpandableDisclosure>
