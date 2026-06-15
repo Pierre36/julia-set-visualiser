@@ -57,13 +57,10 @@ fn divide(z1: vec2f, z2: vec2f, value_when_both_infinity: vec2f) -> vec2f {
   }
 
   if (mod_z1 >= INFINITY) {
-    if (mod_z2 < mod_z1) {
-      return INFINITY_POINT;
+    if (mod_z2 >= INFINITY) {
+      return value_when_both_infinity;
     }
-    if (mod_z2 > mod_z1) {
-      return ZERO_POINT;
-    }
-    return value_when_both_infinity;
+    return INFINITY_POINT;
   }
   
   if (mod_z2 >= INFINITY) {
