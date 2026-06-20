@@ -79,52 +79,31 @@ watch(
   { deep: true },
 );
 watch(
-  () => configuration.value.defaultAttractor,
-  (attractor) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
-      attractor.hue,
-      attractor.saturationStrength,
-      attractor.saturationOffset,
-      attractor.valueStrength,
-      attractor.valueOffset,
-    ]),
-  { deep: true },
+  () => configuration.value.fatouHue,
+  (hue) => fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_HUE, hue),
 );
 watch(
-  () => configuration.value.infinityAttractor,
-  (attractor) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
-      attractor.hue,
-      attractor.saturationStrength,
-      attractor.saturationOffset,
-      attractor.valueStrength,
-      attractor.valueOffset,
-    ]),
-  { deep: true },
+  () => configuration.value.fatouSaturationStrength,
+  (strength) =>
+    fractalGenerator?.updateParameter(
+      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
+      strength,
+    ),
 );
 watch(
-  () => configuration.value.attractors,
-  (attractors) => {
-    fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.ATTRACTORS_COUNT,
-      attractors.length,
-    );
-    fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.ATTRACTORS,
-      attractors.flatMap((attractor) => [
-        attractor.complex?.re || 0,
-        attractor.complex?.im || 0,
-        0,
-        0,
-        attractor.hue,
-        attractor.saturationStrength,
-        attractor.saturationOffset,
-        attractor.valueStrength,
-        attractor.valueOffset,
-      ]),
-    );
-  },
-  { deep: true },
+  () => configuration.value.fatouSaturationOffset,
+  (offset) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_SATURATION_OFFSET, offset),
+);
+watch(
+  () => configuration.value.fatouValueStrength,
+  (strength) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_VALUE_STRENGTH, strength),
+);
+watch(
+  () => configuration.value.fatouValueOffset,
+  (offset) =>
+    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_VALUE_OFFSET, offset),
 );
 
 onMounted(async () => {

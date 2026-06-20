@@ -9,33 +9,21 @@ struct FunctionParameters {
   denominator_coefs_count: u32,
 };
 
-struct ColourParameters {
-  hue: f32,
-  sat_strength: f32,
-  sat_offset: f32,
-  val_strength: f32,
-  val_offset: f32,
-};
-
 struct FractalParameters {
   iterations_count: u32,
   epsilon: f32,
   julia_bound: f32,
-  attractors_count: u32,
-  default_colour: ColourParameters,
-  @align(16) infinity_colour: ColourParameters,
-  @align(16) julia_hsv: vec3f,
-};
-
-struct Attractor {
-  complex: vec2f,
-  @align(16) colour: ColourParameters,
+  fatou_hue: f32,
+  fatou_saturation_strength: f32,
+  fatou_saturation_offset: f32,
+  fatou_value_strength: f32,
+  fatou_value_offset: f32,
+  julia_hsv: vec3f,
 };
 
 @group(0) @binding(2) var<uniform> function_params: FunctionParameters;
 @group(0) @binding(4) var<storage, read_write> fraction: array<vec3f>;
 @group(0) @binding(5) var<uniform> fractal_params: FractalParameters;
-@group(0) @binding(6) var<storage> attractors: array<Attractor>;
 
 fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   return select(
@@ -186,36 +174,26 @@ fn chordalDistance(z1: vec2f, z2: vec2f) -> f32 {
   return length(z1 - z2) * inverse_sqrt_1_plus_squared_mod_z1 * inverse_sqrt_1_plus_squared_mod_z2;
 }
 
-fn colourAccordingToAttractor(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
-  // If it converges to infinity, colour using infinity colouring
-  if (length(fkz) >= INFINITY) {
-    return getColour(adjusted_divergence, fractal_params.infinity_colour); 
-  }
-
-  // Search for an attractor
-  for (var a = 0u; a < fractal_params.attractors_count; a++) {
-    if (chordalDistance(attractors[a].complex, fkz) < 0.001) {
-      return getColour(adjusted_divergence, attractors[a].colour);
-    }
-  }
-
-  // If no attractor matches the point, colour using default colouring
-  return getColour(adjusted_divergence, fractal_params.default_colour);
-}
-
 fn colourAccordingToSet(adjusted_divergence: f32, fkz: vec2f) -> vec3f {
   return select(
     fractal_params.julia_hsv, // If it belongs to the Julia Set, return the Julia colour
-    colourAccordingToAttractor(adjusted_divergence, fkz), // If it belongs to the Fatou Set, colour based on the attractor
+    getColour(
+      adjusted_divergence,
+      fractal_params.fatou_hue,
+      fractal_params.fatou_saturation_strength,
+      fractal_params.fatou_saturation_offset,
+      fractal_params.fatou_value_strength,
+      fractal_params.fatou_value_offset
+    ), // If it belongs to the Fatou Set, colour based on the attractor
     adjusted_divergence <= 0
   );
 }
 
-fn getColour(adjusted_divergence: f32, colour_params: ColourParameters) -> vec3f {
-  let saturation = colour_params.sat_strength * -adjusted_divergence + colour_params.sat_offset;
-  let raw_value = colour_params.val_strength * adjusted_divergence + colour_params.val_offset;
+fn getColour(adjusted_divergence: f32, hue: f32, saturation_strength: f32, saturation_offset: f32, value_strength: f32, value_offset: f32) -> vec3f {
+  let saturation = saturation_strength * -adjusted_divergence + saturation_offset;
+  let raw_value = value_strength * adjusted_divergence + value_offset;
   let value = 0.5 * (raw_value / sqrt(1.0 + raw_value * raw_value) + 1.0);
-  return vec3f(colour_params.hue, saturation, value);
+  return vec3f(hue, saturation, value);
 }
 
 fn hsv2rgba(hsv: vec3f) -> vec4f {

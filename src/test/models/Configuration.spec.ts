@@ -1,5 +1,5 @@
 import FunctionTypes from "@/constants/FunctionTypes";
-import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
+import Attractor from "@/models/Attractor";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import Configuration from "@/models/Configuration";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
@@ -24,9 +24,11 @@ describe("constructor", () => {
       new Complex(0, 0),
     );
     const juliaHSV = [0, 0, 0];
-    const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
-    const infinityAttractor = new Attractor(undefined, 80, 1, 1, 0.5, 1.5);
-    const attractors: Attractor[] = [];
+    const fatouHue = 210;
+    const fatouSaturationStrength = 3.6;
+    const fatouSaturationOffset = 4.2;
+    const fatouValueStrength = 3;
+    const fatouValueOffset = 6;
 
     const configuration = new Configuration(
       id,
@@ -39,9 +41,11 @@ describe("constructor", () => {
       juliaBound,
       fractalFunction,
       juliaHSV,
-      defaultAttractor,
-      infinityAttractor,
-      attractors,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
     );
 
     expect(configuration.id).toBe(id);
@@ -54,16 +58,18 @@ describe("constructor", () => {
     expect(configuration.juliaBound).toBe(juliaBound);
     expect(configuration.fractalFunction).toBe(fractalFunction);
     expect(configuration.juliaHSV).toBe(juliaHSV);
-    expect(configuration.defaultAttractor).toBe(defaultAttractor);
-    expect(configuration.infinityAttractor).toBe(infinityAttractor);
-    expect(configuration.attractors).toBe(attractors);
+    expect(configuration.fatouHue).toBe(fatouHue);
+    expect(configuration.fatouSaturationStrength).toBe(fatouSaturationStrength);
+    expect(configuration.fatouSaturationOffset).toBe(fatouSaturationOffset);
+    expect(configuration.fatouValueStrength).toBe(fatouValueStrength);
+    expect(configuration.fatouValueOffset).toBe(fatouValueOffset);
   });
 });
 
 describe("toString", () => {
   it("properly returns a string representation of the configuration", () => {
     expect(Configuration.defaultConfiguration("ID", "Name").toString()).toBe(
-      "Configuration(ID, Name, 1, 2, 0, 20, 0.001, 1, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), Attractor(undefined, 210, 0.11, 0, 0.26, 1.4), [])",
+      "Configuration(ID, Name, 1, 2, 0, 20, 0.001, 1, FractalFunction(Polynomial(1z^2), Polynomial(1), DEFAULT, 0), [0, 0, 1], 210, 0.11, 0, 0.26, 1.4)",
     );
   });
 });
@@ -82,10 +88,13 @@ describe("fromJSON", () => {
     FunctionTypes.DEFAULT,
   );
   const juliaHSV = [1, 2, 3];
-  const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
-  const infinityAttractor = new Attractor(undefined, 80, 1, 1, 0.5, 1.5);
-  const attractor = new Attractor(new Complex(1, 0), 50, 3, 6, 4, 2);
+  const fatouHue = 210;
+  const fatouSaturationStrength = 3.6;
+  const fatouSaturationOffset = 4.2;
+  const fatouValueStrength = 3;
+  const fatouValueOffset = 6;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const validJson: any = {
     id,
     name,
@@ -97,9 +106,11 @@ describe("fromJSON", () => {
     juliaBound,
     fractalFunction: fractalFunction.toJSON(),
     juliaHSV,
-    defaultAttractor: defaultAttractor.toJSON(),
-    infinityAttractor: infinityAttractor.toJSON(),
-    attractors: [attractor.toJSON()],
+    fatouHue,
+    fatouSaturationStrength,
+    fatouSaturationOffset,
+    fatouValueStrength,
+    fatouValueOffset,
   };
 
   const testCases = [
@@ -117,9 +128,11 @@ describe("fromJSON", () => {
         juliaBound,
         fractalFunction,
         juliaHSV,
-        defaultAttractor,
-        infinityAttractor,
-        [attractor],
+        fatouHue,
+        fatouSaturationStrength,
+        fatouSaturationOffset,
+        fatouValueStrength,
+        fatouValueOffset,
       ),
     },
     { description: "does not accept undefined", json: undefined, output: undefined },
@@ -155,14 +168,6 @@ describe("fromJSON", () => {
         output: undefined,
       });
     }
-    if (key == "attractors") {
-      validJson[key] = [attractor.toJSON(), "invalid"];
-      testCases.push({
-        description: `rejects JSON with invalid ${key}`,
-        json: { ...validJson },
-        output: undefined,
-      });
-    }
     validJson[key] = value;
   }
 
@@ -188,10 +193,11 @@ describe("toJSON", () => {
       new Complex(0, 0),
     );
     const juliaHSV = [0, 0, 0];
-    const defaultAttractor = new Attractor(undefined, 210, 1, 1, 0.5, 1.5);
-    const infinityAttractor = new Attractor(undefined, 80, 1, 1, 0.5, 1.5);
-    const attractor = new Attractor(new Complex(1, 0), 50, 3, 6, 4, 2);
-    const attractors = [attractor];
+    const fatouHue = 210;
+    const fatouSaturationStrength = 3.6;
+    const fatouSaturationOffset = 4.2;
+    const fatouValueStrength = 3;
+    const fatouValueOffset = 6;
 
     const json = new Configuration(
       id,
@@ -204,25 +210,29 @@ describe("toJSON", () => {
       juliaBound,
       fractalFunction,
       juliaHSV,
-      defaultAttractor,
-      infinityAttractor,
-      attractors,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
     ).toJSON();
 
     expect(json).toEqual({
-      id: id,
-      name: name,
-      resolutionScale: resolutionScale,
-      coordinatesScale: coordinatesScale,
+      id,
+      name,
+      resolutionScale,
+      coordinatesScale,
       coordinatesCentre: coordinatesCentre.toJSON(),
-      iterationsCount: iterationsCount,
-      epsilon: epsilon,
-      juliaBound: juliaBound,
+      iterationsCount,
+      epsilon,
+      juliaBound,
       fractalFunction: fractalFunction.toJSON(),
-      juliaHSV: juliaHSV,
-      defaultAttractor: defaultAttractor.toJSON(),
-      infinityAttractor: infinityAttractor.toJSON(),
-      attractors: [attractor.toJSON()],
+      juliaHSV,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
     });
   });
 });
@@ -245,9 +255,11 @@ describe("copy", () => {
         new Complex(1, 0),
       ),
       [0, 0, 0],
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      [new Attractor(new Complex(3, 6), 5, 6, 7, 8, 9)],
+      5,
+      6,
+      7,
+      8,
+      9,
     );
 
     expect(configuration.copy()).toEqual(configuration);
@@ -267,9 +279,11 @@ describe("randomise", () => {
     const juliaBound = 1;
     const fractalFunction = new FractalFunction(new Polynomial({}), FunctionTypes.DEFAULT);
     const juliaHSV = [1, 1, 1];
-    const defaultAttractor = new Attractor(undefined, 1, 1, 1, 0.5, 1.5);
-    const infinityAttractor = new Attractor(undefined, 1, 1, 1, 0.5, 1.5);
-    const attractors = [new Attractor(new Complex(1, 0), 1, 3, 6, 4, 2)];
+    const fatouHue = 210;
+    const fatouSaturationStrength = 3.6;
+    const fatouSaturationOffset = 4.2;
+    const fatouValueStrength = 3;
+    const fatouValueOffset = 6;
 
     const configuration = new Configuration(
       id,
@@ -282,9 +296,11 @@ describe("randomise", () => {
       juliaBound,
       fractalFunction,
       juliaHSV,
-      defaultAttractor,
-      infinityAttractor,
-      attractors,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
     );
 
     const randomFractalFunction = new FractalFunction(
@@ -300,7 +316,6 @@ describe("randomise", () => {
     Attractor.getRandomAttractor = vi.fn(() => randomAttractor);
 
     const fractalFunctionParameters = {} as RandomFractalFunctionParameters;
-    const attractorsParameters = {} as RandomAttractorParameters;
     const viewportCentre = {} as RandomComplexParameters;
     const params = {
       fractalFunction: fractalFunctionParameters,
@@ -310,7 +325,16 @@ describe("randomise", () => {
       maxJuliaSaturation: 3,
       minJuliaValue: 4,
       maxJuliaValue: 5,
-      attractors: attractorsParameters,
+      minFatouHue: 14,
+      maxFatouHue: 15,
+      minFatouSaturationStrength: 16,
+      maxFatouSaturationStrength: 17,
+      minFatouSaturationOffset: 18,
+      maxFatouSaturationOffset: 19,
+      minFatouValueStrength: 20,
+      maxFatouValueStrength: 21,
+      minFatouValueOffset: 22,
+      maxFatouValueOffset: 23,
       minViewportScale: 6,
       maxViewportScale: 7,
       viewportCentre,
@@ -330,8 +354,6 @@ describe("randomise", () => {
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(0, 1);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(2, 3);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(4, 5);
-    expect(Attractor.getRandomAttractor).toHaveBeenCalledWith(attractorsParameters);
-    expect(Attractor.getRandomAttractor).toBeCalledTimes(2);
     expect(RandomUtils.floatBetween).toHaveBeenCalledWith(6, 7);
     expect(Complex.getRandomComplex).toHaveBeenCalledWith(viewportCentre);
     expect(RandomUtils.integerBetween).toHaveBeenCalledWith(8, 9);
@@ -350,9 +372,11 @@ describe("randomise", () => {
         12,
         randomFractalFunction,
         [0, 2, 4],
-        randomAttractor,
-        randomAttractor,
-        [],
+        14,
+        16,
+        18,
+        20,
+        22,
       ),
     );
   });

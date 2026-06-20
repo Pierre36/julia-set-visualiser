@@ -416,7 +416,7 @@ describe("toMathML", () => {
 
   const positiveConstant = new Complex(3, 0);
   const negativeConstant = new Complex(-6, 0);
-  const nonConstant = new ComplexCircle(new Complex(0, 0), 0, 0);
+  const nonConstant = new ComplexCircle(new Complex(0, 0), 0, 0, 0);
 
   const prefix =
     "<math display='block'><mrow><mn>∀</mn><mo>z</mo><mo>∈</mo><mi>ℂ</mi><mo separator='true'>,</mo><mspace width='1em'/></mrow><mrow><mi>f</mi><mo form='prefix' stretchy='false'>(</mo><mi>z</mi><mo form='postfix' stretchy='false'>)</mo><mo>=</mo></mrow>";

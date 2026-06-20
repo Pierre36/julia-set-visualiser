@@ -5,7 +5,6 @@ import PanelId from "@/components/panels/PanelId";
 import RandomPanel from "@/components/panels/RandomPanel.vue";
 import SidePanel, { type Props } from "@/components/panels/SidePanel.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
-import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import Configuration from "@/models/Configuration";
 import FractalFunction from "@/models/FractalFunction";
@@ -92,9 +91,17 @@ describe("Render", () => {
 
     // Check the COLOURS panel is rendered properly
     expect(coloursPanel.vm.$props.juliaHSV).toEqual(props.configuration.juliaHSV);
-    expect(coloursPanel.vm.$props.defaultAttractor).toEqual(props.configuration.defaultAttractor);
-    expect(coloursPanel.vm.$props.infinityAttractor).toEqual(props.configuration.infinityAttractor);
-    expect(coloursPanel.vm.$props.attractors).toEqual(props.configuration.attractors);
+    expect(coloursPanel.vm.$props.fatouHue).toEqual(props.configuration.fatouHue);
+    expect(coloursPanel.vm.$props.fatouSaturationStrength).toEqual(
+      props.configuration.fatouSaturationStrength,
+    );
+    expect(coloursPanel.vm.$props.fatouSaturationOffset).toEqual(
+      props.configuration.fatouSaturationOffset,
+    );
+    expect(coloursPanel.vm.$props.fatouValueStrength).toEqual(
+      props.configuration.fatouValueStrength,
+    );
+    expect(coloursPanel.vm.$props.fatouValueOffset).toEqual(props.configuration.fatouValueOffset);
   });
 
   it("renders properly the ADVANCED panel", () => {
@@ -176,19 +183,25 @@ describe("Interactions", () => {
 
     // Make COLOURS panel emit changes
     const newJuliaHSV = [1, 2, 3];
-    const newDefaultAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
-    const newInfinityAttractor = new Attractor(undefined, 6, 7, 8, 9, 10);
-    const newAttractors = [new Attractor(new Complex(4, 2), 11, 12, 13, 14, 15)];
+    const newFatouHue = 4;
+    const newFatouSaturationStrength = 5;
+    const newFatouSaturationOffset = 6;
+    const newFatouValueStrength = 7;
+    const newFatouValueOffset = 8;
     coloursPanel.vm.$emit("update:juliaHSV", newJuliaHSV);
-    coloursPanel.vm.$emit("update:defaultAttractor", newDefaultAttractor);
-    coloursPanel.vm.$emit("update:infinityAttractor", newInfinityAttractor);
-    coloursPanel.vm.$emit("update:attractors", newAttractors);
+    coloursPanel.vm.$emit("update:fatouHue", newFatouHue);
+    coloursPanel.vm.$emit("update:fatouSaturationStrength", newFatouSaturationStrength);
+    coloursPanel.vm.$emit("update:fatouSaturationOffset", newFatouSaturationOffset);
+    coloursPanel.vm.$emit("update:fatouValueStrength", newFatouValueStrength);
+    coloursPanel.vm.$emit("update:fatouValueOffset", newFatouValueOffset);
 
     // Check the configuration is updated
     expect(props.configuration.juliaHSV).toEqual(newJuliaHSV);
-    expect(props.configuration.defaultAttractor).toEqual(newDefaultAttractor);
-    expect(props.configuration.infinityAttractor).toEqual(newInfinityAttractor);
-    expect(props.configuration.attractors).toEqual(newAttractors);
+    expect(props.configuration.fatouHue).toEqual(newFatouHue);
+    expect(props.configuration.fatouSaturationStrength).toEqual(newFatouSaturationStrength);
+    expect(props.configuration.fatouSaturationOffset).toEqual(newFatouSaturationOffset);
+    expect(props.configuration.fatouValueStrength).toEqual(newFatouValueStrength);
+    expect(props.configuration.fatouValueOffset).toEqual(newFatouValueOffset);
   });
 
   it("emits change the ADVANCED panel emits change", () => {

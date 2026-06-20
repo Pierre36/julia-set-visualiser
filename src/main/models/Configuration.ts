@@ -1,5 +1,4 @@
 import FunctionTypes from "@/constants/FunctionTypes";
-import Attractor, { type RandomAttractorParameters } from "@/models/Attractor";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
 import type { JsonSerialisable } from "@/models/JsonSerialisable";
@@ -14,7 +13,6 @@ export interface RandomConfigurationParameters {
   maxJuliaSaturation: number;
   minJuliaValue: number;
   maxJuliaValue: number;
-  attractors: RandomAttractorParameters;
   minViewportScale: number;
   maxViewportScale: number;
   viewportCentre: RandomComplexParameters;
@@ -24,6 +22,16 @@ export interface RandomConfigurationParameters {
   maxEpsilon: number;
   minJuliaBound: number;
   maxJuliaBound: number;
+  minFatouHue: number;
+  maxFatouHue: number;
+  minFatouSaturationStrength: number;
+  maxFatouSaturationStrength: number;
+  minFatouSaturationOffset: number;
+  maxFatouSaturationOffset: number;
+  minFatouValueStrength: number;
+  maxFatouValueStrength: number;
+  minFatouValueOffset: number;
+  maxFatouValueOffset: number;
 }
 
 /** Julia Set Visualiser configuration */
@@ -56,9 +64,11 @@ export default class Configuration implements JsonSerialisable {
     public juliaBound: number,
     public fractalFunction: FractalFunction,
     public juliaHSV: number[],
-    public defaultAttractor: Attractor,
-    public infinityAttractor: Attractor,
-    public attractors: Attractor[],
+    public fatouHue: number,
+    public fatouSaturationStrength: number,
+    public fatouSaturationOffset: number,
+    public fatouValueStrength: number,
+    public fatouValueOffset: number,
   ) {}
 
   /**
@@ -78,9 +88,11 @@ export default class Configuration implements JsonSerialisable {
       1,
       new FractalFunction(new Polynomial({ 2: new Complex(1, 0) }), FunctionTypes.DEFAULT),
       [0, 0, 1],
-      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
-      new Attractor(undefined, 210.0, 0.11, 0, 0.26, 1.4),
-      [],
+      210.0,
+      0.11,
+      0,
+      0.26,
+      1.4,
     );
   }
 
@@ -101,9 +113,11 @@ export default class Configuration implements JsonSerialisable {
       3,
       new FractalFunction(new Polynomial({}), FunctionTypes.DEFAULT),
       [0, 0, 0],
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      new Attractor(undefined, 0, 0, 0, 0, 0),
-      [],
+      0,
+      0,
+      0,
+      0,
+      0,
     );
   }
 
@@ -113,13 +127,7 @@ export default class Configuration implements JsonSerialisable {
    * @returns the String representation
    */
   public toString(): string {
-    return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${
-      this.coordinatesScale
-    }, ${this.coordinatesCentre}, ${this.iterationsCount}, ${this.epsilon}, ${this.juliaBound}, ${
-      this.fractalFunction
-    }, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.defaultAttractor}, ${
-      this.infinityAttractor
-    }, [${this.attractors.join(", ")}])`;
+    return `Configuration(${this.id}, ${this.name}, ${this.resolutionScale}, ${this.coordinatesScale}, ${this.coordinatesCentre}, ${this.iterationsCount}, ${this.epsilon}, ${this.juliaBound}, ${this.fractalFunction}, [${this.juliaHSV[0]}, ${this.juliaHSV[1]}, ${this.juliaHSV[2]}], ${this.fatouHue}, ${this.fatouSaturationStrength}, ${this.fatouSaturationOffset}, ${this.fatouValueStrength}, ${this.fatouValueOffset})`;
   }
 
   /**
@@ -128,6 +136,7 @@ export default class Configuration implements JsonSerialisable {
    * @param json the JSON to deserialise
    * @returns the configuration or `undefined` if the JSON is invalid
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static fromJSON(json: any): Configuration | undefined {
     if (json === undefined) return undefined;
 
@@ -152,15 +161,18 @@ export default class Configuration implements JsonSerialisable {
     if (json.juliaHSV === undefined || !Array.isArray(json.juliaHSV)) return undefined;
     if (json.juliaHSV.length !== 3 || !json.juliaHSV.every(Number.isFinite)) return undefined;
 
-    const defaultAttractor = Attractor.fromJSON(json.defaultAttractor);
-    if (defaultAttractor === undefined) return undefined;
-
-    const infinityAttractor = Attractor.fromJSON(json.infinityAttractor);
-    if (infinityAttractor === undefined) return undefined;
-
-    if (json.attractors === undefined || !Array.isArray(json.attractors)) return undefined;
-    const attractors = json.attractors.map(Attractor.fromJSON);
-    if (attractors.some((a: Attractor | undefined) => a === undefined)) return undefined;
+    if (json.fatouHue === undefined || !Number.isFinite(json.fatouHue)) return undefined;
+    if (
+      json.fatouSaturationStrength === undefined ||
+      !Number.isFinite(json.fatouSaturationStrength)
+    )
+      return undefined;
+    if (json.fatouSaturationOffset === undefined || !Number.isFinite(json.fatouSaturationOffset))
+      return undefined;
+    if (json.fatouValueStrength === undefined || !Number.isFinite(json.fatouValueStrength))
+      return undefined;
+    if (json.fatouValueOffset === undefined || !Number.isFinite(json.fatouValueOffset))
+      return undefined;
 
     return new Configuration(
       json.id,
@@ -173,12 +185,15 @@ export default class Configuration implements JsonSerialisable {
       json.juliaBound,
       fractalFunction,
       json.juliaHSV,
-      defaultAttractor,
-      infinityAttractor,
-      attractors,
+      json.fatouHue,
+      json.fatouSaturationStrength,
+      json.fatouSaturationOffset,
+      json.fatouValueStrength,
+      json.fatouValueOffset,
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public toJSON(): any {
     return {
       id: this.id,
@@ -191,9 +206,11 @@ export default class Configuration implements JsonSerialisable {
       juliaBound: this.juliaBound,
       fractalFunction: this.fractalFunction.toJSON(),
       juliaHSV: this.juliaHSV,
-      defaultAttractor: this.defaultAttractor.toJSON(),
-      infinityAttractor: this.infinityAttractor.toJSON(),
-      attractors: this.attractors.map((attractor) => attractor.toJSON()),
+      fatouHue: this.fatouHue,
+      fatouSaturationStrength: this.fatouSaturationStrength,
+      fatouSaturationOffset: this.fatouSaturationOffset,
+      fatouValueStrength: this.fatouValueStrength,
+      fatouValueOffset: this.fatouValueOffset,
     };
   }
 
@@ -214,9 +231,11 @@ export default class Configuration implements JsonSerialisable {
       this.juliaBound,
       this.fractalFunction.copy(),
       this.juliaHSV.slice(),
-      this.defaultAttractor.copy(),
-      this.infinityAttractor.copy(),
-      this.attractors.map((a) => a.copy()),
+      this.fatouHue,
+      this.fatouSaturationStrength,
+      this.fatouSaturationOffset,
+      this.fatouValueStrength,
+      this.fatouValueOffset,
     );
   }
 
@@ -244,8 +263,22 @@ export default class Configuration implements JsonSerialisable {
       params.maxJuliaSaturation,
     );
     this.juliaHSV[2] = RandomUtils.floatBetween(params.minJuliaValue, params.maxJuliaValue);
-    this.defaultAttractor = Attractor.getRandomAttractor(params.attractors);
-    this.infinityAttractor = Attractor.getRandomAttractor(params.attractors);
-    this.attractors = [];
+    this.fatouHue = RandomUtils.integerBetween(params.minFatouHue, params.maxFatouHue);
+    this.fatouSaturationStrength = RandomUtils.floatBetween(
+      params.minFatouSaturationStrength,
+      params.maxFatouSaturationStrength,
+    );
+    this.fatouSaturationOffset = RandomUtils.floatBetween(
+      params.minFatouSaturationOffset,
+      params.maxFatouSaturationOffset,
+    );
+    this.fatouValueStrength = RandomUtils.floatBetween(
+      params.minFatouValueStrength,
+      params.maxFatouValueStrength,
+    );
+    this.fatouValueOffset = RandomUtils.floatBetween(
+      params.minFatouValueOffset,
+      params.maxFatouValueOffset,
+    );
   }
 }

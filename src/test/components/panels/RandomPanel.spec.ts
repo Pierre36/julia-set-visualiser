@@ -55,14 +55,14 @@ const juliaValueMinMin = 0;
 const juliaValueMaxDefault = 1;
 const juliaValueMaxMax = 1;
 
-const attractorSaturationStrengthMinDefault = 0.01;
-const attractorSaturationStrengthMaxDefault = 0.2;
-const attractorSaturationOffsetMinDefault = 0;
-const attractorSaturationOffsetMaxDefault = 1;
-const attractorValueStrengthMinDefault = 0.1;
-const attractorValueStrengthMaxDefault = 0.5;
-const attractorValueOffsetMinDefault = 0;
-const attractorValueOffsetMaxDefault = 3;
+const fatouSaturationStrengthMinDefault = 0.01;
+const fatouSaturationStrengthMaxDefault = 0.2;
+const fatouSaturationOffsetMinDefault = 0;
+const fatouSaturationOffsetMaxDefault = 1;
+const fatouValueStrengthMinDefault = 0.1;
+const fatouValueStrengthMaxDefault = 0.5;
+const fatouValueOffsetMinDefault = 0;
+const fatouValueOffsetMaxDefault = 3;
 const strengthOffsetMinMin = 0;
 const strengthOffsetMaxMax = 100;
 
@@ -447,11 +447,11 @@ describe("Render", () => {
     expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum value of Julia colour");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
 
-    // Check the attractors part renders correctly
+    // Check the Fatou part renders correctly
     disclosure = disclosures[1];
     headings5 = disclosure.findAll("h5");
     minMaxInputs = disclosure.findAllComponents(MinMaxInput);
-    expect(disclosure.vm.$props.headingText).toBe("Attractors");
+    expect(disclosure.vm.$props.headingText).toBe("Fatou colour");
     expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(4);
     expect(disclosure.vm.$props.rotateWhenExpand).toBe(true);
@@ -463,56 +463,48 @@ describe("Render", () => {
     expect(minMaxInputs[0].vm.$props.max).toBe(hueMaxMax);
     expect(minMaxInputs[0].vm.$props.step).toBe(1);
     expect(minMaxInputs[0].vm.$props.isIntegerOnly).toBe(true);
-    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of attractors colour");
-    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of attractors colour");
+    expect(minMaxInputs[0].vm.$props.minLabel).toBe("Minimum hue of Fatou colour");
+    expect(minMaxInputs[0].vm.$props.maxLabel).toBe("Maximum hue of Fatou colour");
     expect(minMaxInputs[0].vm.$props.level).toBe(6);
     expect(headings5[1].text()).toBe("Saturation strength");
-    expect(minMaxInputs[1].vm.$props.minValue).toBe(attractorSaturationStrengthMinDefault);
-    expect(minMaxInputs[1].vm.$props.maxValue).toBe(attractorSaturationStrengthMaxDefault);
+    expect(minMaxInputs[1].vm.$props.minValue).toBe(fatouSaturationStrengthMinDefault);
+    expect(minMaxInputs[1].vm.$props.maxValue).toBe(fatouSaturationStrengthMaxDefault);
     expect(minMaxInputs[1].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[1].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[1].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[1].vm.$props.isIntegerOnly).toBe(false);
-    expect(minMaxInputs[1].vm.$props.minLabel).toBe(
-      "Minimum saturation strength of attractors colour",
-    );
-    expect(minMaxInputs[1].vm.$props.maxLabel).toBe(
-      "Maximum saturation strength of attractors colour",
-    );
+    expect(minMaxInputs[1].vm.$props.minLabel).toBe("Minimum saturation strength of Fatou colour");
+    expect(minMaxInputs[1].vm.$props.maxLabel).toBe("Maximum saturation strength of Fatou colour");
     expect(minMaxInputs[1].vm.$props.level).toBe(6);
     expect(headings5[2].text()).toBe("Saturation offset");
-    expect(minMaxInputs[2].vm.$props.minValue).toBe(attractorSaturationOffsetMinDefault);
-    expect(minMaxInputs[2].vm.$props.maxValue).toBe(attractorSaturationOffsetMaxDefault);
+    expect(minMaxInputs[2].vm.$props.minValue).toBe(fatouSaturationOffsetMinDefault);
+    expect(minMaxInputs[2].vm.$props.maxValue).toBe(fatouSaturationOffsetMaxDefault);
     expect(minMaxInputs[2].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[2].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[2].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[2].vm.$props.isIntegerOnly).toBe(false);
-    expect(minMaxInputs[2].vm.$props.minLabel).toBe(
-      "Minimum saturation offset of attractors colour",
-    );
-    expect(minMaxInputs[2].vm.$props.maxLabel).toBe(
-      "Maximum saturation offset of attractors colour",
-    );
+    expect(minMaxInputs[2].vm.$props.minLabel).toBe("Minimum saturation offset of Fatou colour");
+    expect(minMaxInputs[2].vm.$props.maxLabel).toBe("Maximum saturation offset of Fatou colour");
     expect(minMaxInputs[2].vm.$props.level).toBe(6);
     expect(headings5[3].text()).toBe("Value strength");
-    expect(minMaxInputs[3].vm.$props.minValue).toBe(attractorValueStrengthMinDefault);
-    expect(minMaxInputs[3].vm.$props.maxValue).toBe(attractorValueStrengthMaxDefault);
+    expect(minMaxInputs[3].vm.$props.minValue).toBe(fatouValueStrengthMinDefault);
+    expect(minMaxInputs[3].vm.$props.maxValue).toBe(fatouValueStrengthMaxDefault);
     expect(minMaxInputs[3].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[3].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[3].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[3].vm.$props.isIntegerOnly).toBe(false);
-    expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum value strength of attractors colour");
-    expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum value strength of attractors colour");
+    expect(minMaxInputs[3].vm.$props.minLabel).toBe("Minimum value strength of Fatou colour");
+    expect(minMaxInputs[3].vm.$props.maxLabel).toBe("Maximum value strength of Fatou colour");
     expect(minMaxInputs[3].vm.$props.level).toBe(6);
     expect(headings5[4].text()).toBe("Value offset");
-    expect(minMaxInputs[4].vm.$props.minValue).toBe(attractorValueOffsetMinDefault);
-    expect(minMaxInputs[4].vm.$props.maxValue).toBe(attractorValueOffsetMaxDefault);
+    expect(minMaxInputs[4].vm.$props.minValue).toBe(fatouValueOffsetMinDefault);
+    expect(minMaxInputs[4].vm.$props.maxValue).toBe(fatouValueOffsetMaxDefault);
     expect(minMaxInputs[4].vm.$props.min).toBe(strengthOffsetMinMin);
     expect(minMaxInputs[4].vm.$props.max).toBe(strengthOffsetMaxMax);
     expect(minMaxInputs[4].vm.$props.step).toBe(0.1);
     expect(minMaxInputs[4].vm.$props.isIntegerOnly).toBe(false);
-    expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum value offset of attractors colour");
-    expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum value offset of attractors colour");
+    expect(minMaxInputs[4].vm.$props.minLabel).toBe("Minimum value offset of Fatou colour");
+    expect(minMaxInputs[4].vm.$props.maxLabel).toBe("Maximum value offset of Fatou colour");
     expect(minMaxInputs[4].vm.$props.level).toBe(6);
   });
 
@@ -710,18 +702,16 @@ describe("Interactions", () => {
       maxJuliaSaturation: 33,
       minJuliaValue: 34,
       maxJuliaValue: 35,
-      attractors: {
-        minHue: 36,
-        maxHue: 37,
-        minSaturationStrength: 38,
-        maxSaturationStrength: 39,
-        minSaturationOffset: 40,
-        maxSaturationOffset: 41,
-        minValueStrength: 42,
-        maxValueStrength: 43,
-        minValueOffset: 44,
-        maxValueOffset: 45,
-      },
+      minFatouHue: 36,
+      maxFatouHue: 37,
+      minFatouSaturationStrength: 38,
+      maxFatouSaturationStrength: 39,
+      minFatouSaturationOffset: 40,
+      maxFatouSaturationOffset: 41,
+      minFatouValueStrength: 42,
+      maxFatouValueStrength: 43,
+      minFatouValueOffset: 44,
+      maxFatouValueOffset: 45,
       minViewportScale: 46,
       maxViewportScale: 47,
       viewportCentre: { minMod: 48, maxMod: 49 },

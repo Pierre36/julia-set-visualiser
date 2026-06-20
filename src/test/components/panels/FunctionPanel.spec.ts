@@ -20,7 +20,7 @@ let props: TestProps;
 
 const fractalFunction = new FractalFunction(
   new Polynomial({
-    0: new ComplexCircle(new Complex(0, 0), 1, 2000),
+    0: new ComplexCircle(new Complex(0, 0), 1, 2000, 0),
     2: new Complex(1, 0),
   }),
   FunctionTypes.DEFAULT,
@@ -141,7 +141,7 @@ describe("Render", () => {
     expect(disclosure.vm.$props.headingText).toBe("Coefficients");
 
     // Check the coefficient items render correctly
-    coefficientItems.forEach((item: any) => {
+    coefficientItems.forEach((item: VueWrapper) => {
       expect(item.classes()).toContain("coefficient-item");
     });
     expect(coefficientItems.length).toBe(2);
@@ -235,7 +235,7 @@ describe("Render", () => {
     expect(disclosure.vm.$props.headingText).toBe("Denominator coefficients");
 
     // Check the coefficient items render correctly
-    coefficientItems.forEach((item: any) => {
+    coefficientItems.forEach((item: VueWrapper) => {
       expect(item.classes()).toContain("coefficient-item");
     });
     expect(coefficientItems.length).toBe(1);

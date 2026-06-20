@@ -1,26 +1,27 @@
+import NumberInput from "@/components/inputs/NumberInput.vue";
 import SliderInput from "@/components/inputs/SliderInput.vue";
-import AttractorItem from "@/components/items/AttractorItem.vue";
 import ColoursPanel from "@/components/panels/ColoursPanel.vue";
 import ExpandableDisclosure from "@/components/primitives/ExpandableDisclosure.vue";
-import IconTextButton from "@/components/primitives/IconTextButton.vue";
-import Attractor from "@/models/Attractor";
-import Complex from "@/models/Complex";
 import { config, mount } from "@vue/test-utils";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 interface TestProps {
   juliaHSV: number[];
-  defaultAttractor: Attractor;
-  infinityAttractor: Attractor;
-  attractors: Attractor[];
+  fatouHue: number;
+  fatouSaturationStrength: number;
+  fatouSaturationOffset: number;
+  fatouValueStrength: number;
+  fatouValueOffset: number;
 }
 
 let props: TestProps;
 
 const juliaHSV = [210, 0, 0];
-const defaultAttractor = new Attractor(undefined, 36, 0.3, 0.4, 0.5, 0.6);
-const infinityAttractor = new Attractor(undefined, 42, 0.7, 0.8, 0.9, 1.0);
-const attractor = new Attractor(new Complex(3, 6), 78, 1.1, 1.2, 1.3, 1.4);
+const fatouHue = 36;
+const fatouSaturationStrength = 0.3;
+const fatouSaturationOffset = 0.4;
+const fatouValueStrength = 0.5;
+const fatouValueOffset = 0.6;
 
 beforeAll(() => {
   config.global.renderStubDefaultSlot = true;
@@ -32,7 +33,14 @@ afterAll(() => {
 
 describe("Render", () => {
   beforeEach(() => {
-    props = { juliaHSV, defaultAttractor, infinityAttractor, attractors: [attractor] };
+    props = {
+      juliaHSV,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
+    };
   });
 
   it("renders the header correctly", () => {
@@ -99,52 +107,71 @@ describe("Render", () => {
 
   it("renders the Fatou section correctly", () => {
     // Mount the ColoursPanel
-    let coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
+    const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
     // Get the DOM elements
-    let content = coloursPanel.find(".panel-content");
-    let fatouSection = content.find("section:nth-of-type(2)");
+    const content = coloursPanel.find(".panel-content");
+    const fatouSection = content.find("section:nth-of-type(2)");
     const disclosure = fatouSection.findComponent(ExpandableDisclosure);
-    const attractorItems = fatouSection.findAllComponents(AttractorItem);
-    let addButton = fatouSection.findComponent(IconTextButton);
+    const sectionContent = fatouSection.find(".content");
+    const subHeadings = sectionContent.findAll("h4");
+    const sliderInput = sectionContent.findComponent(SliderInput);
+    const numberInputs = sectionContent.findAllComponents(NumberInput);
 
     // Check the info header renders correctly
     expect(disclosure.vm.$props.headingCentred).toBe(false);
     expect(disclosure.vm.$props.headingLevel).toBe(3);
     expect(disclosure.vm.$props.headingText).toBe("Fatou");
 
-    // Check the attractorItems are rendered correctly
-    expect(attractorItems[0].vm.$props.isDefault).toBe(true);
-    expect(attractorItems[0].vm.$props.isInfinity).toBe(false);
-    expect(attractorItems[0].vm.$props.attractor).toEqual(props.defaultAttractor);
-    expect(attractorItems[1].vm.$props.isDefault).toBe(false);
-    expect(attractorItems[1].vm.$props.isInfinity).toBe(true);
-    expect(attractorItems[1].vm.$props.attractor).toEqual(props.infinityAttractor);
-    expect(attractorItems[2].vm.$props.isDefault).toBe(false);
-    expect(attractorItems[2].vm.$props.isInfinity).toBe(false);
-    expect(attractorItems[2].vm.$props.attractor).toEqual(props.attractors[0]);
+    // Check the sliderInput is rendered correctly
+    expect(sliderInput.vm.$props.value).toBe(props.fatouHue);
+    expect(sliderInput.vm.$props.min).toBe(0);
+    expect(sliderInput.vm.$props.max).toBe(360);
+    expect(sliderInput.vm.$props.step).toBe(1);
+    expect(sliderInput.vm.$props.isIntegerOnly).toBe(true);
+    expect(sliderInput.vm.$props.label).toBe("Hue");
+    expect(sliderInput.vm.$props.level).toBe(4);
 
-    // Check the addButton is rendered correctly
-    expect(addButton.exists()).toBe(true);
-    expect(addButton.vm.$props.text).toBe("New Attractor");
+    // Check the sub headings are rendered correctly
+    expect(subHeadings[0].text()).toBe("Saturation");
+    expect(subHeadings[1].text()).toBe("Value");
 
-    // Mount the ColoursPanel with 16 attractors
-    for (let k = 0; k < 15; k++) {
-      props.attractors.push(new Attractor(new Complex(0, 0), 0, 0, 0, 0, 0));
-    }
-    coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
-
-    // Check the addButton is not displayed
-    content = coloursPanel.find(".panel-content");
-    fatouSection = content.find("section:nth-of-type(2)");
-    addButton = fatouSection.findComponent(IconTextButton);
-    expect(addButton.exists()).toBe(false);
+    // Check the NumberInputs are rendered correctly
+    expect(numberInputs[0].vm.$props.value).toBe(props.fatouSaturationStrength);
+    expect(numberInputs[0].vm.$props.min).toBe(0);
+    expect(numberInputs[0].vm.$props.max).toBeUndefined();
+    expect(numberInputs[0].vm.$props.step).toBe(0.1);
+    expect(numberInputs[0].vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInputs[0].vm.$props.label).toBe("Saturation strength");
+    expect(numberInputs[1].vm.$props.value).toBe(props.fatouSaturationOffset);
+    expect(numberInputs[1].vm.$props.max).toBeUndefined();
+    expect(numberInputs[1].vm.$props.step).toBe(0.1);
+    expect(numberInputs[1].vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInputs[1].vm.$props.label).toBe("Saturation offset");
+    expect(numberInputs[2].vm.$props.value).toBe(props.fatouValueStrength);
+    expect(numberInputs[2].vm.$props.min).toBe(0);
+    expect(numberInputs[2].vm.$props.max).toBeUndefined();
+    expect(numberInputs[2].vm.$props.step).toBe(0.1);
+    expect(numberInputs[2].vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInputs[2].vm.$props.label).toBe("Value strength");
+    expect(numberInputs[3].vm.$props.value).toBe(props.fatouValueOffset);
+    expect(numberInputs[3].vm.$props.max).toBeUndefined();
+    expect(numberInputs[3].vm.$props.step).toBe(0.1);
+    expect(numberInputs[3].vm.$props.isIntegerOnly).toBe(false);
+    expect(numberInputs[3].vm.$props.label).toBe("Value offset");
   });
 });
 
 describe("Interactions", () => {
   beforeEach(() => {
-    props = { juliaHSV, defaultAttractor, infinityAttractor, attractors: [attractor] };
+    props = {
+      juliaHSV,
+      fatouHue,
+      fatouSaturationStrength,
+      fatouSaturationOffset,
+      fatouValueStrength,
+      fatouValueOffset,
+    };
   });
 
   it("changes the Julia hue when updating the Julia hue slider", () => {
@@ -195,77 +222,85 @@ describe("Interactions", () => {
     expect(props.juliaHSV[2]).toBe(newValue);
   });
 
-  it("emits change when the default attractor changes", () => {
+  it("changes the hue when updating the Fatou hue slider", () => {
     // Mount the ColoursPanel
     const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
-    // Get the DOM elements
+    // Get the slider input
     const content = coloursPanel.find(".panel-content");
     const fatouSection = content.find("section:nth-of-type(2)");
-    const defaultAttractorItem = fatouSection.findAllComponents(AttractorItem)[0];
+    const sectionContent = fatouSection.find(".content");
+    const sliderInput = sectionContent.findComponent(SliderInput);
 
-    // Change the default attractor and check change is emitted
-    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
-    defaultAttractorItem.vm.$emit("update:attractor", newAttractor);
-    expect(coloursPanel.emitted()["update:defaultAttractor"]).toEqual([[newAttractor]]);
+    // Update the slider input and check the hue is changed
+    const newHue = 42;
+    sliderInput.vm.$emit("update:value", newHue);
+    expect(coloursPanel.emitted()["update:fatouHue"]).toEqual([[newHue]]);
   });
 
-  it("emits change when the infinity attractor changes", () => {
+  it("changes the saturation strength when updating the Fatou saturation strength number input", () => {
     // Mount the ColoursPanel
     const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
-    // Get the DOM elements
+    // Get the number input
     const content = coloursPanel.find(".panel-content");
     const fatouSection = content.find("section:nth-of-type(2)");
-    const infinityAttractorItem = fatouSection.findAllComponents(AttractorItem)[1];
+    const sectionContent = fatouSection.find(".content");
+    const numberInput = sectionContent.findAllComponents(NumberInput)[0];
 
-    // Change the infinity attractor and check change is emitted
-    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
-    infinityAttractorItem.vm.$emit("update:attractor", newAttractor);
-    expect(coloursPanel.emitted()["update:infinityAttractor"]).toEqual([[newAttractor]]);
+    // Update the number input and check the saturation strength is changed
+    const newSaturationStrength = 3.6;
+    numberInput.vm.$emit("update:value", newSaturationStrength);
+    expect(coloursPanel.emitted()["update:fatouSaturationStrength"]).toEqual([
+      [newSaturationStrength],
+    ]);
   });
 
-  it("emits change when a normal attractor changes", () => {
+  it("changes the saturation offset when updating the Fatou saturation offset number input", () => {
     // Mount the ColoursPanel
     const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
-    // Get the DOM elements
+    // Get the number input
     const content = coloursPanel.find(".panel-content");
     const fatouSection = content.find("section:nth-of-type(2)");
-    const normalAttractorItem = fatouSection.findAllComponents(AttractorItem)[2];
+    const sectionContent = fatouSection.find(".content");
+    const numberInput = sectionContent.findAllComponents(NumberInput)[1];
 
-    // Change the normal attractor and check change is emitted
-    const newAttractor = new Attractor(undefined, 1, 2, 3, 4, 5);
-    normalAttractorItem.vm.$emit("update:attractor", newAttractor);
-    expect(props.attractors[0]).toEqual(newAttractor);
+    // Update the number input and check the saturation offset is changed
+    const newSaturationOffset = 3.6;
+    numberInput.vm.$emit("update:value", newSaturationOffset);
+    expect(coloursPanel.emitted()["update:fatouSaturationOffset"]).toEqual([[newSaturationOffset]]);
   });
 
-  it("deletes the attractor when attractorItem emits deletion event", () => {
+  it("changes the value strength when updating the Fatou value strength number input", () => {
     // Mount the ColoursPanel
     const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
-    // Get the DOM elements
+    // Get the number input
     const content = coloursPanel.find(".panel-content");
     const fatouSection = content.find("section:nth-of-type(2)");
-    const normalAttractorItem = fatouSection.findAllComponents(AttractorItem)[2];
+    const sectionContent = fatouSection.find(".content");
+    const numberInput = sectionContent.findAllComponents(NumberInput)[2];
 
-    // Change the normal attractor and check change is emitted
-    normalAttractorItem.vm.$emit("delete:attractor");
-    expect(props.attractors.length).toBe(0);
+    // Update the number input and check the value strength is changed
+    const newValueStrength = 3.6;
+    numberInput.vm.$emit("update:value", newValueStrength);
+    expect(coloursPanel.emitted()["update:fatouValueStrength"]).toEqual([[newValueStrength]]);
   });
 
-  it("adds an attractor when clicking the add button", () => {
+  it("changes the value offset when updating the Fatou value offset number input", () => {
     // Mount the ColoursPanel
     const coloursPanel = mount(ColoursPanel, { props: props, shallow: true });
 
-    // Get the DOM elements
+    // Get the number input
     const content = coloursPanel.find(".panel-content");
     const fatouSection = content.find("section:nth-of-type(2)");
-    const addButton = fatouSection.findComponent(IconTextButton);
+    const sectionContent = fatouSection.find(".content");
+    const numberInput = sectionContent.findAllComponents(NumberInput)[3];
 
-    // Change the normal attractor and check change is emitted
-    addButton.trigger("click");
-    expect(props.attractors.length).toBe(2);
-    expect(props.attractors[1]).toEqual(new Attractor(new Complex(0, 0), 0, 1, 0, 1, 0));
+    // Update the number input and check the value offset is changed
+    const newValueOffset = 3.6;
+    numberInput.vm.$emit("update:value", newValueOffset);
+    expect(coloursPanel.emitted()["update:fatouValueOffset"]).toEqual([[newValueOffset]]);
   });
 });

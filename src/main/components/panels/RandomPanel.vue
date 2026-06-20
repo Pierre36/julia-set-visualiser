@@ -74,18 +74,16 @@ const randomParameters = ref({
   maxJuliaSaturation: 0,
   minJuliaValue: 1,
   maxJuliaValue: 1,
-  attractors: {
-    minHue: 0,
-    maxHue: 360,
-    minSaturationStrength: 0.01,
-    maxSaturationStrength: 0.2,
-    minSaturationOffset: 0,
-    maxSaturationOffset: 1,
-    minValueStrength: 0.1,
-    maxValueStrength: 0.5,
-    minValueOffset: 0,
-    maxValueOffset: 3,
-  },
+  minFatouHue: 0,
+  maxFatouHue: 360,
+  minFatouSaturationStrength: 0.01,
+  maxFatouSaturationStrength: 0.2,
+  minFatouSaturationOffset: 0,
+  maxFatouSaturationOffset: 1,
+  minFatouValueStrength: 0.1,
+  maxFatouValueStrength: 0.5,
+  minFatouValueOffset: 0,
+  maxFatouValueOffset: 3,
   minViewportScale: 1,
   maxViewportScale: 3,
   viewportCentre: { minMod: 0, maxMod: 0 },
@@ -432,7 +430,7 @@ function randomise() {
             />
           </ExpandableDisclosure>
           <ExpandableDisclosure
-            headingText="Attractors"
+            headingText="Fatou colour"
             :headingLevel="4"
             :rotateWhenExpand="true"
             buttonTitle="Show"
@@ -441,66 +439,66 @@ function randomise() {
             <h5>Hue</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractors.minHue"
-              v-model:maxValue="randomParameters.attractors.maxHue"
+              v-model:minValue="randomParameters.minFatouHue"
+              v-model:maxValue="randomParameters.maxFatouHue"
               :min="0"
               :max="360"
               :step="1"
               :isIntegerOnly="true"
-              minLabel="Minimum hue of attractors colour"
-              maxLabel="Maximum hue of attractors colour"
+              minLabel="Minimum hue of Fatou colour"
+              maxLabel="Maximum hue of Fatou colour"
               :level="6"
             />
             <h5>Saturation strength</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractors.minSaturationStrength"
-              v-model:maxValue="randomParameters.attractors.maxSaturationStrength"
+              v-model:minValue="randomParameters.minFatouSaturationStrength"
+              v-model:maxValue="randomParameters.maxFatouSaturationStrength"
               :min="0"
               :max="100"
               :step="0.1"
               :isIntegerOnly="false"
-              minLabel="Minimum saturation strength of attractors colour"
-              maxLabel="Maximum saturation strength of attractors colour"
+              minLabel="Minimum saturation strength of Fatou colour"
+              maxLabel="Maximum saturation strength of Fatou colour"
               :level="6"
             />
             <h5>Saturation offset</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractors.minSaturationOffset"
-              v-model:maxValue="randomParameters.attractors.maxSaturationOffset"
+              v-model:minValue="randomParameters.minFatouSaturationOffset"
+              v-model:maxValue="randomParameters.maxFatouSaturationOffset"
               :min="0"
               :max="100"
               :step="0.1"
               :isIntegerOnly="false"
-              minLabel="Minimum saturation offset of attractors colour"
-              maxLabel="Maximum saturation offset of attractors colour"
+              minLabel="Minimum saturation offset of Fatou colour"
+              maxLabel="Maximum saturation offset of Fatou colour"
               :level="6"
             />
             <h5>Value strength</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractors.minValueStrength"
-              v-model:maxValue="randomParameters.attractors.maxValueStrength"
+              v-model:minValue="randomParameters.minFatouValueStrength"
+              v-model:maxValue="randomParameters.maxFatouValueStrength"
               :min="0"
               :max="100"
               :step="0.1"
               :isIntegerOnly="false"
-              minLabel="Minimum value strength of attractors colour"
-              maxLabel="Maximum value strength of attractors colour"
+              minLabel="Minimum value strength of Fatou colour"
+              maxLabel="Maximum value strength of Fatou colour"
               :level="6"
             />
             <h5>Value offset</h5>
             <MinMaxInput
               class="parameter-input"
-              v-model:minValue="randomParameters.attractors.minValueOffset"
-              v-model:maxValue="randomParameters.attractors.maxValueOffset"
+              v-model:minValue="randomParameters.minFatouValueOffset"
+              v-model:maxValue="randomParameters.maxFatouValueOffset"
               :min="0"
               :max="100"
               :step="0.1"
               :isIntegerOnly="false"
-              minLabel="Minimum value offset of attractors colour"
-              maxLabel="Maximum value offset of attractors colour"
+              minLabel="Minimum value offset of Fatou colour"
+              maxLabel="Maximum value offset of Fatou colour"
               :level="6"
             />
           </ExpandableDisclosure>

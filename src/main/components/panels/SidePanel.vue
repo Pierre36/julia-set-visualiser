@@ -25,9 +25,11 @@ const configuration = defineModel<Configuration>("configuration", { required: tr
       <ColoursPanel
         v-show="currentPanel == 'COLOURS'"
         v-model:juliaHSV="configuration.juliaHSV"
-        v-model:defaultAttractor="configuration.defaultAttractor"
-        v-model:infinityAttractor="configuration.infinityAttractor"
-        v-model:attractors="configuration.attractors"
+        v-model:fatouHue="configuration.fatouHue"
+        v-model:fatouSaturationStrength="configuration.fatouSaturationStrength"
+        v-model:fatouSaturationOffset="configuration.fatouSaturationOffset"
+        v-model:fatouValueStrength="configuration.fatouValueStrength"
+        v-model:fatouValueOffset="configuration.fatouValueOffset"
       />
       <AdvancedSettingsPanel
         v-show="currentPanel == 'ADVANCED'"

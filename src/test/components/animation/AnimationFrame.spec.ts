@@ -3,7 +3,6 @@ import AnimationOverlay from "@/components/animation/AnimationOverlay.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
 import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
 import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
-import Attractor from "@/models/Attractor";
 import Complex from "@/models/Complex";
 import Configuration from "@/models/Configuration";
 import type FractalFunction from "@/models/FractalFunction";
@@ -75,7 +74,7 @@ describe("Render", () => {
     expect(errorMessage.find("p").text()).toBe(error.toString());
 
     // Check console.error is called correctly
-    expect(console.error).toBeCalledWith(error);
+    expect(console.error).toHaveBeenCalledWith(error);
   });
 });
 
@@ -125,7 +124,7 @@ describe("Interactions", () => {
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
 
     // Check initialisation is called correctly
-    expect(initialise).toBeCalledWith(animationFrame.find("canvas").element);
+    expect(initialise).toHaveBeenCalledWith(animationFrame.find("canvas").element);
   });
 
   it("recreates the viewport when the window size changes", async () => {
@@ -221,7 +220,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateCanvasResolution).toBeCalledWith(newResolutionScale);
+    expect(mockedFractalGenerator.updateCanvasResolution).toHaveBeenCalledWith(newResolutionScale);
   });
 
   it("updates the fractal engine when the coordinates scale changes", async () => {
@@ -235,7 +234,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.COORDINATES_SCALE,
       newCoordinatesScale,
     );
@@ -252,7 +251,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.COORDINATES_CENTRE,
       [newCoordinatesCentre.re, newCoordinatesCentre.im],
     );
@@ -269,7 +268,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.ITERATIONS_COUNT,
       newIterationsCount,
     );
@@ -286,7 +285,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.EPSILON,
       newEpsilon,
     );
@@ -303,7 +302,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.JULIA_BOUND,
       newJuliaBound,
     );
@@ -319,19 +318,19 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.IS_NEWTON,
       1,
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
       props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.NUMERATOR,
       props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.DENOMINATOR,
       props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
@@ -347,19 +346,19 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.IS_NEWTON,
       0,
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.NEWTON_COEFFICIENT,
       props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.NUMERATOR,
       props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.DENOMINATOR,
       props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
@@ -375,77 +374,94 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
       FractalGeneratorParameters.JULIA_HSV,
       props.configuration.juliaHSV,
     );
   });
 
-  it("updates the fractal engine when the default attractor changes", async () => {
+  it("updates the fractal engine when the Fatou hue changes", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
     await flushPromises();
 
-    // Change the default attractor
-    const newHue = 36;
-    animationFrame.vm.$props.configuration.defaultAttractor.hue = newHue;
+    // Change the Fatou hue
+    const newFatouHue = 180;
+    animationFrame.vm.$props.configuration.fatouHue = newFatouHue;
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
-      FractalGeneratorParameters.DEFAULT_COLOUR,
-      [
-        newHue,
-        props.configuration.defaultAttractor.saturationStrength,
-        props.configuration.defaultAttractor.saturationOffset,
-        props.configuration.defaultAttractor.valueStrength,
-        props.configuration.defaultAttractor.valueOffset,
-      ],
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
+      FractalGeneratorParameters.FATOU_HUE,
+      newFatouHue,
     );
   });
 
-  it("updates the fractal engine when the infinity attractor changes", async () => {
+  it("updates the fractal engine when the Fatou saturation strength changes", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
     await flushPromises();
 
-    // Change the infinity attractor
-    const newHue = 36;
-    animationFrame.vm.$props.configuration.infinityAttractor.hue = newHue;
+    // Change the Fatou saturation strength
+    const newFatouSaturationStrength = 0.3;
+    animationFrame.vm.$props.configuration.fatouSaturationStrength = newFatouSaturationStrength;
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
-      FractalGeneratorParameters.INFINITY_COLOUR,
-      [
-        newHue,
-        props.configuration.infinityAttractor.saturationStrength,
-        props.configuration.infinityAttractor.saturationOffset,
-        props.configuration.infinityAttractor.valueStrength,
-        props.configuration.infinityAttractor.valueOffset,
-      ],
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
+      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
+      newFatouSaturationStrength,
     );
   });
 
-  it("updates the fractal engine when an attractor changes", async () => {
+  it("updates the fractal engine when the Fatou saturation offset changes", async () => {
     // Mount the AnimationFrame
     const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
     await flushPromises();
 
-    // Add an attractor
-    animationFrame.vm.$props.configuration.attractors.push(
-      new Attractor(new Complex(0, 0), 36, 0.1, 0.2, 0.3, 0.4),
-    );
+    // Change the Fatou saturation offset
+    const newFatouSaturationOffset = 0.3;
+    animationFrame.vm.$props.configuration.fatouSaturationOffset = newFatouSaturationOffset;
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
-      FractalGeneratorParameters.ATTRACTORS,
-      [0, 0, 0, 0, 36, 0.1, 0.2, 0.3, 0.4],
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
+      FractalGeneratorParameters.FATOU_SATURATION_OFFSET,
+      newFatouSaturationOffset,
     );
-    expect(mockedFractalGenerator.updateParameter).toBeCalledWith(
-      FractalGeneratorParameters.ATTRACTORS_COUNT,
-      props.configuration.attractors.length,
+  });
+
+  it("updates the fractal engine when the Fatou value strength changes", async () => {
+    // Mount the AnimationFrame
+    const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
+    await flushPromises();
+
+    // Change the Fatou value strength
+    const newFatouValueStrength = 0.3;
+    animationFrame.vm.$props.configuration.fatouValueStrength = newFatouValueStrength;
+    await animationFrame.vm.$nextTick();
+
+    // Check the fractal engine is updated
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
+      FractalGeneratorParameters.FATOU_VALUE_STRENGTH,
+      newFatouValueStrength,
+    );
+  });
+
+  it("updates the fractal engine when the Fatou value offset changes", async () => {
+    // Mount the AnimationFrame
+    const animationFrame = mount(AnimationFrame, { props: props, shallow: true });
+    await flushPromises();
+
+    // Change the Fatou value offset
+    const newFatouValueOffset = 0.3;
+    animationFrame.vm.$props.configuration.fatouValueOffset = newFatouValueOffset;
+    await animationFrame.vm.$nextTick();
+
+    // Check the fractal engine is updated
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
+      FractalGeneratorParameters.FATOU_VALUE_OFFSET,
+      newFatouValueOffset,
     );
   });
 

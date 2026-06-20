@@ -22,7 +22,6 @@ enum BufferNames {
   FUNCTION_STORAGE = "FUNCTION_STORAGE_BUFFER",
   FRACTION_STORAGE = "FRACTION_STORAGE_BUFFER",
   FRACTAL_UNIFORMS = "FRACTAL_UNIFORMS_BUFFER",
-  ATTRACTORS_STORAGE = "ATTRACTORS_STORAGE_BUFFER",
 }
 
 /** Enumeration for the buffers views */
@@ -84,30 +83,33 @@ const PARAMS_MAPPING: {
   },
   EPSILON: { bufferName: BufferNames.FRACTAL_UNIFORMS, offset: 1, view: BufferViews.FLOAT32 },
   JULIA_BOUND: { bufferName: BufferNames.FRACTAL_UNIFORMS, offset: 2, view: BufferViews.FLOAT32 },
-  ATTRACTORS_COUNT: {
-    bufferName: BufferNames.FRACTAL_UNIFORMS,
-    offset: 3,
-    view: BufferViews.UINT32,
-  },
-  DEFAULT_COLOUR: {
+  FATOU_HUE: { bufferName: BufferNames.FRACTAL_UNIFORMS, offset: 3, view: BufferViews.FLOAT32 },
+  FATOU_SATURATION_STRENGTH: {
     bufferName: BufferNames.FRACTAL_UNIFORMS,
     offset: 4,
     view: BufferViews.FLOAT32,
-    isArray: true,
   },
-  INFINITY_COLOUR: {
+  FATOU_SATURATION_OFFSET: {
     bufferName: BufferNames.FRACTAL_UNIFORMS,
-    offset: 12,
+    offset: 5,
     view: BufferViews.FLOAT32,
-    isArray: true,
+  },
+  FATOU_VALUE_STRENGTH: {
+    bufferName: BufferNames.FRACTAL_UNIFORMS,
+    offset: 6,
+    view: BufferViews.FLOAT32,
+  },
+  FATOU_VALUE_OFFSET: {
+    bufferName: BufferNames.FRACTAL_UNIFORMS,
+    offset: 7,
+    view: BufferViews.FLOAT32,
   },
   JULIA_HSV: {
     bufferName: BufferNames.FRACTAL_UNIFORMS,
-    offset: 20,
+    offset: 8,
     view: BufferViews.FLOAT32,
     isArray: true,
   },
-  ATTRACTORS: { bufferName: BufferNames.ATTRACTORS_STORAGE, offset: 0, isArray: true },
 };
 
 /**
@@ -248,7 +250,6 @@ export default class WebGpuFractalGenerator {
       FUNCTION_STORAGE_BUFFER: this.createFunctionStorageBuffer(gpuDevice),
       FRACTION_STORAGE_BUFFER: this.createFractionStorageBuffer(gpuDevice),
       FRACTAL_UNIFORMS_BUFFER: this.createFractalUniformsBuffer(gpuDevice),
-      ATTRACTORS_STORAGE_BUFFER: this.createAttractorsStorageBuffers(gpuDevice),
     };
   }
 
@@ -371,7 +372,7 @@ export default class WebGpuFractalGenerator {
    * @returns the fractal uniforms buffer details
    */
   private static createFractalUniformsBuffer(gpuDevice: GPUDevice): BufferDetails {
-    const arrayBuffer = new ArrayBuffer(24 * 4);
+    const arrayBuffer = new ArrayBuffer(12 * 4);
     return {
       buffer: gpuDevice.createBuffer({
         label: BufferNames.FRACTAL_UNIFORMS,
@@ -382,24 +383,6 @@ export default class WebGpuFractalGenerator {
       views: new Map()
         .set(BufferViews.UINT32, new Uint32Array(arrayBuffer))
         .set(BufferViews.FLOAT32, new Float32Array(arrayBuffer)),
-    };
-  }
-
-  /**
-   * Initialise the attractors storage buffer
-   *
-   * @param gpuDevice GPU device to create the buffer
-   * @returns the attractors storage buffer details
-   */
-  private static createAttractorsStorageBuffers(gpuDevice: GPUDevice): BufferDetails {
-    return {
-      buffer: gpuDevice.createBuffer({
-        label: BufferNames.ATTRACTORS_STORAGE,
-        size: (4 + 5) * 16 * 4,
-        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
-      }),
-      values: new Float32Array((4 + 5) * 16),
-      views: new Map(),
     };
   }
 
@@ -452,11 +435,6 @@ export default class WebGpuFractalGenerator {
           buffer: { type: "storage" },
         },
         { binding: 5, visibility: GPUShaderStage.FRAGMENT, buffer: {} },
-        {
-          binding: 6,
-          visibility: GPUShaderStage.FRAGMENT,
-          buffer: { type: "read-only-storage" },
-        },
       ],
     });
   }
@@ -484,7 +462,6 @@ export default class WebGpuFractalGenerator {
         { binding: 3, resource: { buffer: buffers[BufferNames.FUNCTION_STORAGE].buffer } },
         { binding: 4, resource: { buffer: buffers[BufferNames.FRACTION_STORAGE].buffer } },
         { binding: 5, resource: { buffer: buffers[BufferNames.FRACTAL_UNIFORMS].buffer } },
-        { binding: 6, resource: { buffer: buffers[BufferNames.ATTRACTORS_STORAGE].buffer } },
       ],
     });
   }
@@ -615,39 +592,24 @@ export default class WebGpuFractalGenerator {
     );
     this.updateParameter(FractalGeneratorParameters.EPSILON, configuration.epsilon);
     this.updateParameter(FractalGeneratorParameters.JULIA_BOUND, configuration.juliaBound);
+    this.updateParameter(FractalGeneratorParameters.FATOU_HUE, configuration.fatouHue);
+    this.updateParameter(
+      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
+      configuration.fatouSaturationStrength,
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.FATOU_SATURATION_OFFSET,
+      configuration.fatouSaturationOffset,
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.FATOU_VALUE_STRENGTH,
+      configuration.fatouValueStrength,
+    );
+    this.updateParameter(
+      FractalGeneratorParameters.FATOU_VALUE_OFFSET,
+      configuration.fatouValueOffset,
+    );
     this.updateParameter(FractalGeneratorParameters.JULIA_HSV, configuration.juliaHSV);
-    this.updateParameter(FractalGeneratorParameters.DEFAULT_COLOUR, [
-      configuration.defaultAttractor.hue,
-      configuration.defaultAttractor.saturationStrength,
-      configuration.defaultAttractor.saturationOffset,
-      configuration.defaultAttractor.valueStrength,
-      configuration.defaultAttractor.valueOffset,
-    ]);
-    this.updateParameter(FractalGeneratorParameters.INFINITY_COLOUR, [
-      configuration.infinityAttractor.hue,
-      configuration.infinityAttractor.saturationStrength,
-      configuration.infinityAttractor.saturationOffset,
-      configuration.infinityAttractor.valueStrength,
-      configuration.infinityAttractor.valueOffset,
-    ]);
-    this.updateParameter(
-      FractalGeneratorParameters.ATTRACTORS_COUNT,
-      configuration.attractors.length,
-    );
-    this.updateParameter(
-      FractalGeneratorParameters.ATTRACTORS,
-      configuration.attractors.flatMap((attractor) => [
-        attractor.complex?.re || 0,
-        attractor.complex?.im || 0,
-        0,
-        0,
-        attractor.hue,
-        attractor.saturationStrength,
-        attractor.saturationOffset,
-        attractor.valueStrength,
-        attractor.valueOffset,
-      ]),
-    );
   }
 
   /**
