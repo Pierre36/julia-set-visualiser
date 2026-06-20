@@ -45,13 +45,17 @@ fn multiply(z1: vec2f, z2: vec2f) -> vec2f {
   );
 }
 
-fn divide(z1: vec2f, z2: vec2f, value_when_both_infinity: vec2f) -> vec2f {
+fn divide(z1: vec2f, z2: vec2f, value_when_both_zero: vec2f, value_when_both_infinity: vec2f) -> vec2f {
   let mod_z1 = length(z1);
+  let mod_z2 = length(z2);
+
   if (mod_z1 == 0) {
+    if (mod_z2 == 0) {
+      return value_when_both_zero;
+    }
     return ZERO_POINT;
   }
 
-  let mod_z2 = length(z2);
   if (mod_z2 == 0) {
     return INFINITY_POINT;
   }
@@ -101,6 +105,37 @@ fn getPolynomialDegree(offset: u32, coefs_count: u32) -> f32 {
   return power;
 }
 
+fn evaluateFractionAtZero() -> vec2f {
+  let lower_numerator_coef = fraction[0];
+  let lower_denominator_coef = fraction[function_params.numerator_coefs_count];
+
+  let numerator_at_zero = select(lower_numerator_coef.xy, ZERO_POINT, lower_numerator_coef.z > 0);
+  let denominator_at_zero = select(lower_denominator_coef.xy, ZERO_POINT, lower_denominator_coef.z > 0);
+
+  let mod_numerator_at_zero = length(numerator_at_zero);
+  let mod_denominator_at_zero = length(denominator_at_zero);
+
+  if (mod_numerator_at_zero == 0) {
+    if (mod_denominator_at_zero == 0) {
+      let numerator_degree = getPolynomialDegree(0, function_params.numerator_coefs_count);
+      let denominator_degree = getPolynomialDegree(16, function_params.denominator_coefs_count);
+      if (numerator_degree > denominator_degree) {
+        return ZERO_POINT;
+      } else {
+        return INFINITY_POINT;
+      }
+    } else {
+      return ZERO_POINT;
+    }
+  } else {
+    if (mod_denominator_at_zero == 0) {
+      return INFINITY_POINT;
+    } else {
+      return divide(numerator_at_zero, denominator_at_zero, ZERO_POINT, ZERO_POINT);
+    }
+  }
+}
+
 fn evaluateFractionAtInfinity() -> vec2f {
   let higher_numerator_coef = fraction[function_params.numerator_coefs_count - 1];
   let higher_denominator_coef = fraction[function_params.denominator_coefs_count + 15];
@@ -110,7 +145,7 @@ fn evaluateFractionAtInfinity() -> vec2f {
 
   return select(
     select(
-      divide(higher_numerator_coef.xy, higher_denominator_coef.xy, vec2f(1, 0)),
+      divide(higher_numerator_coef.xy, higher_denominator_coef.xy, vec2f(1, 0), vec2f(1, 0)),
       ZERO_POINT,
       numerator_degree < denominator_degree
     ),
@@ -119,13 +154,14 @@ fn evaluateFractionAtInfinity() -> vec2f {
   );
 }
 
-fn applyFunction(z: vec2f, value_at_infinity: vec2f) -> vec2f {
+fn applyFunction(z: vec2f, value_at_zero: vec2f, value_at_infinity: vec2f) -> vec2f {
   if (length(z) >= INFINITY) {
     return value_at_infinity;
   }
   return divide(
     evaluatePolynomial(z, 0, function_params.numerator_coefs_count),
     evaluatePolynomial(z, 16, function_params.denominator_coefs_count),
+    value_at_zero,
     value_at_infinity
   );
 }
@@ -191,14 +227,15 @@ fn fragmentMain(@location(0) z: vec2f) -> @location(0) vec4f {
   var fkz = z;
   var fkzeps = z + fractal_params.epsilon;
 
+  let value_at_zero = evaluateFractionAtZero();
   let value_at_infinity = evaluateFractionAtInfinity();
 
   var divergence: f32 = 0;
   var distance: f32 = INFINITY;
   var k: u32 = 0;
   while (k < fractal_params.iterations_count && distance > 0) {
-    fkz = applyFunction(fkz, value_at_infinity);
-    fkzeps = applyFunction(fkzeps, value_at_infinity);
+    fkz = applyFunction(fkz, value_at_zero, value_at_infinity);
+    fkzeps = applyFunction(fkzeps, value_at_zero, value_at_infinity);
     distance = chordalDistance(fkz, fkzeps);
     divergence += distance;
     k++;
