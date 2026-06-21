@@ -1,7 +1,25 @@
 <script setup lang="ts">
 import AnimationOverlay from "@/components/animation/AnimationOverlay.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
-import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import {
+  COORDINATES_CENTRE,
+  COORDINATES_SCALE,
+  DENOMINATOR,
+  DENOMINATOR_COEFFICIENTS_COUNT,
+  EPSILON,
+  FATOU_HUE,
+  FATOU_SATURATION_OFFSET,
+  FATOU_SATURATION_STRENGTH,
+  FATOU_VALUE_OFFSET,
+  FATOU_VALUE_STRENGTH,
+  IS_NEWTON,
+  ITERATIONS_COUNT,
+  JULIA_BOUND,
+  JULIA_HSV,
+  NEWTON_COEFFICIENT,
+  NUMERATOR,
+  NUMERATOR_COEFFICIENTS_COUNT,
+} from "@/generators/FractalGeneratorParameter";
 import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
 import Configuration from "@/models/Configuration";
 import { onMounted, onUnmounted, ref, useTemplateRef, watch, type Ref } from "vue";
@@ -20,54 +38,50 @@ watch(
 );
 watch(
   () => configuration.value.coordinatesScale,
-  (scale) => fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_SCALE, scale),
+  (scale) => fractalGenerator?.updateParameter(COORDINATES_SCALE, scale),
 );
 watch(
   () => configuration.value.coordinatesCentre,
-  (centre) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
-      centre.re,
-      centre.im,
-    ]),
+  (centre) => fractalGenerator?.updateParameter(COORDINATES_CENTRE, [centre.re, centre.im]),
   { deep: true },
 );
 watch(
   () => configuration.value.iterationsCount,
-  (count) => fractalGenerator?.updateParameter(FractalGeneratorParameters.ITERATIONS_COUNT, count),
+  (count) => fractalGenerator?.updateParameter(ITERATIONS_COUNT, count),
 );
 watch(
   () => configuration.value.epsilon,
-  (epsilon) => fractalGenerator?.updateParameter(FractalGeneratorParameters.EPSILON, epsilon),
+  (epsilon) => fractalGenerator?.updateParameter(EPSILON, epsilon),
 );
 watch(
   () => configuration.value.juliaBound,
-  (bound) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_BOUND, bound),
+  (bound) => fractalGenerator?.updateParameter(JULIA_BOUND, bound),
 );
 watch(
   () => configuration.value.fractalFunction,
   (fractalFunction) => {
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.IS_NEWTON,
+      IS_NEWTON,
       fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0,
     );
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
+      NUMERATOR_COEFFICIENTS_COUNT,
       fractalFunction.getNumeratorCoefficients().length,
     );
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
+      DENOMINATOR_COEFFICIENTS_COUNT,
       fractalFunction.getDenominatorCoefficients().length,
     );
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      NEWTON_COEFFICIENT,
       fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.NUMERATOR,
+      NUMERATOR,
       fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.DENOMINATOR,
+      DENOMINATOR,
       fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   },
@@ -75,35 +89,28 @@ watch(
 );
 watch(
   () => configuration.value.juliaHSV,
-  (hsv) => fractalGenerator?.updateParameter(FractalGeneratorParameters.JULIA_HSV, hsv),
+  (hsv) => fractalGenerator?.updateParameter(JULIA_HSV, hsv),
   { deep: true },
 );
 watch(
   () => configuration.value.fatouHue,
-  (hue) => fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_HUE, hue),
+  (hue) => fractalGenerator?.updateParameter(FATOU_HUE, hue),
 );
 watch(
   () => configuration.value.fatouSaturationStrength,
-  (strength) =>
-    fractalGenerator?.updateParameter(
-      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
-      strength,
-    ),
+  (strength) => fractalGenerator?.updateParameter(FATOU_SATURATION_STRENGTH, strength),
 );
 watch(
   () => configuration.value.fatouSaturationOffset,
-  (offset) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_SATURATION_OFFSET, offset),
+  (offset) => fractalGenerator?.updateParameter(FATOU_SATURATION_OFFSET, offset),
 );
 watch(
   () => configuration.value.fatouValueStrength,
-  (strength) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_VALUE_STRENGTH, strength),
+  (strength) => fractalGenerator?.updateParameter(FATOU_VALUE_STRENGTH, strength),
 );
 watch(
   () => configuration.value.fatouValueOffset,
-  (offset) =>
-    fractalGenerator?.updateParameter(FractalGeneratorParameters.FATOU_VALUE_OFFSET, offset),
+  (offset) => fractalGenerator?.updateParameter(FATOU_VALUE_OFFSET, offset),
 );
 
 onMounted(async () => {

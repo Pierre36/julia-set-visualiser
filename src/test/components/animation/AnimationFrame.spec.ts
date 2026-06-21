@@ -1,7 +1,23 @@
 import AnimationFrame from "@/components/animation/AnimationFrame.vue";
 import AnimationOverlay from "@/components/animation/AnimationOverlay.vue";
 import FunctionTypes from "@/constants/FunctionTypes";
-import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import {
+  COORDINATES_CENTRE,
+  COORDINATES_SCALE,
+  DENOMINATOR,
+  EPSILON,
+  FATOU_HUE,
+  FATOU_SATURATION_OFFSET,
+  FATOU_SATURATION_STRENGTH,
+  FATOU_VALUE_OFFSET,
+  FATOU_VALUE_STRENGTH,
+  IS_NEWTON,
+  ITERATIONS_COUNT,
+  JULIA_BOUND,
+  JULIA_HSV,
+  NEWTON_COEFFICIENT,
+  NUMERATOR,
+} from "@/generators/FractalGeneratorParameter";
 import WebGpuFractalGenerator from "@/generators/WebGpuFractalGenerator";
 import Complex from "@/models/Complex";
 import Configuration from "@/models/Configuration";
@@ -235,7 +251,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.COORDINATES_SCALE,
+      COORDINATES_SCALE,
       newCoordinatesScale,
     );
   });
@@ -251,10 +267,10 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.COORDINATES_CENTRE,
-      [newCoordinatesCentre.re, newCoordinatesCentre.im],
-    );
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(COORDINATES_CENTRE, [
+      newCoordinatesCentre.re,
+      newCoordinatesCentre.im,
+    ]);
   });
 
   it("updates the fractal engine when the number of iterations changes", async () => {
@@ -269,7 +285,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.ITERATIONS_COUNT,
+      ITERATIONS_COUNT,
       newIterationsCount,
     );
   });
@@ -285,10 +301,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.EPSILON,
-      newEpsilon,
-    );
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(EPSILON, newEpsilon);
   });
 
   it("updates the fractal engine when the Julia bound changes", async () => {
@@ -302,10 +315,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.JULIA_BOUND,
-      newJuliaBound,
-    );
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(JULIA_BOUND, newJuliaBound);
   });
 
   it("updates the fractal engine when the fractal function changes", async () => {
@@ -318,20 +328,17 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(IS_NEWTON, 1);
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.IS_NEWTON,
-      1,
-    );
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      NEWTON_COEFFICIENT,
       props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.NUMERATOR,
+      NUMERATOR,
       props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.DENOMINATOR,
+      DENOMINATOR,
       props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   });
@@ -346,20 +353,17 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(IS_NEWTON, 0);
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.IS_NEWTON,
-      0,
-    );
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      NEWTON_COEFFICIENT,
       props.configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.NUMERATOR,
+      NUMERATOR,
       props.configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.DENOMINATOR,
+      DENOMINATOR,
       props.configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
   });
@@ -375,7 +379,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.JULIA_HSV,
+      JULIA_HSV,
       props.configuration.juliaHSV,
     );
   });
@@ -391,10 +395,7 @@ describe("Interactions", () => {
     await animationFrame.vm.$nextTick();
 
     // Check the fractal engine is updated
-    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.FATOU_HUE,
-      newFatouHue,
-    );
+    expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(FATOU_HUE, newFatouHue);
   });
 
   it("updates the fractal engine when the Fatou saturation strength changes", async () => {
@@ -409,7 +410,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
+      FATOU_SATURATION_STRENGTH,
       newFatouSaturationStrength,
     );
   });
@@ -426,7 +427,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.FATOU_SATURATION_OFFSET,
+      FATOU_SATURATION_OFFSET,
       newFatouSaturationOffset,
     );
   });
@@ -443,7 +444,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.FATOU_VALUE_STRENGTH,
+      FATOU_VALUE_STRENGTH,
       newFatouValueStrength,
     );
   });
@@ -460,7 +461,7 @@ describe("Interactions", () => {
 
     // Check the fractal engine is updated
     expect(mockedFractalGenerator.updateParameter).toHaveBeenCalledWith(
-      FractalGeneratorParameters.FATOU_VALUE_OFFSET,
+      FATOU_VALUE_OFFSET,
       newFatouValueOffset,
     );
   });

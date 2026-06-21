@@ -1,5 +1,26 @@
 import FunctionTypes from "@/constants/FunctionTypes";
-import FractalGeneratorParameters from "@/generators/FractalGeneratorParameters";
+import {
+  COORDINATES_CENTRE,
+  COORDINATES_SCALE,
+  DENOMINATOR,
+  DENOMINATOR_COEFFICIENTS_COUNT,
+  DIMENSION_RATIO,
+  EPSILON,
+  FATOU_HUE,
+  FATOU_SATURATION_OFFSET,
+  FATOU_SATURATION_STRENGTH,
+  FATOU_VALUE_OFFSET,
+  FATOU_VALUE_STRENGTH,
+  IS_NEWTON,
+  ITERATIONS_COUNT,
+  JULIA_BOUND,
+  JULIA_HSV,
+  NEWTON_COEFFICIENT,
+  NUMERATOR,
+  NUMERATOR_COEFFICIENTS_COUNT,
+  TIME,
+  type FractalGeneratorParameter,
+} from "@/generators/FractalGeneratorParameter";
 import type Measurements from "@/measurements/Measurements";
 import RollingAverage from "@/measurements/RollingAverage";
 import type TimingHelper from "@/measurements/TimingHelper";
@@ -46,9 +67,7 @@ interface ParamsMappingDetails {
 }
 
 /** Mapping between the parameters and their buffers */
-const PARAMS_MAPPING: {
-  [K in FractalGeneratorParameters]: ParamsMappingDetails;
-} = {
+const PARAMS_MAPPING: Record<FractalGeneratorParameter, ParamsMappingDetails> = {
   TIME: { bufferName: BufferNames.TIME_UNIFORM, offset: 0 },
   DIMENSION_RATIO: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 0 },
   COORDINATES_SCALE: { bufferName: BufferNames.VIEWPORT_UNIFORMS, offset: 1 },
@@ -549,67 +568,49 @@ export default class WebGpuFractalGenerator {
     this.writeBuffer(BufferNames.VERTEX);
 
     this.updateViewportDimensionRatio();
-    this.updateParameter(
-      FractalGeneratorParameters.COORDINATES_SCALE,
-      configuration.coordinatesScale,
-    );
-    this.updateParameter(FractalGeneratorParameters.COORDINATES_CENTRE, [
+    this.updateParameter(COORDINATES_SCALE, configuration.coordinatesScale);
+    this.updateParameter(COORDINATES_CENTRE, [
       configuration.coordinatesCentre.re,
       configuration.coordinatesCentre.im,
     ]);
 
-    this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime);
+    this.updateParameter(TIME, this.animationTime);
 
     this.updateParameter(
-      FractalGeneratorParameters.IS_NEWTON,
+      IS_NEWTON,
       configuration.fractalFunction.getFunctionType() == FunctionTypes.NEWTON ? 1 : 0,
     );
     this.updateParameter(
-      FractalGeneratorParameters.NUMERATOR_COEFFICIENTS_COUNT,
+      NUMERATOR_COEFFICIENTS_COUNT,
       configuration.fractalFunction.getNumeratorCoefficients().length,
     );
     this.updateParameter(
-      FractalGeneratorParameters.DENOMINATOR_COEFFICIENTS_COUNT,
+      DENOMINATOR_COEFFICIENTS_COUNT,
       configuration.fractalFunction.getDenominatorCoefficients().length,
     );
     this.updateParameter(
-      FractalGeneratorParameters.NEWTON_COEFFICIENT,
+      NEWTON_COEFFICIENT,
       configuration.fractalFunction.newtonCoefficient.getEllipseParameters(),
     );
 
     this.updateParameter(
-      FractalGeneratorParameters.NUMERATOR,
+      NUMERATOR,
       configuration.fractalFunction.getNumeratorCoefficientsEllipseParameters(),
     );
     this.updateParameter(
-      FractalGeneratorParameters.DENOMINATOR,
+      DENOMINATOR,
       configuration.fractalFunction.getDenominatorCoefficientsEllipseParameters(),
     );
 
-    this.updateParameter(
-      FractalGeneratorParameters.ITERATIONS_COUNT,
-      configuration.iterationsCount,
-    );
-    this.updateParameter(FractalGeneratorParameters.EPSILON, configuration.epsilon);
-    this.updateParameter(FractalGeneratorParameters.JULIA_BOUND, configuration.juliaBound);
-    this.updateParameter(FractalGeneratorParameters.FATOU_HUE, configuration.fatouHue);
-    this.updateParameter(
-      FractalGeneratorParameters.FATOU_SATURATION_STRENGTH,
-      configuration.fatouSaturationStrength,
-    );
-    this.updateParameter(
-      FractalGeneratorParameters.FATOU_SATURATION_OFFSET,
-      configuration.fatouSaturationOffset,
-    );
-    this.updateParameter(
-      FractalGeneratorParameters.FATOU_VALUE_STRENGTH,
-      configuration.fatouValueStrength,
-    );
-    this.updateParameter(
-      FractalGeneratorParameters.FATOU_VALUE_OFFSET,
-      configuration.fatouValueOffset,
-    );
-    this.updateParameter(FractalGeneratorParameters.JULIA_HSV, configuration.juliaHSV);
+    this.updateParameter(ITERATIONS_COUNT, configuration.iterationsCount);
+    this.updateParameter(EPSILON, configuration.epsilon);
+    this.updateParameter(JULIA_BOUND, configuration.juliaBound);
+    this.updateParameter(FATOU_HUE, configuration.fatouHue);
+    this.updateParameter(FATOU_SATURATION_STRENGTH, configuration.fatouSaturationStrength);
+    this.updateParameter(FATOU_SATURATION_OFFSET, configuration.fatouSaturationOffset);
+    this.updateParameter(FATOU_VALUE_STRENGTH, configuration.fatouValueStrength);
+    this.updateParameter(FATOU_VALUE_OFFSET, configuration.fatouValueOffset);
+    this.updateParameter(JULIA_HSV, configuration.juliaHSV);
   }
 
   /**
@@ -626,10 +627,7 @@ export default class WebGpuFractalGenerator {
    * Update the viewport dimension ratio
    */
   public updateViewportDimensionRatio() {
-    this.updateParameter(
-      FractalGeneratorParameters.DIMENSION_RATIO,
-      this.canvas.clientWidth / this.canvas.clientHeight,
-    );
+    this.updateParameter(DIMENSION_RATIO, this.canvas.clientWidth / this.canvas.clientHeight);
   }
 
   /**
@@ -641,7 +639,7 @@ export default class WebGpuFractalGenerator {
    * @throws an error if the buffer of the parameter is not initialised or has not the view
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public updateParameter(parameter: FractalGeneratorParameters, value: any, debug = true) {
+  public updateParameter(parameter: FractalGeneratorParameter, value: any, debug = true) {
     const paramsDetails = PARAMS_MAPPING[parameter];
 
     const bufferDetails = this.buffers[paramsDetails.bufferName];
@@ -701,7 +699,7 @@ export default class WebGpuFractalGenerator {
 
     if (!this.paused) {
       this.animationTime += timeIncrement;
-      this.updateParameter(FractalGeneratorParameters.TIME, this.animationTime, false);
+      this.updateParameter(TIME, this.animationTime, false);
       this.drawFractal();
     }
 
