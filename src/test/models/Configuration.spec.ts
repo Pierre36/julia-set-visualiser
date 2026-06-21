@@ -1,5 +1,4 @@
 import FunctionTypes from "@/constants/FunctionTypes";
-import Attractor from "@/models/Attractor";
 import Complex, { type RandomComplexParameters } from "@/models/Complex";
 import Configuration from "@/models/Configuration";
 import FractalFunction, { type RandomFractalFunctionParameters } from "@/models/FractalFunction";
@@ -312,8 +311,6 @@ describe("randomise", () => {
     RandomUtils.integerBetween = vi.fn((min, _) => min);
     const randomComplex = new Complex(4, 2);
     Complex.getRandomComplex = vi.fn(() => randomComplex);
-    const randomAttractor = new Attractor(undefined, 0, 1, 2, 3, 4);
-    Attractor.getRandomAttractor = vi.fn(() => randomAttractor);
 
     const fractalFunctionParameters = {} as RandomFractalFunctionParameters;
     const viewportCentre = {} as RandomComplexParameters;
