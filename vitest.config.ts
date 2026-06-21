@@ -11,6 +11,7 @@ export default mergeConfig(
       root: fileURLToPath(new URL("./", import.meta.url)),
       coverage: {
         include: ["src/main/**"],
+        exclude: ["*.wgsl"],
         provider: "istanbul",
       },
     },
